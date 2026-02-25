@@ -1,10 +1,18 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  /* Mapeo de tu paleta profesional/casera */
+  --color-primary: #8D775F;       /* Marrón Topo (Botones y Logo) */
+  --color-secondary: #F5E6CA;     /* Beige Claro (Fondo de menús/bordes) */
+  --color-accent: #4A3F35;        /* Marrón Oscuro (Hover y Énfasis) */
+  --color-background: #FDFCF8;    /* Blanco Crema (Fondo de página) */
+  --color-text: #4A3F35;          /* Color de letra principal */
+}
 
 @layer base {
   html,
   body {
+    /* Aquí usamos las variables que definimos arriba */
     @apply bg-background text-text antialiased;
   }
 

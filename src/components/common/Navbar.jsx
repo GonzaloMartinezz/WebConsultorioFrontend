@@ -35,12 +35,12 @@ const Navbar = () => {
 
   return (
     <header
-      className={`sticky top-0 z-20 border-b border-secondary/70 backdrop-blur-md transition-all ${
-        scrolled ? "bg-white/90 shadow-md" : "bg-white/70"
-      }`}
-    >
+  className={`sticky top-0 z-20 border-b border-secondary/70 backdrop-blur-md transition-all ${
+    scrolled ? "bg-background/90 shadow-md" : "bg-background/70"
+  }`}
+>
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:px-4 lg:px-0">
-        <Link to="/" className="flex min-h-[44px] min-w-[44px] shrink-0 items-center gap-2 sm:gap-3">
+        <Link to="/" className="flex min-h-11 min-w-11 shrink-0 items-center gap-2 sm:gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-primary shadow-md">
             {!logoError ? (
               <img
@@ -54,7 +54,7 @@ const Navbar = () => {
             )}
           </div>
           <span className="text-base font-bold text-black sm:text-lg">
-            Martínez Cárcara
+            Centro Odontológico A&E
           </span>
         </Link>
 
@@ -76,7 +76,7 @@ const Navbar = () => {
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-secondary/80 bg-white text-black"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-full border border-secondary/80 bg-white text-black"
             aria-label="Abrir menú"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,6 +97,16 @@ const Navbar = () => {
               <Link to="/acerca" className="rounded-xl px-4 py-3 text-black hover:bg-secondary/60" onClick={() => setMenuOpen(false)}>Acerca de nosotros</Link>
               <Link to="/contacto" className="rounded-xl px-4 py-3 text-black hover:bg-secondary/60" onClick={() => setMenuOpen(false)}>Contacto</Link>
               <Link to="/turnos" className="rounded-xl bg-primary px-4 py-3 text-center font-semibold text-white" onClick={() => setMenuOpen(false)}>Reservar turno</Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setMenuOpen(false);
+                  handleLogout();
+                }}
+                className="rounded-xl bg-red-600 px-4 py-3 text-center font-semibold text-white"
+              >
+                Cerrar sesión
+              </button>
             </div>
           </div>
         )}
@@ -104,7 +114,7 @@ const Navbar = () => {
         {/* Derecha: Instagram, usuario, reservar (oculto en móvil si hay hamburger) */}
         <div className="relative flex items-center gap-2" ref={userMenuRef}>
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/c.o_carcaramartinez/"
             target="_blank"
             rel="noreferrer"
             aria-label="Instagram"
@@ -157,7 +167,7 @@ const Navbar = () => {
             to="/turnos"
             className="rounded-full bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-wide text-white shadow-md transition hover:bg-accent min-h-[44px] min-w-[44px] flex items-center justify-center sm:min-h-0 sm:min-w-0 md:text-sm"
           >
-            Reservar turno
+            Reservar un turno!
           </Link>
         </div>
       </nav>
