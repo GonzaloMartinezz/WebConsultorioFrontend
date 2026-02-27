@@ -1,22 +1,34 @@
 @import "tailwindcss";
 
 @theme {
-  /* Mapeo de tu paleta profesional/casera */
-  --color-primary: #8D775F;       /* Marrón Topo (Botones y Logo) */
-  --color-secondary: #F5E6CA;     /* Beige Claro (Fondo de menús/bordes) */
-  --color-accent: #4A3F35;        /* Marrón Oscuro (Hover y Énfasis) */
-  --color-background: #FDFCF8;    /* Blanco Crema (Fondo de página) */
-  --color-text: #4A3F35;          /* Color de letra principal */
+  /* Paleta Carcara • Martínez (Actualizada con el nuevo logo naranja) */
+  --color-background: #F4F2EE;    /* Blanco/crema suave del piso y paredes lisas */
+  --color-primary: #4A3623;       /* Marrón nogal oscuro (madera de las sillas) */
+  --color-primary-hover: #332416; /* Marrón más profundo para los hover */
+  --color-secondary: #D4D0C8;     /* Greige/Beige claro de los tablones de la pared */
+  --color-accent: #CFA04F;        /* Mostaza/Ocre de los tapizados (Amarillo cálido) - Para calidez */
+  --color-accent-orange: #FF7800; /* Naranja del nuevo logo - Para marca principal */
+  --color-text: #1A1A1A;          /* Casi negro, inspirado en el fondo del cartel principal */
+  --color-text-light: #7A6352;    /* Marrón intermedio/ceniza para textos secundarios */
+  
+  /* Tipografía Global */
+  --font-sans: 'Inter', sans-serif;
 }
 
 @layer base {
   html,
   body {
-    /* Aquí usamos las variables que definimos arriba */
-    @apply bg-background text-text antialiased;
+    @apply bg-background text-text font-sans antialiased;
+    /* Evita que el texto se vea muy pequeño en celulares */
+    font-size: 16px; 
   }
 
   #root {
-    @apply min-h-screen;
+    @apply min-h-screen flex flex-col;
+  }
+
+  /* Títulos prominentes */
+  h1, h2, h3 {
+    @apply font-bold text-text tracking-tight;
   }
 }
