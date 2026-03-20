@@ -15,3 +15,5 @@ const Inicio = () => {
     </main>
   );
 };
+
+export default Inicio;

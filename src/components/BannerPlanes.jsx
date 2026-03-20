@@ -66,7 +66,7 @@ const BannerPlanes = () => {
           {/* COLUMNA DERECHA: Carrusel de Imágenes */}
           <div className="flex-1 w-full lg:max-w-[55%] relative md:ml-auto">
             
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-accent-orange/80 aspect-[4/3] w-full bg-secondary/50">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-accent-orange/80 aspect-4/3 w-full bg-secondary/50">
               {imagenesConsultorio.map((img, index) => (
                 <img 
                   key={index}

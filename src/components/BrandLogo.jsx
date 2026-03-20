@@ -13,7 +13,7 @@ const BrandLogo = ({ className = "" }) => {
           <img
             // IMPORTANTE: Asegúrate de que este nombre coincida EXACTAMENTE 
             // con tu archivo en la carpeta public (ej: /logo.png, /logo.jpg)
-            src="/public/IMG_LOGO9173.jpeg" 
+            src="/IMG_LOGO9173.jpeg" 
             alt="Logo Carcara Martínez"
             // object-cover es clave para que no se estire y llene el círculo
             className="h-full w-full object-cover"
