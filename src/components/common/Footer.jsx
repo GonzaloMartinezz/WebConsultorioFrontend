@@ -1,48 +1,124 @@
+import { Link } from 'react-router-dom';
+// Importamos iconos variados para una mejor identificación visual
+import { FaInstagram, FaWhatsapp, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+
 const Footer = () => {
+  
+  // Clase utilitaria para los enlaces de navegación con el efecto de subrayado animado
+  const navLinkClass = "relative text-lg font-medium text-background/80 hover:text-background transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full";
+
+  // Clase utilitaria para los botones de Instagram (Accesibles y claros)
+  const instagramButtonClass = "flex items-center gap-3 w-full sm:w-auto px-5 py-3 rounded-lg text-base font-bold shadow-sm transition-all active:scale-95 hover:brightness-105";
+
   return (
-    <footer className="mt-auto border-t border-stone-600 bg-stone-800 text-stone-300">
-      <div className="mx-auto max-w-6xl px-4 py-8 text-sm lg:px-0">
-        <div className="grid gap-6 md:grid-cols-4">
-          <div>
-            <p className="font-semibold text-primary">
-              Martínez Cárcara
-            </p>
-            <p className="mt-2 text-stone-400">
-              Cuidamos tu salud bucal con un enfoque integral, humano y
-              profesional.
+    // Fondo Marrón Nogal Oscuro (`bg-primary`) extraído de las sillas de la sala de espera
+    <footer className="bg-primary text-background mt-auto border-t border-primary-hover">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        
+        {/* GRILLA PRINCIPAL ( Stack en móvil, Grid en desktop) */}
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-4 md:gap-8">
+          
+          {/* COLUMNA 1: Marca y confianza */}
+          <div className="md:col-span-1 space-y-4 text-center md:text-left">
+            <Link to="/" className="inline-block focus:outline-none focus:ring-2 focus:ring-accent rounded-lg p-1">
+              <div className="flex flex-col items-center md:items-start">
+                <span className="text-3xl font-extrabold tracking-tight">
+                  Carcara • Martínez
+                </span>
+                <span className="text-xs font-semibold tracking-[0.3em] uppercase mt-2 text-secondary">
+                  Centro Odontológico
+                </span>
+              </div>
+            </Link>
+            <p className="text-base text-secondary/90 leading-relaxed max-w-sm mx-auto md:mx-0">
+              Excelencia y calidez en San Miguel de Tucumán. Cuidamos tu sonrisa con tecnología de vanguardia y atención personalizada.
             </p>
           </div>
 
-          <div>
-            <p className="font-semibold text-primary">Contacto</p>
-            <p className="mt-2 text-stone-400">Av. Siempre Viva 123, Barrio Centro</p>
-            <p className="text-stone-400">Tel: +54 11 1234-5678</p>
-            <p className="text-stone-400">WhatsApp: +54 9 11 9876-5432</p>
-            <p className="text-stone-400">Email: turnos@centrodental.com</p>
+          {/* COLUMNA 2: Navegación Rápida */}
+          <div className="space-y-4 text-center md:text-left md:pl-8">
+            <h3 className="text-xl font-bold tracking-tight text-white/95">Explorar</h3>
+            <ul className="space-y-3 flex flex-col items-center md:items-start">
+              <li><Link to="/" className={navLinkClass}>Inicio</Link></li>
+              <li><Link to="/acerca" className={navLinkClass}>Acerca de nosotros</Link></li>
+              <li><Link to="/contacto" className={navLinkClass}>Contacto</Link></li>
+              <li><Link to="/turnos" className={`${navLinkClass} text-accent-orange hover:text-accent-orange font-semibold`}>Reservar turno online</Link></li>
+            </ul>
           </div>
 
-          <div>
-            <p className="font-semibold text-primary">Redes sociales</p>
-            <p className="mt-2 text-stone-400">Instagram: @centro.odontologico</p>
-            <p className="text-stone-400">Facebook: /centro.odontologico</p>
+          {/* COLUMNA 3: Contacto Directo */}
+          <div className="space-y-4 text-center md:text-left">
+            <h3 className="text-xl font-bold tracking-tight text-white/95">Contacto</h3>
+            <ul className="space-y-4 flex flex-col items-center md:items-start text-secondary/90 text-base">
+              <li className="flex items-center gap-3">
+                <FaMapMarkerAlt className="text-accent shrink-0 text-lg" />
+                <span>Calle Jose Rondeau 827, San Miguel de Tucumán</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <FaPhoneAlt className="text-accent shrink-0 text-lg" />
+                <span>+54 381 5840885</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <FaPhoneAlt className="text-accent shrink-0 text-lg" />
+                <span>+54 381 5804262</span>
+              </li>
+              <li className="flex items-center gap-3">
+                <FaWhatsapp className="text-accent shrink-0 text-xl" />
+                <a href="https://wa.me/5493819876543" target="_blank" rel="noopener noreferrer" className="hover:text-background transition-colors font-medium">
+                  +54 9 381 987-6543
+                </a>
+              </li>
+            </ul>
           </div>
 
-          <div>
-            <p className="font-semibold text-primary">Ubicación</p>
-            <p className="mt-2 text-stone-400">
-              Barrio Centro. Ver mapa en la sección Contacto.
-            </p>
+          {/* COLUMNA 4: Redes Sociales (Nuestros Instagrams) */}
+          <div className="space-y-5 text-center md:text-left">
+            <h3 className="text-xl font-bold tracking-tight text-white/95">Síguenos</h3>
+            <div className="flex flex-col gap-3 items-center md:items-start">
+              
+              {/* Botón 1: Consultorio (Usamos el ocre de las sillas para calidez) */}
+              <a 
+                href="https://www.instagram.com/c.o_carcaramartinez/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`${instagramButtonClass} bg-accent text-text`}
+              >
+                <FaInstagram className="text-xl shrink-0" />
+                @c.o_carcaramartinez
+              </a>
+
+              {/* Botón 2: Dr. Adolfo Martínez (Usamos el Greige claro de la pared para distinguir) */}
+              <a 
+                href="https://www.instagram.com/adolfo_a_martinez/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`${instagramButtonClass} bg-secondary text-text`}
+              >
+                <FaInstagram className="text-xl shrink-0 text-primary" />
+                Dr. Adolfo Martínez
+              </a>
+
+              {/* Botón 3: Dra. Erina Carcara (Usamos el Greige claro de la pared para distinguir) */}
+              <a 
+                href="https://www.instagram.com/erinacarcara/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`${instagramButtonClass} bg-secondary text-text`}
+              >
+                <FaInstagram className="text-xl shrink-0 text-primary" />
+                Dra. Erina Carcara
+              </a>
+            </div>
           </div>
         </div>
 
-        <div className="mt-6 flex flex-col items-center justify-between gap-2 border-t border-stone-600 pt-4 text-xs text-stone-500 md:flex-row">
-          <p>
-            &copy; {new Date().getFullYear()} Martínez Cárcara.
-            Todos los derechos reservados.
+        {/* BARRA INFERIOR DE COPYRIGHT (Grises suaves y marrón nogal) */}
+        <div className="mt-16 pt-8 border-t border-secondary/20 text-center space-y-3">
+          <p className="text-sm text-secondary tracking-wide">
+            &copy; {new Date().getFullYear()} Gonzalo Martinez. Todos los derechos reservados.
           </p>
-          <p>
-            Información orientativa. El diagnóstico y tratamiento definitivo se
-            realiza siempre de forma presencial.
+          <p className="text-xs text-secondary/60">
+            Carcara • Martínez Centro Odontológico • Odontología Integral •San Miguel de Tucumán, Argentina.
           </p>
         </div>
       </div>

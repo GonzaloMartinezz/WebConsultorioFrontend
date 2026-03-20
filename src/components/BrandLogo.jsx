@@ -8,7 +8,7 @@ const BrandLogo = ({ className = "" }) => {
     <div className={`flex items-center gap-3 ${className}`}>
       
       {/* 1. Contenedor de la Imagen: Cuadrado y Circular */}
-      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full bg-text flex items-center justify-center border-2 border-primary/20 shadow-sm">
+      <div className="h-16 w-16 shrink-0 overflow-hidden rounded-full bg-text flex items-center justify-center border-2 border-primary/20 shadow-sm">
         {!imgError ? (
           <img
             // IMPORTANTE: Asegúrate de que este nombre coincida EXACTAMENTE 
@@ -30,11 +30,11 @@ const BrandLogo = ({ className = "" }) => {
       {/* 2. El nombre de la clínica */}
       {/* Mantenemos el nombre al lado para máxima claridad, especialmente para personas mayores */}
       <div className="hidden sm:flex flex-col">
-        <span className="text-xl font-extrabold text-text leading-none tracking-tight">
-          Carcara • Martínez
-        </span>
-        <span className="text-[0.65rem] font-semibold text-text-light tracking-[0.2em] uppercase mt-1">
+        <span className="text-[0.75rem] font-semibold text-text-light tracking-[0.2em] uppercase mt-1">
           Centro Odontológico
+        </span>
+         <span className="text-lg md:text-xxl font-extrabold text-text leading-none tracking-tight">
+          Carcara • Martínez
         </span>
       </div>
 
