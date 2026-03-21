@@ -1,110 +1,68 @@
-const mockAppointments = [
-  {
-    paciente: "Juan Pérez",
-    doctor: "Dr. Pérez — Odontología general",
-    fecha: "2025-10-10",
-    hora: "10:30",
-    estado: "Pendiente de confirmar",
-  },
-  {
-    paciente: "María Gómez",
-    doctor: "Dra. Gómez — Ortodoncia",
-    fecha: "2025-10-12",
-    hora: "15:00",
-    estado: "Confirmado",
-  },
-  {
-    paciente: "Pedro Rodríguez",
-    doctor: "Dr. Rodríguez — Ortodoncia",
-    fecha: "2025-10-15",
-    hora: "11:30",
-    estado: "Pendiente de confirmar",
-  },
-  {
-    paciente: "Luisa Rodríguez",
-    doctor: "Dra. Rodríguez — Ortodoncia",
-    fecha: "2025-10-17",
-    hora: "14:00",
-    estado: "Confirmado",
-  },
-  {
-    paciente: "Carlos Rodríguez",
-    doctor: "Dr. Rodríguez — Ortodoncia",
-    fecha: "2025-10-19",
-    hora: "16:30",
-    estado: "Pendiente de confirmar",
-  },
-  {
-    paciente: "Ana Rodríguez",
-    doctor: "Dra. Rodríguez — Ortodoncia",
-    fecha: "2025-10-21",
-    hora: "13:00",
-    estado: "Confirmado",
-  },
-];
+import { FaCheckCircle, FaTimesCircle, FaPen } from 'react-icons/fa';
 
 const AppointmentTable = () => {
+  // SIMULACIÓN DE DATOS REALES (Para la maqueta visual)
+  const turnosMock = [
+    { hora: "09:00", paciente: "Gonzalo Martínez", profesional: "Dr. Adolfo Martínez", motivo: "Control Ortodoncia", estado: "Pendiente" },
+    { hora: "10:30", paciente: "María Rodríguez", profesional: "Dra. Erina Carcara", motivo: "Limpieza Dental", estado: "Confirmado" },
+    { hora: "11:00", paciente: "Carlos Sánchez", profesional: "Dra. Erina Carcara", motivo: "Blanqueamiento", estado: "Confirmado" },
+    { hora: "16:00", paciente: "Laura Gómez", profesional: "Dr. Adolfo Martínez", motivo: "Consulta Implante", estado: "Pendiente" },
+  ];
+
   return (
-    <div className="p-12 bg-secondary/50 border-2 rounded-4xl shadow-md">
-      <div className="flex flex-col gap-2 mb-12 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-primary">
-            Turnos enviados por los pacientes en la aplicación mediante el formulario de turnos.
-          </h2>
-          <p className="text-xs text-text/70">
-            Vista interna para profesionales y administración. Aquí podés
-            revisar el estado de los turnos solicitados por los pacientes.
-          </p>
-        </div>
-        <div className="text-xs text-text/60">
-          <p>
-            Leyenda de estado:{" "}
-            <span className="font-medium text-primary">Pendiente</span> /
-            <span className="font-medium text-green-700"> Confirmado</span>
-          </p>
-        </div>
-      </div>
-
-      <div className="overflow-x-auto rounded-xl border border-secondary/80">
-        <table className="w-full text-sm">
-          <thead className="bg-secondary text-left text-xs uppercase tracking-wide text-text/80">
-            <tr>
-              <th className="px-4 py-3">Paciente</th>
-              <th className="px-4 py-3">Profesional</th>
-              <th className="px-4 py-3">Fecha</th>
-              <th className="px-4 py-3">Hora</th>
-              <th className="px-4 py-3">Estado</th>
+    <div className="w-full overflow-x-auto">
+      <table className="w-full text-left border-collapse min-w-[700px]">
+        {/* ENCABEZADO DE LA TABLA - Estilo Pro */}
+        <thead className="border-b border-secondary/70">
+          <tr>
+            <th className="px-5 py-4 text-xs font-bold uppercase tracking-wider text-text-light">Hora</th>
+            <th className="px-5 py-4 text-xs font-bold uppercase tracking-wider text-text-light">Paciente</th>
+            <th className="px-5 py-4 text-xs font-bold uppercase tracking-wider text-text-light">Profesional</th>
+            <th className="px-5 py-4 text-xs font-bold uppercase tracking-wider text-text-light">Motivo</th>
+            <th className="px-5 py-4 text-xs font-bold uppercase tracking-wider text-text-light">Estado</th>
+            {/* Alineamos la columna de acciones a la derecha */}
+            <th className="px-5 py-4 text-xs font-bold uppercase tracking-wider text-text-light text-right">Acciones</th>
+          </tr>
+        </thead>
+        
+        {/* CUERPO DE LA TABLA (C&M Style) */}
+        <tbody>
+          {turnosMock.map((turno, index) => (
+            <tr key={index} className="border-b border-secondary/20 hover:bg-secondary/10 transition-colors">
+              <td className="px-5 py-4 font-bold text-primary text-base">{turno.hora}</td>
+              <td className="px-5 py-4 font-semibold text-text text-sm">{turno.paciente}</td>
+              <td className="px-5 py-4 text-text-light text-sm">{turno.profesional}</td>
+              <td className="px-5 py-4 text-text-light text-sm">{turno.motivo}</td>
+              <td className="px-5 py-4">
+                <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold 
+                  ${turno.estado === 'Confirmado' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                  {turno.estado}
+                </span>
+              </td>
+              
+              {/* ======================================================== */}
+              {/* COLUMNA DE ACCIONES (NUEVOS ÍCONOS PROFESIONALES) */}
+              {/* ======================================================== */}
+              <td className="px-5 py-4 text-right">
+                <div className="flex items-center justify-end gap-2.5">
+                  {/* Aceptar: Tilde Verde */}
+                  <button className="text-green-500 hover:text-green-600 hover:scale-110 transition-transform p-1 focus:outline-none" title="Aceptar Turno">
+                    <FaCheckCircle className="text-xl" />
+                  </button>
+                  {/* Rechazar: X Roja */}
+                  <button className="text-red-500 hover:text-red-600 hover:scale-110 transition-transform p-1 focus:outline-none" title="Rechazar Turno">
+                    <FaTimesCircle className="text-xl" />
+                  </button>
+                  {/* Editar: Lápiz Amarillo */}
+                  <button className="text-yellow-500 hover:text-yellow-600 hover:scale-110 transition-transform p-1 focus:outline-none" title="Editar Turno">
+                    <FaPen className="text-xl" />
+                  </button>
+                </div>
+              </td>
             </tr>
-          </thead>
-
-          <tbody>
-            {mockAppointments.map((turno, i) => (
-              <tr
-                key={i}
-                className="border-t border-secondary/60 hover:bg-secondary/40 transition-colors"
-              >
-                <td className="px-4 py-3 font-medium text-text">
-                  {turno.paciente}
-                </td>
-                <td className="px-4 py-3 text-text/85">{turno.doctor}</td>
-                <td className="px-4 py-3 text-text/85">{turno.fecha}</td>
-                <td className="px-4 py-3 text-text/85">{turno.hora}</td>
-                <td className="px-4 py-3">
-                  <span
-                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
-                      turno.estado.includes("Pendiente")
-                        ? "bg-amber-100 text-amber-800"
-                        : "bg-emerald-100 text-emerald-800"
-                    }`}
-                  >
-                    {turno.estado}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

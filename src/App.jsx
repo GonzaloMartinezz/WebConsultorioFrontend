@@ -9,6 +9,7 @@ import AcercaDe from "./pages/AcercaDe.jsx";
 import Contacto from "./pages/Contacto.jsx";
 import Login from "./pages/Login.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
+import OdontogramaPage from "./pages/admin/Odontograma.jsx";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         {/* La ruta de admin está por fuera del MainLayout, lo cual es perfecto 
             para que el panel de control tenga su propio diseño sin el Navbar público */}
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/odontograma" element={<OdontogramaPage />} />
       </Routes>
     </>
   );
