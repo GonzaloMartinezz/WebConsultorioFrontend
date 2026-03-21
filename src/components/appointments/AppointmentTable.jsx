@@ -13,15 +13,43 @@ const mockAppointments = [
     hora: "15:00",
     estado: "Confirmado",
   },
+  {
+    paciente: "Pedro Rodríguez",
+    doctor: "Dr. Rodríguez — Ortodoncia",
+    fecha: "2025-10-15",
+    hora: "11:30",
+    estado: "Pendiente de confirmar",
+  },
+  {
+    paciente: "Luisa Rodríguez",
+    doctor: "Dra. Rodríguez — Ortodoncia",
+    fecha: "2025-10-17",
+    hora: "14:00",
+    estado: "Confirmado",
+  },
+  {
+    paciente: "Carlos Rodríguez",
+    doctor: "Dr. Rodríguez — Ortodoncia",
+    fecha: "2025-10-19",
+    hora: "16:30",
+    estado: "Pendiente de confirmar",
+  },
+  {
+    paciente: "Ana Rodríguez",
+    doctor: "Dra. Rodríguez — Ortodoncia",
+    fecha: "2025-10-21",
+    hora: "13:00",
+    estado: "Confirmado",
+  },
 ];
 
 const AppointmentTable = () => {
   return (
-    <div className="p-6 bg-white rounded-2xl shadow-md">
-      <div className="flex flex-col gap-2 mb-4 md:flex-row md:items-end md:justify-between">
+    <div className="p-12 bg-secondary/50 border-2 rounded-4xl shadow-md">
+      <div className="flex flex-col gap-2 mb-12 md:flex-row md:items-end md:justify-between">
         <div>
           <h2 className="text-2xl font-bold text-primary">
-            Turnos programados
+            Turnos enviados por los pacientes en la aplicación mediante el formulario de turnos.
           </h2>
           <p className="text-xs text-text/70">
             Vista interna para profesionales y administración. Aquí podés

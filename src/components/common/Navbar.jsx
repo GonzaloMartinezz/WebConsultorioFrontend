@@ -54,19 +54,19 @@ const Navbar = () => {
         <div className="hidden md:flex items-center gap-10">
           <Link
             to="/"
-            className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+            className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
           >
             Inicio
           </Link>
           <Link
             to="/acerca"
-            className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+            className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
           >
             Acerca de nosotros
           </Link>
           <Link
             to="/contacto"
-            className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+            className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
           >
             Contacto
           </Link>

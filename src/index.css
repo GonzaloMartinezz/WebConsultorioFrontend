@@ -10,9 +10,10 @@
   --color-accent-orange: #FF7800; /* Naranja del nuevo logo - Para marca principal */
   --color-text: #1A1A1A;          /* Casi negro, inspirado en el fondo del cartel principal */
   --color-text-light: #7A6352;    /* Marrón intermedio/ceniza para textos secundarios */
-  
+  --color-text-orange: #FF7800;   /* Naranja del nuevo logo - Para marca principal */
   /* Tipografía Global */
   --font-sans: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
 @layer base {

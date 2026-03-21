@@ -6,11 +6,23 @@ const BannerPlanes = () => {
   
   const imagenesConsultorio = [
     "/sala de espera 1.jpeg",
+    "/sala de espera 2.jpeg",
     "/sala de espera 3.jpeg",
-    "/consultorio 2.jpeg",
+    "/sala de espera 4.jpeg",
     "/consultorio 1.jpeg",
+    "/consultorio 2.jpeg",
     "/escritorio 1.jpeg",
     "/escritorio 2.jpeg",
+    "/escritorio 3.jpeg",
+    "/escritorio 4.jpeg",
+    "/escritorio 5.jpeg",
+    "/pasillo consultorio adolfo 1.jpeg",
+    "/pasillo consultorio adolfo 2.jpeg",
+    "/pasillo consultorio adolfo 3.jpeg",
+    "/consultorio adolfo 1.jpeg",
+    "/consultorio adolfo 2.jpeg",
+    "/consultorio adolfo 3.jpeg",
+    "/consultorio adolfo 4.jpeg",
   ];
 
   useEffect(() => {
@@ -25,7 +37,7 @@ const BannerPlanes = () => {
       {/* ========================================== */}
       {/* SECCIÓN 1: HERO (FONDO OSCURO PREMIUM) */}
       {/* ========================================== */}
-      <section className="relative bg-primary text-background overflow-visible border-b-8 border-accent-orange h-[calc(100vh-80px)] min-h-[600px] flex items-center">
+      <section className="relative bg-primary text-background overflow-visible border-b-8 border-accent-orange h-[calc(100vh-80px)] min-h-150 flex items-center">
         
         {/* Fondo decorativo extraído de Contacto */}
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none bg-[radial-gradient(circle_at_top_left,white,transparent_50%)]"></div>
@@ -80,7 +92,7 @@ const BannerPlanes = () => {
             </div>
             
             {/* Tarjeta flotante */}
-            <div className="absolute -bottom-6 left-1/2 md:-left-8 transform -translate-x-1/2 md:translate-x-0 bg-white p-3 sm:p-4 rounded-2xl shadow-2xl border border-secondary flex flex-col sm:flex-row items-center gap-3 z-20 w-[90%] sm:w-[400px]">
+            <div className="absolute -bottom-6 left-1/2 md:-left-8 transform -translate-x-1/2 md:translate-x-0 bg-white p-3 sm:p-4 rounded-2xl shadow-2xl border border-secondary flex flex-col sm:flex-row items-center gap-3 z-20 w-[90%] sm:w-100">
               <div className="bg-primary/10 p-3 rounded-full text-accent-orange shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
