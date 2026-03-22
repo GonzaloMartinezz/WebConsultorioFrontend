@@ -118,7 +118,7 @@ const BannerPlanes = () => {
       {/* ========================================== */}
       {/* SECCIÓN 2: CHECKLIST (FONDO CLARO) */}
       {/* ========================================== */}
-      <section className="bg-background border-b border-secondary/50 py-16 px-4 sm:px-6 lg:px-8">
+      <section className="bg-background border-b-8 border-accent-orange py-16 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="text-center text-sm font-bold tracking-widest text-primary uppercase mb-10">
             ¿Por qué elegirnos?

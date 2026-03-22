@@ -45,7 +45,7 @@ const Navbar = () => {
         {/* LADO IZQUIERDO: El nuevo logo compuesto y el nombre */}
         <Link
           to="/"
-          className="shrink-0 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg p-1"
+          className="shrink-0 outline-none focus:outline-none rounded-lg p-1"
         >
           <BrandLogo />
         </Link>
@@ -136,9 +136,9 @@ const Navbar = () => {
             {/* El botón de reserva ahora usa el nuevo naranja de marca */}
             <Link
               to="/turnos"
-              className="flex h-10  items-center justify-center rounded-lg bg-accent-orange px-6 font-bold text-text shadow-sm hover:brightness-110 transition-all"
+              className="bg-accent-orange text-primary font-bold px-6 py-2 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-95 uppercase text-sm tracking-wide"
             >
-              Reservar turno
+              Reservar Turno
             </Link>
           </div>
 

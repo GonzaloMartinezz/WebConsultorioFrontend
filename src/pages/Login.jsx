@@ -81,7 +81,7 @@ const Login = () => {
                       type="text"
                       value={form.nombre}
                       onChange={handleChange}
-                      className="w-full rounded-xl border-2 border-secondary/20 bg-white px-4 py-3 text-sm font-bold text-accent-orange placeholder-text-light outline-none transition-all focus:border-accent-orange focus:ring-4 focus:ring-accent-orange/20 shadow-sm"
+                      className="w-full rounded-xl border-2 border-secondary/20 bg-white px-4 py-3 text-sm font-bold text-text placeholder-text-light outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/30 shadow-sm"
                       required
                       placeholder="Ej. Juan"
                     />
@@ -97,7 +97,7 @@ const Login = () => {
                       type="text"
                       value={form.apellido}
                       onChange={handleChange}
-                      className="w-full rounded-xl border-2 border-secondary/20 bg-white px-4 py-3 text-sm font-bold text-accent-orange placeholder-text-light outline-none transition-all focus:border-accent-orange focus:ring-4 focus:ring-accent-orange/20 shadow-sm"
+                      className="w-full rounded-xl border-2 border-secondary/20 bg-white px-4 py-3 text-sm font-bold text-text placeholder-text-light outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/30 shadow-sm"
                       required
                       placeholder="Ej. Pérez"
                     />
@@ -113,7 +113,7 @@ const Login = () => {
                       type="email"
                       value={form.email}
                       onChange={handleChange}
-                      className="w-full rounded-xl border-2 border-secondary/20 bg-white px-4 py-3 text-sm font-bold text-accent-orange placeholder-text-light outline-none transition-all focus:border-accent-orange focus:ring-4 focus:ring-accent-orange/20 shadow-sm"
+                      className="w-full rounded-xl border-2 border-secondary/20 bg-white px-4 py-3 text-sm font-bold text-text placeholder-text-light outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/30 shadow-sm"
                       required
                       placeholder="tu@email.com"
                     />
@@ -129,7 +129,7 @@ const Login = () => {
                       type="password"
                       value={form.password}
                       onChange={handleChange}
-                      className="w-full rounded-xl border-2 border-secondary/20 bg-white px-4 py-3 text-sm font-bold text-accent-orange placeholder-text-light outline-none transition-all focus:border-accent-orange focus:ring-4 focus:ring-accent-orange/20 shadow-sm"
+                      className="w-full rounded-xl border-2 border-secondary/20 bg-white px-4 py-3 text-sm font-bold text-text placeholder-text-light outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/30 shadow-sm"
                       required
                       minLength={4}
                       placeholder="••••••••"

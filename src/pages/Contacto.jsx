@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FaPhoneAlt, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 
 // Dirección real para el mapa
 const direccion = "Jose Rondeau 827, San Miguel de Tucumán, Argentina";
@@ -86,6 +87,49 @@ const Contacto = () => {
           </div>
         </div>
       </section>
+
+      {/* ======================================================== */}
+      {/* NUEVA SECCIÓN: DUDAS Y CONSULTAS (Fondo Marrón) */}
+      {/* ======================================================== */}
+      <section className="bg-primary rounded-[2.5rem] p-10 md:p-16 mx-4 lg:mx-auto lg:max-w-7xl my-20 shadow-2xl border-b-8 border-accent-orange text-center" data-aos="fade-up">
+        
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight mb-12 leading-tight">
+          Para poder consultar cualquier duda <br className="hidden md:block"/> 
+          o comentarnos tu situación
+        </h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          
+          {/* Tarjeta Teléfono */}
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 flex flex-col items-center hover:bg-white/10 transition-all duration-300 hover:-translate-y-2 cursor-pointer shadow-lg group">
+            <div className="p-4 bg-secondary/20 rounded-full mb-5 group-hover:scale-110 transition-transform">
+              <FaPhoneAlt className="text-4xl text-accent-orange" />
+            </div>
+            <h3 className="text-white font-bold text-xl uppercase tracking-wide">Llamada Directa</h3>
+            <p className="text-secondary/80 mt-2 font-medium text-lg">+54 381 5840885</p>
+          </div>
+
+          {/* Tarjeta WhatsApp */}
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 flex flex-col items-center hover:bg-white/10 transition-all duration-300 hover:-translate-y-2 cursor-pointer shadow-lg group">
+            <div className="p-4 bg-secondary/20 rounded-full mb-5 group-hover:scale-110 transition-transform">
+              <FaWhatsapp className="text-4xl text-accent-orange" />
+            </div>
+            <h3 className="text-white font-bold text-xl uppercase tracking-wide">WhatsApp</h3>
+            <p className="text-secondary/80 mt-2 font-medium text-lg">+54 9 381 9876-5432</p>
+          </div>
+
+          {/* Tarjeta Instagram */}
+          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 flex flex-col items-center hover:bg-white/10 transition-all duration-300 hover:-translate-y-2 cursor-pointer shadow-lg group">
+            <div className="p-4 bg-secondary/20 rounded-full mb-5 group-hover:scale-110 transition-transform">
+              <FaInstagram className="text-4xl text-accent-orange" />
+            </div>
+            <h3 className="text-white font-bold text-xl uppercase tracking-wide">Instagram</h3>
+            <p className="text-secondary/80 mt-2 font-medium text-lg">@carcaramartinez</p>
+          </div>
+
+        </div>
+      </section>
+
 
       {/* ======================================================== */}
       {/* SECCIÓN 2: MAPA PANORÁMICO */}

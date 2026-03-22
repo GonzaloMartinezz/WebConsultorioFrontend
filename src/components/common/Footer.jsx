@@ -16,7 +16,7 @@ const Footer = () => {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         
         {/* GRILLA PRINCIPAL ( Stack en móvil, Grid en desktop) */}
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-4 md:gap-8">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-8">
           
           {/* COLUMNA 1: Marca y confianza */}
           <div className="md:col-span-1 space-y-4 text-center md:text-left">
@@ -30,15 +30,15 @@ const Footer = () => {
                 </span>
               </div>
             </Link>
-            <p className="text-base text-secondary/90 leading-relaxed max-w-sm mx-auto md:mx-0">
+            <p className="text-base text-secondary/90 leading-relaxed max-w-md lg:max-w-xl mx-auto md:mx-0">
               Excelencia y calidez en San Miguel de Tucumán. Cuidamos tu sonrisa con tecnología de vanguardia y atención personalizada.
             </p>
           </div>
 
           {/* COLUMNA 2: Navegación Rápida */}
-          <div className="space-y-4 text-center md:text-left md:pl-8">
+          <div className="space-y-4 text-center md:mx-auto">
             <h3 className="text-xl font-bold tracking-tight text-white/95">Explorar</h3>
-            <ul className="space-y-3 flex flex-col items-center md:items-start">
+            <ul className="space-y-3 flex flex-col items-center">
               <li><Link to="/" className={navLinkClass}>Inicio</Link></li>
               <li><Link to="/acerca" className={navLinkClass}>Acerca de nosotros</Link></li>
               <li><Link to="/contacto" className={navLinkClass}>Contacto</Link></li>
@@ -71,45 +71,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* COLUMNA 4: Redes Sociales (Nuestros Instagrams) */}
-          <div className="space-y-5 text-center md:text-left">
-            <h3 className="text-xl font-bold tracking-tight text-white/95">Síguenos</h3>
-            <div className="flex flex-col gap-3 items-center md:items-start">
-              
-              {/* Botón 1: Consultorio (Usamos el ocre de las sillas para calidez) */}
-              <a 
-                href="https://www.instagram.com/c.o_carcaramartinez/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className={`${instagramButtonClass} bg-accent text-text`}
-              >
-                <FaInstagram className="text-xl shrink-0" />
-                @c.o_carcaramartinez
-              </a>
-
-              {/* Botón 2: Dr. Adolfo Martínez (Usamos el Greige claro de la pared para distinguir) */}
-              <a 
-                href="https://www.instagram.com/adolfo_a_martinez/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className={`${instagramButtonClass} bg-secondary text-text`}
-              >
-                <FaInstagram className="text-xl shrink-0 text-primary" />
-                Dr. Adolfo Martínez
-              </a>
-
-              {/* Botón 3: Dra. Erina Carcara (Usamos el Greige claro de la pared para distinguir) */}
-              <a 
-                href="https://www.instagram.com/erinacarcara/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className={`${instagramButtonClass} bg-secondary text-text`}
-              >
-                <FaInstagram className="text-xl shrink-0 text-primary" />
-                Dra. Erina Carcara
-              </a>
-            </div>
-          </div>
         </div>
 
         {/* BARRA INFERIOR DE COPYRIGHT (Grises suaves y marrón nogal) */}
