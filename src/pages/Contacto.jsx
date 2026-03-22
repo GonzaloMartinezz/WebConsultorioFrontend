@@ -8,7 +8,7 @@ const mapsUrl = `https://maps.google.com/maps?q=${encodeURIComponent(direccion)}
 const Contacto = () => {
   return (
     <main className="grow bg-background">
-      
+
       {/* ======================================================== */}
       {/* SECCIÓN 1: BLOQUE DIVIDIDO (Inspirado en imágenes "RC Gym") */}
       {/* ========================================== */}
@@ -18,20 +18,20 @@ const Contacto = () => {
 
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
-            
+
             {/* Lado Izquierdo: Título y descripción */}
             <div className="w-full lg:w-5/12 space-y-6">
               <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
-                Estamos <br /> 
+                Estamos <br />
                 <span className="text-accent-orange">Cerca Tuyo</span>
               </h1>
               <p className="text-lg text-secondary/90 font-medium leading-relaxed max-w-md">
                 En Carcara • Martínez, tu salud dental es nuestra prioridad. Comunicate con nosotros para resolver dudas, pedir presupuesto o agendar tu próxima visita.
               </p>
               <div className="pt-4">
-                <Link 
-                  to="/turnos" 
-                  className="inline-block border border-accent-orange text-accent-orange font-bold uppercase tracking-wider text-sm px-8 py-4 rounded-full hover:bg-accent-orange hover:text-white transition-all"
+                <Link
+                  to="/turnos"
+                  className="inline-block border border-accent-orange text-accent-orange font-bold uppercase tracking-wider text-sm px-8 py-4 rounded-full transition-all duration-300 hover:bg-accent-orange hover:text-white hover:-translate-y-1 hover:shadow-xl active:scale-95"
                 >
                   Ir a solicitar turno
                 </Link>
@@ -44,9 +44,9 @@ const Contacto = () => {
             {/* Lado Derecho: Lista de información con íconos */}
             <div className="w-full lg:w-6/12 space-y-10">
               <h3 className="text-2xl font-bold tracking-tight">Vías de comunicación directa</h3>
-              
+
               <div className="space-y-8">
-                
+
                 {/* Ítem: Dirección */}
                 <div className="flex gap-5 items-start">
                   <div className="bg-secondary/10 p-3 rounded-xl text-accent-orange shrink-0">
@@ -54,7 +54,7 @@ const Contacto = () => {
                   </div>
                   <div>
                     <h4 className="text-lg font-bold uppercase tracking-wide">Dirección</h4>
-                    <p className="text-secondary/80 mt-1">Jose Rondeau 827<br/>San Miguel de Tucumán, Argentina.</p>
+                    <p className="text-secondary/80 mt-1">Jose Rondeau 827<br />San Miguel de Tucumán, Argentina.</p>
                   </div>
                 </div>
 
@@ -65,7 +65,7 @@ const Contacto = () => {
                   </div>
                   <div>
                     <h4 className="text-lg font-bold uppercase tracking-wide">Teléfonos y WhatsApp</h4>
-                    <p className="text-secondary/80 mt-1 whitespace-pre-line">Fijo: +54 381 5840885<br/>WhatsApp: +54 9 381 9876-5432</p>
+                    <p className="text-secondary/80 mt-1 whitespace-pre-line">Fijo: +54 381 5840885<br />WhatsApp: +54 9 381 9876-5432</p>
                   </div>
                 </div>
 
@@ -76,7 +76,7 @@ const Contacto = () => {
                   </div>
                   <div>
                     <h4 className="text-lg font-bold uppercase tracking-wide">Horarios de Atención</h4>
-                    <p className="text-secondary/80 mt-1 whitespace-pre-line">Lunes a Viernes: 09:00 a 19:00 hs<br/>Sábados: 09:00 a 13:00 hs</p>
+                    <p className="text-secondary/80 mt-1 whitespace-pre-line">Lunes a Viernes: 09:00 a 19:00 hs<br />Sábados: 09:00 a 13:00 hs</p>
                   </div>
                 </div>
 
@@ -100,9 +100,9 @@ const Contacto = () => {
               Ubicados en zona céntrica con fácil acceso.
             </p>
           </div>
-          
+
           <div className="rounded-[2.5rem] bg-white p-4 sm:p-6 shadow-xl border border-secondary/50 overflow-hidden">
-            <div className="aspect-[21/9] min-h-[400px] w-full overflow-hidden rounded-[2rem] bg-secondary/20 relative">
+            <div className="aspect-21/9 min-h-[400px] w-full overflow-hidden rounded-4xl bg-secondary/20 relative">
               <iframe
                 title="Ubicación Carcara Martínez"
                 src={mapsUrl}
@@ -112,13 +112,13 @@ const Contacto = () => {
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                className="absolute inset-0 w-full h-full grayscale-[20%] contrast-[1.1]"
+                className="absolute inset-0 w-full h-full grayscale-20 contrast-[1.1]"
               />
             </div>
           </div>
         </div>
       </section>
-      
+
     </main>
   );
 };

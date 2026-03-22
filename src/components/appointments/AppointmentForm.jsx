@@ -54,7 +54,7 @@ const AppointmentForm = () => {
             name="nombre"
             placeholder="Ej: Juan"
             onChange={handleChange}
-            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required
           />
         </div>
@@ -71,7 +71,7 @@ const AppointmentForm = () => {
             name="apellido"
             placeholder="Ej: Pérez"
             onChange={handleChange}
-            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required
           />
         </div>
@@ -91,7 +91,7 @@ const AppointmentForm = () => {
             type="email"
             placeholder="tu correo@ejemplo.com"
             onChange={handleChange}
-            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required
           />
         </div>
@@ -108,7 +108,7 @@ const AppointmentForm = () => {
             name="telefono"
             placeholder="Ej: +54 9 11 1234 5678"
             onChange={handleChange}
-            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required
           />
         </div>
@@ -126,7 +126,7 @@ const AppointmentForm = () => {
             id="doctor"
             name="doctor"
             onChange={handleChange}
-            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required
           >
             <option value="">Seleccionar profesional</option>
@@ -150,7 +150,7 @@ const AppointmentForm = () => {
             type="date"
             name="fecha"
             onChange={handleChange}
-            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required
           />
         </div>
@@ -168,7 +168,7 @@ const AppointmentForm = () => {
           name="consulta"
           placeholder="Contanos brevemente qué te gustaría consultar (dolor, limpieza, control, ortodoncia, etc.)."
           onChange={handleChange}
-          className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+          className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
           rows={4}
         />
         <p className="text-xs text-text/70">

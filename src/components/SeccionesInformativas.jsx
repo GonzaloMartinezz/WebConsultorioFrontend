@@ -22,7 +22,7 @@ const SeccionesInformativas = () => {
       {/* ======================================================== */}
       <section className="bg-secondary/20 py-24 px-4 sm:px-6 lg:px-8 w-full">
         <div className="mx-auto max-w-7xl">
-          <div className="bg-primary rounded-[2.5rem] p-10 md:p-16 flex flex-col lg:flex-row items-center overflow-hidden relative shadow-2xl">
+          <div className="bg-primary rounded-[2.5rem] p-10 md:p-16 flex flex-col lg:flex-row items-center overflow-hidden relative shadow-2xl" data-aos="fade-up">
             <div className="w-full lg:w-1/2 z-10 text-center lg:text-left space-y-6">
               <h2 className="text-4xl md:text-5xl font-black text-background uppercase leading-tight">
                 Elegí un plan <br/> <span className="text-accent-orange">a tu medida</span>
@@ -31,7 +31,7 @@ const SeccionesInformativas = () => {
                 En simples pasos, personalizá el tratamiento que mejor se adapta a tus necesidades y las de tu familia.
               </p>
               <div className="pt-4">
-                <Link to="/acerca" className="inline-block bg-background text-primary px-8 py-3 rounded-full font-bold hover:bg-secondary transition-all">
+                <Link to="/acerca" className="inline-block bg-background text-primary px-8 py-3 rounded-full font-bold transition-all duration-300 hover:bg-secondary hover:-translate-y-1 hover:shadow-xl active:scale-95">
                   Conocer equipo &rarr;
                 </Link>
               </div>
@@ -60,7 +60,7 @@ const SeccionesInformativas = () => {
         {/* Fondo decorativo radial oscuro */}
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none bg-[radial-gradient(circle_at_bottom_left,white,transparent_50%)]"></div>
         
-        <div className="mx-auto max-w-7xl relative z-10">
+        <div className="mx-auto max-w-7xl relative z-10" data-aos="fade-up">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
             <div className="w-full lg:w-5/12 space-y-8 text-center lg:text-left">
               <span className="inline-block px-4 py-1.5 rounded-full border border-accent-orange text-accent-orange font-bold text-xs uppercase tracking-wider">
@@ -73,7 +73,7 @@ const SeccionesInformativas = () => {
               <p className="text-secondary/80 font-medium text-lg">
                 Encontranos en el corazón de San Miguel de Tucumán, con fácil acceso y comodidad para tu atención.
               </p>
-              <Link to="/contacto" className="inline-block bg-accent-orange text-primary font-bold px-8 py-3 rounded-full hover:brightness-110 transition-all">
+              <Link to="/contacto" className="inline-block bg-accent-orange text-primary font-bold px-8 py-3 rounded-full transition-all duration-300 hover:brightness-110 hover:-translate-y-1 hover:shadow-xl active:scale-95">
                 Ver cómo llegar &rarr;
               </Link>
               
@@ -114,7 +114,7 @@ const SeccionesInformativas = () => {
       <section className="bg-background py-24 px-4 sm:px-6 lg:px-8 w-full">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left">
+            <div className="w-full lg:w-1/2 space-y-6 text-center lg:text-left" data-aos="fade-right">
               <h2 className="text-5xl md:text-6xl font-black text-text uppercase leading-[1.05] tracking-tight">
                 Expertos <br/> en lo que <br/>
                 <span className="text-accent-orange">te hace bien</span>
@@ -123,15 +123,15 @@ const SeccionesInformativas = () => {
                 Atendiendo sonrisas y cuidando la salud dental de las familias tucumanas con la mejor tecnología.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-                <Link to="/turnos" className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-primary text-background font-bold hover:brightness-110 transition-all uppercase tracking-wide">
+                <Link to="/turnos" className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-primary text-background font-bold transition-all duration-300 hover:brightness-110 hover:-translate-y-1 hover:shadow-xl active:scale-95 uppercase tracking-wide">
                   Reservar turno &rarr;
                 </Link>
-                <Link to="/contacto" className="w-full sm:w-auto px-8 py-3.5 rounded-full border-2 border-secondary text-primary font-bold hover:bg-secondary/50 transition-all uppercase tracking-wide">
+                <Link to="/contacto" className="w-full sm:w-auto px-8 py-3.5 rounded-full border-2 border-secondary text-primary font-bold transition-all duration-300 hover:bg-secondary/50 hover:-translate-y-1 hover:shadow-xl active:scale-95 uppercase tracking-wide">
                   Asesoramiento &rarr;
                 </Link>
               </div>
             </div>
-            <div className="w-full lg:w-1/2 relative mt-8 lg:mt-0">
+            <div className="w-full lg:w-1/2 relative mt-8 lg:mt-0" data-aos="fade-left">
               <img src="/sala de espera 1.jpeg" alt="Instalaciones" className="w-full h-[500px] object-cover rounded-[2.5rem] shadow-2xl border-4 border-white" />
               <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-[90%] bg-white rounded-2xl p-5 shadow-xl border border-secondary/50 flex items-center gap-4">
                 <div className="bg-secondary/40 p-3 rounded-full text-accent-orange">
@@ -158,18 +158,18 @@ const SeccionesInformativas = () => {
           <div className="flex flex-col md:flex-row gap-16">
             
             <div className="w-full md:w-5/12 text-center md:text-left">
-              <h2 className="text-4xl lg:text-5xl font-black uppercase leading-tight tracking-tight">
+              <h2 className="text-4xl lg:text-5xl font-black uppercase leading-tight tracking-tight" data-aos="fade-up">
                 Respuestas <br/>
                 <span className="text-accent-orange">que pueden ayudarte</span>
               </h2>
               <div className="mt-8">
-                <Link to="/contacto" className="inline-block px-8 py-4 border-2 border-secondary/30 text-secondary hover:text-primary rounded-full font-bold hover:bg-secondary transition-all shadow-sm">
+                <Link to="/contacto" className="inline-block px-8 py-4 border-2 border-secondary/30 text-secondary rounded-full font-bold transition-all duration-300 hover:text-primary hover:bg-secondary hover:-translate-y-1 hover:shadow-xl active:scale-95 shadow-sm">
                   Ir a contacto directo &rarr;
                 </Link>
               </div>
             </div>
 
-            <div className="w-full md:w-7/12 space-y-4">
+            <div className="w-full md:w-7/12 space-y-4" data-aos="fade-up" data-aos-delay="200">
               {faqs.map((faq, index) => (
                 <div key={index} className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden shadow-lg transition-all">
                   <button 
