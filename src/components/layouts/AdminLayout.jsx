@@ -7,7 +7,7 @@ const AdminLayout = ({ children }) => {
   const [isDesktopExpanded, setIsDesktopExpanded] = useState(true);
   // Estado para Móvil: Menú abierto/cerrado
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
+
   const location = useLocation();
 
   // Cerramos el menú móvil automáticamente si cambiamos de ruta
@@ -24,13 +24,13 @@ const AdminLayout = ({ children }) => {
 
   return (
     <div className="flex min-h-screen bg-background overflow-hidden relative">
-      
+
       {/* ========================================== */}
       {/* OVERLAY OSCURO PARA MÓVILES */}
       {/* ========================================== */}
       {/* Aparece solo en celulares cuando el menú está abierto */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-sm transition-opacity"
           onClick={() => setIsMobileMenuOpen(false)}
         ></div>
@@ -39,7 +39,7 @@ const AdminLayout = ({ children }) => {
       {/* ========================================== */}
       {/* BARRA LATERAL (Responsive: Fixed en móvil, Relative en PC) */}
       {/* ========================================== */}
-      <aside 
+      <aside
         className={`bg-primary text-background flex flex-col z-50 shadow-2xl border-r-4 border-accent-orange/50 transition-all duration-300 ease-in-out
           /* Comportamiento Móvil: Fijo, superpuesto, entra por la izquierda */
           fixed inset-y-0 left-0 transform ${isMobileMenuOpen ? 'translate-x-0 w-3/4 max-w-[300px]' : '-translate-x-full w-3/4'}
@@ -65,7 +65,7 @@ const AdminLayout = ({ children }) => {
         </div>
 
         {/* Botón flotante para PC (Oculto en móvil) */}
-        <button 
+        <button
           onClick={() => setIsDesktopExpanded(!isDesktopExpanded)}
           className="hidden lg:flex absolute top-24 -right-4 bg-accent-orange text-text w-8 h-8 rounded-full items-center justify-center shadow-lg hover:scale-110 transition-transform focus:outline-none"
         >
@@ -73,17 +73,17 @@ const AdminLayout = ({ children }) => {
         </button>
 
         {/* Navegación */}
-        <nav className="flex-grow p-4 mt-4 lg:mt-8 flex flex-col gap-3 overflow-y-auto">
+        <nav className="grow p-4 mt-4 lg:mt-8 flex flex-col gap-3 overflow-y-auto">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
             const Icon = item.icon;
             // Evaluamos si debe mostrar el texto (Abierto en móvil o expandido en PC)
             const showText = isMobileMenuOpen || isDesktopExpanded;
-            
+
             return (
-              <Link 
-                key={item.name} 
-                to={item.path} 
+              <Link
+                key={item.name}
+                to={item.path}
                 className={`group flex items-center gap-4 px-4 py-4 rounded-xl font-semibold transition-all duration-200 
                   ${isActive ? 'bg-accent-orange text-text shadow-md' : 'text-secondary hover:bg-white/10 hover:text-white'} 
                   ${!showText && 'lg:justify-center'}
@@ -91,7 +91,7 @@ const AdminLayout = ({ children }) => {
               >
                 <Icon className={`text-2xl shrink-0 transition-colors ${isActive ? 'text-text' : 'text-accent-orange'}`} />
                 {showText && <span className="tracking-wide text-sm whitespace-nowrap">{item.name}</span>}
-                
+
                 {/* Tooltip (Solo PC colapsado) */}
                 {!isDesktopExpanded && (
                   <div className="hidden lg:block absolute left-24 bg-primary text-background text-xs px-3 py-1.5 rounded-md opacity-0 group-hover:opacity-100 whitespace-nowrap pointer-events-none shadow-lg border border-secondary/20 transition-opacity">
@@ -116,7 +116,7 @@ const AdminLayout = ({ children }) => {
       {/* ÁREA PRINCIPAL */}
       {/* ========================================== */}
       <main className="flex-1 overflow-y-auto z-10 w-full">
-        
+
         {/* Header Superior Móvil (Hamburguesa) */}
         <div className="lg:hidden bg-primary text-white p-4 flex items-center justify-between sticky top-0 z-30 shadow-md">
           <div className="flex items-center gap-3">

@@ -3,32 +3,32 @@ import { Link } from 'react-router-dom';
 
 const BannerPlanes = () => {
   const [currentImage, setCurrentImage] = useState(0);
-  
+
   // ========================================================
   // LISTA DEFINITIVA Y COMPLETA DE IMÁGENES PARA EL INICIO
   // (Nombres exactos de archivos en carpeta public)
   // ========================================================
   const imagenesConsultorio = [
-    "/sala de espera 1.jpg",
-    "/sala de espera 2.jpg",
-    "/sala de espera 3.jpg",
-    "/sala de espera 4.jpg",
-    "/consultorio 1.jpg",
-    "/consultorio 2.jpg",
+    "/sala de espera 1.jpeg",
+    "/sala de espera 2.jpeg",
+    "/sala de espera 3.jpeg",
+    "/sala de espera 4.jpeg",
+    "/consultorio 1.jpeg",
+    "/consultorio 2.jpeg",
     // User requested escritorio erina 1, uploaded 2 and 3. Using all for variety.
-    "/escritorio erina 2.jpg", 
-    "/escritorio erina 3.jpg",
-    "/consultorio erina 1.jpg",
-    "/consultorio erina 2.jpg",
-    "/escritorio adolfo 1.jpg",
-    "/escritorio adolfo 2.jpg",
-    "/pasillo consultorio adolfo 1.jpg",
-    "/pasillo consultorio adolfo 2.jpg",
-    "/pasillo consultorio adolfo 3.jpg",
-    "/consultorio adolfo 1.jpg",
-    "/consultorio adolfo 2.jpg",
-    "/consultorio adolfo 3.jpg",
-    "/consultorio adolfo 4.jpg",
+    "/escritorio erina 2.jpeg",
+    "/escritorio erina 3.jpeg",
+    "/consultorio erina 1.jpeg",
+    "/consultorio erina 2.jpeg",
+    "/escritorio adolfo 1.jpeg",
+    "/escritorio adolfo 2.jpeg",
+    "/pasillo consultorio adolfo 1.jpeg",
+    "/pasillo consultorio adolfo 2.jpeg",
+    "/pasillo consultorio adolfo 3.jpeg",
+    "/consultorio adolfo 1.jpeg",
+    "/consultorio adolfo 2.jpeg",
+    "/consultorio adolfo 3.jpeg",
+    "/consultorio adolfo 4.jpeg",
   ];
 
   useEffect(() => {
@@ -44,37 +44,37 @@ const BannerPlanes = () => {
       {/* SECCIÓN 1: HERO (FONDO OSCURO PREMIUM) */}
       {/* ========================================== */}
       <section className="relative bg-primary text-background overflow-visible border-b-8 border-accent-orange h-[calc(100vh-80px)] min-h-[600px] flex items-center">
-        
+
         {/* Fondo decorativo radial oscuro */}
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none bg-[radial-gradient(circle_at_top_left,white,transparent_50%)]"></div>
-        
+
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8 lg:gap-16 z-10">
-          
+
           {/* COLUMNA IZQUIERDA: Textos y Botones con animación AOS */}
           <div className="flex-1 text-center md:text-left w-full mt-4 md:mt-0" data-aos="fade-right">
             <span className="inline-block py-2 px-6 rounded-full bg-secondary/10 text-accent-orange font-bold text-xs sm:text-sm mb-4 tracking-wide shadow-sm border border-accent-orange/30 backdrop-blur-sm">
               El primer paso hacia tu mejor sonrisa
             </span>
-            
+
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-5 tracking-tight uppercase">
-              Cuidamos tu <br className="hidden lg:block"/> salud con <br className="hidden lg:block"/>
+              Cuidamos tu <br className="hidden lg:block" /> salud con <br className="hidden lg:block" />
               <span className="text-accent-orange">profesionalismo</span>
             </h1>
-            
+
             <p className="text-base md:text-lg text-secondary/90 mb-8 max-w-xl mx-auto md:mx-0 leading-relaxed font-medium">
               Te ofrecemos tratamientos de primer nivel en un ambiente cómodo y relajado. Reserva tu turno online de forma rápida y sin complicaciones.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row items-center gap-4 justify-center md:justify-start">
               {/* Botón innovador con efecto 'push' (active:scale-95) */}
-              <Link 
-                to="/turnos" 
+              <Link
+                to="/turnos"
                 className="w-full sm:w-auto text-center px-10 py-3 text-primary font-black text-lg rounded-xl bg-accent-orange shadow-lg transition-all duration-300 transform hover:-translate-y-1 active:scale-95 hover:shadow-xl uppercase tracking-wide"
               >
                 Solicitar Turno
               </Link>
-              <Link 
-                to="/acerca" 
+              <Link
+                to="/acerca"
                 className="w-full sm:w-auto text-center px-8 py-3 text-white font-bold text-lg rounded-xl border-2 border-secondary/50 hover:bg-secondary hover:text-primary transition-all duration-300 active:scale-95"
               >
                 Conocer el Centro
@@ -84,21 +84,20 @@ const BannerPlanes = () => {
 
           {/* COLUMNA DERECHA: Carrusel de Imágenes con animación AOS */}
           <div className="flex-1 w-full lg:max-w-[55%] relative md:ml-auto" data-aos="fade-left" data-aos-delay="200">
-            
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-accent-orange/80 aspect-[4/3] w-full bg-secondary/50">
+
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-accent-orange/80 aspect-4/3 w-full bg-secondary/50">
               {imagenesConsultorio.map((img, index) => (
-                <img 
+                <img
                   key={index}
-                  src={img} 
-                  alt={`Instalaciones ${index + 1}`} 
+                  src={img}
+                  alt={`Instalaciones ${index + 1}`}
                   // Efecto fade suave entre fotos
-                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
-                    index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
-                  }`}
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
+                    }`}
                 />
               ))}
             </div>
-            
+
             {/* Tarjeta flotante */}
             <div className="absolute -bottom-6 left-1/2 md:-left-8 transform -translate-x-1/2 md:translate-x-0 bg-white p-3 sm:p-4 rounded-2xl shadow-2xl border border-secondary flex flex-col sm:flex-row items-center gap-3 z-20 w-[90%] sm:w-[400px]">
               <div className="bg-primary/10 p-3 rounded-full text-accent-orange shrink-0">
