@@ -1,13 +1,16 @@
 import { useState } from "react";
+import api from "../../api/axios.js";
 
 const AppointmentForm = () => {
   const [form, setForm] = useState({
     nombre: "",
     apellido: "",
+    dni: "",
     email: "",
     telefono: "",
     doctor: "",
     fecha: "",
+    hora: "",
     consulta: "",
   });
 
@@ -18,9 +21,43 @@ const AppointmentForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
+    
+    // Adaptamos los datos para el backend
+    const formData = {
+      nombrePaciente: form.nombre,
+      apellidoPaciente: form.apellido,
+      dni: form.dni,
+      telefono: form.telefono,
+      profesional: form.doctor,
+      fecha: form.fecha,
+      hora: form.hora,
+      motivo: form.consulta
+    };
+
+    // ¡AGREGA ESTA LÍNEA PARA VER AL CULPABLE!
+    console.log("Datos que estoy a punto de enviar:", formData);
+
+    try {
+      const respuesta = await api.post('/turnos', formData);
+      alert("¡Turno solicitado con éxito! Nuestra asistente te contactará para confirmar.");
+      
+      setForm({
+        nombre: "",
+        apellido: "",
+        dni: "",
+        email: "",
+        telefono: "",
+        doctor: "",
+        fecha: "",
+        hora: "",
+        consulta: "",
+      });
+    } catch (error) {
+      console.error("Error al solicitar el turno:", error);
+      alert("Hubo un error al procesar tu solicitud. Por favor, intenta de nuevo o contáctanos por WhatsApp.");
+    }
   };
 
   return (
@@ -75,21 +112,18 @@ const AppointmentForm = () => {
             required
           />
         </div>
-      </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-1">
           <label
-            htmlFor="email"
+            htmlFor="dni"
             className="block text-sm font-medium text-text/90"
           >
-            Correo electrónico
+            DNI
           </label>
           <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="tu correo@ejemplo.com"
+            id="dni"
+            name="dni"
+            placeholder="Ej: 12345678"
             onChange={handleChange}
             className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required
@@ -112,9 +146,25 @@ const AppointmentForm = () => {
             required
           />
         </div>
-      </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-1">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-text/90"
+          >
+            Correo electrónico
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="tu correo@ejemplo.com"
+            onChange={handleChange}
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            required
+          />
+        </div>
+
         <div className="space-y-1">
           <label
             htmlFor="doctor"
@@ -149,6 +199,23 @@ const AppointmentForm = () => {
             id="fecha"
             type="date"
             name="fecha"
+            onChange={handleChange}
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            required
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label
+            htmlFor="hora"
+            className="block text-sm font-medium text-text/90"
+          >
+            Hora tentativa
+          </label>
+          <input
+            id="hora"
+            type="time"
+            name="hora"
             onChange={handleChange}
             className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required

@@ -13,6 +13,7 @@ import Contacto from "./pages/Contacto.jsx";
 import Login from "./pages/Login.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import OdontogramaPage from "./pages/admin/Odontograma.jsx";
+import PortalAcceso from "./pages/PortalAcceso.jsx";
 
 export default function App() {
   // Encendemos el motor de animaciones
@@ -31,12 +32,16 @@ export default function App() {
       <ScrollToTop />
       
       <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Inicio />} />
-          <Route path="turnos" element={<Turnos />} />
-          <Route path="acerca" element={<AcercaDe />} />
-          <Route path="contacto" element={<Contacto />} />
-          <Route path="login" element={<Login />} />
+        {/* Portal de Acceso Aislado a pantalla completa */}
+        <Route path="/" element={<PortalAcceso />} />
+
+        {/* Grupo principal dentro del MainLayout */}
+        <Route element={<MainLayout />}>
+          <Route path="/inicio" element={<Inicio />} />
+          <Route path="/turnos" element={<Turnos />} />
+          <Route path="/acerca" element={<AcercaDe />} />
+          <Route path="/contacto" element={<Contacto />} />
+          <Route path="/login" element={<Login />} />
         </Route>
         
         {/* La ruta de admin está por fuera del MainLayout, lo cual es perfecto 

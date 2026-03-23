@@ -1,32 +1,38 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import api from "../api/axios.js";
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const [form, setForm] = useState({
-    nombre: "",
-    apellido: "",
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.email || !form.nombre || !form.apellido) return;
-    login({
-      nombre: form.nombre,
-      apellido: form.apellido,
-      email: form.email,
-    });
-    navigate("/turnos");
+    if (!form.email || !form.password) return;
+    setError("");
+
+    try {
+      const respuesta = await api.post('/auth/login', { 
+        email: form.email, 
+        password: form.password 
+      });
+      console.log("Bienvenido:", respuesta.data?.nombre);
+      navigate("/admin");
+    } catch (err) {
+      setError(err.response?.data?.error || "Error al iniciar sesión");
+    }
   };
 
   return (
@@ -71,37 +77,11 @@ const Login = () => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <label htmlFor="nombre" className="block text-sm font-bold text-text mb-1 uppercase tracking-wide">
-                      Nombre
-                    </label>
-                    <input
-                      id="nombre"
-                      name="nombre"
-                      type="text"
-                      value={form.nombre}
-                      onChange={handleChange}
-                      className="w-full rounded-xl border-2 border-secondary/20 bg-white px-4 py-3 text-sm font-bold text-text placeholder-text-light outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/30 shadow-sm"
-                      required
-                      placeholder="Ej. Juan"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="apellido" className="block text-sm font-bold text-text mb-1 uppercase tracking-wide">
-                      Apellido
-                    </label>
-                    <input
-                      id="apellido"
-                      name="apellido"
-                      type="text"
-                      value={form.apellido}
-                      onChange={handleChange}
-                      className="w-full rounded-xl border-2 border-secondary/20 bg-white px-4 py-3 text-sm font-bold text-text placeholder-text-light outline-none transition-all focus:border-primary focus:ring-2 focus:ring-primary/30 shadow-sm"
-                      required
-                      placeholder="Ej. Pérez"
-                    />
-                  </div>
+                  {error && (
+                    <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4 text-sm font-bold text-center">
+                      {error}
+                    </div>
+                  )}
 
                   <div>
                     <label htmlFor="email" className="block text-sm font-bold text-text mb-1 uppercase tracking-wide">

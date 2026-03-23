@@ -44,7 +44,7 @@ const Navbar = () => {
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         {/* LADO IZQUIERDO: El nuevo logo compuesto y el nombre */}
         <Link
-          to="/"
+          to="/inicio"
           className="shrink-0 outline-none focus:outline-none rounded-lg p-1"
         >
           <BrandLogo />
@@ -53,7 +53,7 @@ const Navbar = () => {
         {/* CENTRO: Menú Desktop */}
         <div className="hidden md:flex items-center gap-10">
           <Link
-            to="/"
+            to="/inicio"
             className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
           >
             Inicio
@@ -181,7 +181,7 @@ const Navbar = () => {
         <div className="md:hidden border-t border-secondary bg-background shadow-lg">
           <div className="flex flex-col px-4 py-4 space-y-2">
             <Link
-              to="/"
+              to="/inicio"
               className="block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-secondary"
               onClick={() => setMenuOpen(false)}
             >

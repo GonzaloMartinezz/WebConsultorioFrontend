@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
 import { FaCalendarDay, FaUserClock, FaHistory, FaPlus, FaCheckCircle, FaTimesCircle, FaPen, FaFileInvoiceDollar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import api from '../../api/axios.js';
 
 const AdminDashboard = () => {
   const stats = [
@@ -10,12 +11,23 @@ const AdminDashboard = () => {
     { name: "Ingresos Estimados", value: "$450k", icon: FaFileInvoiceDollar, color: "text-green-600" },
   ];
 
-  const [turnos, setTurnos] = useState([
-    { id: 1, hora: "09:00", paciente: "Gonzalo Martínez", profesional: "Dr. Adolfo Martínez", motivo: "Control Ortodoncia", estado: "Pendiente" },
-    { id: 2, hora: "10:30", paciente: "María Rodríguez", profesional: "Dra. Erina Carcara", motivo: "Limpieza Dental", estado: "Confirmado" },
-    { id: 3, hora: "11:00", paciente: "Carlos Sánchez", profesional: "Dra. Erina Carcara", motivo: "Blanqueamiento", estado: "Confirmado" },
-    { id: 4, hora: "16:00", paciente: "Laura Gómez", profesional: "Dr. Adolfo Martínez", motivo: "Consulta Implante", estado: "Pendiente" },
-  ]);
+  const [turnos, setTurnos] = useState([]);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    const obtenerTurnosDeBD = async () => {
+      try {
+        const respuesta = await api.get('/turnos');
+        setTurnos(respuesta.data);
+        setCargando(false);
+      } catch (error) {
+        console.error("Error al cargar los turnos:", error);
+        setCargando(false);
+      }
+    };
+
+    obtenerTurnosDeBD();
+  }, []);
 
   // Toast System Nativo
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
@@ -25,17 +37,32 @@ const AdminDashboard = () => {
   };
 
   // Acciones Funcionales Reales Visualmente
-  const handleApprove = (id) => {
-    setTurnos(p => p.map(t => t.id === id ? { ...t, estado: 'Confirmado' } : t));
-    showToast('¡Turno Confirmado! Se notificó al paciente por API WhatsApp.', 'success');
+  const handleApprove = async (id) => {
+    try {
+      await api.patch(`/turnos/${id}/estado`, { estado: 'Confirmado' });
+      setTurnos(prevTurnos => 
+        prevTurnos.map(turno => turno._id === id ? { ...turno, estado: 'Confirmado' } : turno)
+      );
+      showToast('¡Turno Confirmado! Se notificó al paciente por API WhatsApp.', 'success');
+    } catch (error) {
+      alert("Hubo un error al confirmar el turno");
+    }
   };
 
-  const handleReject = (id) => {
-    setTurnos(p => p.map(t => t.id === id ? { ...t, estado: 'Cancelado' } : t));
-    showToast('Turno Rechazado y espacio liberado de la agenda.', 'error');
+  const handleReject = async (id) => {
+    try {
+      await api.patch(`/turnos/${id}/estado`, { estado: 'Cancelado' });
+      setTurnos(prevTurnos => 
+        prevTurnos.map(turno => turno._id === id ? { ...turno, estado: 'Cancelado' } : turno)
+      );
+      showToast('Turno Rechazado y espacio liberado de la agenda.', 'error');
+    } catch (error) {
+      alert("Hubo un error al rechazar el turno");
+    }
   };
 
   const handleEdit = (id) => {
+    console.log(`Falta conectar el Modal de edición para el turno ${id}`);
     showToast(`Abriendo el menú de edición rápida para el turno #${id}...`, 'info');
   };
 
@@ -119,7 +146,7 @@ const AdminDashboard = () => {
               </thead>
               <tbody>
                 {turnos.map((turno) => (
-                  <tr key={turno.id} className="border-b border-secondary/20 hover:bg-secondary/10 transition-colors group">
+                  <tr key={turno._id} className="border-b border-secondary/20 hover:bg-secondary/10 transition-colors group">
                     <td className="px-6 py-5 font-black text-primary text-lg">{turno.hora}</td>
                     <td className="px-6 py-5 font-bold text-text text-base">{turno.paciente}</td>
                     <td className="px-6 py-5 font-semibold text-text-light text-sm">{turno.profesional}</td>
@@ -137,16 +164,16 @@ const AdminDashboard = () => {
                     <td className="px-6 py-5 text-right">
                       <div className="flex items-center justify-end gap-3 opacity-90 group-hover:opacity-100 transition-opacity">
                         {turno.estado !== 'Confirmado' && (
-                          <button onClick={() => handleApprove(turno.id)} className="text-green-600 bg-green-50 hover:bg-green-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Aprobar Turno y Notificar">
+                          <button onClick={() => handleApprove(turno._id)} className="text-green-600 bg-green-50 hover:bg-green-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Aprobar Turno y Notificar">
                             <FaCheckCircle className="text-xl" />
                           </button>
                         )}
                         {turno.estado !== 'Cancelado' && (
-                          <button onClick={() => handleReject(turno.id)} className="text-red-500 bg-red-50 hover:bg-red-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Rechazar Turno">
+                          <button onClick={() => handleReject(turno._id)} className="text-red-500 bg-red-50 hover:bg-red-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Rechazar Turno">
                             <FaTimesCircle className="text-xl" />
                           </button>
                         )}
-                        <button onClick={() => handleEdit(turno.id)} className="text-primary bg-secondary/30 hover:bg-secondary/50 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Configurar Info">
+                        <button onClick={() => handleEdit(turno._id)} className="text-primary bg-secondary/30 hover:bg-secondary/50 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Configurar Info">
                           <FaPen className="text-xl" />
                         </button>
                       </div>
