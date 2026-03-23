@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 // Importamos iconos profesionales para todas las nuevas secciones
-import { 
-  FaHome, FaBell, FaCalendarAlt, FaUserInjured, FaFileMedical, 
-  FaTeeth, FaChartLine, FaSmileBeam, FaCogs, FaSignOutAlt, 
-  FaChevronLeft, FaChevronRight 
+import {
+  FaHome, FaBell, FaCalendarAlt, FaUserInjured, FaFileMedical,
+  FaTeeth, FaChartLine, FaSmileBeam, FaCogs, FaSignOutAlt,
+  FaChevronLeft, FaChevronRight
 } from 'react-icons/fa';
 
 const LayoutAdmin = ({ children }) => {
@@ -26,9 +26,9 @@ const LayoutAdmin = ({ children }) => {
 
   return (
     <div className="flex min-h-screen bg-background overflow-hidden relative">
-      
+
       {/* SIDEBAR */}
-      <aside 
+      <aside
         className={`bg-primary text-background flex flex-col transition-all duration-300 relative z-30 shadow-2xl border-r-4 border-accent-orange/50 
           ${isExpanded ? 'w-1/4 min-w-[280px]' : 'w-[88px]'}`}
       >
@@ -45,7 +45,7 @@ const LayoutAdmin = ({ children }) => {
         </div>
 
         {/* TOGGLE BUTTON */}
-        <button 
+        <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="absolute top-24 -right-4 bg-accent-orange text-white w-8 h-8 rounded-full flex items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform focus:outline-none ring-4 ring-background"
         >
@@ -53,18 +53,18 @@ const LayoutAdmin = ({ children }) => {
         </button>
 
         {/* LISTA DE ÍTEMS DEL MENÚ (Scrollable si son muchos) */}
-        <nav className="flex-grow p-4 mt-4 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
+        <nav className="grow p-4 mt-4 flex flex-col gap-2 overflow-y-auto custom-scrollbar">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
             const Icon = item.icon;
-            
+
             return (
-              <Link 
-                key={item.name} 
-                to={item.path} 
+              <Link
+                key={item.name}
+                to={item.path}
                 className={`group flex items-center gap-4 px-4 py-3.5 rounded-xl font-bold transition-all duration-300 relative overflow-hidden
-                  ${isActive 
-                    ? 'bg-accent-orange text-text shadow-md' 
+                  ${isActive
+                    ? 'bg-accent-orange text-text shadow-md'
                     : 'text-secondary hover:bg-white/10 hover:text-white'
                   } 
                   ${!isExpanded && 'justify-center'}
@@ -72,13 +72,13 @@ const LayoutAdmin = ({ children }) => {
               >
                 {/* Animación de fondo al hacer hover */}
                 {!isActive && <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity"></div>}
-                
+
                 <Icon className={`text-xl shrink-0 transition-all duration-300 ${isActive ? 'text-text scale-110' : 'text-accent-orange group-hover:scale-110'}`} />
-                
+
                 {isExpanded && (
                   <span className="tracking-wide text-[13px] whitespace-nowrap">{item.name}</span>
                 )}
-                
+
                 {/* Ícono de Alerta para Turnos Pendientes (Badge rojo) */}
                 {isExpanded && item.name === "Turnos Pendientes" && (
                   <span className="ml-auto bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow-sm animate-pulse-slow">3</span>

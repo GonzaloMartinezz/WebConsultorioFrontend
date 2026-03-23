@@ -45,88 +45,87 @@ const ChatbotWidget = () => {
     if (text.includes('turno') || text.includes('cita') || text.includes('agendar')) {
       return "📅 Puedes agendar un turno tocando el botón verde de WhatsApp a tu izquierda, o usando la sección 'Solicitar Turno' de nuestra web.";
     }
-    // 8. ¿Qué tratamientos realizan?
-    if (text.includes('tratamientos') || text.includes('hacen') || text.includes('realizan')) {
-      return "🦷 Realizamos una amplia gama de tratamientos, incluyendo: Ortodoncia, Implantes Dentales, Estética Dental, Odontología General, Odontopediatría, Prótesis Dentales, Endodoncia, Cirugía Oral, Periodoncia, Rehabilitación Oral, ATM y Dolor Facial, Bruxismo";
-    }
 
-
-    const handleSend = (e) => {
-      e.preventDefault();
-      if (!inputText.trim()) return;
-
-      const newMessages = [...messages, { sender: 'user', text: inputText }];
-      setMessages(newMessages);
-      setInputText('');
-
-      setTimeout(() => {
-        const botReply = getBotResponse(inputText);
-        setMessages((prev) => [...prev, { sender: 'bot', text: botReply }]);
-      }, 600);
-    };
-
-    return (
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-
-        {isOpen && (
-          <div className="bg-white rounded-2xl shadow-2xl border border-secondary/50 w-80 sm:w-96 h-[450px] mb-4 flex flex-col overflow-hidden transform transition-all duration-300 origin-bottom-right">
-
-            <div className="bg-primary text-white px-5 py-4 flex justify-between items-center shrink-0 shadow-md">
-              <div className="flex items-center gap-3">
-                <div className="bg-white/20 p-2 rounded-full">
-                  <FaRobot className="text-xl text-accent-orange" />
-                </div>
-                <div>
-                  <h4 className="font-bold leading-none">Asistente C&M</h4>
-                  <span className="text-[10px] text-accent-orange font-semibold uppercase tracking-wider">En línea</span>
-                </div>
-              </div>
-              <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white transition-colors">
-                <FaTimes className="text-xl" />
-              </button>
-            </div>
-
-            <div className="flex-1 p-4 overflow-y-auto bg-background/30 flex flex-col gap-4">
-              {messages.map((msg, idx) => (
-                <div key={idx} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  {/* whitespace-pre-wrap es clave para que el link del mapa y los enter se vean bien */}
-                  <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm shadow-sm whitespace-pre-wrap ${msg.sender === 'user'
-                      ? 'bg-accent-orange text-white rounded-tr-none'
-                      : 'bg-white border border-secondary/30 text-text rounded-tl-none'
-                    }`}>
-                    {msg.text}
-                  </div>
-                </div>
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
-
-            <form onSubmit={handleSend} className="bg-white p-3 border-t border-secondary/30 flex items-center gap-2 shrink-0">
-              <input
-                type="text"
-                placeholder="Pregunta sobre turnos, mapas, pagos..."
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                className="flex-1 bg-background/50 border border-secondary/50 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors"
-              />
-              <button type="submit" className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors shrink-0">
-                <FaPaperPlane className="text-sm -ml-0.5" />
-              </button>
-            </form>
-
-          </div>
-        )}
-
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-primary/90 hover:scale-110 active:scale-95 transition-all duration-300 relative"
-        >
-          <FaRobot className="text-2xl" />
-          {!isOpen && <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-pulse"></span>}
-        </button>
-
-      </div>
-    );
+    // Respuesta por defecto si no entiende
+    return "No entendí muy bien. 😅 ¿Quieres hablar con nuestra secretaria? Solo toca el ícono verde de WhatsApp a la izquierda de la pantalla.";
   };
 
-  export default ChatbotWidget; 
+  const handleSend = (e) => {
+    e.preventDefault();
+    if (!inputText.trim()) return;
+
+    const newMessages = [...messages, { sender: 'user', text: inputText }];
+    setMessages(newMessages);
+    setInputText('');
+
+    setTimeout(() => {
+      const botReply = getBotResponse(inputText);
+      setMessages((prev) => [...prev, { sender: 'bot', text: botReply }]);
+    }, 600);
+  };
+
+  return (
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+
+      {isOpen && (
+        <div className="bg-white rounded-2xl shadow-2xl border border-secondary/50 w-80 sm:w-96 h-[450px] mb-4 flex flex-col overflow-hidden transform transition-all duration-300 origin-bottom-right">
+
+          <div className="bg-primary text-white px-5 py-4 flex justify-between items-center shrink-0 shadow-md">
+            <div className="flex items-center gap-3">
+              <div className="bg-white/20 p-2 rounded-full">
+                <FaRobot className="text-xl text-accent-orange" />
+              </div>
+              <div>
+                <h4 className="font-bold leading-none">Asistente C&M</h4>
+                <span className="text-[10px] text-accent-orange font-semibold uppercase tracking-wider">En línea</span>
+              </div>
+            </div>
+            <button onClick={() => setIsOpen(false)} className="text-white/70 hover:text-white transition-colors">
+              <FaTimes className="text-xl" />
+            </button>
+          </div>
+
+          <div className="flex-1 p-4 overflow-y-auto bg-background/30 flex flex-col gap-4">
+            {messages.map((msg, idx) => (
+              <div key={idx} className={`flex w-full ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                {/* whitespace-pre-wrap es clave para que el link del mapa y los enter se vean bien */}
+                <div className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm shadow-sm whitespace-pre-wrap ${msg.sender === 'user'
+                    ? 'bg-accent-orange text-white rounded-tr-none'
+                    : 'bg-white border border-secondary/30 text-text rounded-tl-none'
+                  }`}>
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+
+          <form onSubmit={handleSend} className="bg-white p-3 border-t border-secondary/30 flex items-center gap-2 shrink-0">
+            <input
+              type="text"
+              placeholder="Pregunta sobre turnos, mapas, pagos..."
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              className="flex-1 bg-background/50 border border-secondary/50 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition-colors"
+            />
+            <button type="submit" className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors shrink-0">
+              <FaPaperPlane className="text-sm -ml-0.5" />
+            </button>
+          </form>
+
+        </div>
+      )}
+
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-primary/90 hover:scale-110 active:scale-95 transition-all duration-300 relative"
+      >
+        <FaRobot className="text-2xl" />
+        {!isOpen && <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-pulse"></span>}
+      </button>
+
+    </div>
+  );
+};
+
+export default ChatbotWidget;

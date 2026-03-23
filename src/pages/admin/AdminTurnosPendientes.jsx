@@ -6,8 +6,8 @@ const AdminTurnosPendientes = () => {
     // Sistema Nativo de Notificaciones (TOASTS)
     const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
     const showToast = (message, type = 'success') => {
-      setToast({ show: true, message, type });
-      setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 4000);
+        setToast({ show: true, message, type });
+        setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 4000);
     };
 
     const [pendientes, setPendientes] = useState([
@@ -33,8 +33,8 @@ const AdminTurnosPendientes = () => {
                 <div className={`fixed top-10 right-10 z-50 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-bold animate-fade-in text-white tracking-wide border-2 
                 ${toast.type === 'success' ? 'bg-green-500 border-green-400' : 'bg-red-500 border-red-400'}`}
                 >
-                {toast.type === 'success' ? <FaCheckCircle className="text-2xl" /> : <FaTimesCircle className="text-2xl" />}
-                {toast.message}
+                    {toast.type === 'success' ? <FaCheckCircle className="text-2xl" /> : <FaTimesCircle className="text-2xl" />}
+                    {toast.message}
                 </div>
             )}
 
@@ -56,8 +56,8 @@ const AdminTurnosPendientes = () => {
                 ) : (
                     <div className="grid grid-cols-1 gap-6">
                         {pendientes.map((turno) => (
-                            <div key={turno.id} className="bg-white rounded-[2rem] p-6 lg:p-8 shadow-md border-l-8 border-accent-orange flex flex-col xl:flex-row xl:items-center justify-between gap-8 hover:-translate-y-1 transition-transform cursor-pointer">
-                                
+                            <div key={turno.id} className="bg-white rounded-4xl p-6 lg:p-8 shadow-md border-l-8 border-accent-orange flex flex-col xl:flex-row xl:items-center justify-between gap-8 hover:-translate-y-1 transition-transform cursor-pointer">
+
                                 <div className="flex flex-col md:flex-row items-start md:items-center gap-6 xl:w-2/3">
                                     <div className="bg-primary/10 rounded-2xl p-4 text-center min-w-[100px] shrink-0 border border-primary/20">
                                         <p className="text-xs font-black uppercase text-accent-orange tracking-widest">{turno.fecha}</p>
@@ -70,7 +70,7 @@ const AdminTurnosPendientes = () => {
                                         </div>
                                         <p className="text-text-light font-medium">Solicita consultar con: <span className="text-primary font-bold">{turno.profesional}</span></p>
                                         <p className="text-secondary-dark font-medium flex items-center gap-2 mt-1">
-                                            <FaWhatsapp className="text-green-500"/> +54 9 {turno.telefono}
+                                            <FaWhatsapp className="text-green-500" /> +54 9 {turno.telefono}
                                         </p>
                                     </div>
                                 </div>

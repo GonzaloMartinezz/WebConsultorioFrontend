@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx"; 
+import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
 import { FaCalendarDay, FaUserClock, FaHistory, FaPlus, FaCheckCircle, FaTimesCircle, FaPen, FaFileInvoiceDollar } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
@@ -64,8 +64,8 @@ const AdminDashboard = () => {
             Panel de Administración <span className="text-accent-orange text-xl lg:text-2xl ml-2">C&M</span>
           </h1>
         </div>
-        <Link 
-          to="/turnos" 
+        <Link
+          to="/turnos"
           className="w-full md:w-auto px-8 py-3.5 text-white font-bold text-sm rounded-xl bg-primary shadow-lg hover:bg-primary/90 active:scale-95 transition-all uppercase tracking-wide flex items-center justify-center gap-3 hover:-translate-y-1 hover:shadow-xl"
         >
           <FaPlus /> Crear Nuevo Turno FrontDesk
@@ -73,7 +73,7 @@ const AdminDashboard = () => {
       </header>
 
       <main className="space-y-10 pb-10">
-        
+
         {/* ======================================================== */}
         {/* CARDS ESTRICTAMENTE ABAJO DEL TÍTULO */}
         {/* ======================================================== */}
@@ -81,7 +81,7 @@ const AdminDashboard = () => {
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <div key={index} className="bg-white rounded-[2rem] p-8 shadow-sm border border-secondary/60 flex items-center justify-between hover:border-accent-orange transition-colors group cursor-pointer">
+              <div key={index} className="bg-white rounded-4xl p-8 shadow-sm border border-secondary/60 flex items-center justify-between hover:border-accent-orange transition-colors group cursor-pointer">
                 <div>
                   <p className="text-text-light text-xs font-black uppercase tracking-widest mb-2">{stat.name}</p>
                   <p className="text-text text-5xl font-black leading-none tracking-tighter">{stat.value}</p>
@@ -104,7 +104,7 @@ const AdminDashboard = () => {
               Ver Todos los Pendientes <span className="bg-red-500 text-white rounded-full px-2 py-0.5 text-xs">3</span>
             </Link>
           </div>
-          
+
           <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-secondary/50 overflow-hidden w-full overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead className="border-b-2 border-primary/10">
@@ -126,13 +126,13 @@ const AdminDashboard = () => {
                     <td className="px-6 py-5 text-text-light text-sm">{turno.motivo}</td>
                     <td className="px-6 py-5">
                       <span className={`inline-block px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider
-                        ${turno.estado === 'Confirmado' ? 'bg-green-100 text-green-700 border border-green-200' : 
-                          turno.estado === 'Cancelado' ? 'bg-red-100 text-red-700 border border-red-200' : 
-                          'bg-yellow-100 text-yellow-700 border border-yellow-200 shadow-inner'}`}>
+                        ${turno.estado === 'Confirmado' ? 'bg-green-100 text-green-700 border border-green-200' :
+                          turno.estado === 'Cancelado' ? 'bg-red-100 text-red-700 border border-red-200' :
+                            'bg-yellow-100 text-yellow-700 border border-yellow-200 shadow-inner'}`}>
                         {turno.estado}
                       </span>
                     </td>
-                    
+
                     {/* FUNCIONALIDAD DE BOTONES QUE ALTERA EL ESTADO (y lanza las alertas) */}
                     <td className="px-6 py-5 text-right">
                       <div className="flex items-center justify-end gap-3 opacity-90 group-hover:opacity-100 transition-opacity">
@@ -157,7 +157,7 @@ const AdminDashboard = () => {
             </table>
           </div>
         </div>
-        
+
       </main>
     </LayoutAdmin>
   );

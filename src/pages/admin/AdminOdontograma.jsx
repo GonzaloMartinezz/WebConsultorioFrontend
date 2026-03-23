@@ -22,14 +22,14 @@ const AdminOdontograma = () => {
 
     const ToothVisual = ({ number }) => {
         const state = statusMatch[number];
-        
+
         return (
             <div className="flex flex-col items-center gap-1 group cursor-pointer hover:scale-110 transition-transform">
                 <span className="text-[10px] font-black text-text-light group-hover:text-primary">{number}</span>
                 <div className="relative w-10 h-14 flex items-center justify-center">
                     {/* Diente Base (realista usando FaTooth pero estirado como molar/incisivo) */}
-                    <FaTooth className={`w-8 h-10 ${state === 'extraction' ? 'text-secondary/50' : 'text-[#f8f9fa] drop-shadow-md stroke-secondary stroke-2'}`} style={{strokeWidth: '15', stroke: '#cbd5e1'}} />
-                    
+                    <FaTooth className={`w-8 h-10 ${state === 'extraction' ? 'text-secondary/50' : 'text-[#f8f9fa] drop-shadow-md stroke-secondary stroke-2'}`} style={{ strokeWidth: '15', stroke: '#cbd5e1' }} />
+
                     {/* Tratamientos Overlay */}
                     {state === 'extraction' && (
                         <div className="absolute inset-0 flex items-center justify-center">
@@ -48,7 +48,7 @@ const AdminOdontograma = () => {
                 </div>
 
                 {/* Grid Clínico (5 superficies) - MUY TÍPICO DE ODONTOGRAMAS */}
-                <div className="w-5 h-5 grid grid-cols-3 grid-rows-3 gap-[1px] bg-secondary p-[1px] mt-1 opacity-50 group-hover:opacity-100 transition-opacity">
+                <div className="w-5 h-5 grid grid-cols-3 grid-rows-3 gap-px bg-secondary p-px mt-1 opacity-50 group-hover:opacity-100 transition-opacity">
                     <div className="bg-white col-start-2"></div>
                     <div className="bg-white col-start-1 row-start-2"></div>
                     <div className="bg-white col-start-2 row-start-2"></div>
@@ -62,15 +62,15 @@ const AdminOdontograma = () => {
     return (
         <LayoutAdmin>
             <header className="mb-8" data-aos="fade-down">
-                 <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-orange mb-1">Registro Médico</p>
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-orange mb-1">Registro Médico</p>
                 <h1 className="text-3xl font-black text-primary tracking-tight">Odontograma Avanzado</h1>
             </header>
 
             <main className="space-y-6" data-aos="fade-up">
-                
+
                 {/* Herramientas */}
                 <div className="bg-white rounded-2xl p-4 shadow-sm border border-secondary/50 flex flex-wrap gap-4 items-center justify-center md:justify-start">
-                    <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border border-secondary hover:bg-secondary/20 transition-all"><FaTools/> Herramientas</button>
+                    <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border border-secondary hover:bg-secondary/20 transition-all"><FaTools /> Herramientas</button>
                     <div className="w-px h-6 bg-secondary/50 hidden md:block"></div>
                     <button className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold rounded hover:bg-red-50 text-red-600"><div className="w-3 h-3 rounded-full bg-red-500"></div> Caries</button>
                     <button className="flex items-center gap-1 px-3 py-1.5 text-xs font-bold rounded hover:bg-blue-50 text-blue-600"><div className="w-3 h-3 bg-blue-500"></div> Obturación</button>
@@ -80,8 +80,8 @@ const AdminOdontograma = () => {
                 </div>
 
                 {/* El Odontograma Principal */}
-                <div className="bg-white rounded-[2rem] p-8 lg:p-12 shadow-sm border border-secondary/50 overflow-x-auto custom-scrollbar">
-                    
+                <div className="bg-white rounded-4xl p-8 lg:p-12 shadow-sm border border-secondary/50 overflow-x-auto custom-scrollbar">
+
                     <div className="min-w-[800px] flex flex-col items-center gap-12 relative">
                         {/* Líneas divisorias en el centro estilo Nubidoc */}
                         <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-secondary/30"></div>
@@ -91,7 +91,7 @@ const AdminOdontograma = () => {
                         <div className="flex justify-center gap-1 sm:gap-2">
                             {topRow.map((tooth) => <ToothVisual key={tooth} number={tooth} />)}
                         </div>
-                        
+
                         {/* Bottom Row */}
                         <div className="flex justify-center gap-1 sm:gap-2">
                             {bottomRow.map((tooth) => <ToothVisual key={tooth} number={tooth} />)}

@@ -12,11 +12,11 @@ const AdminEncuestas = () => {
             <main className="space-y-8" data-aos="fade-up">
 
                 <div className="flex flex-col md:flex-row gap-6">
-                    <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-secondary/50 flex-1 flex flex-col items-center justify-center">
+                    <div className="bg-white rounded-4xl p-8 shadow-sm border border-secondary/50 flex-1 flex flex-col items-center justify-center">
                         <p className="text-sm font-bold text-text-light uppercase tracking-wider mb-2">Encuestas Enviadas</p>
                         <p className="text-6xl font-black text-primary">38</p>
                     </div>
-                    <div className="bg-white rounded-[2rem] p-8 shadow-sm border border-secondary/50 flex-1 flex flex-col items-center justify-center">
+                    <div className="bg-white rounded-4xl p-8 shadow-sm border border-secondary/50 flex-1 flex flex-col items-center justify-center">
                         <p className="text-sm font-bold text-text-light uppercase tracking-wider mb-2">Encuestas Respondidas</p>
                         <p className="text-6xl font-black text-accent-orange">29</p>
                     </div>

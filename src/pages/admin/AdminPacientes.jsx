@@ -25,13 +25,13 @@ const AdminPacientes = () => {
       </header>
 
       <main className="space-y-6 pb-10" data-aos="fade-up">
-        
+
         {/* BUSCADOR Y FILTROS */}
         <div className="bg-white rounded-2xl p-5 shadow-sm border border-secondary flex flex-col md:flex-row gap-4 items-center justify-between">
           <div className="relative w-full md:w-1/2">
-            <input 
-              type="text" 
-              placeholder="Buscar por Nombre, DNI o Teléfono..." 
+            <input
+              type="text"
+              placeholder="Buscar por Nombre, DNI o Teléfono..."
               className="w-full px-12 py-3 rounded-xl border border-secondary bg-background/30 focus:border-accent-orange outline-none font-medium"
             />
             <FaSearch className="absolute top-1/2 left-5 transform -translate-y-1/2 text-text-light" />
@@ -49,7 +49,7 @@ const AdminPacientes = () => {
         </div>
 
         {/* TABLA DE DATOS */}
-        <div className="bg-white rounded-[2rem] p-4 shadow-sm border border-secondary/50 overflow-hidden w-full overflow-x-auto">
+        <div className="bg-white rounded-4xl p-4 shadow-sm border border-secondary/50 overflow-hidden w-full overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[850px]">
             <thead className="bg-background/50 border-b border-secondary/70">
               <tr>
@@ -70,7 +70,7 @@ const AdminPacientes = () => {
                   <td className="px-6 py-5 text-text-light text-sm font-medium">{paciente.ultimaVisita}</td>
                   <td className="px-6 py-5">
                     <span className={`inline-block px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wider
-                      ${paciente.estado === 'Tratamiento Activo' ? 'bg-accent-orange/20 text-accent-orange' : 
+                      ${paciente.estado === 'Tratamiento Activo' ? 'bg-accent-orange/20 text-accent-orange' :
                         paciente.estado === 'Alta' ? 'bg-green-100 text-green-700' : 'bg-secondary/40 text-text-light'}`}>
                       {paciente.estado}
                     </span>
@@ -92,7 +92,7 @@ const AdminPacientes = () => {
               ))}
             </tbody>
           </table>
-          
+
           {/* Paginación */}
           <div className="flex items-center justify-between px-6 py-4 border-t border-secondary/30 mt-2">
             <p className="text-sm text-text-light font-medium">Mostrando 1 a 4 de 240 pacientes</p>
