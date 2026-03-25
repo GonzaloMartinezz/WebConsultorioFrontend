@@ -13,7 +13,7 @@ import Contacto from "./pages/Contacto.jsx";
 import Login from "./pages/Login.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import OdontogramaPage from "./pages/admin/Odontograma.jsx";
-import PortalAcceso from "./pages/PortalAcceso.jsx";
+import DirectorioPacientes from './pages/admin/DirectorioPacientes.jsx';
 
 export default function App() {
   // Encendemos el motor de animaciones
@@ -32,22 +32,30 @@ export default function App() {
       <ScrollToTop />
       
       <Routes>
-        {/* Portal de Acceso Aislado a pantalla completa */}
-        <Route path="/" element={<PortalAcceso />} />
-
-        {/* Grupo principal dentro del MainLayout */}
-        <Route element={<MainLayout />}>
-          <Route path="/inicio" element={<Inicio />} />
-          <Route path="/turnos" element={<Turnos />} />
-          <Route path="/acerca" element={<AcercaDe />} />
-          <Route path="/contacto" element={<Contacto />} />
-          <Route path="/login" element={<Login />} />
+        {/* ========================================= */}
+        {/* EL MUNDO PÚBLICO (Para los pacientes)       */}
+        {/* ========================================= */}
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Inicio />} />
+          <Route path="inicio" element={<Inicio />} />
+          <Route path="turnos" element={<Turnos />} />
+          <Route path="acerca" element={<AcercaDe />} />
+          <Route path="contacto" element={<Contacto />} />
+          {/* El login publico ya no está en MainLayout */}
         </Route>
+
+        {/* ========================================= */}
+        {/* EL MUNDO PRIVADO (Para el administrador)    */}
+        {/* ========================================= */}
+        
+        {/* 1. La puerta de entrada a la plataforma */}
+        <Route path="/login" element={<Login />} />
         
         {/* La ruta de admin está por fuera del MainLayout, lo cual es perfecto 
             para que el panel de control tenga su propio diseño sin el Navbar público */}
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/odontograma" element={<OdontogramaPage />} />
+        <Route path="/admin/pacientes" element={<DirectorioPacientes />} />
       </Routes>
     </>
   );

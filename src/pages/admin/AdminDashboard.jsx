@@ -1,33 +1,65 @@
 import { useState, useEffect } from 'react';
 import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
 import { FaCalendarDay, FaUserClock, FaHistory, FaPlus, FaCheckCircle, FaTimesCircle, FaPen, FaFileInvoiceDollar } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/axios.js';
 
 const AdminDashboard = () => {
-  const stats = [
-    { name: "Turnos para Hoy", value: "12", icon: FaCalendarDay, color: "text-primary" },
-    { name: "Consultas Pendientes", value: "3", icon: FaUserClock, color: "text-red-500" },
-    { name: "Ingresos Estimados", value: "$450k", icon: FaFileInvoiceDollar, color: "text-green-600" },
-  ];
-
   const [turnos, setTurnos] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const navigate = useNavigate();
+
+  // ========================================================
+  // EL CEREBRO MATEMÁTICO (Cálculos Dinámicos en Tiempo Real)
+  // ========================================================
+  
+  // A. Obtener la fecha de hoy exacta en formato YYYY-MM-DD
+  const fechaHoy = new Date().toISOString().split('T')[0];
+
+  // B. Calcular Turnos para Hoy (Filtramos los que coinciden con la fecha)
+  const turnosHoy = turnos.filter(turno => turno.fecha === fechaHoy).length;
+
+  // C. Calcular Consultas Pendientes GLOBALES (Filtramos por estado)
+  const consultasPendientes = turnos.filter(turno => turno.estado === 'Pendiente').length;
+
+  // D. Calcular Ingresos Estimados de Hoy
+  const ticketPromedio = 37500;
+  const calculoIngresos = (turnosHoy * ticketPromedio);
+  
+  // Formateamos el número
+  const ingresosEstimadosTexto = calculoIngresos === 0 
+    ? "$0" 
+    : calculoIngresos > 999999 
+      ? `$${(calculoIngresos / 1000000).toFixed(1)}M` 
+      : `$${(calculoIngresos / 1000).toFixed(0)}k`;
+
+  // Array de stats dinámico
+  const stats = [
+    { name: "Turnos para Hoy", value: cargando ? '-' : turnosHoy.toString(), icon: FaCalendarDay, color: "text-primary" },
+    { name: "Consultas Pendientes", value: cargando ? '-' : consultasPendientes.toString(), icon: FaUserClock, color: "text-red-500" },
+    { name: "Ingresos Estimados", value: cargando ? '-' : ingresosEstimadosTexto, icon: FaFileInvoiceDollar, color: "text-green-600" },
+  ];
 
   useEffect(() => {
     const obtenerTurnosDeBD = async () => {
       try {
         const respuesta = await api.get('/turnos');
         setTurnos(respuesta.data);
-        setCargando(false);
       } catch (error) {
         console.error("Error al cargar los turnos:", error);
+        
+        // EL GUARDIÁN: Si el backend dice 401 (Sin llave) o 403 (No es admin)...
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          // ...lo expulsamos a la pantalla de login de inmediato.
+          navigate('/login'); 
+        }
+      } finally {
         setCargando(false);
       }
     };
 
     obtenerTurnosDeBD();
-  }, []);
+  }, [navigate]);
 
   // Toast System Nativo
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
@@ -128,7 +160,7 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-primary text-2xl font-black uppercase tracking-tight">Agenda de Hoy</h2>
             <Link to="/admin/pendientes" className="text-sm font-bold text-accent-orange hover:underline flex items-center gap-2">
-              Ver Todos los Pendientes <span className="bg-red-500 text-white rounded-full px-2 py-0.5 text-xs">3</span>
+              Ver Todos los Pendientes <span className="bg-red-500 text-white rounded-full px-2 py-0.5 text-xs">{consultasPendientes}</span>
             </Link>
           </div>
 
@@ -145,10 +177,12 @@ const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {turnos.map((turno) => (
+                {turnos
+                  .filter(turno => turno.fecha === fechaHoy) // Filtraremos opcionalmente para que solo muestre los de HOY en "Agenda de Hoy"
+                  .map((turno) => (
                   <tr key={turno._id} className="border-b border-secondary/20 hover:bg-secondary/10 transition-colors group">
                     <td className="px-6 py-5 font-black text-primary text-lg">{turno.hora}</td>
-                    <td className="px-6 py-5 font-bold text-text text-base">{turno.paciente}</td>
+                    <td className="px-6 py-5 font-bold text-text text-base">{turno.nombrePaciente} {turno.apellidoPaciente}</td>
                     <td className="px-6 py-5 font-semibold text-text-light text-sm">{turno.profesional}</td>
                     <td className="px-6 py-5 text-text-light text-sm">{turno.motivo}</td>
                     <td className="px-6 py-5">

@@ -74,13 +74,17 @@ const Footer = () => {
         </div>
 
         {/* BARRA INFERIOR DE COPYRIGHT (Grises suaves y marrón nogal) */}
-        <div className="mt-16 pt-8 border-t border-secondary/20 text-center space-y-3">
-          <p className="text-sm text-secondary tracking-wide">
+        <div className="mt-16 pt-8 border-t border-secondary/20 flex flex-col items-center space-y-3">
+          <p className="text-sm text-secondary tracking-wide text-center">
             &copy; {new Date().getFullYear()} Gonzalo Martinez. Todos los derechos reservados.
           </p>
-          <p className="text-xs text-secondary/60">
+          <p className="text-xs text-secondary/60 text-center">
             Carcara • Martínez Centro Odontológico • Odontología Integral •San Miguel de Tucumán, Argentina.
           </p>
+          
+          <Link to="/login" className="text-secondary/50 text-xs hover:text-accent-orange mt-2 transition-colors">
+            Acceso Personal C&M
+          </Link>
         </div>
       </div>
     </footer>

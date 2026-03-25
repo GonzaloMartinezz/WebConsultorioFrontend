@@ -1,132 +1,123 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../api/axios.js';
+import { useNavigate, Link } from 'react-router-dom';
+import api from '../api/axios.js'; // El puente mágico que creamos
+import { FaLock, FaUserShield, FaArrowLeft } from 'react-icons/fa';
 
 const PortalAcceso = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(false);
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
-  const [formData, setFormData] = useState({
-    nombre: '',
-    apellido: '',
-    email: '',
-    password: ''
-  });
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const toggleMode = () => {
-    setIsLogin(!isLogin);
-    setFormData({ nombre: '', apellido: '', email: '', password: '' });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (isLogin) {
-      try {
-        const res = await api.post('/auth/login', { email: formData.email, password: formData.password });
-        navigate('/inicio');
-      } catch (error) {
-        alert("Error al iniciar sesión. Comprueba tus credenciales.");
-        console.error(error);
+    setError(''); // Limpiamos errores anteriores
+    setCargando(true); // Activamos el estado de carga
+
+    try {
+      // 1. Tocamos la puerta del backend para pedir acceso
+      const respuesta = await api.post('/auth/login', { email, password });
+      
+      // 2. Si el backend responde OK (Status 200), la cookie de seguridad 
+      // se guarda automáticamente en el navegador gracias a axios.
+      const usuarioLogueado = respuesta.data;
+      console.log(`¡Acceso concedido! Hola ${usuarioLogueado.nombre}`);
+      
+      localStorage.setItem('perfilUsuario', JSON.stringify(usuarioLogueado));
+
+      // 3. Redirigimos al usuario a su panel de administración (tu foto)
+      if (usuarioLogueado.rol === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/'); // O redirigir a una vista de paciente 
       }
-    } else {
-      // Petición real para crear en la base de datos
-      try {
-        await api.post('/auth/register', { 
-          nombre: formData.nombre, 
-          apellido: formData.apellido, 
-          email: formData.email, 
-          password: formData.password 
-        });
-        alert("¡Cuenta creada exitosamente! Ahora ingresa tus datos para iniciar sesión.");
-        toggleMode(); // Cambia a Iniciar Sesión y vacía los inputs
-      } catch (error) {
-        alert("Error al registrar. Verifica los datos o puede que el correo ya exista.");
-        console.error(error);
-      }
+
+    } catch (err) {
+      // Si el backend nos rebota (Status 401), mostramos el error exacto
+      console.error("Error de login:", err);
+      setError(
+        err.response?.data?.error || 
+        'No se pudo conectar con el servidor. Verifica que el backend esté encendido.'
+      );
+    } finally {
+      setCargando(false); // Apagamos el estado de carga
     }
   };
 
   return (
-    <main className="relative bg-[#3E2723] overflow-hidden min-h-screen flex items-center justify-center p-4">
-      {/* Fondo decorativo radial sutil */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none bg-[radial-gradient(circle_at_top_left,white,transparent_50%)]"></div>
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative">
       
-      <div className="mx-auto w-full max-w-5xl z-10 py-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center">
-          
-          {/* COLUMNA IZQUIERDA: Formulario de Registro / Ingreso */}
-          {/* Tarjeta translúcida para visibilidad sobre fondo marrón oscuro */}
-          <div className="bg-black/20 backdrop-blur-xl rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-white/20" data-aos="fade-right">
-            <span className="inline-block py-1.5 px-4 rounded-full bg-white/10 text-white font-extrabold text-xs mb-3 tracking-wide shadow-sm border border-white/10">
-              Portal de Pacientes
-            </span>
-            <h2 className="text-2xl md:text-3xl font-black mb-1 text-white uppercase tracking-tight drop-shadow-md">
-              {isLogin ? "Iniciar Sesión" : "Crear Cuenta"}
-            </h2>
-            <p className="text-white/90 mb-6 text-sm font-medium">
-              {isLogin 
-                ? "Ingresa para acceder a todos los beneficios y gestionar tus turnos." 
-                : "Regístrate gratis para empezar a usar la plataforma."}
-            </p>
+      {/* Botón para volver a la página web pública */}
+      <Link to="/" className="absolute top-6 left-6 text-text-light hover:text-accent-orange flex items-center gap-2 font-bold transition-colors">
+        <FaArrowLeft /> Volver a la web
+      </Link>
 
-            <form onSubmit={handleSubmit} className="space-y-3">
-              {!isLogin && (
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-bold text-white/90 mb-1 uppercase tracking-widest">Nombre</label>
-                    <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required className="w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2.5 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-accent-orange font-bold text-sm transition-all" placeholder="Ej. Juan" />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-white/90 mb-1 uppercase tracking-widest">Apellido</label>
-                    <input type="text" name="apellido" value={formData.apellido} onChange={handleChange} required className="w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2.5 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-accent-orange font-bold text-sm transition-all" placeholder="Ej. Pérez" />
-                  </div>
-                </div>
-              )}
-              <div>
-                <label className="block text-xs font-bold text-white/90 mb-1 uppercase tracking-widest">Correo Electrónico</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2.5 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-accent-orange font-bold text-sm transition-all" placeholder="tucorreo@email.com" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-white/90 mb-1 uppercase tracking-widest">Contraseña</label>
-                <input type="password" name="password" value={formData.password} onChange={handleChange} required className="w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2.5 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-accent-orange font-bold text-sm transition-all" placeholder="••••••••" />
-              </div>
-              
-              <button type="submit" className="w-full mt-4 bg-accent-orange hover:bg-white text-white hover:text-accent-orange font-black py-3 rounded-xl shadow-lg transition-all active:scale-95 uppercase tracking-widest text-sm">
-                {isLogin ? "Ingresar a la Plataforma" : "Registrarse ahora"}
-              </button>
-            </form>
-
-            <div className="mt-5 text-center pt-4 border-t border-white/20">
-              <button onClick={toggleMode} type="button" className="text-xs font-bold text-white/80 hover:text-white transition-colors underline decoration-white/30 underline-offset-4">
-                {isLogin ? "¿No tienes cuenta? Regístrate aquí" : "¿Ya tienes cuenta? Inicia sesión"}
-              </button>
-            </div>
-            
-            <div className="mt-3 text-center">
-               <button type="button" onClick={() => navigate('/inicio')} className="text-xs font-extrabold text-white/50 hover:text-white transition-colors">
-                 O continuar como invitado &rarr;
-               </button>
-            </div>
+      <div className="w-full max-w-md bg-white rounded-[2.5rem] p-10 shadow-2xl border-t-8 border-accent-orange">
+        
+        {/* Encabezado del Login */}
+        <div className="text-center mb-10">
+          <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <FaUserShield className="text-4xl text-accent-orange" />
           </div>
-
-          {/* COLUMNA DERECHA: Logo Grande y Centrado con fondo negro/oscuro */}
-          <div className="flex flex-col items-center justify-center text-center" data-aos="fade-left" data-aos-delay="200">
-            {/* Usamos bg-primary (el color oscuro del navbar) */}
-            <div className="w-48 h-48 sm:w-56 sm:h-56 md:w-72 md:h-72 rounded-full bg-primary flex items-center justify-center shadow-2xl border-4 border-accent-orange/80 overflow-hidden relative transform hover:scale-105 transition-transform duration-500">
-              <img src="/Logo Principal.png" alt="Logo Centro Odontológico" className="w-full h-full object-contain p-4 scale-110 translate-y-2" />
-            </div>
-            <h1 className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tighter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              Centro Clínico
-            </h1>
-            <p className="text-lg sm:text-lg lg:text-xl text-white font-extrabold uppercase tracking-[0.2em] mt-1 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-              Carcara • Martínez
-            </p>
-          </div>
-
+          <h1 className="text-3xl font-black text-primary tracking-tight">C&M Dental</h1>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-text-light mt-1">
+            Portal de Acceso
+          </p>
         </div>
+
+        {/* Mensaje de Error (Se muestra solo si hay falla) */}
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg text-sm font-bold mb-6 shadow-sm animate-pulse">
+            {error}
+          </div>
+        )}
+
+        {/* Formulario */}
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div>
+            <label className="block text-xs font-black uppercase tracking-wider text-text-light mb-2">
+              Correo Electrónico
+            </label>
+            <input 
+              type="email" 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-5 py-4 rounded-xl border border-secondary bg-background/50 focus:border-accent-orange focus:ring-1 focus:ring-accent-orange outline-none transition-colors font-medium text-text"
+              placeholder="admin@carcara.com o tu email"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-black uppercase tracking-wider text-text-light mb-2">
+              Contraseña
+            </label>
+            <input 
+              type="password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-5 py-4 rounded-xl border border-secondary bg-background/50 focus:border-accent-orange focus:ring-1 focus:ring-accent-orange outline-none transition-colors font-medium text-text"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={cargando}
+            className="w-full bg-primary text-white font-black text-sm py-4 rounded-xl shadow-md hover:bg-primary-dark active:scale-95 transition-all uppercase tracking-wide flex items-center justify-center gap-2 disabled:opacity-70 mt-4"
+          >
+            {cargando ? (
+              'Verificando...'
+            ) : (
+              <> <FaLock /> Ingresar al Sistema </>
+            )}
+          </button>
+        </form>
+
       </div>
-    </main>
+    </div>
   );
 };
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import api from '../../api/axios.js';
 // Importamos iconos profesionales para todas las nuevas secciones
 import {
   FaHome, FaBell, FaCalendarAlt, FaUserInjured, FaFileMedical,
@@ -9,7 +10,19 @@ import {
 
 const LayoutAdmin = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [mostrarModalLogout, setMostrarModalLogout] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const confirmarLogout = async () => {
+    try {
+      await api.post('/auth/logout');
+      localStorage.removeItem('perfilUsuario');
+      navigate('/');
+    } catch (error) {
+      console.error("Error al cerrar sesión", error);
+    }
+  };
 
   // El menú gigante expandido basado en tus fotos
   const menuItems = [
@@ -102,7 +115,7 @@ const LayoutAdmin = ({ children }) => {
 
         {/* CERRAR SESIÓN */}
         <div className="p-4 border-t border-secondary/10 shrink-0">
-          <button className={`w-full flex items-center gap-4 px-4 py-3 text-secondary-dark hover:text-red-400 font-bold transition-all hover:bg-white/5 rounded-xl ${!isExpanded && 'justify-center'}`}>
+          <button onClick={() => setMostrarModalLogout(true)} className={`w-full flex items-center gap-4 px-4 py-3 text-secondary-dark hover:text-red-400 font-bold transition-all hover:bg-white/5 rounded-xl ${!isExpanded && 'justify-center'}`}>
             <FaSignOutAlt className="text-xl shrink-0" />
             {isExpanded && <span className="text-[13px]">Cerrar Sesión</span>}
           </button>
@@ -115,6 +128,42 @@ const LayoutAdmin = ({ children }) => {
           {children}
         </div>
       </main>
+
+      {/* ========================================= */}
+      {/* MODAL DE CONFIRMACIÓN DE CERRAR SESIÓN    */}
+      {/* ========================================= */}
+      {mostrarModalLogout && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl animate-scale-up text-center border-t-8 border-accent-orange">
+            
+            <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+              <FaSignOutAlt className="text-4xl text-red-500 ml-2" />
+            </div>
+            
+            <h3 className="text-2xl font-black text-primary mb-2">¿Cerrar Sesión?</h3>
+            <p className="text-text-light text-sm font-medium mb-8 px-2">
+              Tendrás que volver a ingresar tus credenciales para acceder al panel de C&M Dental.
+            </p>
+            
+            <div className="flex flex-col gap-3">
+              <button 
+                onClick={confirmarLogout}
+                className="w-full bg-red-500 text-white font-bold py-3.5 rounded-xl hover:bg-red-600 active:scale-95 transition-all shadow-md"
+              >
+                Sí, cerrar sesión
+              </button>
+              
+              <button 
+                onClick={() => setMostrarModalLogout(false)}
+                className="w-full bg-background text-text font-bold py-3.5 rounded-xl hover:bg-secondary/20 active:scale-95 transition-all"
+              >
+                Cancelar
+              </button>
+            </div>
+            
+          </div>
+        </div>
+      )}
 
     </div>
   );
