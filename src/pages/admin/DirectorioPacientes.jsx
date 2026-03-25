@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../../api/axios.js';
 import { FaSearch, FaUserInjured, FaIdCard, FaEnvelope } from 'react-icons/fa';
 import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
@@ -101,9 +102,12 @@ const DirectorioPacientes = () => {
                         {paciente.createdAt ? new Date(paciente.createdAt).toLocaleDateString('es-AR') : 'N/A'}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <button className="bg-primary text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-accent-orange transition-colors shadow-sm">
+                        <Link 
+                          to={`/admin/paciente/${paciente._id}`} 
+                          className="bg-primary text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-accent-orange transition-colors shadow-sm inline-block"
+                        >
                           Ver Ficha Clínica
-                        </button>
+                        </Link>
                       </td>
                     </tr>
                   ))

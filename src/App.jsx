@@ -14,6 +14,7 @@ import Login from "./pages/Login.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import OdontogramaPage from "./pages/admin/Odontograma.jsx";
 import DirectorioPacientes from './pages/admin/DirectorioPacientes.jsx';
+import FichaClinica from './pages/admin/FichaClinica.jsx';
 
 export default function App() {
   // Encendemos el motor de animaciones
@@ -56,6 +57,7 @@ export default function App() {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/odontograma" element={<OdontogramaPage />} />
         <Route path="/admin/pacientes" element={<DirectorioPacientes />} />
+        <Route path="/admin/paciente/:id" element={<FichaClinica />} />
       </Routes>
     </>
   );
