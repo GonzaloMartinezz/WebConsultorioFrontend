@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaInstagram, FaWhatsapp, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Footer = () => {
-  
+
   // Clase utilitaria para los enlaces de navegación con el efecto de subrayado animado
   const navLinkClass = "relative text-lg font-medium text-background/80 hover:text-background transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-[1px] after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full";
 
@@ -14,16 +14,16 @@ const Footer = () => {
     // Fondo Marrón Nogal Oscuro (`bg-primary`) extraído de las sillas de la sala de espera
     <footer className="bg-primary text-background mt-auto border-t border-primary-hover">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        
+
         {/* GRILLA PRINCIPAL ( Stack en móvil, Grid en desktop) */}
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-8">
-          
+
           {/* COLUMNA 1: Marca y confianza */}
           <div className="md:col-span-1 space-y-4 text-center md:text-left">
             <Link to="/" className="inline-block focus:outline-none focus:ring-2 focus:ring-accent rounded-lg p-1">
               <div className="flex flex-col items-center md:items-start">
                 <span className="text-3xl font-extrabold tracking-tight">
-                  Carcara • Martínez
+                  Carcara & Martínez
                 </span>
                 <span className="text-xs font-semibold tracking-[0.3em] uppercase mt-2 text-secondary">
                   Centro Odontológico
@@ -55,14 +55,6 @@ const Footer = () => {
                 <span>Calle Jose Rondeau 827, San Miguel de Tucumán</span>
               </li>
               <li className="flex items-center gap-3">
-                <FaPhoneAlt className="text-accent shrink-0 text-lg" />
-                <span>+54 381 5840885</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <FaPhoneAlt className="text-accent shrink-0 text-lg" />
-                <span>+54 381 5804262</span>
-              </li>
-              <li className="flex items-center gap-3">
                 <FaWhatsapp className="text-accent shrink-0 text-xl" />
                 <a href="https://wa.me/5493819876543" target="_blank" rel="noopener noreferrer" className="hover:text-background transition-colors font-medium">
                   +54 9 381 987-6543
@@ -81,7 +73,7 @@ const Footer = () => {
           <p className="text-xs text-secondary/60 text-center">
             Carcara • Martínez Centro Odontológico • Odontología Integral •San Miguel de Tucumán, Argentina.
           </p>
-          
+
           <Link to="/login" className="text-secondary/50 text-xs hover:text-accent-orange mt-2 transition-colors">
             Acceso Personal C&M
           </Link>

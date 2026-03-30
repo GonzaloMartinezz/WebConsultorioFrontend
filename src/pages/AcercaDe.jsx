@@ -70,8 +70,8 @@ const AcercaDe = () => {
               {/* LOGO PRINCIPAL: /Logo Principal.png (Pequeño junto al título) */}
               {/* ======================================================== */}
               <img src="/Logo Principal.png" alt="Logo C&M" className="h-16 w-auto mx-auto lg:mx-0 mb-4" />
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-text uppercase leading-tight tracking-tight">
-                El Equipo <br /> <span className="text-accent-orange">Carcara • Martínez</span>
+              <h2 className="text-4xl md:text-5xl lg:text-5xl font-black text-text uppercase leading-tight tracking-tight">
+                El Equipo <br /> <span className="text-accent-orange">Carcara & Martínez</span>
               </h2>
               <p className="text-lg text-text-light font-medium max-w-xl mx-auto lg:mx-0">
                 Profesionales con amplia trayectoria, dedicados a ofrecerte diagnósticos precisos y tratamientos mínimamente invasivos.
