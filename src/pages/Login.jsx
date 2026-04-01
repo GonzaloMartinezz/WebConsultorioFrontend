@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios.js";
 import { FaLock } from 'react-icons/fa';
+import { useAuth } from "../context/AuthContext.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // Estado para alternar entre "Iniciar Sesión" y "Registrarse"
   const [isRegistro, setIsRegistro] = useState(false);
@@ -44,17 +46,17 @@ const Login = () => {
         }
 
         // 1. Mandamos petición de registro
-        const respuesta = await api.post('/auth/register', { 
+        const respuesta = await api.post('/auth/register', {
           nombre: form.nombre,
           apellido: form.apellido,
-          email: form.email, 
+          email: form.email,
           password: form.password,
           rol: "paciente"
         });
 
-        // 2. Guardamos sesión local para que el "Circulito" lo detecte
-        localStorage.setItem('perfilUsuario', JSON.stringify(respuesta.data));
-        
+        // 2. Guardamos sesión vía AuthContext (actualiza React state + localStorage)
+        login(respuesta.data);
+
         // 3. Volvemos al portal de pacientes
         navigate("/");
 
@@ -67,14 +69,14 @@ const Login = () => {
         }
 
         // 1. Mandamos petición de Login
-        const respuesta = await api.post('/auth/login', { 
-          email: form.email, 
-          password: form.password 
+        const respuesta = await api.post('/auth/login', {
+          email: form.email,
+          password: form.password
         });
 
-        // 2. Guardamos la sesión
+        // 2. Guardamos la sesión vía AuthContext (actualiza React state + localStorage)
         const usuarioLogueado = respuesta.data;
-        localStorage.setItem('perfilUsuario', JSON.stringify(usuarioLogueado));
+        login(usuarioLogueado);
 
         // 3. Redirigimos inteligentemente según el rol
         if (usuarioLogueado.rol === 'admin') {
@@ -85,7 +87,7 @@ const Login = () => {
       }
     } catch (err) {
       setError(
-        err.response?.data?.error || 
+        err.response?.data?.error ||
         (isRegistro ? "Error al crear cuenta. Puede que el correo ya exista." : "Error al Iniciar Sesión. Verifica tus datos.")
       );
     } finally {
@@ -126,19 +128,19 @@ const Login = () => {
 
             {/* Lado Derecho: Formulario (Tarjeta Gris Más Oscura con Tabs) */}
             <div className="w-full lg:w-6/12 relative max-w-md mx-auto lg:mx-0 animate-scale-up">
-              
-              <div className="rounded-[2rem] border border-secondary/30 bg-gray-200 p-8 sm:p-10 shadow-2xl relative z-10 overflow-hidden">
-                
+
+              <div className="rounded-4xl border border-secondary/30 bg-gray-200 p-8 sm:p-10 shadow-2xl relative z-10 overflow-hidden">
+
                 {/* Switcher TABS (Login / Registro) */}
                 <div className="flex bg-gray-300 rounded-full p-1 mb-8 shadow-inner">
-                  <button 
-                    onClick={() => {setIsRegistro(false); setError("");}}
+                  <button
+                    onClick={() => { setIsRegistro(false); setError(""); }}
                     className={`flex-1 py-2 text-sm font-black uppercase tracking-wider rounded-full transition-all duration-300 ${!isRegistro ? 'bg-primary text-white shadow-md' : 'text-primary/70 hover:text-primary'}`}
                   >
                     Iniciar Sesión
                   </button>
-                  <button 
-                    onClick={() => {setIsRegistro(true); setError("");}}
+                  <button
+                    onClick={() => { setIsRegistro(true); setError(""); }}
                     className={`flex-1 py-2 text-sm font-black uppercase tracking-wider rounded-full transition-all duration-300 ${isRegistro ? 'bg-primary text-white shadow-md' : 'text-primary/70 hover:text-primary'}`}
                   >
                     Registrarse

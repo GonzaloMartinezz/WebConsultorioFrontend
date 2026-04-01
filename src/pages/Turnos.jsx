@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FaCalendarPlus, FaLock } from "react-icons/fa";
 import AppointmentForm from "../components/appointments/AppointmentForm.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -26,6 +27,7 @@ const Turnos = () => {
                 Elegí el profesional, contanos el motivo de tu consulta y nuestro equipo administrativo coordinará el mejor horario disponible para tu atención.
               </p>
 
+              {/* Hint extra solo cuando no hay sesión */}
               {!user && (
                 <div className="mt-8 rounded-2xl border border-accent-orange/30 bg-white/10 backdrop-blur-md px-6 py-5 text-sm text-secondary shadow-lg">
                   <div className="flex items-start gap-3">
@@ -49,27 +51,69 @@ const Turnos = () => {
             {/* Separador vertical sutil */}
             <div className="hidden lg:block w-px h-80 bg-secondary/20 shrink-0"></div>
 
-            {/* Lado Derecho: Appointment Form (Tarjeta Gris Más Oscura) */}
+            {/* Lado Derecho: Formulario o Gate de Login */}
             <div className="w-full lg:w-6/12 relative mx-auto lg:mx-0" data-aos="fade-left">
               <div className="rounded-3xl border border-secondary/30 bg-gray-200 p-6 sm:p-10 shadow-2xl relative z-10">
-                <div className="mb-6 border-b border-secondary/30 pb-4">
-                  <h2 className="text-2xl font-black text-primary uppercase tracking-tight">Solicitud Online</h2>
-                  <p className="text-sm font-medium text-text-light mt-1">Completa los datos detallando tu motivo de consulta.</p>
-                </div>
 
-                {/* Formulario inyectado (El componente AppointmentForm se encarga del renderizado interno) */}
-                <div className="[&>form]:space-y-4">
-                  <AppointmentForm />
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-secondary/30 flex items-start gap-3">
-                  <div className="bg-primary/10 p-1.5 rounded-full text-primary shrink-0">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                {/* ===== GATE: Si NO está logueado ===== */}
+                {!user ? (
+                  <div className="text-center py-6 space-y-6">
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto text-primary">
+                      <FaLock className="text-3xl" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-black text-primary uppercase tracking-tight mb-2">
+                        Iniciá Sesión para Continuar
+                      </h2>
+                      <p className="text-sm font-medium text-text-light leading-relaxed">
+                        Necesitamos tus datos para registrar el turno en tu historial clínico y enviarte la confirmación.
+                      </p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                      <Link
+                        to="/login"
+                        className="px-8 py-3 bg-primary text-white font-bold rounded-xl shadow-md hover:bg-primary/90 transition-all hover:-translate-y-1"
+                      >
+                        Ingresar
+                      </Link>
+                      <Link
+                        to="/login"
+                        className="px-8 py-3 border-2 border-primary text-primary font-bold rounded-xl hover:bg-primary/10 transition-all"
+                        onClick={() => {/* El Login.jsx ya tiene el tab de registro */}}
+                      >
+                        Crear cuenta gratis
+                      </Link>
+                    </div>
                   </div>
-                  <p className="text-xs font-semibold text-text-light/90 leading-snug">
-                    Una vez enviado, un miembro de administración se contactará con vos para confirmar fecha y horario exacto.
-                  </p>
-                </div>
+
+                ) : (
+                  /* ===== FORMULARIO: Si ESTÁ logueado ===== */
+                  <>
+                    <div className="mb-6 border-b border-secondary/30 pb-4 flex items-center gap-3">
+                      <div className="bg-primary/10 p-2 rounded-full text-primary">
+                        <FaCalendarPlus className="text-lg" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-black text-primary uppercase tracking-tight">Solicitud Online</h2>
+                        <p className="text-sm font-medium text-text-light mt-0.5">Completa los datos detallando tu motivo de consulta.</p>
+                      </div>
+                    </div>
+
+                    {/* Formulario inyectado */}
+                    <div className="[&>form]:space-y-4">
+                      <AppointmentForm />
+                    </div>
+
+                    <div className="mt-8 pt-6 border-t border-secondary/30 flex items-start gap-3">
+                      <div className="bg-primary/10 p-1.5 rounded-full text-primary shrink-0">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                      </div>
+                      <p className="text-xs font-semibold text-text-light/90 leading-snug">
+                        Una vez enviado, un miembro de administración se contactará con vos para confirmar fecha y horario exacto.
+                      </p>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Elementos decorativos flotantes de la tarjeta */}
