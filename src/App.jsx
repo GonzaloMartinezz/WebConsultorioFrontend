@@ -33,6 +33,7 @@ import AdminFinanzas from "./pages/admin/AdminFinanzas.jsx";
 import AdminHistoriaClinica from "./pages/admin/AdminHistoriaClinica.jsx";
 import AdminPacientes from "./pages/admin/AdminPacientes.jsx";
 import AdminOdontograma from "./pages/admin/AdminOdontograma.jsx";
+import AdminTurnosPendientes from "./pages/admin/AdminTurnosPendientes.jsx";
 
 export default function App() {
   // Encendemos el motor de animaciones
@@ -71,6 +72,7 @@ export default function App() {
 
         {/* PANEL DE CONTROL UNIFICADO */}
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/pendientes" element={<AdminTurnosPendientes />} />
 
         {/* Rutas conectadas con la Base de Datos Real */}
         <Route path="/admin/pacientes" element={<DirectorioPacientes />} />
