@@ -34,8 +34,13 @@ const Navbar = () => {
     setMostrarModal(true);
     setCargandoTurnos(true);
     try {
-      const respuesta = await api.get(`/turnos/paciente/${usuario.nombre}/${usuario.apellido}`);
-      setMisTurnos(respuesta.data);
+      // Fetch all turnos and filter them effectively ensuring case-insensitive match
+      const respuesta = await api.get('/turnos');
+      const filtrados = respuesta.data.filter(t => 
+        t.nombrePaciente?.trim().toLowerCase() === usuario.nombre?.trim().toLowerCase() &&
+        t.apellidoPaciente?.trim().toLowerCase() === usuario.apellido?.trim().toLowerCase()
+      );
+      setMisTurnos(filtrados);
     } catch (error) {
       console.error("Error al cargar los turnos:", error);
     } finally {

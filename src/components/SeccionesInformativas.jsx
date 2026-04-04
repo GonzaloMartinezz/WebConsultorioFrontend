@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { FaWhatsapp, FaInstagram } from 'react-icons/fa';
 
 const SeccionesInformativas = () => {
   const [openFaq, setOpenFaq] = useState(null);
@@ -11,27 +12,99 @@ const SeccionesInformativas = () => {
   const faqs = [
     { q: "¿Cómo solicito un turno online?", a: "Puedes solicitar un turno haciendo clic en el botón 'Solicitar Turno' y completando el formulario con tus datos y el profesional elegido." },
     { q: "¿Qué obras sociales atienden?", a: "Atendemos las principales obras sociales y prepagas del país. Contáctanos por WhatsApp para consultar por tu cobertura específica." },
-    { q: "¿Cuáles son los medios de pago?", a: "Aceptamos efectivo, tarjetas de débito y crédito, y transferencias bancarias. Ofrecemos planes de financiación para tratamientos largos." }
+    { q: "¿Cuáles son los medios de pago?", a: "Aceptamos efectivo, tarjetas de débito y crédito, y transferencias bancarias. Ofrecemos planes de financiación para tratamientos largos." },
+    { q: "¿Cuáles son los Horarios de Atencion?", a: "Lunes a Viernes de 9 a 13 y de 16 a 20 hs. Sábados de 9 a 13 hs." },
+    { q: "¿Cuáles son las Redes sociales del Centro Odontologico?", a: "Nos encontramos en Instagram como @c_o_carcara_martinez" },
+    { q: "¿Cuáles son los doctores que trabajan en el Centro Odontologico?", a: "Los doctores que trabajan en el Centro Odontologico son: Dra. Erina Carcara y Dr. Adolfo Martinez" },
+    { q: "¿Como utilizo la App?", a: "La App es muy sencilla de usar.Usted debe Registrarse con su Mail y nombre completo; Al ingresar puede ver informacion del Centro Odontologico , donde podra enviarnos un mensaje por Whatsapp y ademas tiene un Asistente Virtual el cual puede consultar cualquier informacion.Pueda solicitar un turno dando la reserva , Los doctores le enviaran por mail el dia y hora para que pueda asistir al turno." },
   ];
 
   return (
     <div className="flex flex-col w-full">
 
       {/* ======================================================== */}
-      {/* 1. SECCIÓN PLAN A MEDIDA (FONDO CLARO, TARJETA OSCURA) */}
+      {/* SECCIÓN BIENVENIDA A LA APP (CÁLIDA Y PROFESIONAL) */}
+      {/* ======================================================== */}
+      <section className="bg-gray-50 py-24 px-4 sm:px-6 lg:px-8 w-full relative">
+        <div className="mx-auto max-w-7xl relative z-10" data-aos="fade-up">
+          <div className="bg-gray-100 rounded-[2.5rem] p-10 md:p-16 shadow-2xl border border-gray-200 relative overflow-hidden">
+            {/* Elemento decorativo */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-accent-orange/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+
+            <div className="flex flex-col md:flex-row gap-12 items-center relative z-10">
+              <div className="w-full md:w-5/12 space-y-6 text-center md:text-left">
+                <span className="inline-block px-4 py-1.5 rounded-full border border-accent-orange bg-accent-orange/10 text-accent-orange font-black text-xs uppercase tracking-wider">
+                  Tu salud al instante
+                </span>
+                <h2 className="text-4xl md:text-5xl font-black text-primary leading-tight tracking-tight">
+                  ¡Bienvenido a <br />
+                  <span className="text-accent-orange">nuestra App!</span>
+                </h2>
+                <p className="text-lg text-text-light font-medium">
+                  Diseñamos esta plataforma para que gestionar tu salud bucal sea rápido y sencillo. Para comenzar, solo necesitas registrarte con tu correo electrónico y tu nombre completo.
+                </p>
+                <div className="pt-4 flex justify-center md:justify-start">
+                  <Link to="/login" className="inline-block w-full sm:w-auto px-30 py-4 bg-primary text-white rounded-full font-bold transition-all duration-300 hover:bg-accent-orange hover:-translate-y-1 hover:shadow-xl active:scale-95 uppercase tracking-wide text-center auto-cols-auto">
+                    Comenzar ahora
+                  </Link>
+                </div>
+              </div>
+
+              <div className="w-full md:w-7/12">
+                <div className="bg-background/50 rounded-3xl p-8 border border-secondary/20 shadow-inner">
+                  <h3 className="text-xl font-bold text-text mb-6">Una vez dentro, podrás:</h3>
+                  <ul className="space-y-6">
+                    <li className="flex items-start gap-4">
+                      <div className="bg-white p-3 rounded-2xl shadow-sm text-2xl">🏥</div>
+                      <div>
+                        <p className="font-bold text-primary text-lg leading-tight">Información de excelencia</p>
+                        <p className="text-text-light text-sm font-medium mt-1">Conocer toda la información sobre nuestro Centro Odontológico.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-4">
+                      <div className="bg-white p-3 rounded-2xl shadow-sm text-2xl">💬</div>
+                      <div>
+                        <p className="font-bold text-primary text-lg leading-tight">Atención directa</p>
+                        <p className="text-text-light text-sm font-medium mt-1">Contactarnos directamente por WhatsApp ante cualquier duda.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-4">
+                      <div className="bg-white p-3 rounded-2xl shadow-sm text-2xl">🤖</div>
+                      <div>
+                        <p className="font-bold text-primary text-lg leading-tight">Soporte Inteligente</p>
+                        <p className="text-text-light text-sm font-medium mt-1">Consultar a nuestro Asistente Virtual disponible 24/7.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-4">
+                      <div className="bg-white p-3 rounded-2xl shadow-sm text-2xl">📅</div>
+                      <div>
+                        <p className="font-bold text-primary text-lg leading-tight">Gestión de Turnos</p>
+                        <p className="text-text-light text-sm font-medium mt-1">Solicitar tu turno: Envíanos tu preferencia de atención y nuestro equipo médico te enviará un correo confirmando el día y la hora exacta de tu cita.</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ======================================================== */}
+      {/* 1. SECCIÓN ELEGI A TU PROFESIONAL (FONDO CLARO, TARJETA OSCURA) */}
       {/* ======================================================== */}
       <section className="bg-secondary/20 py-24 px-4 sm:px-6 lg:px-8 w-full">
         <div className="mx-auto max-w-7xl">
           <div className="bg-primary rounded-[2.5rem] p-10 md:p-16 flex flex-col lg:flex-row items-center overflow-hidden relative shadow-2xl" data-aos="fade-up">
             <div className="w-full lg:w-1/2 z-10 text-center lg:text-left space-y-6">
               <h2 className="text-4xl md:text-5xl font-black text-background uppercase leading-tight">
-                Elegí un plan <br /> <span className="text-accent-orange">a tu medida</span>
+                Elegí a tu <br /> <span className="text-accent-orange">Profesional</span>
               </h2>
               <p className="text-background/80 text-lg max-w-md mx-auto lg:mx-0">
-                En simples pasos, personalizá el tratamiento que mejor se adapta a tus necesidades y las de tu familia.
+                En simples pasos, elegí al profesional que mejor se adapta a tus necesidades y las de tu familia.
               </p>
               <div className="pt-4">
-                <Link to="/acerca" className="inline-block bg-background text-primary px-8 py-3 rounded-full font-bold transition-all duration-300 hover:bg-secondary hover:-translate-y-1 hover:shadow-xl active:scale-95">
+                <Link to="/acerca" className="inline-block bg-background text-primary px-30 py-4 rounded-full font-bold transition-all duration-300 hover:bg-secondary hover:-translate-y-1 hover:shadow-xl active:scale-95">
                   Conocer equipo &rarr;
                 </Link>
               </div>
@@ -40,13 +113,16 @@ const SeccionesInformativas = () => {
             <div className="w-full lg:w-1/2 mt-12 lg:mt-0 relative h-75 flex items-center justify-center">
               <div className="absolute w-full h-full opacity-20 bg-[radial-gradient(circle_at_center,var(--color-secondary)_0,transparent_100%)]"></div>
               <div className="relative z-10 flex flex-col gap-3 items-center">
-                <div className="bg-background/10 backdrop-blur-md border border-background/20 text-background px-6 py-2 rounded-full font-bold opacity-60">Dra. Erina Carcara</div>
+                <div className="bg-background/10 backdrop-blur-md border border-background/20 text-background px-6 py-2 rounded-full font-bold opacity-60">Profesionales de salud</div>
                 <div className="bg-background text-primary px-8 py-4 rounded-full font-black text-xl shadow-2xl transform scale-110 flex items-center gap-3">
-                  <div className="w-10 h-10 bg-accent-orange rounded-full flex items-center justify-center text-white">👨‍⚕️</div>
-                  Dr. Adolfo Martínez
+                  <div className="w-8 h-8 bg-accent-orange rounded-full flex items-center justify-center text-white">👩‍⚕️</div>
+                  Dra Erina Carcara
                 </div>
-                <div className="bg-background/10 backdrop-blur-md border border-background/20 text-background px-6 py-2 rounded-full font-bold opacity-60">Especialistas</div>
-                <div className="bg-background/10 backdrop-blur-md border border-background/20 text-background px-6 py-2 rounded-full font-bold opacity-60">Otros Dr's</div>
+                <div className="bg-background/10 backdrop-blur-md border border-background/20 text-background px-6 py-2 rounded-full font-bold opacity-60"> Otros Especialistas</div>
+                <div className="bg-background text-primary px-8 py-4 rounded-full font-black text-xl shadow-2xl transform scale-110 flex items-center gap-3">
+                  <div className="w-8 h-8 bg-accent-orange rounded-full flex items-center justify-center text-white">👨‍⚕️</div>
+                  Dr Adolfo Martinez
+                </div>
               </div>
             </div>
           </div>
@@ -62,8 +138,8 @@ const SeccionesInformativas = () => {
 
         <div className="mx-auto max-w-7xl relative z-10" data-aos="fade-up">
           <div className="flex flex-col lg:flex-row gap-12 items-center">
-            <div className="w-full lg:w-5/12 space-y-8 text-center lg:text-left">
-              <span className="inline-block px-4 py-1.5 rounded-full border border-accent-orange text-accent-orange font-bold text-xs uppercase tracking-wider">
+            <div className="w-full lg:w-5/12 space-y-4 text-center lg:text-left">
+              <span className="inline-block px-20 py-3 rounded-full border border-accent-orange text-accent-orange font-bold text-xs uppercase tracking-wider">
                 Nuestra Ubicación
               </span>
               <h2 className="text-4xl md:text-5xl font-black leading-tight uppercase tracking-tight">
@@ -73,7 +149,7 @@ const SeccionesInformativas = () => {
               <p className="text-secondary/80 font-medium text-lg">
                 Encontranos en el corazón de San Miguel de Tucumán, con fácil acceso y comodidad para tu atención.
               </p>
-              <Link to="/contacto" className="inline-block bg-accent-orange text-primary font-bold px-8 py-3 rounded-full transition-all duration-300 hover:brightness-110 hover:-translate-y-1 hover:shadow-xl active:scale-95">
+              <Link to="/contacto" className="inline-block bg-accent-orange text-primary font-bold px-30 py-4 rounded-full transition-all duration-300 hover:brightness-110 hover:-translate-y-1 hover:shadow-xl active:scale-95">
                 Ver cómo llegar &rarr;
               </Link>
 
@@ -86,6 +162,20 @@ const SeccionesInformativas = () => {
                   <div className="bg-accent-orange text-white p-2 rounded-full"><svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg></div>
                   <p className="font-bold text-sm">Centro Odontológico</p>
                 </div>
+              </div>
+              <div className="pt-8 flex flex-col sm:flex-row gap-4">
+                <a href="https://wa.me/5493816242482" target="_blank" rel="noreferrer" className="flex-1 border border-white/20 rounded-2xl p-4 flex items-center gap-4 bg-white/5 backdrop-blur-sm shadow-sm hover:bg-white/10 transition-colors">
+                  <div className="bg-green-500 text-white p-2.5 rounded-full shadow-lg">
+                    <FaWhatsapp className="w-5 h-5" />
+                  </div>
+                  <p className="font-bold text-sm">Envianos un Whatsapp al +54 9 381 624-2482</p>
+                </a>
+                <a href="https://www.instagram.com/c.o_carcaramartinez/" target="_blank" rel="noreferrer" className="flex-1 border border-white/20 rounded-2xl p-4 flex items-center gap-4 bg-white/5 backdrop-blur-sm shadow-sm hover:bg-white/10 transition-colors">
+                  <div className="bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white p-2.5 rounded-full shadow-lg">
+                    <FaInstagram className="w-5 h-5" />
+                  </div>
+                  <p className="font-bold text-sm">Seguinos en Instagram: @c_o_carcara_martinez</p>
+                </a>
               </div>
             </div>
 
@@ -150,20 +240,20 @@ const SeccionesInformativas = () => {
       {/* ======================================================== */}
       {/* 4. SECCIÓN PREGUNTAS FRECUENTES (FONDO OSCURO PREMIUM) */}
       {/* ======================================================== */}
-      <section className="bg-primary text-white py-24 px-4 sm:px-6 lg:px-8 w-full relative overflow-hidden border-t-8 border-accent-orange">
+      <section className="bg-primary text-white py-40 px-4 sm:px-6 lg:px-8 w-full relative overflow-hidden border-t-8 border-accent-orange">
         {/* Fondo decorativo radial oscuro */}
         <div className="absolute top-0 right-0 w-full h-full opacity-5 pointer-events-none bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
 
         <div className="mx-auto max-w-7xl relative z-10">
-          <div className="flex flex-col md:flex-row gap-16">
+          <div className="flex flex-col md:flex-row gap-1">
 
-            <div className="w-full md:w-5/12 text-center md:text-left">
-              <h2 className="text-4xl lg:text-5xl font-black uppercase leading-tight tracking-tight" data-aos="fade-up">
+            <div className="w-full md:w-4/12 text-center md:text-left">
+              <h2 className="text-4xl lg:text-6xl font-black uppercase leading-tight tracking-tight" data-aos="fade-up">
                 Respuestas <br />
                 <span className="text-accent-orange">que pueden ayudarte</span>
               </h2>
               <div className="mt-8">
-                <Link to="/contacto" className="inline-block px-8 py-4 border-2 border-secondary/30 text-secondary rounded-full font-bold transition-all duration-300 hover:text-primary hover:bg-secondary hover:-translate-y-1 hover:shadow-xl active:scale-95 shadow-sm">
+                <Link to="/contacto" className="inline-block px-20 py-4 border-2 border-secondary/40 text-secondary-light rounded-full font-bold transition-all duration-300 hover:text-primary hover:bg-secondary hover:-translate-y-1 hover:shadow-xl active:scale-95 shadow-sm">
                   Ir a contacto directo &rarr;
                 </Link>
               </div>
@@ -191,6 +281,8 @@ const SeccionesInformativas = () => {
           </div>
         </div>
       </section>
+
+
 
     </div>
   );

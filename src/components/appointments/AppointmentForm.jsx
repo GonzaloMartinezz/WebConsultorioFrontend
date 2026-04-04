@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axios.js";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -8,6 +8,8 @@ const AppointmentForm = () => {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
+    nombre: "",
+    apellido: "",
     dni: "",
     email: "",
     telefono: "",
@@ -19,6 +21,18 @@ const AppointmentForm = () => {
 
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" });
   const [cargando, setCargando] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setForm((prev) => ({
+        ...prev,
+        nombre: user.nombre || prev.nombre,
+        apellido: user.apellido || prev.apellido,
+        email: user.email || prev.email,
+        telefono: user.telefono || prev.telefono,
+      }));
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     setForm({
@@ -38,17 +52,31 @@ const AppointmentForm = () => {
       return;
     }
 
+    const hora = form.hora;
+    const isMorning = hora >= "09:00" && hora <= "13:30";
+    const isAfternoon = hora >= "16:00" && hora <= "21:00";
+    
+    if (!isMorning && !isAfternoon) {
+      setMensaje({
+        texto: "Por favor, selecciona una hora de 09:00 a 13:30, o de 16:00 a 21:00.",
+        tipo: "error",
+      });
+      setCargando(false);
+      return;
+    }
+
     // Combinamos los datos del usuario logueado con el formulario
     const formData = {
-      nombrePaciente: user.nombre,
-      apellidoPaciente: user.apellido,
+      nombrePaciente: form.nombre || user?.nombre || "Paciente",
+      apellidoPaciente: form.apellido || user?.apellido || "Registrado",
       dni: form.dni,
-      email: user.email || form.email,
+      email: form.email || user?.email,
       telefono: form.telefono,
       profesional: form.doctor,
       fecha: form.fecha,
       hora: form.hora,
       motivo: form.consulta,
+      estado: 'Pendiente'
     };
 
     console.log("Datos que estoy a punto de enviar:", formData);
@@ -113,49 +141,37 @@ const AppointmentForm = () => {
         </div>
       )}
 
-      {/* Badge de usuario logueado o campos de nombre/apellido */}
-      {user ? (
-        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/5 border border-primary/20">
-          <div className="bg-primary text-white w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shrink-0">
-            {user.nombre?.charAt(0)?.toUpperCase()}
-          </div>
-          <div>
-            <p className="text-xs font-semibold text-text/60 uppercase tracking-wide">Paciente</p>
-            <p className="text-sm font-bold text-primary">
-              {user.nombre} {user.apellido}
-            </p>
-          </div>
+      {/* Campos de nombre/apellido (siempre visibles) */}
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-1">
+          <label htmlFor="nombre" className="block text-sm font-medium text-text/90">
+            Nombre
+          </label>
+          <input
+            id="nombre"
+            name="nombre"
+            value={form.nombre}
+            placeholder="Ej: Juan"
+            onChange={handleChange}
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            required
+          />
         </div>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-1">
-            <label htmlFor="nombre" className="block text-sm font-medium text-text/90">
-              Nombre
-            </label>
-            <input
-              id="nombre"
-              name="nombre"
-              placeholder="Ej: Juan"
-              onChange={handleChange}
-              className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
-              required
-            />
-          </div>
-          <div className="space-y-1">
-            <label htmlFor="apellido" className="block text-sm font-medium text-text/90">
-              Apellido
-            </label>
-            <input
-              id="apellido"
-              name="apellido"
-              placeholder="Ej: Pérez"
-              onChange={handleChange}
-              className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
-              required
-            />
-          </div>
+        <div className="space-y-1">
+          <label htmlFor="apellido" className="block text-sm font-medium text-text/90">
+            Apellido
+          </label>
+          <input
+            id="apellido"
+            name="apellido"
+            value={form.apellido}
+            placeholder="Ej: Pérez"
+            onChange={handleChange}
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            required
+          />
         </div>
-      )}
+      </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-1">
@@ -194,27 +210,25 @@ const AppointmentForm = () => {
           />
         </div>
 
-        {/* Mostrar email solo si el usuario NO está logueado (si está, ya lo tenemos) */}
-        {!user && (
-          <div className="space-y-1">
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-text/90"
-            >
-              Correo electrónico
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              value={form.email}
-              placeholder="tu correo@ejemplo.com"
-              onChange={handleChange}
-              className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
-              required
-            />
-          </div>
-        )}
+        {/* Mostrar email siempre */}
+        <div className="space-y-1">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-text/90"
+          >
+            Correo electrónico
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={form.email}
+            placeholder="tu correo@ejemplo.com"
+            onChange={handleChange}
+            className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
+            required
+          />
+        </div>
 
         <div className="space-y-1">
           <label
@@ -232,11 +246,8 @@ const AppointmentForm = () => {
             required
           >
             <option value="">Seleccionar profesional</option>
-            <option value="dr_perez">Dr. Pérez — Odontología general</option>
-            <option value="dra_gomez">Dra. Gómez — Ortodoncia</option>
-            <option value="dr_fernandez">
-              Dr. Fernández — Implantes y cirugía
-            </option>
+            <option value="Dr. Adolfo Martinez">Dr. Adolfo Martinez (Implantología y Cirugía)</option>
+            <option value="Dra. Erina Carcara">Dra. Erina Carcara (Ortodoncia)</option>
           </select>
         </div>
 
@@ -251,6 +262,7 @@ const AppointmentForm = () => {
             id="fecha"
             type="date"
             name="fecha"
+            min="2026-04-04"
             value={form.fecha}
             onChange={handleChange}
             className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"

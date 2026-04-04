@@ -41,8 +41,8 @@ const AcercaDe = () => {
               {/* ======================================================== */}
               {/* FOTO FILOSOFÍA: /logo escritorio.jpg Flotante */}
               {/* ======================================================== */}
-              <div className="absolute -bottom-16 -right-10 w-64 h-64 rounded-3xl overflow-hidden shadow-2xl border-4 border-background rotate-3 hidden md:block z-10 hover:rotate-0 transition-transform duration-300">
-                <img src="/logo escritorio.jpg" alt="Filosofía Carcara Martínez" className="w-full h-full object-cover" />
+              <div className="absolute -bottom-30 -right-1 w-50 h-50 rounded-4xl overflow-hidden shadow-2xl border-5 border-background rotate-3 hidden md:block z-10 hover:rotate-0 transition-transform duration-300">
+                <img src="/Logo Principal marron 2.png" alt="Filosofía Carcara Martínez" className="w-full h-full object-cover" />
               </div>
             </div>
 
@@ -59,7 +59,7 @@ const AcercaDe = () => {
 
           {/* Lado Izquierdo: Foto de Escritorio (escritorio 2.jpeg) */}
           <div className="w-full lg:w-1/2 relative h-[500px] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white" data-aos="fade-right">
-            <img src="/escritorio 2.jpeg" alt="Área de consulta Carcara Martínez" className="w-full h-full object-cover" />
+            <img src="/sala de espera 2.jpeg" alt="Área de consulta Carcara Martínez" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent"></div>
           </div>
 
@@ -69,8 +69,7 @@ const AcercaDe = () => {
               {/* ======================================================== */}
               {/* LOGO PRINCIPAL: /Logo Principal.png (Pequeño junto al título) */}
               {/* ======================================================== */}
-              <img src="/Logo Principal.png" alt="Logo C&M" className="h-16 w-auto mx-auto lg:mx-0 mb-4" />
-              <h2 className="text-4xl md:text-5xl lg:text-5xl font-black text-text uppercase leading-tight tracking-tight">
+              <h2 className="text-4xl md:text-4xl lg:text-4xl font-black text-text uppercase leading-tight tracking-tight">
                 El Equipo <br /> <span className="text-accent-orange">Carcara & Martínez</span>
               </h2>
               <p className="text-lg text-text-light font-medium max-w-xl mx-auto lg:mx-0">
@@ -79,29 +78,33 @@ const AcercaDe = () => {
             </div>
 
             {/* Grilla de Doctores */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-6 border-t border-secondary">
-              {/* Dr. Adolfo Martínez */}
-              <div className="bg-white rounded-2xl p-6 border border-secondary shadow-sm hover:border-accent-orange hover:-translate-y-1 transition-all active:scale-95">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="bg-primary text-white p-3 rounded-full text-lg">👨⚕️</div>
+            <div className="flex flex-col sm:flex-row gap-6 pt-8 border-t border-secondary justify-center lg:justify-start">
+              {/* Tarjeta Dr. Adolfo */}
+              <div className="bg-white rounded-[2re m] p-10 shadow-[0_15px_40px_rgba(0,0,0,0.1)] w-full sm:w-[280px]  hover:-translate-y-2 transition-transform duration-300 border-5  border-accent-orange border-x border-t border-x-secondary/20 border-t-secondary/20">
+                <div className="flex flex-col items-center text-center gap-4">
+                  <div className="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center text-4xl shadow-inner border border-secondary/20">
+                    👨‍⚕️
+                  </div>
                   <div>
-                    <h4 className="text-xl font-bold text-text">Dr. Adolfo Martínez</h4>
-                    <p className="text-sm text-text-light font-medium whitespace-pre-line">Odontología General e Implantes</p>
+                    <h4 className="text-2xl font-black text-text leading-tight">Dr. Adolfo <br /> Martínez</h4>
+                    <p className="text-[11px] font-black text-accent-orange uppercase tracking-widest mt-3">Odontología General</p>
+                    <p className="text-xs font-medium text-text-light mt-1 w-full border-t border-gray-100 pt-2">Area de Implantologia</p>
                   </div>
                 </div>
-                <p className="text-sm text-text-light font-medium">Especialista en devolver la función y estética dental con protocolos actualizados de bioseguridad.</p>
               </div>
 
-              {/* Dra. Erina Carcara */}
-              <div className="bg-white rounded-2xl p-6 border border-secondary shadow-sm hover:border-accent-orange hover:-translate-y-1 transition-all active:scale-95">
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="bg-accent-orange text-white p-3 rounded-full text-lg">👩⚕️</div>
+              {/* Tarjeta Dra. Erina */}
+              <div className="bg-white rounded-4xl p-10 shadow-[0_15px_40px_rgba(0,0,0,0.1)] w-full sm:w-[280px]  hover:-translate-y-2 transition-transform duration-300 border-b-5 border-accent-orange border-x border-t border-x-secondary/20 border-t-secondary/20">
+                <div className="flex flex-col items-center text-center gap-4">
+                  <div className="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center text-4xl shadow-inner border border-secondary/20">
+                    👩‍⚕️
+                  </div>
                   <div>
-                    <h4 className="text-xl font-bold text-text">Dra. Erina Carcara</h4>
-                    <p className="text-sm text-text-light font-medium whitespace-pre-line">Ortodoncia y Estética Dental</p>
+                    <h4 className="text-2xl font-black text-text leading-tight">Dra. Erina <br /> Carcara</h4>
+                    <p className="text-[11px] font-black text-accent-orange uppercase tracking-widest mt-3">Estética Dental</p>
+                    <p className="text-xs font-medium text-text-light mt-1 w-full border-t border-gray-100 pt-2">Ortodoncia y Estética</p>
                   </div>
                 </div>
-                <p className="text-sm text-text-light font-medium">Apasionada por crear sonrisas armónicas usando tecnología digital de scanner intraoral.</p>
               </div>
             </div>
           </div>

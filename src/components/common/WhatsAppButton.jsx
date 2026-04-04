@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 const WhatsAppButton = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: '', reason: '' });
+  const [formData, setFormData] = useState({ name: '', lastname: '', email: '', reason: '' });
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
@@ -12,12 +12,12 @@ const WhatsAppButton = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const phoneNumber = '54938198765432';
-    const message = `Hola Soy ${formData.name}, necesitaría un turno, mi motivo es ${formData.reason}`;
+    const phoneNumber = '5493816242482';
+    const message = `Hola buenos días/tardes, mi nombre es ${formData.name} ${formData.lastname}.\nMe comunico para solicitar un turno y obtener mayor información.\n\n📝 *Mis datos:*\n- Email: ${formData.email}\n\n🦷 *Especialidad/Motivo:*\n- ${formData.reason}\n\nQuedo a la espera de su respuesta para coordinar. ¡Muchas gracias!`;
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
     setIsOpen(false);
-    setFormData({ name: '', reason: '' }); // reset form
+    setFormData({ name: '', lastname: '', email: '', reason: '' }); // reset form
   };
 
   return (
@@ -26,11 +26,11 @@ const WhatsAppButton = () => {
       {isOpen && (
         <div 
           className="mb-4 bg-white rounded-2xl shadow-2xl overflow-hidden border border-gray-100 transition-all duration-300 origin-bottom-left"
-          style={{ width: '320px', animation: 'fadeIn 0.3s ease-out' }}
+          style={{ width: '350px', animation: 'fadeIn 0.3s ease-out' }}
         >
           <div className="bg-[#25D366] text-white p-4 relative">
-            <h3 className="font-bold text-lg mb-1">¡Hola! 👋</h3>
-            <p className="text-sm opacity-90">Completá tus datos para contactarnos por WhatsApp y pedir un turno rápido.</p>
+            <h3 className="font-bold text-lg mb-1 uppercase tracking-wide">Centro Odontológico</h3>
+            <p className="text-sm opacity-95">Completa los datos para contactarnos y poder consultarnos cualquier información.</p>
             <button 
               onClick={toggleOpen} 
               className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors"
@@ -41,32 +41,62 @@ const WhatsAppButton = () => {
           </div>
           
           <form onSubmit={handleSubmit} className="p-5 flex flex-col space-y-4">
+            <div className="flex gap-2">
+              <div className="w-1/2">
+                <input
+                  id="wa-name"
+                  name="name"
+                  type="text"
+                  required
+                  placeholder="Nombre"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:border-transparent text-sm"
+                />
+              </div>
+              <div className="w-1/2">
+                <input
+                  id="wa-lastname"
+                  name="lastname"
+                  type="text"
+                  required
+                  placeholder="Apellido"
+                  value={formData.lastname}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:border-transparent text-sm"
+                />
+              </div>
+            </div>
+
             <div>
-              <label htmlFor="wa-name" className="block text-sm font-medium text-gray-700 mb-1">Tu Nombre</label>
               <input
-                id="wa-name"
-                name="name"
-                type="text"
+                id="wa-email"
+                name="email"
+                type="email"
                 required
-                placeholder="Ej. Juan Pérez"
-                value={formData.name}
+                placeholder="Correo electrónico"
+                value={formData.email}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:border-transparent text-sm"
               />
             </div>
             
             <div>
-              <label htmlFor="wa-reason" className="block text-sm font-medium text-gray-700 mb-1">Motivo del turno</label>
-              <textarea
+              <select
                 id="wa-reason"
                 name="reason"
                 required
-                rows="2"
-                placeholder="Ej. Limpieza dental, dolor de muela..."
                 value={formData.reason}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:border-transparent text-sm resize-none"
-              ></textarea>
+                className={`w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:border-transparent text-sm ${!formData.reason ? 'text-gray-500' : 'text-gray-900'}`}
+              >
+                <option value="" disabled>Elegir especialidad/motivo...</option>
+                <option value="Consulta General">Consulta General</option>
+                <option value="Ortodoncia">Ortodoncia</option>
+                <option value="Implantología">Implantología</option>
+                <option value="Cirugía (Todas las áreas)">Cirugía (Todas las áreas)</option>
+                <option value="Otro">Otro motivo</option>
+              </select>
             </div>
             
             <button

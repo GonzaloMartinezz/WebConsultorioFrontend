@@ -4,25 +4,27 @@ import { FaWhatsapp, FaTimes, FaPaperPlane } from 'react-icons/fa';
 const WhatsAppWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState(''); // NUEVO: Apellido
-  const [profesional, setProfesional] = useState(''); // NUEVO: Selección de profesional
+  const [apellido, setApellido] = useState(''); 
+  const [mail, setMail] = useState(''); // NUEVO: Mail
+  const [profesional, setProfesional] = useState(''); 
   const [motivo, setMotivo] = useState('');
 
-  // Número de la clínica (Ej: 54 381 5840885)
-  const numeroWhatsApp = "3816242482";
+  // Número de la clínica
+  const numeroWhatsApp = "5493816242482";
 
   const handleEnviar = (e) => {
     e.preventDefault();
-    if (!nombre.trim() || !apellido.trim() || !profesional || !motivo.trim()) return;
+    if (!nombre.trim() || !apellido.trim() || !mail.trim() || !motivo.trim()) return;
 
     // Mensaje formateado con todos los datos
-    const mensaje = `¡Hola! Soy ${nombre} ${apellido}.\nNecesitaría solicitar un turno con ${profesional}.\n\nMi motivo de consulta es: ${motivo}`;
+    const mensaje = `Hola buenos días/tardes, mi nombre es ${nombre} ${apellido}.\nMe comunico para solicitar un turno${profesional ? ` con ${profesional}` : ''} y obtener mayor información.\n\n📝 *Mis datos:*\n- Email: ${mail}\n\n🦷 *Especialidad/Motivo:*\n- ${motivo}\n\nQuedo a la espera de su respuesta para coordinar. ¡Muchas gracias!`;
     const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
 
     window.open(url, '_blank');
     setIsOpen(false);
     setNombre('');
     setApellido('');
+    setMail('');
     setProfesional('');
     setMotivo('');
   };
@@ -31,18 +33,18 @@ const WhatsAppWidget = () => {
     <div className="fixed bottom-6 left-6 z-50 flex flex-col items-start">
 
       {isOpen && (
-        <div className="bg-white rounded-2xl shadow-2xl border border-secondary/50 p-5 mb-4 w-80 max-h-[85vh] overflow-y-auto transform transition-all duration-300 origin-bottom-left">
-          <div className="flex justify-between items-center mb-4">
-            <h4 className="font-black text-primary flex items-center gap-2">
-              <FaWhatsapp className="text-green-500 text-xl" /> Chat Directo
+        <div className="bg-white rounded-2xl shadow-2xl border border-secondary/50 p-5 mb-4 w-[350px] max-h-[85vh] overflow-y-auto transform transition-all duration-300 origin-bottom-left">
+          <div className="flex justify-between items-start mb-3 gap-2">
+            <h4 className="font-black text-primary flex items-center gap-1.5 text-[15px] uppercase tracking-wider leading-tight">
+              <FaWhatsapp className="text-green-500 text-xl shrink-0" /> Centro Odontológico
             </h4>
-            <button onClick={() => setIsOpen(false)} className="text-text-light hover:text-red-500 transition-colors">
+            <button onClick={() => setIsOpen(false)} className="text-text-light hover:text-red-500 transition-colors shrink-0 mt-0.5">
               <FaTimes />
             </button>
           </div>
 
-          <p className="text-sm text-text-light mb-4 font-medium">
-            Completa tus datos para agendar tu cita rápidamente.
+          <p className="text-[13px] text-text-light mb-4 font-medium leading-relaxed">
+            Completa los datos para contactarnos y poder consultarnos cualquier información.
           </p>
 
           <form onSubmit={handleEnviar} className="space-y-3">
@@ -66,6 +68,18 @@ const WhatsAppWidget = () => {
               />
             </div>
 
+            {/* Email */}
+            <div>
+              <input
+                type="email"
+                placeholder="Correo electrónico"
+                value={mail}
+                onChange={(e) => setMail(e.target.value)}
+                className="w-full text-sm px-4 py-2.5 rounded-xl border border-secondary bg-background/50 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none"
+                required
+              />
+            </div>
+
             {/* Menú desplegable para elegir Doctor */}
             <div>
               <select
@@ -83,14 +97,19 @@ const WhatsAppWidget = () => {
 
             {/* Motivo */}
             <div>
-              <textarea
-                placeholder="¿Cuál es tu motivo de consulta?"
-                rows="2"
+              <select
                 value={motivo}
                 onChange={(e) => setMotivo(e.target.value)}
-                className="w-full text-sm px-4 py-2.5 rounded-xl border border-secondary bg-background/50 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none resize-none"
+                className={`w-full text-sm px-4 py-2.5 rounded-xl border border-secondary bg-background/50 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none ${!motivo ? 'text-text-light' : 'text-text'}`}
                 required
-              ></textarea>
+              >
+                <option value="" disabled>Elegir especialidad/motivo...</option>
+                <option value="Consulta General">Consulta General</option>
+                <option value="Ortodoncia">Ortodoncia</option>
+                <option value="Implantología">Implantología</option>
+                <option value="Cirugía (Todas las áreas)">Cirugía (Todas las áreas)</option>
+                <option value="Otro">Otro motivo</option>
+              </select>
             </div>
 
             <button
