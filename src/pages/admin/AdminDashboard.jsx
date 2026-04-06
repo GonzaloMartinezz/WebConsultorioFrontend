@@ -248,7 +248,7 @@ const AdminDashboard = () => {
         {/* ======================================================== */}
         <div data-aos="fade-up" data-aos-delay="200" className="pt-4">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-primary text-2xl font-black uppercase tracking-tight">Agenda de Hoy</h2>
+            <h2 className="text-primary text-2xl font-black uppercase tracking-tight">Agenda Completa y Pendientes</h2>
             <Link to="/admin/pendientes" className="text-sm font-bold text-accent-orange hover:underline flex items-center gap-2">
               Ver Todos los Pendientes <span className="bg-red-500 text-white rounded-full px-2 py-0.5 text-xs">{consultasPendientes}</span>
             </Link>
@@ -268,7 +268,12 @@ const AdminDashboard = () => {
               </thead>
               <tbody>
                 {turnos
-                  .filter(turno => turno.fecha === fechaHoy) // Filtraremos opcionalmente para que solo muestre los de HOY en "Agenda de Hoy"
+                  .filter(turno => {
+                    // Mostrar turnos pendientes SIEMPRE (para que no se pierdan)
+                    // y mostrar turnos confirmados/atendidos desde HOY en adelante
+                    if (turno.estado === 'Pendiente') return true;
+                    return turno.fecha >= fechaHoy;
+                  }) 
                   .map((turno) => (
                   <tr key={turno._id} className="border-b border-secondary/20 hover:bg-secondary/10 transition-colors group">
                     <td className="px-6 py-5 font-black text-primary text-lg">{turno.hora}</td>

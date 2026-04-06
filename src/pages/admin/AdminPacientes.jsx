@@ -80,7 +80,7 @@ const AdminPacientes = () => {
                       <button className="text-green-500 hover:text-green-600 bg-green-50 p-2 rounded-lg hover:scale-110 transition-transform" title="WhatsApp">
                         <FaWhatsapp className="text-lg" />
                       </button>
-                      <Link to="/admin/odontograma" className="text-accent-orange hover:text-orange-600 bg-orange-50 p-2 rounded-lg hover:scale-110 transition-transform" title="Odontograma">
+                      <Link to="/admin/odontograma-avanzado" className="text-accent-orange hover:text-orange-600 bg-orange-50 p-2 rounded-lg hover:scale-110 transition-transform" title="Odontograma">
                         <FaTooth className="text-lg" />
                       </Link>
                       <button className="text-primary hover:text-primary/70 bg-primary/10 p-2 rounded-lg hover:scale-110 transition-transform" title="Historia Clínica">
