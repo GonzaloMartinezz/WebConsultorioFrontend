@@ -22,7 +22,7 @@ const Contacto = () => {
 
             {/* Lado Izquierdo: Título y descripción */}
             <div className="w-full lg:w-5/12 space-y-6">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
                 Estamos <br />
                 <span className="text-accent-orange">Cerca Tuyo</span>
               </h1>
@@ -91,9 +91,9 @@ const Contacto = () => {
       {/* ======================================================== */}
       {/* NUEVA SECCIÓN: DUDAS Y CONSULTAS (Fondo Marrón) */}
       {/* ======================================================== */}
-      <section className="bg-primary rounded-[2.5rem] p-10 md:p-16 mx-4 lg:mx-auto lg:max-w-7xl my-20 shadow-2xl border-b-8 border-accent-orange text-center" data-aos="fade-up">
+      <section className="bg-primary rounded-[2.5rem] p-8 md:p-16 mx-4 lg:mx-auto lg:max-w-7xl my-10 md:my-20 shadow-2xl border-b-8 border-accent-orange text-center" data-aos="fade-up">
         
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight mb-12 leading-tight">
+        <h2 className="text-2xl md:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight mb-8 md:mb-12 leading-tight">
           Para poder consultar cualquier duda <br className="hidden md:block"/> 
           o comentarnos tu situación
         </h2>
@@ -134,7 +134,7 @@ const Contacto = () => {
       {/* ======================================================== */}
       {/* SECCIÓN 2: MAPA PANORÁMICO */}
       {/* ========================================== */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section className="py-10 md:py-20 px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-black text-text uppercase tracking-tight">

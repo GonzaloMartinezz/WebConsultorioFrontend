@@ -36,7 +36,7 @@ const BannerPlanes = () => {
   return (
     <>
       {/* SECCIÓN 1: HERO */}
-      <section className="relative bg-primary text-background overflow-visible border-b-6 border-accent-orange h-[calc(100vh-80px)] min-h-[600px] flex items-center">
+      <section className="relative bg-primary text-background overflow-visible border-b-6 border-accent-orange min-h-auto py-16 md:py-0 md:h-[calc(100vh-80px)] md:min-h-[600px] flex items-center">
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none bg-[radial-gradient(circle_at_top_left,white,transparent_50%)]"></div>
 
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8 lg:gap-16 z-10">
@@ -46,12 +46,12 @@ const BannerPlanes = () => {
               El primer paso hacia tu mejor sonrisa
             </span>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-5 tracking-tight uppercase">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.1] mb-5 tracking-tight uppercase">
               Cuidamos tu <br className="hidden lg:block" /> salud con <br className="hidden lg:block" />
               <span className="text-accent-orange">profesionalismo</span>
             </h1>
 
-            <p className="text-base md:text-lg text-secondary/90 mb-8 max-w-xl mx-auto md:mx-0 leading-relaxed font-medium">
+            <p className="text-sm md:text-lg text-secondary/90 mb-8 max-w-xl mx-auto md:mx-0 leading-relaxed font-medium">
               Te ofrecemos tratamientos de primer nivel en un ambiente cómodo y relajado. Reserva tu turno online de forma rápida y sin complicaciones.
             </p>
 
@@ -65,8 +65,8 @@ const BannerPlanes = () => {
             </div>
           </div>
 
-          <div className="flex-1 w-full lg:max-w-[55%] relative md:ml-auto" data-aos="fade-left" data-aos-delay="200">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-accent-orange/80 aspect-4/3 w-full bg-secondary/50">
+          <div className="flex-1 w-full lg:max-w-[55%] relative md:ml-auto mt-8 md:mt-0" data-aos="fade-left" data-aos-delay="200">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-accent-orange/80 aspect-square md:aspect-4/3 w-full bg-secondary/50">
               {imagenesConsultorio.map((img, index) => (
                 <img
                   key={index}
@@ -93,10 +93,10 @@ const BannerPlanes = () => {
       </section>
 
       {/* SECCIÓN 2: CHECKLIST */}
-      <section className="bg-background border-b-6 border-accent-orange py-25 px-4 sm:px-6 lg:px-10">
+      <section className="bg-background border-b-6 border-accent-orange py-16 lg:py-25 px-4 sm:px-6 lg:px-10">
         <div className="mx-auto max-w-7xl">
-          <p className="text-center text-lg font-bold tracking-widest text-primary uppercase mb-15">¿Por qué elegirnos?</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-15 gap-x-5 text-text-light text-base md:text-lg font-bold mx-auto max-w-5xl">
+          <p className="text-center text-sm md:text-lg font-bold tracking-widest text-primary uppercase mb-10 md:mb-15">¿Por qué elegirnos?</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-10 md:gap-y-15 gap-x-5 text-text-light text-base md:text-lg font-bold mx-auto max-w-5xl">
             <div className="flex items-center gap-3" data-aos="fade-up"><svg className="w-7 h-7 text-accent-orange shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg><span>Profesionales Especializados</span></div>
             <div className="flex items-center gap-3" data-aos="fade-up" data-aos-delay="100"><svg className="w-7 h-7 text-accent-orange shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg><span>Atención Personalizada</span></div>
             <div className="flex items-center gap-3" data-aos="fade-up" data-aos-delay="200"><svg className="w-7 h-7 text-accent-orange shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg><span>Máquinas de última generación</span></div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import api from '../../api/axios.js';
 // Importamos iconos profesionales para todas las nuevas secciones
@@ -11,8 +11,28 @@ import {
 const LayoutAdmin = ({ children }) => {
   const [isExpanded, setIsExpanded] = useState(true);
   const [mostrarModalLogout, setMostrarModalLogout] = useState(false);
+  const [turnosPendientesCount, setTurnosPendientesCount] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchTurnosAlert = async () => {
+      try {
+        const respuesta = await api.get('/turnos');
+        const count = respuesta.data.filter(t => t.estado === 'Pendiente').length;
+        setTurnosPendientesCount(count);
+      } catch (error) {
+        // Silencio en Layout para que no haya conflictos con redirects de otras vistas
+      }
+    };
+    
+    // Ejecución inicial
+    fetchTurnosAlert();
+
+    // Polling cada 10 segundos
+    const interval = setInterval(fetchTurnosAlert, 10000);
+    return () => clearInterval(interval);
+  }, []);
 
   const confirmarLogout = async () => {
     try {
@@ -92,11 +112,11 @@ const LayoutAdmin = ({ children }) => {
                   <span className="tracking-wide text-[13px] whitespace-nowrap">{item.name}</span>
                 )}
 
-                {/* Ícono de Alerta para Turnos Pendientes (Badge rojo) */}
-                {isExpanded && item.name === "Turnos Pendientes" && (
-                  <span className="ml-auto bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow-sm animate-pulse-slow">3</span>
+                {/* Ícono de Alerta para Turnos Pendientes (Badge rojo dinámico) */}
+                {isExpanded && item.name === "Turnos Pendientes" && turnosPendientesCount > 0 && (
+                  <span className="ml-auto bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow-sm animate-pulse-slow">{turnosPendientesCount}</span>
                 )}
-                {!isExpanded && item.name === "Turnos Pendientes" && (
+                {!isExpanded && item.name === "Turnos Pendientes" && turnosPendientesCount > 0 && (
                   <span className="absolute top-2 right-2 w-3 h-3 bg-red-500 rounded-full border-2 border-primary animate-pulse-slow"></span>
                 )}
 

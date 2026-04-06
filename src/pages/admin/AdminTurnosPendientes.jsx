@@ -13,6 +13,17 @@ const AdminTurnosPendientes = () => {
 
     const [pendientes, setPendientes] = useState([]);
     const [cargando, setCargando] = useState(true);
+    const [ediciones, setEdiciones] = useState({});
+
+    const handleEditChange = (id, field, value) => {
+        setEdiciones(prev => ({
+            ...prev,
+            [id]: {
+                ...prev[id],
+                [field]: value
+            }
+        }));
+    };
 
     // ==========================================
     // TRAER TURNOS REALES DE LA BASE DE DATOS
@@ -33,17 +44,65 @@ const AdminTurnosPendientes = () => {
         };
 
         fetchPendientes();
+
+        // Actualización en tiempo real cada 10 segundos
+        const interval = setInterval(() => {
+            fetchPendientes();
+        }, 10000);
+
+        return () => clearInterval(interval);
     }, []);
 
     // ==========================================
     // ACCIONES REALES CONTRA LA BASE DE DATOS
     // ==========================================
-    const handleAceptar = async (id) => {
+    const handleAceptar = async (turno) => {
+        const id = turno._id;
+        const horaDefinitiva = ediciones[id]?.hora !== undefined ? ediciones[id].hora : turno.hora;
+        const fechaDefinitiva = ediciones[id]?.fecha || turno.fecha;
+
         try {
-            await api.patch(`/turnos/${id}/estado`, { estado: 'Confirmado' });
+            await api.patch(`/turnos/${id}/estado`, { 
+                estado: 'Confirmado',
+                hora: horaDefinitiva,
+                fecha: fechaDefinitiva
+            });
             // Lo quitamos visualmente de la lista de pendientes
             setPendientes(p => p.filter(t => t._id !== id));
             showToast('¡Turno Confirmado! Guardado en la agenda oficial.', 'success');
+
+            // --- INTEGRACIÓN: Generar Link de Google Calendar ---
+            let startTime = '090000';
+            let endTime = '130000';
+            if (horaDefinitiva.includes(':')) {
+                // Formato exacto ej: 10:30
+                const partes = horaDefinitiva.replace(/[^0-9:]/g, '').split(':');
+                if (partes.length >= 2) {
+                    startTime = `${partes[0].padStart(2, '0')}${partes[1].padStart(2, '0')}00`;
+                    const endH = (parseInt(partes[0]) + 1).toString().padStart(2, '0');
+                    endTime = `${endH}${partes[1].padStart(2, '0')}00`;
+                }
+            } else if (horaDefinitiva.includes('Tarde')) {
+                startTime = '160000';
+                endTime = '200000';
+            }
+            
+            const fechaLimpia = fechaDefinitiva ? fechaDefinitiva.replace(/-/g, '') : '';
+            const gcalLink = fechaLimpia 
+                ? `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Turno Odontológico: ' + turno.profesional)}&dates=${fechaLimpia}T${startTime}/${fechaLimpia}T${endTime}&details=${encodeURIComponent('Consulta por: ' + turno.motivo)}`
+                : '';
+
+            // --- INTEGRACIÓN: Redirigir a WhatsApp al paciente ---
+            const telefonoLimpio = turno.telefono ? turno.telefono.replace(/\D/g, '') : '';
+            if (telefonoLimpio) {
+                const fechaLegible = fechaDefinitiva ? fechaDefinitiva.split('-').reverse().join('/') : '';
+                const mensaje = `Hola ${turno.nombrePaciente}, ¡tu turno ha sido confirmado! ✅\n\n🦷 *Profesional:* ${turno.profesional}\n📅 *Fecha:* ${fechaLegible}\n⏰ *Horario:* ${horaDefinitiva}\n\nAgendalo en tu Google Calendar para no olvidarte:\n👉 ${gcalLink}\n\n¡Te esperamos!`;
+                const waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+                window.open(waUrl, '_blank');
+            } else {
+                showToast('Advertencia: El paciente no dejó un teléfono.', 'error');
+            }
+
         } catch (error) {
             console.error(error);
             showToast('Hubo un error al confirmar el turno', 'error');
@@ -112,9 +171,43 @@ const AdminTurnosPendientes = () => {
                             >
                                 {/* Info del turno */}
                                 <div className="flex flex-col md:flex-row items-start md:items-center gap-6 xl:w-2/3">
-                                    <div className="bg-primary/10 rounded-2xl p-4 text-center min-w-[120px] shrink-0 border border-primary/20">
-                                        <p className="text-xs font-black uppercase text-accent-orange tracking-widest">{turno.fecha}</p>
-                                        <p className="text-2xl font-black text-primary">{turno.hora}</p>
+                                    <div className="bg-primary/10 rounded-2xl p-4 text-center min-w-[160px] shrink-0 border border-primary/20 flex flex-col gap-2">
+                                        <input 
+                                            type="date"
+                                            value={ediciones[turno._id]?.fecha || turno.fecha}
+                                            onChange={(e) => handleEditChange(turno._id, 'fecha', e.target.value)}
+                                            className="text-xs font-black uppercase text-accent-orange bg-transparent border-b border-primary/30 focus:border-primary outline-none focus:bg-white text-center w-full pb-1"
+                                        />
+                                        <select 
+                                            value={ediciones[turno._id]?.hora !== undefined ? ediciones[turno._id].hora : turno.hora}
+                                            onChange={(e) => handleEditChange(turno._id, 'hora', e.target.value)}
+                                            className="text-lg font-black text-primary text-center bg-white rounded shadow-sm py-1.5 outline-none border border-transparent focus:border-accent-orange w-full cursor-pointer appearance-none"
+                                        >
+                                            {(!turno.hora || turno.hora.includes('Mañana') || turno.hora.includes('Tarde')) && <option value={turno.hora} disabled>{turno.hora}</option>}
+                                            <optgroup label="Mañana">
+                                                <option value="09:00">09:00</option>
+                                                <option value="09:30">09:30</option>
+                                                <option value="10:00">10:00</option>
+                                                <option value="10:30">10:30</option>
+                                                <option value="11:00">11:00</option>
+                                                <option value="11:30">11:30</option>
+                                                <option value="12:00">12:00</option>
+                                                <option value="12:30">12:30</option>
+                                                <option value="13:00">13:00</option>
+                                            </optgroup>
+                                            <optgroup label="Tarde">
+                                                <option value="16:00">16:00</option>
+                                                <option value="16:30">16:30</option>
+                                                <option value="17:00">17:00</option>
+                                                <option value="17:30">17:30</option>
+                                                <option value="18:00">18:00</option>
+                                                <option value="18:30">18:30</option>
+                                                <option value="19:00">19:00</option>
+                                                <option value="19:30">19:30</option>
+                                                <option value="20:00">20:00</option>
+                                            </optgroup>
+                                        </select>
+                                        <p className="text-[9px] text-text-light font-bold">ASIGNAR HORA FINAL</p>
                                     </div>
                                     <div className="space-y-1">
                                         <div className="flex items-center gap-3 flex-wrap">
@@ -148,7 +241,7 @@ const AdminTurnosPendientes = () => {
                                         <FaTimesCircle className="text-lg" /> Rechazar
                                     </button>
                                     <button
-                                        onClick={() => handleAceptar(turno._id)}
+                                        onClick={() => handleAceptar(turno)}
                                         className="flex-1 xl:flex-none justify-center px-8 py-4 rounded-xl text-white bg-green-500 border-b-4 border-green-700 hover:brightness-110 active:border-b-0 active:translate-y-1 font-black uppercase text-sm tracking-wider flex items-center gap-2 transition-all shadow-lg"
                                     >
                                         <FaCheckCircle className="text-lg" /> Aprobar Turno

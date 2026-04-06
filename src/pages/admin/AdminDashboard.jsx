@@ -7,6 +7,10 @@ import api from '../../api/axios.js';
 const AdminDashboard = () => {
   const [turnos, setTurnos] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [modalEditOpen, setModalEditOpen] = useState(false);
+  const [turnoAEditar, setTurnoAEditar] = useState(null);
+  const [editForm, setEditForm] = useState({ fecha: '', hora: '' });
+
   const navigate = useNavigate();
 
   // ========================================================
@@ -59,6 +63,13 @@ const AdminDashboard = () => {
     };
 
     obtenerTurnosDeBD();
+
+    // Sincronización en tiempo real cada 10 segundos
+    const interval = setInterval(() => {
+        obtenerTurnosDeBD();
+    }, 10000);
+
+    return () => clearInterval(interval);
   }, [navigate]);
 
   // Toast System Nativo
@@ -69,13 +80,39 @@ const AdminDashboard = () => {
   };
 
   // Acciones Funcionales Reales Visualmente
-  const handleApprove = async (id) => {
+  const handleApprove = async (turno) => {
+    const id = turno._id;
     try {
       await api.patch(`/turnos/${id}/estado`, { estado: 'Confirmado' });
       setTurnos(prevTurnos => 
-        prevTurnos.map(turno => turno._id === id ? { ...turno, estado: 'Confirmado' } : turno)
+        prevTurnos.map(t => t._id === id ? { ...t, estado: 'Confirmado' } : t)
       );
-      showToast('¡Turno Confirmado! Se notificó al paciente por API WhatsApp.', 'success');
+      showToast('¡Turno Confirmado! Guardado en la agenda oficial.', 'success');
+
+      // --- INTEGRACIÓN: Generar Link de Google Calendar ---
+      let startTime = '090000';
+      let endTime = '130000';
+      if (turno.hora && turno.hora.includes('Tarde')) {
+          startTime = '160000';
+          endTime = '200000';
+      }
+      
+      const fechaLimpia = turno.fecha ? turno.fecha.replace(/-/g, '') : '';
+      const gcalLink = fechaLimpia 
+          ? `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Turno Odontológico: ' + turno.profesional)}&dates=${fechaLimpia}T${startTime}/${fechaLimpia}T${endTime}&details=${encodeURIComponent('Consulta por: ' + turno.motivo)}`
+          : '';
+
+      // --- INTEGRACIÓN: Redirigir a WhatsApp al paciente ---
+      const telefonoLimpio = turno.telefono ? turno.telefono.replace(/\D/g, '') : '';
+      if (telefonoLimpio) {
+          const fechaLegible = turno.fecha ? turno.fecha.split('-').reverse().join('/') : '';
+          const mensaje = `Hola ${turno.nombrePaciente}, ¡tu turno ha sido confirmado! ✅\n\n🦷 *Profesional:* ${turno.profesional}\n📅 *Fecha:* ${fechaLegible}\n⏰ *Horario:* ${turno.hora}\n\nAgendalo en tu Google Calendar para no olvidarte:\n👉 ${gcalLink}\n\n¡Te esperamos!`;
+          const waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+          window.open(waUrl, '_blank');
+      } else {
+          showToast('Advertencia: El paciente no dejó un teléfono.', 'error');
+      }
+
     } catch (error) {
       alert("Hubo un error al confirmar el turno");
     }
@@ -93,9 +130,62 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleEdit = (id) => {
-    console.log(`Falta conectar el Modal de edición para el turno ${id}`);
-    showToast(`Abriendo el menú de edición rápida para el turno #${id}...`, 'info');
+  const abrirModalEdicion = (turno) => {
+    setTurnoAEditar(turno);
+    setEditForm({ fecha: turno.fecha, hora: turno.hora });
+    setModalEditOpen(true);
+  };
+
+  const handleConfirmEdit = async (e) => {
+    e.preventDefault();
+    if (!turnoAEditar) return;
+    
+    try {
+      await api.patch(`/turnos/${turnoAEditar._id}/estado`, { 
+        estado: 'Confirmado', // Lo validamos como confirmado oficialmente
+        fecha: editForm.fecha, 
+        hora: editForm.hora 
+      });
+
+      setTurnos(prevTurnos => 
+        prevTurnos.map(t => t._id === turnoAEditar._id ? { ...t, estado: 'Confirmado', fecha: editForm.fecha, hora: editForm.hora } : t)
+      );
+      
+      // --- INTEGRACIÓN: Generar Link de Google Calendar ---
+      let startTime = '090000';
+      let endTime = '130000';
+      if (editForm.hora.includes(':')) {
+          const partes = editForm.hora.replace(/[^0-9:]/g, '').split(':');
+          if (partes.length >= 2) {
+              startTime = `${partes[0].padStart(2, '0')}${partes[1].padStart(2, '0')}00`;
+              const endH = (parseInt(partes[0]) + 1).toString().padStart(2, '0');
+              endTime = `${endH}${partes[1].padStart(2, '0')}00`;
+          }
+      } else if (editForm.hora.includes('Tarde')) {
+          startTime = '160000';
+          endTime = '200000';
+      }
+      
+      const fechaLimpia = editForm.fecha ? editForm.fecha.replace(/-/g, '') : '';
+      const gcalLink = fechaLimpia 
+          ? `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Turno Odontológico: ' + turnoAEditar.profesional)}&dates=${fechaLimpia}T${startTime}/${fechaLimpia}T${endTime}&details=${encodeURIComponent('Consulta por: ' + turnoAEditar.motivo)}`
+          : '';
+
+      // --- INTEGRACIÓN: Redirigir a WhatsApp al paciente ---
+      const telefonoLimpio = turnoAEditar.telefono ? turnoAEditar.telefono.replace(/\D/g, '') : '';
+      if (telefonoLimpio) {
+          const fechaLegible = editForm.fecha ? editForm.fecha.split('-').reverse().join('/') : '';
+          const mensaje = `Hola ${turnoAEditar.nombrePaciente}, ¡tu turno ha sido asignado y confirmado! ✅\n\n🦷 *Profesional:* ${turnoAEditar.profesional}\n📅 *Fecha:* ${fechaLegible}\n⏰ *Horario:* ${editForm.hora}\n\nAgendalo en tu Google Calendar para no olvidarte:\n👉 ${gcalLink}\n\n¡Te esperamos!`;
+          const waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+          window.open(waUrl, '_blank');
+      }
+
+      showToast(`Turno confirmado para el ${editForm.fecha} a las ${editForm.hora}.`, 'success');
+      setModalEditOpen(false);
+    } catch (error) {
+      console.error("Error editando turno:", error);
+      showToast('Hubo un error al guardar los cambios.', 'error');
+    }
   };
 
   return (
@@ -198,7 +288,7 @@ const AdminDashboard = () => {
                     <td className="px-6 py-5 text-right">
                       <div className="flex items-center justify-end gap-3 opacity-90 group-hover:opacity-100 transition-opacity">
                         {turno.estado !== 'Confirmado' && (
-                          <button onClick={() => handleApprove(turno._id)} className="text-green-600 bg-green-50 hover:bg-green-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Aprobar Turno y Notificar">
+                          <button onClick={() => handleApprove(turno)} className="text-green-600 bg-green-50 hover:bg-green-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Aprobar Turno y Notificar">
                             <FaCheckCircle className="text-xl" />
                           </button>
                         )}
@@ -207,7 +297,7 @@ const AdminDashboard = () => {
                             <FaTimesCircle className="text-xl" />
                           </button>
                         )}
-                        <button onClick={() => handleEdit(turno._id)} className="text-primary bg-secondary/30 hover:bg-secondary/50 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Configurar Info">
+                        <button onClick={() => abrirModalEdicion(turno)} className="text-primary bg-secondary/30 hover:bg-secondary/50 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Reagendar (Feha y Hora)">
                           <FaPen className="text-xl" />
                         </button>
                       </div>
@@ -220,6 +310,112 @@ const AdminDashboard = () => {
         </div>
 
       </main>
+
+      {/* ======================================================== */}
+      {/* MODAL DE EDICIÓN PROFESIONAL DE HORARIOS                 */}
+      {/* ======================================================== */}
+      {modalEditOpen && turnoAEditar && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-white rounded-4xl w-full max-w-md overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative border border-secondary/30" data-aos="zoom-in" data-aos-duration="300">
+            
+            {/* Cabecera del modal */}
+            <div className="bg-primary px-8 pt-8 pb-6 text-white relative">
+              <button 
+                onClick={() => setModalEditOpen(false)}
+                className="absolute top-5 right-5 text-white/50 hover:text-accent-orange transition-colors"
+                aria-label="Cerrar modal"
+              >
+                <FaTimesCircle className="text-2xl" />
+              </button>
+              <h2 className="text-2xl font-black uppercase tracking-tight flex items-center gap-3">
+                <FaCalendarDay className="text-accent-orange text-3xl" /> Reagendar Cita
+              </h2>
+              <div className="mt-4 bg-white/10 border border-white/20 p-3 rounded-xl flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] uppercase font-bold text-white/60 tracking-widest">Paciente</p>
+                  <p className="font-bold text-white">{turnoAEditar.nombrePaciente} {turnoAEditar.apellidoPaciente}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] uppercase font-bold text-white/60 tracking-widest">Profesional</p>
+                  <p className="font-semibold text-white/90 text-sm">{turnoAEditar.profesional}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Cuerpo del Formulario */}
+            <form onSubmit={handleConfirmEdit} className="p-8 space-y-6">
+              <div className="space-y-2">
+                <label className="text-xs font-black text-primary uppercase tracking-widest flex items-center gap-2">
+                  <FaCalendarDay className="text-accent-orange" /> Fecha de Atención
+                </label>
+                <input 
+                  type="date" 
+                  required
+                  value={editForm.fecha}
+                  onChange={(e) => setEditForm({...editForm, fecha: e.target.value})}
+                  className="w-full px-4 py-3.5 bg-secondary/10 border-2 border-secondary/40 rounded-xl font-bold text-primary focus:border-accent-orange focus:bg-white outline-none transition-all shadow-inner"
+                />
+              </div>
+
+              <div className="space-y-2 relative">
+                <label className="text-xs font-black text-primary uppercase tracking-widest flex items-center gap-2">
+                  <FaUserClock className="text-accent-orange" /> Horario Exacto
+                </label>
+                <select 
+                  required
+                  value={editForm.hora}
+                  onChange={(e) => setEditForm({...editForm, hora: e.target.value})}
+                  className="w-full px-4 py-3.5 bg-secondary/10 border-2 border-secondary/40 rounded-xl font-bold text-primary focus:border-accent-orange focus:bg-white outline-none transition-all shadow-inner appearance-none cursor-pointer"
+                >
+                  <option value="" disabled>Seleccionar un horario preciso...</option>
+                  <optgroup label="Turno Mañana">
+                    <option value="09:00">09:00 hs</option>
+                    <option value="09:30">09:30 hs</option>
+                    <option value="10:00">10:00 hs</option>
+                    <option value="10:30">10:30 hs</option>
+                    <option value="11:00">11:00 hs</option>
+                    <option value="11:30">11:30 hs</option>
+                    <option value="12:00">12:00 hs</option>
+                    <option value="12:30">12:30 hs</option>
+                    <option value="13:00">13:00 hs</option>
+                  </optgroup>
+                  <optgroup label="Turno Tarde">
+                    <option value="16:00">16:00 hs</option>
+                    <option value="16:30">16:30 hs</option>
+                    <option value="17:00">17:00 hs</option>
+                    <option value="17:30">17:30 hs</option>
+                    <option value="18:00">18:00 hs</option>
+                    <option value="18:30">18:30 hs</option>
+                    <option value="19:00">19:00 hs</option>
+                    <option value="19:30">19:30 hs</option>
+                    <option value="20:00">20:00 hs</option>
+                  </optgroup>
+                </select>
+                <div className="absolute right-4 top-[38px] pointer-events-none text-primary/60">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+              </div>
+
+              {/* Botones */}
+              <div className="pt-4 flex gap-3">
+                <button 
+                  type="button" 
+                  onClick={() => setModalEditOpen(false)}
+                  className="flex-1 py-4 px-4 rounded-xl border border-secondary-dark text-text-light font-black uppercase text-sm hover:bg-secondary/30 transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button 
+                  type="submit" 
+                  className="flex-1 py-4 px-4 rounded-xl bg-accent-orange text-white font-black uppercase text-sm shadow-lg shadow-accent-orange/30 hover:scale-[1.03] active:scale-[0.98] transition-all flex justify-center items-center gap-2"
+                >
+                  <FaCheckCircle className="text-lg" /> Asignar y Confirmar Turno
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </LayoutAdmin>
   );
 };

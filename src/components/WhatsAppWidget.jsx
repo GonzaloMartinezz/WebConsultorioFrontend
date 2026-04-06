@@ -5,8 +5,7 @@ const WhatsAppWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [nombre, setNombre] = useState('');
   const [apellido, setApellido] = useState(''); 
-  const [mail, setMail] = useState(''); // NUEVO: Mail
-  const [profesional, setProfesional] = useState(''); 
+  const [mail, setMail] = useState(''); 
   const [motivo, setMotivo] = useState('');
 
   // Número de la clínica
@@ -17,7 +16,7 @@ const WhatsAppWidget = () => {
     if (!nombre.trim() || !apellido.trim() || !mail.trim() || !motivo.trim()) return;
 
     // Mensaje formateado con todos los datos
-    const mensaje = `Hola buenos días/tardes, mi nombre es ${nombre} ${apellido}.\nMe comunico para solicitar un turno${profesional ? ` con ${profesional}` : ''} y obtener mayor información.\n\n📝 *Mis datos:*\n- Email: ${mail}\n\n🦷 *Especialidad/Motivo:*\n- ${motivo}\n\nQuedo a la espera de su respuesta para coordinar. ¡Muchas gracias!`;
+    const mensaje = `Hola buenos días/tardes, mi nombre es ${nombre} ${apellido}.\nMe comunico para realizar una consulta.\n\n📝 *Mis datos:*\n- Email: ${mail}\n\n🦷 *Consulta sobre:*\n- ${motivo}\n\nQuedo a la espera de su respuesta. ¡Muchas gracias!`;
     const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
 
     window.open(url, '_blank');
@@ -25,7 +24,6 @@ const WhatsAppWidget = () => {
     setNombre('');
     setApellido('');
     setMail('');
-    setProfesional('');
     setMotivo('');
   };
 
@@ -80,20 +78,7 @@ const WhatsAppWidget = () => {
               />
             </div>
 
-            {/* Menú desplegable para elegir Doctor */}
-            <div>
-              <select
-                value={profesional}
-                onChange={(e) => setProfesional(e.target.value)}
-                className={`w-full text-sm px-4 py-2.5 rounded-xl border border-secondary bg-background/50 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none ${!profesional ? 'text-text-light' : 'text-text'}`}
-                required
-              >
-                <option value="" disabled>Seleccionar Profesional...</option>
-                <option value="el Dr. Adolfo Martínez">Dr. Adolfo Martínez</option>
-                <option value="la Dra. Erina Carcara">Dra. Erina Carcara</option>
-                <option value="cualquier profesional disponible">Indistinto / Primera vez</option>
-              </select>
-            </div>
+            {/* El widget general se enfoca en consultas y ya no pide seleccionar profesional. El selector de profesional fue eliminado. */}
 
             {/* Motivo */}
             <div>

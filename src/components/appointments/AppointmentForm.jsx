@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../../api/axios.js";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 const AppointmentForm = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     nombre: "",
@@ -15,8 +13,8 @@ const AppointmentForm = () => {
     telefono: "",
     doctor: "",
     fecha: "",
-    hora: "",
-    consulta: "",
+    horaTentativa: "",
+    motivo: "",
   });
 
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" });
@@ -46,60 +44,57 @@ const AppointmentForm = () => {
     setCargando(true);
     setMensaje({ texto: "", tipo: "" });
 
-    // Si no está logueado, redirigir al login
-    if (!user) {
-      navigate("/login");
-      return;
-    }
-
-    const hora = form.hora;
-    const isMorning = hora >= "09:00" && hora <= "13:30";
-    const isAfternoon = hora >= "16:00" && hora <= "21:00";
-    
-    if (!isMorning && !isAfternoon) {
-      setMensaje({
-        texto: "Por favor, selecciona una hora de 09:00 a 13:30, o de 16:00 a 21:00.",
-        tipo: "error",
-      });
-      setCargando(false);
-      return;
-    }
-
-    // Combinamos los datos del usuario logueado con el formulario
-    const formData = {
-      nombrePaciente: form.nombre || user?.nombre || "Paciente",
-      apellidoPaciente: form.apellido || user?.apellido || "Registrado",
+    // Preparar objeto para el Backend (DB)
+    const formDataBackend = {
+      nombrePaciente: form.nombre,
+      apellidoPaciente: form.apellido,
       dni: form.dni,
-      email: form.email || user?.email,
+      email: form.email,
       telefono: form.telefono,
       profesional: form.doctor,
       fecha: form.fecha,
-      hora: form.hora,
-      motivo: form.consulta,
+      hora: form.horaTentativa, // Grabamos la franja horaria en la DB
+      motivo: form.motivo,
       estado: 'Pendiente'
     };
 
-    console.log("Datos que estoy a punto de enviar:", formData);
-
     try {
-      await api.post("/turnos", formData);
+      // 1. Guardar primero en MongoDB para la Agenda Admin y la Historia Clínica
+      await api.post("/turnos", formDataBackend);
+
+      // 2. Si guardó bien, redirigir a WhatsApp para el contacto rápido
+      const numeroWhatsApp = "5493816242482";
+      const textoMensaje = `Hola, quiero solicitar un turno online.
+*Mis datos:*
+- Nombre: ${form.nombre} ${form.apellido}
+- DNI: ${form.dni}
+- Teléfono: ${form.telefono}
+- Email: ${form.email}
+
+*Detalles del turno:*
+- Profesional: ${form.doctor}
+- Fecha Tentativa: ${form.fecha.split('-').reverse().join('/')}
+- Turno: ${form.horaTentativa}
+- Motivo: ${form.motivo}
+
+Espero su confirmación por este medio. ¡Muchas gracias!`;
+
+      const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(textoMensaje)}`;
+      window.open(url, "_blank");
+
       setMensaje({
-        texto: "¡Turno solicitado con éxito! Nuestra asistente te contactará para confirmar.",
+        texto: "¡Solicitud creada en nuestro sistema! Te redirigimos a WhatsApp...",
         tipo: "success",
       });
+
       setForm({
-        dni: "",
-        email: "",
-        telefono: "",
-        doctor: "",
-        fecha: "",
-        hora: "",
-        consulta: "",
+        ...form,
+        dni: "", doctor: "", fecha: "", horaTentativa: "", motivo: "",
       });
     } catch (error) {
-      console.error("Error al solicitar el turno:", error);
+      console.error("Error al registrar el turno:", error);
       setMensaje({
-        texto: "Hubo un error al procesar tu solicitud. Por favor, intenta de nuevo o contáctanos por WhatsApp.",
+        texto: "Hubo un error de conexión con la base de datos. Podes contactarnos usando el botón directo de WhatsApp.",
         tipo: "error",
       });
     } finally {
@@ -272,42 +267,55 @@ const AppointmentForm = () => {
 
         <div className="space-y-1">
           <label
-            htmlFor="hora"
+            htmlFor="horaTentativa"
             className="block text-sm font-medium text-text/90"
           >
-            Hora tentativa
+            Turno tentativo
           </label>
-          <input
-            id="hora"
-            type="time"
-            name="hora"
-            value={form.hora}
+          <select
+            id="horaTentativa"
+            name="horaTentativa"
+            value={form.horaTentativa}
             onChange={handleChange}
             className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
             required
-          />
+          >
+            <option value="">Seleccionar turno</option>
+            <option value="Mañana (09:00 - 13:00)">Mañana (09:00 - 13:00)</option>
+            <option value="Tarde (16:00 - 20:00)">Tarde (16:00 - 20:00)</option>
+          </select>
         </div>
       </div>
 
       <div className="space-y-1">
         <label
-          htmlFor="consulta"
+          htmlFor="motivo"
           className="block text-sm font-medium text-text/90"
         >
           Motivo de consulta
         </label>
-        <textarea
-          id="consulta"
-          name="consulta"
-          value={form.consulta}
-          placeholder="Contanos brevemente qué te gustaría consultar (dolor, limpieza, control, ortodoncia, etc.)."
+        <select
+          id="motivo"
+          name="motivo"
+          value={form.motivo}
           onChange={handleChange}
           className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"
-          rows={4}
-        />
-        <p className="text-xs text-text/70">
-          Estos datos serán revisados por el equipo administrativo para
-          coordinar tu turno con el profesional adecuado.
+          required
+        >
+          <option value="">Seleccionar motivo</option>
+          <option value="Consulta General / Control">Consulta General / Control</option>
+          <option value="Limpieza Dental">Limpieza Dental</option>
+          <option value="Ortodoncia (Brackets/Alineadores)">Ortodoncia (Brackets/Alineadores)</option>
+          <option value="Implantología">Implantología</option>
+          <option value="Endodoncia (Tratamiento de conducto)">Endodoncia (Tratamiento de conducto)</option>
+          <option value="Extracción / Cirugía">Extracción / Cirugía</option>
+          <option value="Urgencia / Dolor">Urgencia / Dolor</option>
+          <option value="Estética / Blanqueamiento">Estética / Blanqueamiento</option>
+          <option value="Odontopediatría (Niños)">Odontopediatría (Niños)</option>
+          <option value="Otro">Otro motivo</option>
+        </select>
+        <p className="text-xs text-text/70 mt-1">
+          Al solicitar el turno se abrirá automáticamente WhatsApp para procesar tu reserva.
         </p>
       </div>
 

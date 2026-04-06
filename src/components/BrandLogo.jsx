@@ -7,7 +7,7 @@ const BrandLogo = ({ className = "" }) => {
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       {/* 1. Contenedor de la Imagen: Cuadrado y Circular */}
-      <div className="h-17 w-17 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-full bg-text flex items-center justify-center border-2 border-primary/20 shadow-sm">
+      <div className="h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-full bg-text flex items-center justify-center border-2 border-primary/20 shadow-sm">
         {!imgError ? (
           <img
             src="/Logo Principal marron 2.png"

@@ -19,11 +19,11 @@ const AcercaDe = () => {
               <span className="inline-block px-4 py-1.5 rounded-full border border-accent-orange text-accent-orange font-bold text-xs uppercase tracking-wider">
                 Nuestra Esencia
               </span>
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
                 La Sonrisa <br />
                 <span className="text-accent-orange">Comienza Aquí</span>
               </h1>
-              <p className="text-lg text-secondary/90 font-medium leading-relaxed max-w-md mx-auto lg:mx-0">
+              <p className="text-base md:text-lg text-secondary/90 font-medium leading-relaxed max-w-md mx-auto lg:mx-0">
                 Somos un equipo apasionado que combina experiencia clínica, tecnología moderna y un enfoque humano para acompañarte en cada etapa de tu tratamiento bucal.
               </p>
             </div>
@@ -58,7 +58,7 @@ const AcercaDe = () => {
         <div className="flex flex-col lg:flex-row gap-16 lg:gap-20 items-center">
 
           {/* Lado Izquierdo: Foto de Escritorio (escritorio 2.jpeg) */}
-          <div className="w-full lg:w-1/2 relative h-[500px] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white" data-aos="fade-right">
+          <div className="w-full lg:w-1/2 relative h-[300px] md:h-[500px] rounded-[2.5rem] overflow-hidden shadow-xl border-4 border-white" data-aos="fade-right">
             <img src="/sala de espera 2.jpeg" alt="Área de consulta Carcara Martínez" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent"></div>
           </div>
@@ -69,10 +69,10 @@ const AcercaDe = () => {
               {/* ======================================================== */}
               {/* LOGO PRINCIPAL: /Logo Principal.png (Pequeño junto al título) */}
               {/* ======================================================== */}
-              <h2 className="text-4xl md:text-4xl lg:text-4xl font-black text-text uppercase leading-tight tracking-tight">
+              <h2 className="text-3xl md:text-4xl lg:text-4xl font-black text-text uppercase leading-tight tracking-tight">
                 El Equipo <br /> <span className="text-accent-orange">Carcara & Martínez</span>
               </h2>
-              <p className="text-lg text-text-light font-medium max-w-xl mx-auto lg:mx-0">
+              <p className="text-base md:text-lg text-text-light font-medium max-w-xl mx-auto lg:mx-0">
                 Profesionales con amplia trayectoria, dedicados a ofrecerte diagnósticos precisos y tratamientos mínimamente invasivos.
               </p>
             </div>
@@ -116,12 +116,12 @@ const AcercaDe = () => {
       {/* SECCIÓN 3: INSTALACIONES PREMIUM (GRILLA DE 3 - bg-white) */}
       {/* Inspirado en references profesionales densas */}
       {/* ======================================================== */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-16 bg-white rounded-[2.5rem] shadow-sm border border-secondary/50">
-        <div className="text-center mb-16 space-y-3" data-aos="fade-up">
-          <h2 className="text-4xl lg:text-5xl font-black uppercase text-text leading-tight tracking-tight">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-10 md:py-16 bg-white rounded-3xl md:rounded-[2.5rem] shadow-sm border border-secondary/50">
+        <div className="text-center mb-10 md:mb-16 space-y-3" data-aos="fade-up">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase text-text leading-tight tracking-tight">
             Nuestras <span className="text-accent-orange">Instalaciones</span>
           </h2>
-          <p className="text-lg text-text-light font-medium max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-text-light font-medium max-w-2xl mx-auto leading-relaxed">
             Consultorios amplios, climatizados y equipados con tecnología de vanguardia para que tu experiencia sea lo más cómoda, segura y eficiente posible.
           </p>
         </div>
@@ -130,7 +130,7 @@ const AcercaDe = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
           {/* Maquinas Adolfo 1 - Impresora 3D */}
-          <div className="relative rounded-2xl overflow-hidden h-[300px] shadow-lg group" data-aos="fade-up">
+          <div className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] shadow-lg group" data-aos="fade-up">
             {/* OJO: DNG converted to jpg assumed */}
             <img src="/maquinas adolfo 1.jpg" alt="Impresora 3D Odontológica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
@@ -139,7 +139,7 @@ const AcercaDe = () => {
           </div>
 
           {/* Maquinas Adolfo 2jpg.jpg - CEREC/Fresadora */}
-          <div className="relative rounded-2xl overflow-hidden h-[300px] shadow-lg group" data-aos="fade-up" data-aos-delay="100">
+          <div className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] shadow-lg group" data-aos="fade-up" data-aos-delay="100">
             <img src="/maquinas adolfo 2.jpg" alt="Laboratorio Digital CEREC" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
               <h3 className="text-xl font-bold text-white uppercase tracking-tight">Diseño CAD/CAM</h3>
@@ -147,7 +147,7 @@ const AcercaDe = () => {
           </div>
 
           {/* Maquinas Adolfo 3.jpg - Equipamiento laboratorio */}
-          <div className="relative rounded-2xl overflow-hidden h-[300px] shadow-lg group" data-aos="fade-up" data-aos-delay="200">
+          <div className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] shadow-lg group" data-aos="fade-up" data-aos-delay="200">
             <img src="/maquinas adolfo 3.jpeg" alt="Equipamiento de vanguardia" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
               <h3 className="text-xl font-bold text-white uppercase tracking-tight">Tecnología Sirona</h3>
@@ -160,12 +160,12 @@ const AcercaDe = () => {
       {/* ======================================================== */}
       {/* SECCIÓN 4: TECNOLOGÍA Y CONFORT (GRILLA DE 2 - bg-background) */}
       {/* ======================================================== */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-16">
-        <div className="text-center mb-16 space-y-3" data-aos="fade-up">
-          <h2 className="text-4xl lg:text-5xl font-black uppercase text-text leading-tight tracking-tight">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-10 md:py-16">
+        <div className="text-center mb-10 md:mb-16 space-y-3" data-aos="fade-up">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase text-text leading-tight tracking-tight">
             Tecnología y <span className="text-accent-orange">Confort</span>
           </h2>
-          <p className="text-lg text-text-light font-medium max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-text-light font-medium max-w-2xl mx-auto leading-relaxed">
             Invertimos en tecnología de vanguardia para diagnósticos inmediatos y diseñamos espacios para tu total relajación, asegurando tratamientos rápidos y sin dolor.
           </p>
         </div>
@@ -174,7 +174,7 @@ const AcercaDe = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
           {/* Maquinas Adolfo 4.jpg - Rayos X */}
-          <div className="relative rounded-3xl overflow-hidden h-[400px] shadow-lg border-4 border-white group" data-aos="fade-right">
+          <div className="relative rounded-3xl overflow-hidden h-[300px] md:h-[400px] shadow-lg border-4 border-white group" data-aos="fade-right">
             <img src="/maquinas adolfo 4.jpg" alt="Tecnología Radiológica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
               <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Radiología Digital</h3>
@@ -183,7 +183,7 @@ const AcercaDe = () => {
           </div>
 
           {/* Maquinas Adolfo 5.jpg - Sillón/Consultorio */}
-          <div className="relative rounded-3xl overflow-hidden h-[400px] shadow-lg border-4 border-white group" data-aos="fade-left">
+          <div className="relative rounded-3xl overflow-hidden h-[300px] md:h-[400px] shadow-lg border-4 border-white group" data-aos="fade-left">
             <img src="/maquinas adolfo 5.jpg" alt="Consultorio Moderno" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
               <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Prótesis en el día</h3>

@@ -13,7 +13,7 @@ const WhatsAppButton = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const phoneNumber = '5493816242482';
-    const message = `Hola buenos días/tardes, mi nombre es ${formData.name} ${formData.lastname}.\nMe comunico para solicitar un turno y obtener mayor información.\n\n📝 *Mis datos:*\n- Email: ${formData.email}\n\n🦷 *Especialidad/Motivo:*\n- ${formData.reason}\n\nQuedo a la espera de su respuesta para coordinar. ¡Muchas gracias!`;
+    const message = `Hola buenos días/tardes, mi nombre es ${formData.name} ${formData.lastname}.\nMe comunico para realizar una consulta general o despejar unas dudas.\n\n📝 *Mis datos:*\n- Email: ${formData.email}\n\n🦷 *Consulta sobre:*\n- ${formData.reason}\n\nQuedo a la espera de su respuesta. ¡Muchas gracias!`;
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
     setIsOpen(false);

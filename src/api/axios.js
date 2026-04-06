@@ -1,9 +1,11 @@
 import axios from 'axios';
 
 const api = axios.create({
-  // ¡Cambiamos localhost por tu URL real de Render!
-  baseURL: 'https://webconsultorio-backend.onrender.com/api',
-  withCredentials: true // Esto es vital para que viajen las cookies
+  // Descomentar para producción:
+  // baseURL: 'https://webconsultorio-backend.onrender.com/api',
+  // Local:
+  baseURL: 'http://localhost:5000/api',
+  withCredentials: true 
 });
 
 export default api;
