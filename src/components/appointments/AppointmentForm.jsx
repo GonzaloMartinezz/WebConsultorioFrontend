@@ -5,6 +5,9 @@ import { useAuth } from "../../context/AuthContext.jsx";
 const AppointmentForm = () => {
   const { user } = useAuth();
 
+  // Fecha de hoy en formato YYYY-MM-DD para bloquear días pasados
+  const fechaHoy = new Date().toISOString().split('T')[0];
+
   const [form, setForm] = useState({
     nombre: "",
     apellido: "",
@@ -257,7 +260,7 @@ Espero su confirmación por este medio. ¡Muchas gracias!`;
             id="fecha"
             type="date"
             name="fecha"
-            min="2026-04-04"
+            min={fechaHoy}
             value={form.fecha}
             onChange={handleChange}
             className="w-full rounded-xl border border-accent/40 bg-white px-3 py-2.5 text-sm font-bold text-accent-orange shadow-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/30"

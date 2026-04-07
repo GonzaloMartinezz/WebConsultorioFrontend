@@ -15,6 +15,7 @@ import Turnos from "./pages/Turnos.jsx";
 import AcercaDe from "./pages/AcercaDe.jsx";
 import Contacto from "./pages/Contacto.jsx";
 import Login from "./pages/Login.jsx";
+import MisTurnos from "./pages/MisTurnos.jsx";
 
 // =========================================
 // IMPORTACIONES PRIVADAS (Panel Admin)
@@ -59,6 +60,7 @@ export default function App() {
           <Route index element={<Inicio />} />
           <Route path="inicio" element={<Inicio />} />
           <Route path="turnos" element={<Turnos />} />
+          <Route path="mis-turnos" element={<MisTurnos />} />
           <Route path="acerca" element={<AcercaDe />} />
           <Route path="contacto" element={<Contacto />} />
         </Route>
@@ -86,8 +88,10 @@ export default function App() {
         <Route path="/admin/encuestas" element={<AdminEncuestas />} />
         <Route path="/admin/finanzas" element={<AdminFinanzas />} />
         <Route path="/admin/historia-clinica" element={<AdminHistoriaClinica />} />
+        <Route path="/admin/historia-clinica/:id" element={<AdminHistoriaClinica />} />
         <Route path="/admin/lista-pacientes" element={<AdminPacientes />} />
         <Route path="/admin/odontograma-avanzado" element={<AdminOdontograma />} />
+        <Route path="/admin/odontograma-avanzado/:id" element={<AdminOdontograma />} />
 
       </Routes>
     </>

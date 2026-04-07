@@ -49,7 +49,7 @@ const Login = () => {
         const respuesta = await api.post('/auth/register', {
           nombre: form.nombre,
           apellido: form.apellido,
-          email: form.email,
+          email: form.email.toLowerCase(),
           password: form.password,
           rol: "paciente"
         });
@@ -70,7 +70,7 @@ const Login = () => {
 
         // 1. Mandamos petición de Login
         const respuesta = await api.post('/auth/login', {
-          email: form.email,
+          email: form.email.toLowerCase(),
           password: form.password
         });
 

@@ -89,6 +89,11 @@ const Navbar = () => {
           <Link to="/contacto" className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
             Contacto
           </Link>
+          {usuario && (
+            <Link to="/mis-turnos" className="relative text-[1.25rem] font-medium text-accent-orange hover:text-primary transition-colors duration-300 flex items-center gap-1.5 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-accent-orange after:transition-all after:duration-300 hover:after:w-full">
+              <FaCalendarAlt className="text-sm" /> Mis Turnos
+            </Link>
+          )}
         </div>
 
         {/* LADO DERECHO: Botones Desktop */}
@@ -137,6 +142,11 @@ const Navbar = () => {
             <Link to="/" className="block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-secondary" onClick={() => setMenuOpen(false)}>Inicio</Link>
             <Link to="/acerca" className="block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-secondary" onClick={() => setMenuOpen(false)}>Acerca de nosotros</Link>
             <Link to="/contacto" className="block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-secondary" onClick={() => setMenuOpen(false)}>Contacto</Link>
+            {usuario && (
+              <Link to="/mis-turnos" className="flex rounded-lg px-4 py-3 text-lg font-medium text-accent-orange hover:bg-secondary items-center gap-2" onClick={() => setMenuOpen(false)}>
+                <FaCalendarAlt className="text-sm" /> Mis Turnos
+              </Link>
+            )}
 
             <div className="h-px w-full bg-secondary my-2"></div>
 

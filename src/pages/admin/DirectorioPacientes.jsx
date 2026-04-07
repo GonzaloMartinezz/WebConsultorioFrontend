@@ -102,12 +102,20 @@ const DirectorioPacientes = () => {
                         {paciente.createdAt ? new Date(paciente.createdAt).toLocaleDateString('es-AR') : 'N/A'}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <Link 
-                          to={`/admin/paciente/${paciente._id}`} 
-                          className="bg-primary text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-accent-orange transition-colors shadow-sm inline-block"
-                        >
-                          Ver Ficha Clínica
-                        </Link>
+                        <div className="flex items-center justify-center gap-2">
+                          <Link 
+                            to={`/admin/paciente/${paciente._id}`} 
+                            className="bg-primary text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-accent-orange transition-colors shadow-sm inline-block"
+                          >
+                            Ver Ficha
+                          </Link>
+                          <Link 
+                            to={`/admin/historia-clinica/${paciente._id}`} 
+                            className="bg-accent-orange text-white px-4 py-2 rounded-lg text-xs font-bold hover:brightness-110 transition-all shadow-sm inline-block"
+                          >
+                            Expediente
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   ))
