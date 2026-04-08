@@ -36,6 +36,10 @@ import AdminPacientes from "./pages/admin/AdminPacientes.jsx";
 import AdminOdontograma from "./pages/admin/AdminOdontograma.jsx";
 import AdminTurnosPendientes from "./pages/admin/AdminTurnosPendientes.jsx";
 
+// Súper Ficha del Paciente y Estadísticas
+import AdminFichaPaciente from "./pages/admin/AdminFichaPaciente.jsx";
+import AdminEstadisticas from "./pages/admin/AdminEstadisticas.jsx";
+
 export default function App() {
   // Encendemos el motor de animaciones
   useEffect(() => {
@@ -92,6 +96,12 @@ export default function App() {
         <Route path="/admin/lista-pacientes" element={<AdminPacientes />} />
         <Route path="/admin/odontograma-avanzado" element={<AdminOdontograma />} />
         <Route path="/admin/odontograma-avanzado/:id" element={<AdminOdontograma />} />
+
+        {/* Súper Ficha Unificada del Paciente */}
+        <Route path="/admin/ficha-paciente/:id" element={<AdminFichaPaciente />} />
+
+        {/* Panel de Estadísticas (Rendimiento Clínico) */}
+        <Route path="/admin/estadisticas" element={<AdminEstadisticas />} />
 
       </Routes>
     </>
