@@ -82,7 +82,7 @@ export default function App() {
 
         {/* Rutas conectadas con la Base de Datos Real */}
         <Route path="/admin/pacientes" element={<DirectorioPacientes />} />
-        <Route path="/admin/paciente/:id" element={<FichaClinica />} />
+        <Route path="/admin/paciente/:id" element={<AdminFichaPaciente />} />
         <Route path="/admin/odontograma" element={<OdontogramaPage />} />
 
         {/* ¡Nuevas rutas del diseño maquetado agregadas! */}
