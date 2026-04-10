@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import api from '../../api/axios.js';
-// Importamos iconos profesionales para todas las nuevas secciones
 import {
   FaHome, FaBell, FaCalendarAlt, FaUserInjured, FaFileMedical,
   FaTeeth, FaChartLine, FaSmileBeam, FaCogs, FaSignOutAlt,
@@ -16,11 +15,12 @@ const LayoutAdmin = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Close mobile sidebar on route change
+  // Cerrar menú móvil al cambiar de ruta
   useEffect(() => {
     setIsMobileOpen(false);
   }, [location.pathname]);
 
+  // Alerta de turnos pendientes
   useEffect(() => {
     const fetchTurnosAlert = async () => {
       try {
@@ -28,28 +28,31 @@ const LayoutAdmin = ({ children }) => {
         const count = respuesta.data.filter(t => t.estado === 'Pendiente').length;
         setTurnosPendientesCount(count);
       } catch (error) {
-        // Silencio en Layout para que no haya conflictos con redirects de otras vistas
+        // Silencio en Layout
       }
     };
     
-    // Ejecución inicial
     fetchTurnosAlert();
-
-    // Polling cada 10 segundos
     const interval = setInterval(fetchTurnosAlert, 10000);
     return () => clearInterval(interval);
   }, []);
 
+  // ====== LÓGICA DE CIERRE DE SESIÓN INFALIBLE ======
   const confirmarLogout = async () => {
     try {
-      await api.post('/auth/logout');
+      // Opcional: avisar al backend
+      await api.post('/auth/logout').catch(() => {}); 
+    } finally {
+      // LO IMPORTANTE: Destruir la sesión en el navegador sí o sí
+      localStorage.removeItem('token');
       localStorage.removeItem('perfilUsuario');
-      navigate('/');
-    } catch (error) {
-      console.error("Error al cerrar sesión", error);
+      setMostrarModalLogout(false);
+      navigate('/login');
+      window.location.reload(); // Limpia la memoria caché de React
     }
   };
 
+  // ====== MENÚ ACTUALIZADO (Sin Odontograma suelto) ======
   const menuItems = [
     { name: "Panel Principal", path: "/admin", icon: FaHome },
     { name: "Turnos Pendientes", path: "/admin/pendientes", icon: FaBell },
@@ -59,13 +62,13 @@ const LayoutAdmin = ({ children }) => {
     { name: "Odontograma", path: "/admin/odontograma-avanzado", icon: FaTeeth },
     { name: "Estadísticas", path: "/admin/estadisticas", icon: FaChartLine },
     { name: "Resultados (Encuestas)", path: "/admin/encuestas", icon: FaSmileBeam },
-    { name: "Automatizaciones", path: "/admin/configuracion", icon: FaCogs },
+    { name: "Configuración", path: "/admin/configuracion", icon: FaCogs },
   ];
 
   return (
     <div className="flex min-h-screen bg-background overflow-hidden relative">
 
-      {/* MOBILE HEADER (Visible solo en md e inferior) */}
+      {/* MOBILE HEADER */}
       <div className="md:hidden flex items-center justify-between bg-primary p-4 text-white z-20 absolute top-0 w-full shadow-md">
         <div className="flex items-center gap-2">
           <span className="text-xl font-black leading-none">C&M</span>
@@ -92,17 +95,24 @@ const LayoutAdmin = ({ children }) => {
           ${isExpanded ? 'md:w-1/4 md:min-w-[280px]' : 'md:w-[88px]'}
         `}
       >
-        {/* LOGO (Desktop) & BOTON CERRAR (Mobile) */}
+        {/* ====== LOGO CORREGIDO ====== */}
         <div className="h-20 md:h-24 flex items-center justify-center border-b border-secondary/10 p-4 shrink-0 transition-all relative">
-          {/* Logo */}
-          <div className={`text-center transition-opacity duration-300 ${(!isExpanded && !isMobileOpen) ? 'md:hidden' : 'opacity-100'}`}>
-            <span className="text-2xl font-black text-white leading-none">C&M</span>
-            <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-accent-orange mt-1">Dental Admin</span>
-          </div>
-          {/* Mini Logo para desktop colapsado */}
-          <div className={`hidden md:flex text-center transition-opacity duration-300 ${isExpanded ? 'hidden' : 'flex'}`}>
-            <span className="text-2xl font-black text-white hover:text-accent-orange cursor-pointer">C&M</span>
-          </div>
+          
+          {/* Logo Completo (Solo visible si está expandido o en móvil) */}
+          {(isExpanded || isMobileOpen) && (
+            <div className="text-center animate-fade-in">
+              <span className="text-2xl font-black text-white leading-none tracking-wider">C<span className="text-accent-orange">&</span>M</span>
+              <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-accent-orange mt-1">Dental Admin</span>
+            </div>
+          )}
+
+          {/* Mini Logo (Solo visible en PC cuando está colapsado) */}
+          {(!isExpanded && !isMobileOpen) && (
+            <div className="hidden md:block text-center animate-fade-in">
+              <span className="text-2xl font-black text-white hover:text-accent-orange cursor-pointer tracking-wider">C<span className="text-accent-orange">&</span>M</span>
+            </div>
+          )}
+
           {/* Boton cerrar mobile */}
           <button className="md:hidden absolute right-4 text-white/70 hover:text-white" onClick={() => setIsMobileOpen(false)}>
             <FaTimes className="text-2xl" />
@@ -139,10 +149,9 @@ const LayoutAdmin = ({ children }) => {
 
                 <Icon className={`text-xl shrink-0 transition-all duration-300 ${isActive ? 'text-text scale-110' : 'text-accent-orange group-hover:scale-110'}`} />
 
-                {/* Mostrar nombre en Desktop Expandido o en Mobile (siempre expandido) */}
                 <span className={`tracking-wide text-[13px] whitespace-nowrap transition-all duration-300 ${(isExpanded || isMobileOpen) ? 'opacity-100 w-auto' : 'hidden'}`}>{item.name}</span>
 
-                {/* Ícono de Alerta para Turnos Pendientes */}
+                {/* Badges de Turnos Pendientes */}
                 {(isExpanded || isMobileOpen) && item.name === "Turnos Pendientes" && turnosPendientesCount > 0 && (
                   <span className="ml-auto bg-red-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow-sm animate-pulse-slow">{turnosPendientesCount}</span>
                 )}
@@ -178,9 +187,7 @@ const LayoutAdmin = ({ children }) => {
         </div>
       </main>
 
-      {/* ========================================= */}
-      {/* MODAL DE CONFIRMACIÓN DE CERRAR SESIÓN    */}
-      {/* ========================================= */}
+      {/* MODAL DE CONFIRMACIÓN DE CERRAR SESIÓN */}
       {mostrarModalLogout && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in p-4">
           <div className="bg-white rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl animate-scale-up text-center border-t-8 border-accent-orange">

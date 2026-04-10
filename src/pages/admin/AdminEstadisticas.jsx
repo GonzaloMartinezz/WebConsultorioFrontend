@@ -1,7 +1,46 @@
+import { useState, useEffect } from "react";
 import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
 import { FaUsers, FaChartPie, FaStethoscope } from 'react-icons/fa';
+import api from "../../api/axios.js";
 
 const AdminEstadisticas = () => {
+  const [stats, setStats] = useState(null);
+  const [cargando, setCargando] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const { data } = await api.get('/estadisticas');
+        setStats(data);
+      } catch (error) {
+        console.error("Error al obtener estadísticas:", error);
+      } finally {
+        setCargando(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  if (cargando) {
+    return (
+      <LayoutAdmin>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      </LayoutAdmin>
+    );
+  }
+
+  // Cálculos locales para porcentajes
+  const totalCarga = stats?.cargaProfesionales.total || 1;
+  const percAdolfo = ((stats?.cargaProfesionales.Adolfo || 0) / totalCarga * 100).toFixed(0);
+  const percErina = ((stats?.cargaProfesionales.Erina || 0) / totalCarga * 100).toFixed(0);
+
+  const totalMotivos = (stats?.motivosConsulta.ortodoncia + stats?.motivosConsulta.limpieza + stats?.motivosConsulta.general + stats?.motivosConsulta.urgencia) || 1;
+  const percOrtodoncia = ((stats?.motivosConsulta.ortodoncia || 0) / totalMotivos * 100).toFixed(0);
+  const percLimpieza = ((stats?.motivosConsulta.limpieza || 0) / totalMotivos * 100).toFixed(0);
+  const percUrgencia = ((stats?.motivosConsulta.urgencia || 0) / totalMotivos * 100).toFixed(0);
+
   return (
     <LayoutAdmin>
       <header className="mb-8">
@@ -14,20 +53,20 @@ const AdminEstadisticas = () => {
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-secondary/30 flex items-center gap-6">
           <div className="p-4 bg-blue-100 text-blue-600 rounded-2xl text-3xl"><FaUsers /></div>
           <div>
-            <p className="text-sm font-bold text-text-light uppercase">Pacientes Activos</p>
-            <p className="text-4xl font-black text-primary">342</p>
+            <p className="text-sm font-bold text-text-light uppercase">Pacientes Registrados</p>
+            <p className="text-4xl font-black text-primary">{stats?.pacientesTotales || 0}</p>
           </div>
         </div>
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-secondary/30 flex items-center gap-6">
           <div className="p-4 bg-green-100 text-green-600 rounded-2xl text-3xl"><FaUsers /></div>
           <div>
-            <p className="text-sm font-bold text-text-light uppercase">Nuevos en 2026</p>
-            <p className="text-4xl font-black text-primary">+45</p>
+            <p className="text-sm font-bold text-text-light uppercase">Turnos Conciliados</p>
+            <p className="text-4xl font-black text-primary">{stats?.cargaProfesionales.total || 0}</p>
           </div>
         </div>
       </div>
 
-      {/* Gráficos Visuales (Hechos con Tailwind puro para no depender de librerías) */}
+      {/* Gráficos Visuales */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Distribución por Profesional */}
@@ -38,20 +77,20 @@ const AdminEstadisticas = () => {
             <div>
               <div className="flex justify-between mb-2">
                 <span className="font-bold text-text">Dr. Adolfo Martínez</span>
-                <span className="font-black text-primary">60%</span>
+                <span className="font-black text-primary">{percAdolfo}%</span>
               </div>
               <div className="w-full bg-secondary/20 rounded-full h-4 overflow-hidden">
-                <div className="bg-blue-500 h-4 rounded-full" style={{ width: '60%' }}></div>
+                <div className="bg-blue-500 h-4 rounded-full transition-all duration-1000" style={{ width: `${percAdolfo}%` }}></div>
               </div>
             </div>
             
             <div>
               <div className="flex justify-between mb-2">
                 <span className="font-bold text-text">Dra. Erina Carcara</span>
-                <span className="font-black text-primary">40%</span>
+                <span className="font-black text-primary">{percErina}%</span>
               </div>
               <div className="w-full bg-secondary/20 rounded-full h-4 overflow-hidden">
-                <div className="bg-pink-500 h-4 rounded-full" style={{ width: '40%' }}></div>
+                <div className="bg-pink-500 h-4 rounded-full transition-all duration-1000" style={{ width: `${percErina}%` }}></div>
               </div>
             </div>
           </div>
@@ -65,23 +104,23 @@ const AdminEstadisticas = () => {
             <div className="flex items-center gap-4">
               <div className="w-32 text-sm font-bold text-text-light">Ortodoncia</div>
               <div className="flex-1 bg-secondary/20 h-6 rounded overflow-hidden">
-                <div className="bg-accent-orange h-6" style={{ width: '45%' }}></div>
+                <div className="bg-accent-orange h-6 transition-all duration-1000" style={{ width: `${percOrtodoncia}%` }}></div>
               </div>
-              <div className="w-10 text-right font-black">45%</div>
+              <div className="w-10 text-right font-black">{percOrtodoncia}%</div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-32 text-sm font-bold text-text-light">Limpieza</div>
               <div className="flex-1 bg-secondary/20 h-6 rounded overflow-hidden">
-                <div className="bg-teal-500 h-6" style={{ width: '30%' }}></div>
+                <div className="bg-teal-500 h-6 transition-all duration-1000" style={{ width: `${percLimpieza}%` }}></div>
               </div>
-              <div className="w-10 text-right font-black">30%</div>
+              <div className="w-10 text-right font-black">{percLimpieza}%</div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-32 text-sm font-bold text-text-light">Urgencias</div>
               <div className="flex-1 bg-secondary/20 h-6 rounded overflow-hidden">
-                <div className="bg-red-500 h-6" style={{ width: '15%' }}></div>
+                <div className="bg-red-500 h-6 transition-all duration-1000" style={{ width: `${percUrgencia}%` }}></div>
               </div>
-              <div className="w-10 text-right font-black">15%</div>
+              <div className="w-10 text-right font-black">{percUrgencia}%</div>
             </div>
           </div>
         </div>

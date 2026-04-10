@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
 
-// 1. Importamos el componente que arregla el scroll
+// 1. Importamos el componente que arregla el scroll e IA de seguridad
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
@@ -15,7 +16,7 @@ import Turnos from "./pages/Turnos.jsx";
 import AcercaDe from "./pages/AcercaDe.jsx";
 import Contacto from "./pages/Contacto.jsx";
 import Login from "./pages/Login.jsx";
-import MisTurnos from "./pages/MisTurnos.jsx";
+import MiPerfil from "./pages/MiPerfil.jsx";
 
 // =========================================
 // IMPORTACIONES PRIVADAS (Panel Admin)
@@ -23,9 +24,10 @@ import MisTurnos from "./pages/MisTurnos.jsx";
 import AdminDashboard from "./pages/admin/AdminDashboard.jsx";
 import OdontogramaPage from "./pages/admin/Odontograma.jsx";
 import DirectorioPacientes from './pages/admin/DirectorioPacientes.jsx';
-import FichaClinica from './pages/admin/FichaClinica.jsx';
+import AdminFichaPaciente from "./pages/admin/AdminFichaPaciente.jsx";
+import AdminEstadisticas from "./pages/admin/AdminEstadisticas.jsx";
 
-// ¡Nuevas pantallas integradas!
+// Extensiones del Panel
 import AdminAgenda from "./pages/admin/AdminAgenda.jsx";
 import AdminAnalytics from "./pages/admin/AdminAnalytics.jsx";
 import AdminConfiguracion from "./pages/admin/AdminConfiguracion.jsx";
@@ -35,10 +37,6 @@ import AdminHistoriaClinica from "./pages/admin/AdminHistoriaClinica.jsx";
 import AdminPacientes from "./pages/admin/AdminPacientes.jsx";
 import AdminOdontograma from "./pages/admin/AdminOdontograma.jsx";
 import AdminTurnosPendientes from "./pages/admin/AdminTurnosPendientes.jsx";
-
-// Súper Ficha del Paciente y Estadísticas
-import AdminFichaPaciente from "./pages/admin/AdminFichaPaciente.jsx";
-import AdminEstadisticas from "./pages/admin/AdminEstadisticas.jsx";
 
 export default function App() {
   // Encendemos el motor de animaciones
@@ -53,7 +51,6 @@ export default function App() {
 
   return (
     <>
-      {/* 2. Lo colocamos aquí para que escuche los cambios de URL de toda la app */}
       <ScrollToTop />
 
       <Routes>
@@ -64,44 +61,106 @@ export default function App() {
           <Route index element={<Inicio />} />
           <Route path="inicio" element={<Inicio />} />
           <Route path="turnos" element={<Turnos />} />
-          <Route path="mis-turnos" element={<MisTurnos />} />
           <Route path="acerca" element={<AcercaDe />} />
           <Route path="contacto" element={<Contacto />} />
         </Route>
 
-        {/* ========================================= */}
-        {/* EL MUNDO PRIVADO (Para el administrador)    */}
-        {/* ========================================= */}
-
-        {/* 1. La puerta de entrada a la plataforma */}
+        {/* Portal de Acceso */}
         <Route path="/login" element={<Login />} />
 
-        {/* PANEL DE CONTROL UNIFICADO */}
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/pendientes" element={<AdminTurnosPendientes />} />
+        {/* ========================================= */}
+        {/* EL MUNDO PRIVADO DEL PACIENTE               */}
+        {/* ========================================= */}
+        <Route 
+          path="/mi-perfil" 
+          element={
+            <ProtectedRoute>
+              <MiPerfil />
+            </ProtectedRoute>
+          } 
+        />
 
-        {/* Rutas conectadas con la Base de Datos Real */}
-        <Route path="/admin/pacientes" element={<DirectorioPacientes />} />
-        <Route path="/admin/paciente/:id" element={<AdminFichaPaciente />} />
-        <Route path="/admin/odontograma" element={<OdontogramaPage />} />
+        {/* ========================================= */}
+        {/* EL MUNDO PRIVADO DEL ADMINISTRADOR          */}
+        {/* ========================================= */}
+        
+        {/* Panel Principal */}
+        <Route 
+          path="/admin" 
+          element={<ProtectedRoute requireAdmin={true}><AdminDashboard /></ProtectedRoute>} 
+        />
+        
+        {/* Gestion de Turnos */}
+        <Route 
+          path="/admin/pendientes" 
+          element={<ProtectedRoute requireAdmin={true}><AdminTurnosPendientes /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/agenda" 
+          element={<ProtectedRoute requireAdmin={true}><AdminAgenda /></ProtectedRoute>} 
+        />
 
-        {/* ¡Nuevas rutas del diseño maquetado agregadas! */}
-        <Route path="/admin/agenda" element={<AdminAgenda />} />
-        <Route path="/admin/analytics" element={<AdminAnalytics />} />
-        <Route path="/admin/configuracion" element={<AdminConfiguracion />} />
-        <Route path="/admin/encuestas" element={<AdminEncuestas />} />
-        <Route path="/admin/finanzas" element={<AdminFinanzas />} />
-        <Route path="/admin/historia-clinica" element={<AdminHistoriaClinica />} />
-        <Route path="/admin/historia-clinica/:id" element={<AdminHistoriaClinica />} />
-        <Route path="/admin/lista-pacientes" element={<AdminPacientes />} />
-        <Route path="/admin/odontograma-avanzado" element={<AdminOdontograma />} />
-        <Route path="/admin/odontograma-avanzado/:id" element={<AdminOdontograma />} />
+        {/* Gestion de Pacientes */}
+        <Route 
+          path="/admin/pacientes" 
+          element={<ProtectedRoute requireAdmin={true}><DirectorioPacientes /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/paciente/:id" 
+          element={<ProtectedRoute requireAdmin={true}><AdminFichaPaciente /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/ficha-paciente/:id" 
+          element={<ProtectedRoute requireAdmin={true}><AdminFichaPaciente /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/lista-pacientes" 
+          element={<ProtectedRoute requireAdmin={true}><AdminPacientes /></ProtectedRoute>} 
+        />
 
-        {/* Súper Ficha Unificada del Paciente */}
-        <Route path="/admin/ficha-paciente/:id" element={<AdminFichaPaciente />} />
+        {/* Clinica Avanzada */}
+        <Route 
+          path="/admin/odontograma" 
+          element={<ProtectedRoute requireAdmin={true}><OdontogramaPage /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/odontograma-avanzado" 
+          element={<ProtectedRoute requireAdmin={true}><AdminOdontograma /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/odontograma-avanzado/:id" 
+          element={<ProtectedRoute requireAdmin={true}><AdminOdontograma /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/historia-clinica" 
+          element={<ProtectedRoute requireAdmin={true}><AdminHistoriaClinica /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/historia-clinica/:id" 
+          element={<ProtectedRoute requireAdmin={true}><AdminHistoriaClinica /></ProtectedRoute>} 
+        />
 
-        {/* Panel de Estadísticas (Rendimiento Clínico) */}
-        <Route path="/admin/estadisticas" element={<AdminEstadisticas />} />
+        {/* Herramientas de Gestion */}
+        <Route 
+          path="/admin/analytics" 
+          element={<ProtectedRoute requireAdmin={true}><AdminAnalytics /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/configuracion" 
+          element={<ProtectedRoute requireAdmin={true}><AdminConfiguracion /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/encuestas" 
+          element={<ProtectedRoute requireAdmin={true}><AdminEncuestas /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/finanzas" 
+          element={<ProtectedRoute requireAdmin={true}><AdminFinanzas /></ProtectedRoute>} 
+        />
+        <Route 
+          path="/admin/estadisticas" 
+          element={<ProtectedRoute requireAdmin={true}><AdminEstadisticas /></ProtectedRoute>} 
+        />
 
       </Routes>
     </>
