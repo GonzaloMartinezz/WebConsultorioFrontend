@@ -51,12 +51,13 @@ const Navbar = () => {
   // Función para cerrar sesión
   const handleLogout = async () => {
     try {
-      await api.post('/auth/logout');
+      await api.post('/auth/logout').catch(() => {});
+      localStorage.removeItem('token');
       localStorage.removeItem('perfilUsuario');
       setUsuario(null);
       setMostrarModal(false);
       navigate('/');
-      setMenuOpen(false);
+      window.location.reload(); // Limpieza infalible
     } catch (error) {
       console.error("Error al cerrar sesión", error);
     }
@@ -90,8 +91,8 @@ const Navbar = () => {
             Contacto
           </Link>
           {usuario && (
-            <Link to="/mis-turnos" className="relative text-[1.25rem] font-medium text-accent-orange hover:text-primary transition-colors duration-300 flex items-center gap-1.5 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-accent-orange after:transition-all after:duration-300 hover:after:w-full">
-              <FaCalendarAlt className="text-sm" /> Mis Turnos
+            <Link to="/mi-perfil" className="relative text-[1.25rem] font-medium text-accent-orange hover:text-primary transition-colors duration-300 flex items-center gap-1.5 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-accent-orange after:transition-all after:duration-300 hover:after:w-full">
+              <FaCalendarAlt className="text-sm" /> Mi Perfil
             </Link>
           )}
         </div>
@@ -143,8 +144,8 @@ const Navbar = () => {
             <Link to="/acerca" className="block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-secondary" onClick={() => setMenuOpen(false)}>Acerca de nosotros</Link>
             <Link to="/contacto" className="block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-secondary" onClick={() => setMenuOpen(false)}>Contacto</Link>
             {usuario && (
-              <Link to="/mis-turnos" className="flex rounded-lg px-4 py-3 text-lg font-medium text-accent-orange hover:bg-secondary items-center gap-2" onClick={() => setMenuOpen(false)}>
-                <FaCalendarAlt className="text-sm" /> Mis Turnos
+              <Link to="/mi-perfil" className="flex rounded-lg px-4 py-3 text-lg font-medium text-accent-orange hover:bg-secondary items-center gap-2" onClick={() => setMenuOpen(false)}>
+                <FaCalendarAlt className="text-sm" /> Mi Perfil
               </Link>
             )}
 

@@ -110,14 +110,18 @@ const Login = () => {
         });
 
         // 2. Guardamos la sesión vía AuthContext (actualiza React state + localStorage)
-        const usuarioLogueado = respuesta.data;
-        login(usuarioLogueado);
+        const usuarioLogueado = respuesta.data.usuario || respuesta.data;
+        login(respuesta.data); // Mantiene compatibilidad con AuthContext
+
+        // IMPORTANTE: Asegurar que el token esté guardado
+        if (respuesta.data.token) localStorage.setItem('token', respuesta.data.token);
+        localStorage.setItem('perfilUsuario', JSON.stringify(usuarioLogueado));
 
         // 3. Redirigimos inteligentemente según el rol
         if (usuarioLogueado.rol === 'admin') {
           navigate("/admin");
         } else {
-          navigate("/");
+          navigate("/mi-perfil");
         }
       }
     } catch (err) {
