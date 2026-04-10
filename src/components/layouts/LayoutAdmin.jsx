@@ -61,7 +61,7 @@ const LayoutAdmin = ({ children }) => {
     { name: "Historia Clínica", path: "/admin/historia-clinica", icon: FaFileMedical },
     { name: "Odontograma", path: "/admin/odontograma-avanzado", icon: FaTeeth },
     { name: "Estadísticas", path: "/admin/estadisticas", icon: FaChartLine },
-    { name: "Resultados (Encuestas)", path: "/admin/encuestas", icon: FaSmileBeam },
+    // { name: "Resultados (Encuestas)", path: "/admin/encuestas", icon: FaSmileBeam },
     { name: "Configuración", path: "/admin/configuracion", icon: FaCogs },
   ];
 
