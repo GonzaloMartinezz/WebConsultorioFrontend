@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container": "#ffeadc",
+                    "on-primary-container": "#5c2800",
+                    "on-primary-fixed-variant": "#753400",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#e0c0af",
+                    "on-surface": "#2b1704",
+                    "background": "#fff8f5",
+                    "on-tertiary-container": "#5f2600",
+                    "tertiary-fixed": "#ffdbca",
+                    "on-tertiary-fixed-variant": "#783200",
+                    "inverse-surface": "#432b16",
+                    "on-tertiary-fixed": "#341100",
+                    "secondary-container": "#fed5b6",
+                    "on-surface-variant": "#584235",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-container": "#ff7a00",
+                    "on-secondary-container": "#795b42",
+                    "primary-fixed-dim": "#ffb68b",
+                    "surface-variant": "#ffdcc2",
+                    "secondary-fixed-dim": "#e7bfa1",
+                    "on-primary-fixed": "#321200",
+                    "surface-dim": "#fbd2b3",
+                    "tertiary-fixed-dim": "#ffb690",
+                    "surface-tint": "#994700",
+                    "on-primary": "#ffffff",
+                    "on-secondary-fixed": "#2b1704",
+                    "secondary": "#775840",
+                    "primary-fixed": "#ffdbc8",
+                    "surface-container-low": "#fff1e9",
+                    "tertiary": "#9d4300",
+                    "inverse-primary": "#ffb68b",
+                    "error": "#ba1a1a",
+                    "outline": "#8c7263",
+                    "secondary-fixed": "#ffdcc2",
+                    "error-container": "#ffdad6",
+                    "surface": "#fff8f5",
+                    "surface-container-highest": "#ffdcc2",
+                    "on-error-container": "#93000a",
+                    "surface-container-high": "#ffe3cf",
+                    "surface-bright": "#fff8f5",
+                    "tertiary-container": "#ff7a23",
+                    "on-background": "#2b1704",
+                    "primary": "#994700",
+                    "on-secondary-fixed-variant": "#5d412a",
+                    "inverse-on-surface": "#ffede2"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .tooth-container:hover .tooth-overlay {
+            opacity: 1;
+        }
+        .tooth-map-box {
+            position: relative;
+            width: 28px;
+            height: 28px;
+            border: 1px solid #d1d5db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tooth-map-box::after {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body class="bg-background font-body text-on-surface min-h-screen flex">
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-64 border-r border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 flex flex-col p-4 gap-2 shrink-0 fixed left-0 top-0 z-50">
+<div class="mb-8 px-4 py-2">
+<h1 class="text-lg font-bold text-stone-800 dark:text-stone-100 font-headline">Clinical Admin</h1>
+<p class="text-xs text-stone-500 font-medium uppercase tracking-widest">Clinic Management</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-stone-500 dark:text-stone-400 px-4 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800/50 rounded-xl font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+            Agenda
+        </a>
+<a class="flex items-center gap-3 text-stone-500 dark:text-stone-400 px-4 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800/50 rounded-xl font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+            Patients
+        </a>
+<a class="flex items-center gap-3 bg-white dark:bg-stone-800 text-orange-600 dark:text-orange-400 rounded-xl px-4 py-3 shadow-sm font-inter text-sm font-medium translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+            Records
+        </a>
+<a class="flex items-center gap-3 text-stone-500 dark:text-stone-400 px-4 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800/50 rounded-xl font-inter text-sm font-medium" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+            Settings
+        </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-stone-200/60 flex flex-col gap-1">
+<button class="flex items-center gap-3 text-stone-500 dark:text-stone-400 px-4 py-3 hover:text-stone-900 dark:hover:text-stone-100 rounded-xl font-inter text-sm font-medium">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+            Support
+        </button>
+<button class="flex items-center gap-3 text-stone-500 dark:text-stone-400 px-4 py-3 hover:text-stone-900 dark:hover:text-stone-100 rounded-xl font-inter text-sm font-medium">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+            Logout
+        </button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 ml-64 p-8 max-w-[1600px] mb-20">
+<!-- Header / Bio Section -->
+<header class="flex flex-col md:flex-row justify-between items-start gap-6 mb-8">
+<div class="flex gap-6 items-center">
+<div class="relative">
+<img alt="Admin Portrait" class="w-20 h-20 rounded-2xl object-cover shadow-sm ring-4 ring-surface-container-low" data-alt="high-end studio portrait of a middle-aged woman with a warm, professional smile, soft lighting, neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGPgmKC-XIlh8T4XSRXeyy92MtHeMVpVS9-u3Z2miWilQgMGAIyWpnxsM4uGJtL_gGKTgBQZe7TWgVJNpFog0zcTKgrwe1VlxdYVP6vjBakZeT_ocvghQQ2h7T9pW9C1gZnrICm9FBaSsu0rdCkjVShiTHS1wHwQJfm9-zYg2_LTdf5wqijU97FL3ukhTjK02C2fCdtZJqPk1sZDrY_AFAjhPC5XYatUXKuIbrdPtsXx42b5ZJQALnk7YhrK0JwlbukfEuTkmfIBzu"/>
+<div class="absolute -bottom-1 -right-1 bg-primary-container text-white p-1 rounded-lg shadow-lg">
+<span class="material-symbols-outlined text-[10px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div>
+<h2 class="text-2xl font-headline font-bold text-on-surface tracking-tight">Eleanor Vance</h2>
+<div class="flex items-center gap-3 mt-1">
+<span class="text-xs font-medium px-2 py-0.5 bg-surface-container-high text-on-surface-variant rounded-full">ID: #CL-99281</span>
+<span class="text-xs text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[10px]" data-icon="event">event</span>
+                        Last Visit: Oct 14, 2023
+                    </span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 bg-surface-container-low text-primary font-semibold rounded-lg hover:bg-surface-container-high transition-colors text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="history">history</span>
+                History
+            </button>
+<button class="px-5 py-2 bg-primary-container text-on-primary-container font-bold rounded-lg shadow-md hover:scale-95 duration-200 text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                Treatment
+            </button>
+</div>
+</header>
+<!-- Content Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+<!-- MAIN ODONTOGRAM SECTION - Protagonist -->
+<section class="xl:col-span-12 bg-surface-container-lowest rounded-2xl p-8 shadow-[0_4px_24px_rgba(43,23,4,0.06)] border border-outline-variant/10">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 pb-6 border-b border-stone-100">
+<div>
+<h3 class="text-xl font-headline font-bold text-on-surface">Odontograma Nº: 106154 - Eleanor Vance</h3>
+<p class="text-sm text-on-surface-variant">Vista anatómica completa para diagnóstico y seguimiento clínico.</p>
+</div>
+<div class="flex gap-2 bg-surface-container-low p-1 rounded-lg">
+<button class="px-4 py-1.5 bg-white shadow-sm text-sm font-semibold rounded-md text-primary">Arcada Completa</button>
+<button class="px-4 py-1.5 text-sm font-medium rounded-md text-on-surface-variant hover:bg-white/50">Superior</button>
+<button class="px-4 py-1.5 text-sm font-medium rounded-md text-on-surface-variant hover:bg-white/50">Inferior</button>
+</div>
+</div>
+<!-- Enhanced Odontogram Visual based on IMAGE_6 -->
+<div class="flex flex-col items-center gap-0 overflow-x-auto pb-8">
+<!-- Upper Teeth Row (Roots) -->
+<div class="flex items-end justify-center gap-1.5 px-4 mb-2 min-w-[1000px]">
+<!-- Block 18-11 -->
+<div class="flex gap-1.5 border-r-2 border-dashed border-stone-200 pr-3">
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="18" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/659103c81e9b6ea7463f84f009d17d0577be3297a7806fbc3b519c23f5b7410c"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">18</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="17" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/6d4f9f4a1804f86d64115b8095b54203a08d98d251f46401099684698889370b"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">17</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="16" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/5679e9a4f41d01f5c697847c23a078e8748308d98867a5b3a39e8093122108ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">16</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="15" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/7366f383e20d5886616462708307c087968508d98782a46597988893574581ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">15</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="14" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/7d4e5114704e672765870857993a4087958508d9a444855497988893635031ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">14</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="13" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 translate-y-2" src="https://lh3.googleusercontent.com/aida-public/30e38600d8f074d664870857913a4087948508d98342845497988893125231ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">13</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="12" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/3028e97f4e0d6a0b65870857933a4087938508d99432835497988893235331ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">12</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="11" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/4043f114704e672765870857983a4087928508d9a444855497988893745031ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">11</span>
+</div>
+</div>
+<!-- Block 21-28 -->
+<div class="flex gap-1.5 pl-3">
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="21" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/4043f114704e672765870857983a4087928508d9a444855497988893745031ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">21</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="22" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/3028e97f4e0d6a0b65870857933a4087938508d99432835497988893235331ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">22</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="23" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 translate-y-2 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/30e38600d8f074d664870857913a4087948508d98342845497988893125231ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">23</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="24" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/7d4e5114704e672765870857993a4087958508d9a444855497988893635031ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">24</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="25" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/7366f383e20d5886616462708307c087968508d98782a46597988893574581ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">25</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="26" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/5679e9a4f41d01f5c697847c23a078e8748308d98867a5b3a39e8093122108ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">26</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="27" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/6d4f9f4a1804f86d64115b8095b54203a08d98d251f46401099684698889370b"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">27</span>
+</div>
+<div class="flex flex-col items-center gap-1 group cursor-pointer tooth-container">
+<img alt="28" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/659103c81e9b6ea7463f84f009d17d0577be3297a7806fbc3b519c23f5b7410c"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">28</span>
+</div>
+</div>
+</div>
+<!-- Upper Occlusal Diagram Row -->
+<div class="flex justify-center gap-1.5 px-4 mb-6 min-w-[1000px]">
+<div class="flex gap-1.5 border-r-2 border-dashed border-stone-200 pr-3">
+<!-- Boxes for 18-11 -->
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+</div>
+<div class="flex gap-1.5 pl-3">
+<!-- Boxes for 21-28 -->
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+</div>
+</div>
+<!-- Lower Occlusal Diagram Row -->
+<div class="flex justify-center gap-1.5 px-4 mb-2 min-w-[1000px]">
+<div class="flex gap-1.5 border-r-2 border-dashed border-stone-200 pr-3">
+<!-- Boxes for 48-41 -->
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+</div>
+<div class="flex gap-1.5 pl-3">
+<!-- Boxes for 31-38 -->
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+<div class="tooth-map-box"></div><div class="tooth-map-box"></div>
+</div>
+</div>
+<!-- Lower Teeth Row -->
+<div class="flex items-start justify-center gap-1.5 px-4 min-w-[1000px]">
+<!-- Block 48-41 -->
+<div class="flex gap-1.5 border-r-2 border-dashed border-stone-200 pr-3">
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="48" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100" src="https://lh3.googleusercontent.com/aida-public/f0599a0f4a1804f86d64115b8095b54203a08d98d251f46401099684698889370b"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">48</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="47" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180" src="https://lh3.googleusercontent.com/aida-public/659103c81e9b6ea7463f84f009d17d0577be3297a7806fbc3b519c23f5b7410c"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">47</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="46" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180" src="https://lh3.googleusercontent.com/aida-public/5679e9a4f41d01f5c697847c23a078e8748308d98867a5b3a39e8093122108ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">46</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="45" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180" src="https://lh3.googleusercontent.com/aida-public/7366f383e20d5886616462708307c087968508d98782a46597988893574581ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">45</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="44" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180" src="https://lh3.googleusercontent.com/aida-public/7d4e5114704e672765870857993a4087958508d9a444855497988893635031ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">44</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="43" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 -translate-y-2 rotate-180" src="https://lh3.googleusercontent.com/aida-public/30e38600d8f074d664870857913a4087948508d98342845497988893125231ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">43</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="42" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180" src="https://lh3.googleusercontent.com/aida-public/3028e97f4e0d6a0b65870857933a4087938508d99432835497988893235331ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">42</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="41" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180" src="https://lh3.googleusercontent.com/aida-public/4043f114704e672765870857983a4087928508d9a444855497988893745031ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">41</span>
+</div>
+</div>
+<!-- Block 31-38 -->
+<div class="flex gap-1.5 pl-3">
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="31" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/4043f114704e672765870857983a4087928508d9a444855497988893745031ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">31</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="32" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/3028e97f4e0d6a0b65870857933a4087938508d99432835497988893235331ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">32</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="33" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 -translate-y-2 rotate-180 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/30e38600d8f074d664870857913a4087948508d98342845497988893125231ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">33</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="34" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/7d4e5114704e672765870857993a4087958508d9a444855497988893635031ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">34</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="35" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/7366f383e20d5886616462708307c087968508d98782a46597988893574581ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">35</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="36" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/5679e9a4f41d01f5c697847c23a078e8748308d98867a5b3a39e8093122108ec"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">36</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="37" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/659103c81e9b6ea7463f84f009d17d0577be3297a7806fbc3b519c23f5b7410c"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">37</span>
+</div>
+<div class="flex flex-col-reverse items-center gap-1 group cursor-pointer tooth-container">
+<img alt="38" class="w-10 h-auto grayscale hover:grayscale-0 transition-all opacity-80 group-hover:opacity-100 rotate-180 scale-x-[-1]" src="https://lh3.googleusercontent.com/aida-public/f0599a0f4a1804f86d64115b8095b54203a08d98d251f46401099684698889370b"/>
+<span class="w-8 h-6 bg-stone-500 text-white text-[10px] font-bold flex items-center justify-center rounded-sm">38</span>
+</div>
+</div>
+</div>
+<div class="mt-12 flex flex-wrap justify-center gap-8 bg-stone-50 p-4 rounded-xl border border-stone-100 w-full max-w-4xl">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-primary rounded-sm"></div>
+<span class="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Caries Activa</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 border-2 border-primary/40 rounded-full"></div>
+<span class="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Endodoncia Necesaria</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 bg-stone-300 rounded-sm"></div>
+<span class="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Obturación Existente</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="close">close</span>
+<span class="text-xs font-semibold text-on-surface-variant uppercase tracking-wide">Ausente/Extraído</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Secondary Info Grid (Patient Profile & Visit History) -->
+<div class="xl:col-span-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Quick Bio Card -->
+<div class="bg-surface-container-low rounded-2xl p-6 border border-outline-variant/10">
+<div class="flex items-center justify-between mb-4">
+<h4 class="font-headline font-bold text-lg text-primary">Patient Profile</h4>
+<span class="material-symbols-outlined text-stone-400" data-icon="contact_page">contact_page</span>
+</div>
+<div class="grid grid-cols-2 gap-x-8 gap-y-4">
+<div class="py-2 border-b border-outline-variant/30">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block">Age</span>
+<span class="font-bold">34 years</span>
+</div>
+<div class="py-2 border-b border-outline-variant/30">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block">Blood Type</span>
+<span class="font-bold text-error">O+</span>
+</div>
+<div class="py-2 border-b border-outline-variant/30 col-span-2">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider block">Allergies</span>
+<span class="font-bold px-2 py-0.5 bg-error-container text-on-error-container rounded text-xs inline-block mt-1">Penicillin</span>
+</div>
+</div>
+<div class="mt-4">
+<h5 class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider mb-1">Note from Intake</h5>
+<p class="text-xs leading-relaxed text-on-surface italic">
+                        "Patient reports sensitive gums during brushing. History of wisdom tooth extraction in 2018. Very anxious about drill sounds."
+                    </p>
+</div>
+</div>
+<!-- Recent Visits Timeline -->
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-stone-100">
+<div class="flex justify-between items-center mb-6">
+<h4 class="font-headline font-bold text-lg">Visit History</h4>
+<span class="text-primary material-symbols-outlined cursor-pointer" data-icon="open_in_new">open_in_new</span>
+</div>
+<div class="relative space-y-6 before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-surface-container">
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 bg-primary-container rounded-full ring-4 ring-white flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xs" data-icon="check" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-primary uppercase">Oct 14, 2023</span>
+<h6 class="text-sm font-bold">Deep Cleaning &amp; Polish</h6>
+<p class="text-xs text-on-surface-variant">Mild gingivitis observed in Q3.</p>
+</div>
+</div>
+<div class="relative pl-8">
+<div class="absolute left-0 top-1 w-6 h-6 bg-surface-container-highest rounded-full ring-4 ring-white flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-xs" data-icon="emergency" style="font-variation-settings: 'FILL' 1;">emergency</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">June 21, 2023</span>
+<h6 class="text-sm font-bold text-on-surface">Emergency: Tooth 27</h6>
+<p class="text-xs text-on-surface-variant">Slight fracture. Temporary filling.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Treatment Plan Overlay Card -->
+<section class="mt-8 bg-white rounded-2xl overflow-hidden shadow-sm border border-outline-variant/10">
+<div class="bg-primary/5 px-8 py-4 border-b border-primary/10 flex justify-between items-center">
+<h3 class="font-headline font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="assignment">assignment</span>
+                Active Treatment Plan
+            </h3>
+<span class="text-xs font-bold text-primary uppercase">Estimated Completion: Dec 2023</span>
+</div>
+<div class="p-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<span class="w-8 h-8 rounded-full bg-primary-container text-white flex items-center justify-center text-xs font-bold">1</span>
+<span class="font-bold text-sm">Resin Restoration - 17</span>
+</div>
+<div class="ml-10 p-4 bg-surface-container-low rounded-xl">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Status</span>
+<span class="text-[10px] font-bold text-error uppercase">Urgent</span>
+</div>
+<div class="h-1.5 w-full bg-stone-200 rounded-full overflow-hidden">
+<div class="w-0 h-full bg-primary transition-all duration-1000"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2 opacity-50">
+<span class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center text-xs font-bold">2</span>
+<span class="font-bold text-sm">Crown Prep - 27</span>
+</div>
+<div class="ml-10 p-4 bg-surface-container-low rounded-xl opacity-50">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Status</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Pending</span>
+</div>
+<div class="h-1.5 w-full bg-stone-200 rounded-full"></div>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2 opacity-50">
+<span class="w-8 h-8 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center text-xs font-bold">3</span>
+<span class="font-bold text-sm">Scaling &amp; Planing</span>
+</div>
+<div class="ml-10 p-4 bg-surface-container-low rounded-xl opacity-50">
+<div class="flex justify-between items-center mb-2">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Status</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Scheduled</span>
+</div>
+<div class="h-1.5 w-full bg-stone-200 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Cluster -->
+<footer class="fixed bottom-0 left-64 right-0 bg-stone-100/50 dark:bg-stone-950/50 backdrop-blur-md border-t border-stone-200/50 py-4 px-8 flex justify-between items-center z-40">
+<p class="text-xs text-stone-500 dark:text-stone-400 font-inter">
+        © 2024 The Clinical Atelier. Precision in Dentistry.
+    </p>
+<div class="flex gap-6">
+<a class="text-xs text-stone-500 hover:text-orange-500 transition-all hover:underline" href="#">Privacy Policy</a>
+<a class="text-xs text-stone-500 hover:text-orange-500 transition-all hover:underline" href="#">Terms of Service</a>
+<a class="text-xs text-stone-500 hover:text-orange-500 transition-all hover:underline" href="#">Contact Support</a>
+</div>
+</footer>
+</body></html>

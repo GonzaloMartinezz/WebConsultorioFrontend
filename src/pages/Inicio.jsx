@@ -1,18 +1,37 @@
-// Importamos los dos componentes principales
-import BannerPlanes from "../components/BannerPlanes";
-import SeccionesInformativas from "../components/SeccionesInformativas";
+import SeccionAtencionInmediata from "../components/SeccionAtencionInmediata";
+import SeccionMapa from "../components/SeccionMapa";
+import SeccionPreguntasFrecuentes from "../components/SeccionPreguntasFrecuentes";
+import BannerPlanes from "../components/BannerPlanes"; 
+import SeccionPlanesAtencion from "../components/SeccionPlanesAtencion";
+import SeccionExpertos from "../components/SeccionExpertos";
+import HeroCarousel from "../components/HeroCarousel";
 
 const Inicio = () => {
   return (
-    <main className="grow bg-background overflow-hidden">
+    <div className="flex flex-col w-full">
       
-      {/* 1. Nuestro Hero Principal (Ocupa la pantalla completa al entrar) */}
+      {/* 1. HERO SECTION (Carrusel automático TOD3D style) */}
+      <HeroCarousel />
+
+      {/* 2. SECCIÓN COMPROMISO (Tarjetas de Servicios) */}
       <BannerPlanes />
 
-      {/* 2. Todas las secciones nuevas (Expertos, Plan, Mapa, Preguntas) */}
-      <SeccionesInformativas />
+      {/* 3. BIENVENIDA A LA APP */}
+      <SeccionAtencionInmediata />
 
-    </main>
+      {/* 4. SECCIÓN PROFESIONALES */}
+      <SeccionPlanesAtencion />
+
+      {/* 5. MAPA Y UBICACIÓN */}
+      <SeccionMapa />
+
+      {/* 6. EXPERTOS Y COMUNIDAD */}
+      <SeccionExpertos />
+
+      {/* 7. PREGUNTAS FRECUENTES */}
+      <SeccionPreguntasFrecuentes />
+      
+    </div>
   );
 };
 

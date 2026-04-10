@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import api from "../../api/axios.js";
-import BrandLogo from "../BrandLogo.jsx";
-import { FaTimes, FaCalendarAlt, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
+import BrandLogo from "../BrandLogo.jsx"; 
+import { FaTimes, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -10,18 +10,16 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [usuario, setUsuario] = useState(null);
 
-  // Estados para el Modal del Paciente
   const [mostrarModal, setMostrarModal] = useState(false);
   const [misTurnos, setMisTurnos] = useState([]);
   const [cargandoTurnos, setCargandoTurnos] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
+    const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Al cargar la página, revisamos si hay alguien logueado
   useEffect(() => {
     const perfilGuardado = localStorage.getItem('perfilUsuario');
     if (perfilGuardado) {
@@ -29,14 +27,12 @@ const Navbar = () => {
     }
   }, []);
 
-  // Función para abrir el modal y buscar los turnos de este paciente exacto
   const abrirModalPerfil = async () => {
     setMostrarModal(true);
     setCargandoTurnos(true);
     try {
-      // Fetch all turnos and filter them effectively ensuring case-insensitive match
       const respuesta = await api.get('/turnos');
-      const filtrados = respuesta.data.filter(t => 
+      const filtrados = respuesta.data.filter(t =>
         t.nombrePaciente?.trim().toLowerCase() === usuario.nombre?.trim().toLowerCase() &&
         t.apellidoPaciente?.trim().toLowerCase() === usuario.apellido?.trim().toLowerCase()
       );
@@ -48,16 +44,15 @@ const Navbar = () => {
     }
   };
 
-  // Función para cerrar sesión
   const handleLogout = async () => {
     try {
-      await api.post('/auth/logout').catch(() => {});
+      await api.post('/auth/logout').catch(() => { });
       localStorage.removeItem('token');
       localStorage.removeItem('perfilUsuario');
       setUsuario(null);
       setMostrarModal(false);
       navigate('/');
-      window.location.reload(); // Limpieza infalible
+      window.location.reload();
     } catch (error) {
       console.error("Error al cerrar sesión", error);
     }
@@ -65,179 +60,117 @@ const Navbar = () => {
 
   return (
     <>
-      <header
-        className={`sticky top-0 z-40 border-b transition-all duration-300 ${
-        scrolled
-          ? "bg-background/95 shadow-md border-secondary/50 backdrop-blur-sm"
-          : "bg-background border-transparent"
-      }`}
-    >
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-        
-        {/* LADO IZQUIERDO: El nuevo logo compuesto y el nombre */}
-        <Link to="/" className="shrink-0 outline-none focus:outline-none rounded-lg p-1">
-          <BrandLogo />
-        </Link>
-
-        {/* CENTRO: Menú Desktop */}
-        <div className="hidden md:flex items-center gap-10">
-          <Link to="/" className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
-            Inicio
-          </Link>
-          <Link to="/acerca" className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
-            Acerca de nosotros
-          </Link>
-          <Link to="/contacto" className="relative text-[1.25rem] font-medium text-text-light hover:text-primary transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
-            Contacto
-          </Link>
-          {usuario && (
-            <Link to="/mi-perfil" className="relative text-[1.25rem] font-medium text-accent-orange hover:text-primary transition-colors duration-300 flex items-center gap-1.5 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-accent-orange after:transition-all after:duration-300 hover:after:w-full">
-              <FaCalendarAlt className="text-sm" /> Mi Perfil
-            </Link>
-          )}
-        </div>
-
-        {/* LADO DERECHO: Botones Desktop */}
-        <div className="hidden md:flex items-center gap-4">
-          {usuario ? (
-            // CÍRCULO DE PERFIL CLICKEABLE
-            <button 
-              onClick={abrirModalPerfil}
-              className="w-11 h-11 rounded-full bg-accent-orange text-white flex items-center justify-center font-black text-lg shadow-md hover:scale-105 transition-transform cursor-pointer border-2 border-white ring-2 ring-accent-orange/30 delay-75"
-              title="Mi Perfil"
-            >
-              {usuario.nombre?.charAt(0)?.toUpperCase() || ''}{usuario.apellido?.charAt(0)?.toUpperCase() || ''}
-            </button>
-          ) : (
-            <Link to="/login" className="px-5 py-2.5 border-2 border-primary text-primary font-bold rounded-full hover:bg-primary hover:text-white transition-all text-sm">
-              Iniciar Sesión
-            </Link>
-          )}
-
-          <Link to="/turnos" className="bg-accent-orange text-white font-bold px-6 py-2 rounded-full transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:scale-95 uppercase text-sm tracking-wide">
-            Reservar Turno
-          </Link>
-        </div>
-
-        {/* Botón Hamburguesa (MÓVIL SOLAMENTE) */}
-        <button
-          type="button"
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden flex h-11 w-11 items-center justify-center rounded-lg bg-secondary text-primary focus:outline-none focus:ring-2 focus:ring-primary ml-auto"
-          aria-label="Menú principal"
+      <nav className={`fixed w-full z-50 transition-all duration-500 flex justify-center ${scrolled ? "top-4 px-4" : "top-0 px-0"}`}>
+        <div className={`w-full max-w-7xl mx-auto flex items-center justify-between transition-all duration-500 ${
+            scrolled 
+              ? "bg-orange-50/90 backdrop-blur-md border border-accent-orange/30 shadow-[0_10px_25px_rgba(249,115,22,0.15)] rounded-full py-2 px-4 sm:px-6"
+              : "bg-transparent py-5 px-4 sm:px-6 lg:px-8"
+          }`}
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            {menuOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+
+          {/* LADO IZQUIERDO: LOGO */}
+          <Link to="/" className="shrink-0 outline-none">
+            <BrandLogo scrolled={scrolled} />
+          </Link>
+
+          {/* CENTRO: Menú Desktop */}
+          <div className="hidden lg:flex items-center gap-10 font-bold text-sm">
+            <Link to="/" className={`transition-colors ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>Inicio</Link>
+            <Link to="/acerca" className={`transition-colors ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>Nosotros</Link>
+            <Link to="/contacto" className={`transition-colors ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>Contacto</Link>
+          </div>
+
+          {/* LADO DERECHO: Botones de Sesión */}
+          <div className="hidden lg:flex items-center gap-3">
+            {!usuario ? (
+              <>
+                <Link to="/login" className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-md active:scale-95 flex items-center justify-center ${
+                    scrolled 
+                      ? 'bg-accent-orange text-white hover:brightness-110 shadow-accent-orange/30' 
+                      : 'bg-white/20 backdrop-blur-md text-white hover:bg-white hover:text-primary border border-white/30 drop-shadow-md'
+                  }`}>
+                  Iniciar Sesión
+                </Link>
+                <Link to="/turnos" className="px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-md active:scale-95 flex items-center justify-center bg-primary text-white hover:bg-primary/90 shadow-primary/30">
+                  Solicitar Turno
+                </Link>
+              </>
             ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <div className="flex items-center gap-3">
+                <button onClick={abrirModalPerfil} className={`flex items-center gap-2 font-bold text-sm transition-all ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>
+                  <FaUserCircle className="text-xl" /> Mi Perfil
+                </button>
+                <button onClick={handleLogout} className={`p-2.5 rounded-full transition-all ${scrolled ? 'bg-red-50 text-red-500 hover:bg-red-500 hover:text-white' : 'bg-red-500/80 backdrop-blur-sm text-white hover:bg-red-600 border border-white/20 drop-shadow-md'}`} title="Cerrar Sesión">
+                  <FaSignOutAlt />
+                </button>
+              </div>
             )}
-          </svg>
-        </button>
-      </nav>
+          </div>
 
-      {/* Menú Desplegable Móvil */}
-      {menuOpen && (
-        <div className="md:hidden border-t border-secondary bg-background shadow-lg absolute w-full left-0">
-          <div className="flex flex-col px-4 py-4 space-y-2">
-            <Link to="/" className="block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-secondary" onClick={() => setMenuOpen(false)}>Inicio</Link>
-            <Link to="/acerca" className="block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-secondary" onClick={() => setMenuOpen(false)}>Acerca de nosotros</Link>
-            <Link to="/contacto" className="block rounded-lg px-4 py-3 text-lg font-medium text-text hover:bg-secondary" onClick={() => setMenuOpen(false)}>Contacto</Link>
-            {usuario && (
-              <Link to="/mi-perfil" className="flex rounded-lg px-4 py-3 text-lg font-medium text-accent-orange hover:bg-secondary items-center gap-2" onClick={() => setMenuOpen(false)}>
-                <FaCalendarAlt className="text-sm" /> Mi Perfil
-              </Link>
+          {/* Botón Hamburguesa (MÓVIL) */}
+          <button onClick={() => setMenuOpen(!menuOpen)} className={`lg:hidden flex h-10 w-10 items-center justify-center rounded-xl transition-all ${scrolled ? 'bg-accent-orange/10 text-accent-orange' : 'bg-white/20 text-white backdrop-blur-md border border-white/20 shadow-md drop-shadow-md'}`}>
+            {menuOpen ? <FaTimes className="text-xl" /> : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
             )}
+          </button>
+        </div>
 
-            <div className="h-px w-full bg-secondary my-2"></div>
-
-            {/* Acciones en Móvil */}
-            <div className="flex flex-col gap-3 mt-2">
+        {/* MENÚ MÓVIL DESPLEGABLE */}
+        {menuOpen && (
+          <div className="lg:hidden fixed top-20 left-4 right-4 bg-white/95 backdrop-blur-2xl rounded-3xl border border-secondary/20 shadow-2xl overflow-hidden animate-fade-in z-50">
+            <div className="flex flex-col p-6 space-y-6">
+              <Link to="/" className="text-xl font-black text-primary uppercase" onClick={() => setMenuOpen(false)}>Inicio</Link>
+              <Link to="/acerca" className="text-xl font-black text-primary uppercase" onClick={() => setMenuOpen(false)}>Nosotros</Link>
+              <Link to="/contacto" className="text-xl font-black text-primary uppercase" onClick={() => setMenuOpen(false)}>Contacto</Link>
+              
+              <div className="h-px w-full bg-secondary/30"></div>
               {usuario ? (
-                <div 
-                  className="flex items-center justify-between bg-secondary/10 px-4 py-3 rounded-2xl w-full cursor-pointer hover:bg-secondary/20 transition-colors border border-secondary/20" 
-                  onClick={() => { setMenuOpen(false); abrirModalPerfil(); }}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-accent-orange text-white flex items-center justify-center font-black text-lg shadow-sm">
-                      {usuario.nombre?.charAt(0)?.toUpperCase() || ''}{usuario.apellido?.charAt(0)?.toUpperCase() || ''}
-                    </div>
-                    <p className="text-sm font-bold text-primary capitalize">{usuario.nombre} {usuario.apellido}</p>
-                  </div>
-                  <span className="text-xs text-accent-orange font-bold">Ver Perfil &rarr;</span>
+                <div className="flex flex-col gap-3">
+                  <button className="bg-primary text-white p-4 rounded-2xl flex items-center justify-between" onClick={() => { setMenuOpen(false); abrirModalPerfil(); }}>
+                    <span className="font-bold">Mi Perfil ({usuario.nombre})</span>
+                    <span className="bg-white/10 p-2 rounded-full">&rarr;</span>
+                  </button>
+                  <button onClick={() => { setMenuOpen(false); handleLogout(); }} className="bg-red-50 text-red-500 font-bold p-4 rounded-2xl text-center">Cerrar Sesión</button>
                 </div>
               ) : (
-                <Link to="/login" className="block rounded-full border-2 border-primary py-3 text-center text-lg font-bold text-primary hover:bg-primary hover:text-white transition-all" onClick={() => setMenuOpen(false)}>
-                  Iniciar sesión
-                </Link>
+                <div className="flex flex-col gap-3">
+                  <Link to="/login" className="bg-accent-orange text-white font-bold p-4 rounded-2xl text-center uppercase" onClick={() => setMenuOpen(false)}>Iniciar Sesión</Link>
+                  <Link to="/turnos" className="bg-primary text-white font-bold p-4 rounded-2xl text-center uppercase shadow-md" onClick={() => setMenuOpen(false)}>Solicitar Turno</Link>
+                </div>
               )}
-
-              <Link to="/turnos" className="block rounded-full bg-accent-orange py-3 text-center text-lg font-bold text-white shadow-md hover:-translate-y-1 transition-transform uppercase tracking-wide" onClick={() => setMenuOpen(false)}>
-                Reservar turno
-              </Link>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </nav>
 
-      </header>
-
-      {/* ========================================= */}
-      {/* MODAL DEL PERFIL DEL PACIENTE             */}
-      {/* ========================================= */}
+      {/* MODAL DEL PERFIL */}
       {mostrarModal && usuario && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in">
-          
-          <div className="bg-white rounded-4xl w-full max-w-md shadow-2xl overflow-hidden relative animate-scale-up border-t-8 border-accent-orange flex flex-col max-h-[90vh]">
-            
-            {/* Botón Cerrar Modal */}
-            <button 
-              onClick={() => setMostrarModal(false)}
-              className="absolute top-4 right-4 text-secondary hover:text-red-500 transition-colors bg-background p-2 rounded-full z-10"
-            >
-              <FaTimes />
-            </button>
-
-            {/* CABECERA DEL PERFIL */}
-            <div className="p-8 text-center bg-background/50 border-b border-secondary/20 shrink-0">
-              <div className="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center font-black text-3xl shadow-lg mx-auto mb-4">
-                {usuario.nombre?.charAt(0)?.toUpperCase() || ''}{usuario.apellido?.charAt(0)?.toUpperCase() || ''}
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-fade-in" onClick={() => setMostrarModal(false)}>
+          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden relative animate-scale-up border-t-8 border-accent-orange flex flex-col max-h-[90vh]" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setMostrarModal(false)} className="absolute top-4 right-4 text-primary/40 hover:text-red-500 transition-colors bg-secondary/30 p-2 rounded-full z-10"><FaTimes /></button>
+            <div className="p-8 text-center bg-secondary/10 border-b border-secondary/20">
+              <div className="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center font-black text-4xl shadow-xl mx-auto mb-4">
+                {usuario.nombre?.charAt(0)?.toUpperCase()}
               </div>
-              <h2 className="text-2xl font-black text-primary capitalize">{usuario.nombre} {usuario.apellido}</h2>
-              <p className="text-text-light font-medium flex items-center justify-center gap-2 mt-1">
-                <FaUserCircle /> {usuario.email}
-              </p>
+              <h2 className="text-2xl font-black text-primary leading-tight uppercase tracking-tight">{usuario.nombre} {usuario.apellido}</h2>
+              <p className="text-accent-orange font-bold text-xs uppercase tracking-widest mt-2 flex items-center justify-center gap-2"><FaUserCircle /> {usuario.email}</p>
             </div>
-
-            {/* SECCIÓN: MIS TURNOS */}
-            <div className="p-6 bg-white overflow-y-auto grow">
-              <h3 className="text-sm font-black text-text uppercase tracking-wider mb-4 flex items-center gap-2">
-                <FaCalendarAlt className="text-accent-orange" /> Historial de Turnos
-              </h3>
-              
-              <div className="space-y-3">
-                {cargandoTurnos ? (
-                  <p className="text-center text-secondary font-bold text-sm py-4">Buscando tus turnos...</p>
-                ) : misTurnos.length === 0 ? (
-                  <div className="bg-background/80 rounded-xl p-5 text-center border border-dashed border-secondary/50">
-                    <p className="text-text-light font-medium text-sm">Aún no has solicitado ningún turno.</p>
-                    <Link to="/turnos" onClick={() => setMostrarModal(false)} className="text-accent-orange text-sm font-bold mt-2 inline-block hover:underline">
-                      ¡Solicita uno ahora!
-                    </Link>
+            <div className="p-8 bg-white overflow-y-auto grow">
+              <h3 className="text-xs font-black text-primary/40 uppercase tracking-widest mb-6 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-accent-orange"></div> Próximas Citas</h3>
+              <div className="space-y-4">
+                {cargandoTurnos ? (<p className="text-center text-primary/50 font-bold animate-pulse py-8">Buscando turnos...</p>) : misTurnos.length === 0 ? (
+                  <div className="bg-secondary/10 rounded-2xl p-8 text-center border border-dashed border-secondary/30">
+                    <p className="text-primary/60 font-bold text-xs uppercase">No tienes citas programadas.</p>
+                    <Link to="/turnos" onClick={() => setMostrarModal(false)} className="bg-accent-orange text-white text-[10px] font-black uppercase px-6 py-2 rounded-full mt-4 inline-block shadow-md">Solicitar Nueva</Link>
                   </div>
                 ) : (
                   misTurnos.map((turno) => (
-                    <div key={turno._id} className="bg-background rounded-xl p-4 border border-secondary/20 flex justify-between items-center shadow-sm">
+                    <div key={turno._id} className="bg-secondary/5 rounded-2xl p-5 border border-secondary/20 flex justify-between items-center">
                       <div>
-                        <p className="font-bold text-primary text-sm capitalize">{turno.motivo}</p>
-                        <p className="text-xs text-text-light font-semibold mt-1">
-                          {turno.fecha ? turno.fecha.split('-').reverse().join('/') : 'Sin fecha'} | {turno.hora || 'Sin hora'}
-                        </p>
+                        <p className="font-black text-primary text-sm uppercase">{turno.motivo}</p>
+                        <p className="text-[10px] text-primary/60 font-bold uppercase mt-1">📅 {turno.fecha?.split('-').reverse().join('/')} • ⏰ {turno.hora}hs</p>
                       </div>
-                      <span className={`text-xs font-black px-3 py-1 rounded-full ${
-                        turno.estado === 'Confirmado' ? 'bg-green-100 text-green-700' : 
-                        turno.estado === 'Cancelado' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-                      }`}>
+                      <span className={`text-[10px] font-black px-3 py-1.5 rounded-full uppercase shadow-sm ${turno.estado === 'Confirmado' ? 'bg-green-500 text-white' : turno.estado === 'Cancelado' ? 'bg-red-500 text-white' : 'bg-accent-orange text-white'}`}>
                         {turno.estado}
                       </span>
                     </div>
@@ -245,17 +178,6 @@ const Navbar = () => {
                 )}
               </div>
             </div>
-
-            {/* BOTÓN CERRAR SESIÓN */}
-            <div className="p-6 bg-background/50 border-t border-secondary/20 shrink-0">
-              <button 
-                onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 bg-white border-2 border-red-100 text-red-500 font-bold py-3.5 rounded-xl hover:bg-red-50 hover:border-red-200 transition-all shadow-sm"
-              >
-                <FaSignOutAlt /> Cerrar Sesión
-              </button>
-            </div>
-
           </div>
         </div>
       )}

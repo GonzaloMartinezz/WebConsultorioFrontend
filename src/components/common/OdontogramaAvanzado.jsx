@@ -27,6 +27,7 @@ const OdontogramaAvanzado = () => {
     { nombre: 'Ausente', color: 'bg-gray-800', bgClaro: 'bg-gray-100 text-gray-500 border-gray-400 opacity-60 line-through' },
     { nombre: 'Implante', color: 'bg-purple-500', bgClaro: 'bg-purple-50 text-purple-700 border-purple-500' },
     { nombre: 'Endodoncia', color: 'bg-orange-500', bgClaro: 'bg-orange-50 text-orange-700 border-orange-500' },
+    { nombre: 'Falta', color: 'bg-gray-800', bgClaro: 'bg-gray-100 text-gray-500 border-gray-400 opacity-60 line-through' },
   ];
 
   // 1. Cargar pacientes al iniciar
@@ -43,8 +44,8 @@ const OdontogramaAvanzado = () => {
   }, []);
 
   // 2. Filtrar pacientes en tiempo real
-  const pacientesFiltrados = busqueda === '' ? [] : pacientes.filter(p => 
-    p.nombre.toLowerCase().includes(busqueda.toLowerCase()) || 
+  const pacientesFiltrados = busqueda === '' ? [] : pacientes.filter(p =>
+    p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
     p.apellido.toLowerCase().includes(busqueda.toLowerCase()) ||
     (p.dni && p.dni.includes(busqueda))
   );
@@ -55,14 +56,14 @@ const OdontogramaAvanzado = () => {
     setBusqueda('');
     setCargandoFicha(true);
     try {
-        const res = await api.get(`/fichas/${paciente._id}`);
-        // El componente espera formato {numero, estado}
-        setOdontograma(res.data.odontograma || []);
+      const res = await api.get(`/fichas/${paciente._id}`);
+      // El componente espera formato {numero, estado}
+      setOdontograma(res.data.odontograma || []);
     } catch (error) {
-        console.error("Error al cargar odontograma previo", error);
-        setOdontograma([]);
+      console.error("Error al cargar odontograma previo", error);
+      setOdontograma([]);
     } finally {
-        setCargandoFicha(false);
+      setCargandoFicha(false);
     }
   };
 
@@ -112,7 +113,7 @@ const OdontogramaAvanzado = () => {
   const RenderDiente = ({ num, esSuperior }) => {
     const anatomia = obtenerAnatomia(num);
     return (
-      <button 
+      <button
         onClick={() => setDienteActivo({ numero: num, anatomia })}
         className={`group relative flex flex-col items-center justify-center h-16 md:h-20 border-2 rounded-xl transition-all duration-300 transform hover:scale-110 hover:z-10 shadow-sm hover:shadow-xl ${anatomia.ancho} ${obtenerClasesDiente(num)}`}
         title={`Pieza ${num} - ${anatomia.tipo}`}
@@ -125,31 +126,31 @@ const OdontogramaAvanzado = () => {
 
   return (
     <div className="max-w-[1400px] mx-auto h-[calc(100vh-140px)] flex flex-col gap-4">
-      
+
       {/* ======================================================== */}
       {/* PANEL SUPERIOR: BUSCADOR Y FICHA DEL PACIENTE */}
       {/* ======================================================== */}
       <div className="bg-white rounded-[2rem] shadow-sm border border-secondary/20 p-4 shrink-0 flex flex-col md:flex-row gap-6 items-center z-20">
-        
+
         {/* Buscador inteligente */}
         <div className="w-full md:w-1/3 relative">
           <div className="relative">
             <FaSearch className="absolute left-4 top-3.5 text-text-light opacity-50" />
-            <input 
-              type="text" 
-              placeholder="Buscar por Nombre o DNI..." 
+            <input
+              type="text"
+              placeholder="Buscar por Nombre o DNI..."
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
               className="w-full pl-11 pr-4 py-3 bg-background/50 border border-secondary/40 rounded-xl focus:outline-none focus:border-primary font-bold text-sm tracking-tight"
             />
           </div>
-          
+
           {/* Resultados de búsqueda flotantes */}
           {pacientesFiltrados.length > 0 && (
             <div className="absolute top-14 left-0 w-full bg-white border border-secondary/20 shadow-2xl rounded-2xl overflow-hidden max-h-60 overflow-y-auto animate-fade-in z-[60]">
               {pacientesFiltrados.map(p => (
-                <button 
-                  key={p._id} 
+                <button
+                  key={p._id}
                   onClick={() => seleccionarPaciente(p)}
                   className="w-full text-left px-5 py-4 hover:bg-primary/5 border-b border-secondary/10 last:border-0 flex items-center justify-between group transition-colors"
                 >
@@ -180,8 +181,8 @@ const OdontogramaAvanzado = () => {
                   <p className="text-[10px] font-black text-text-light uppercase tracking-[0.2em] mt-2 opacity-70">Historia Clínica Activa | {pacienteSeleccionado.dni || 'Sin DNI'}</p>
                 </div>
               </div>
-              <button 
-                onClick={() => setPacienteSeleccionado(null)} 
+              <button
+                onClick={() => setPacienteSeleccionado(null)}
                 className="text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-50 px-4 py-2 rounded-xl transition-all border border-red-100"
               >
                 Cambiar Paciente
@@ -202,28 +203,28 @@ const OdontogramaAvanzado = () => {
       {/* ODONTOGRAMA (Bloqueado si no hay paciente) */}
       {/* ======================================================== */}
       <div className={`flex-1 bg-white rounded-[2.5rem] shadow-xl border border-secondary/50 flex flex-col relative overflow-hidden transition-all duration-500 ${!pacienteSeleccionado ? 'opacity-40 grayscale pointer-events-none' : ''}`}>
-        
+
         {/* Cabecera del área clínica */}
         <div className="flex justify-between items-center p-6 md:px-10 border-b border-secondary/20 shrink-0 bg-background/30">
           <div className="flex items-center gap-3">
-             <div className="w-10 h-10 bg-accent-orange/10 rounded-xl flex items-center justify-center">
-                <FaTooth className="text-accent-orange text-xl" />
-             </div>
-             <h2 className="text-lg font-black text-primary uppercase tracking-tight">
-               Odontograma Digital <span className="text-text-light/40 ml-2 font-bold">— Piezas 11 a 48</span>
-             </h2>
+            <div className="w-10 h-10 bg-accent-orange/10 rounded-xl flex items-center justify-center">
+              <FaTooth className="text-accent-orange text-xl" />
+            </div>
+            <h2 className="text-lg font-black text-primary uppercase tracking-tight">
+              Odontograma Digital <span className="text-text-light/40 ml-2 font-bold">— Piezas 11 a 48</span>
+            </h2>
           </div>
           <div className="flex gap-3">
-            <button 
-                onClick={() => setOdontograma([])} 
-                className="bg-white hover:bg-red-50 text-text-light px-5 py-2.5 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center gap-2 border border-secondary/30 shadow-sm active:scale-95"
+            <button
+              onClick={() => setOdontograma([])}
+              className="bg-white hover:bg-red-50 text-text-light px-5 py-2.5 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all flex items-center gap-2 border border-secondary/30 shadow-sm active:scale-95"
             >
               <FaUndo className="text-xs" /> Limpiar
             </button>
-            <button 
-                onClick={guardarOdontograma} 
-                disabled={guardando} 
-                className="bg-accent-orange hover:brightness-110 text-white px-8 py-2.5 rounded-xl font-black uppercase tracking-[0.15em] text-[10px] shadow-lg shadow-accent-orange/20 transition-all flex items-center gap-2 disabled:opacity-50 active:scale-95"
+            <button
+              onClick={guardarOdontograma}
+              disabled={guardando}
+              className="bg-accent-orange hover:brightness-110 text-white px-8 py-2.5 rounded-xl font-black uppercase tracking-[0.15em] text-[10px] shadow-lg shadow-accent-orange/20 transition-all flex items-center gap-2 disabled:opacity-50 active:scale-95"
             >
               {guardando ? <FaSpinner className="animate-spin" /> : <FaSave className="text-sm" />}
               {guardando ? 'Guardando...' : 'Guardar Ficha'}
@@ -233,11 +234,11 @@ const OdontogramaAvanzado = () => {
 
         {/* Grilla Dental (Optimizado para Desktop) */}
         <div className="flex-1 overflow-y-auto p-6 md:px-12 flex flex-col justify-center bg-slate-50/20">
-          
+
           {cargandoFicha ? (
             <div className="flex flex-col items-center justify-center gap-4 py-20">
-                 <FaSpinner className="text-4xl text-accent-orange animate-spin" />
-                 <p className="font-black text-text-light text-[10px] uppercase tracking-widest">Cargando antecedentes...</p>
+              <FaSpinner className="text-4xl text-accent-orange animate-spin" />
+              <p className="font-black text-text-light text-[10px] uppercase tracking-widest">Cargando antecedentes...</p>
             </div>
           ) : (
             <>
@@ -291,7 +292,7 @@ const OdontogramaAvanzado = () => {
             <button onClick={() => setDienteActivo(null)} className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-xl bg-secondary/10 text-primary hover:bg-red-500 hover:text-white transition-all">
               <FaTimes className="text-xl" />
             </button>
-            
+
             <div className="flex items-center gap-5 mb-8 border-b border-secondary/20 pb-6">
               <div className="w-16 h-16 bg-accent-orange text-white rounded-2xl flex items-center justify-center shadow-lg shadow-accent-orange/20">
                 <FaTooth className="text-4xl" />
@@ -301,15 +302,15 @@ const OdontogramaAvanzado = () => {
                 <p className="text-accent-orange font-black text-[10px] uppercase tracking-[0.2em] mt-2">{dienteActivo.anatomia?.tipo}</p>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-3">
               {estadosDiente.map(estado => (
-                <button 
-                  key={estado.nombre} 
+                <button
+                  key={estado.nombre}
                   onClick={() => aplicarEstado(estado.nombre)}
                   className={`flex items-center gap-3 py-4 px-4 rounded-xl font-black text-[10px] uppercase tracking-wider border-2 transition-all duration-300 active:scale-95
-                    ${estado.nombre === 'Sano' 
-                      ? 'border-green-400 bg-green-50 text-green-700 hover:bg-green-500 hover:text-white' 
+                    ${estado.nombre === 'Sano'
+                      ? 'border-green-400 bg-green-50 text-green-700 hover:bg-green-500 hover:text-white'
                       : `border-secondary/20 text-text-light hover:${estado.color} hover:border-transparent hover:text-white hover:shadow-lg shadow-sm`
                     }`}
                 >
@@ -319,7 +320,7 @@ const OdontogramaAvanzado = () => {
               ))}
             </div>
             <p className="mt-8 text-[9px] text-text-light text-center font-bold uppercase tracking-widest leading-relaxed opacity-60">
-                Seleccioná el estado clínico para aplicarlo a la pieza {dienteActivo.numero}.
+              Seleccioná el estado clínico para aplicarlo a la pieza {dienteActivo.numero}.
             </p>
           </div>
         </div>
