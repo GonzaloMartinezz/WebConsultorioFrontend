@@ -109,22 +109,29 @@ const Login = () => {
           password: form.password
         });
 
-        // 2. Guardamos la sesión vía AuthContext (actualiza React state + localStorage)
-        const usuarioLogueado = respuesta.data.usuario || respuesta.data;
+        // 🕵️‍♂️ EL CHIVATO: Esto nos dirá qué manda el backend exactamente (Míralo en F12)
+        console.log("Datos que llegaron del servidor:", respuesta.data); 
+
+        // 2. Guardamos la sesión vía AuthContext
+        // Cubrimos ambas posibilidades: por si tu backend lo llama "usuario", "user" o viene directo
+        const usuarioLogueado = respuesta.data.usuario || respuesta.data.user || respuesta.data;
+        
         login(respuesta.data); // Mantiene compatibilidad con AuthContext
 
-        // IMPORTANTE: Asegurar que el token esté guardado
+        // Guardamos explícitamente para mayor seguridad
         if (respuesta.data.token) localStorage.setItem('token', respuesta.data.token);
         localStorage.setItem('perfilUsuario', JSON.stringify(usuarioLogueado));
 
-        // 3. Redirigimos inteligentemente según el rol
-        if (usuarioLogueado.rol === 'admin') {
+        // 3. Redirección Inteligente y a prueba de mayúsculas
+        if (usuarioLogueado && usuarioLogueado.rol && usuarioLogueado.rol.toLowerCase() === 'admin') {
           navigate("/admin");
+          window.location.reload(); // Forzamos carga limpia para resetear estados globales
         } else {
           navigate("/mi-perfil");
         }
       }
     } catch (err) {
+      console.error("Error en login:", err);
       setError(
         err.response?.data?.error ||
         (modoRecuperar ? "Error al recuperar cuenta." : isRegistro ? "Error al crear cuenta. Puede que el correo ya exista." : "Error al Iniciar Sesión. Verifica tus datos.")
