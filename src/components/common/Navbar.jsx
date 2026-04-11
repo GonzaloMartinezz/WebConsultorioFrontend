@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../api/axios.js";
-import BrandLogo from "../BrandLogo.jsx"; 
+import BrandLogo from "../BrandLogo.jsx";
 import { FaTimes, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
 
 const Navbar = () => {
@@ -61,10 +61,9 @@ const Navbar = () => {
   return (
     <>
       <nav className={`fixed w-full z-50 transition-all duration-500 flex justify-center ${scrolled ? "top-4 px-4" : "top-0 px-0"}`}>
-        <div className={`w-full max-w-7xl mx-auto flex items-center justify-between transition-all duration-500 ${
-            scrolled 
-              ? "bg-orange-50/90 backdrop-blur-md border border-accent-orange/30 shadow-[0_10px_25px_rgba(249,115,22,0.15)] rounded-full py-2 px-4 sm:px-6"
-              : "bg-transparent py-5 px-4 sm:px-6 lg:px-8"
+        <div className={`w-full max-w-7xl mx-auto flex items-center justify-between transition-all duration-500 ${scrolled
+            ? "bg-orange-50/90 backdrop-blur-md border border-accent-orange/30 shadow-[0_10px_25px_rgba(249,115,22,0.15)] rounded-full py-2 px-4 sm:px-6"
+            : "bg-transparent py-5 px-4 sm:px-6 lg:px-8"
           }`}
         >
 
@@ -84,10 +83,9 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-3">
             {!usuario ? (
               <>
-                <Link to="/login" className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-md active:scale-95 flex items-center justify-center ${
-                    scrolled 
-                      ? 'bg-accent-orange text-white hover:brightness-110 shadow-accent-orange/30' 
-                      : 'bg-white/20 backdrop-blur-md text-white hover:bg-white hover:text-primary border border-white/30 drop-shadow-md'
+                <Link to="/login" className={`px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-md active:scale-95 flex items-center justify-center ${scrolled
+                    ? 'bg-accent-orange text-white hover:brightness-110 shadow-accent-orange/30'
+                    : 'bg-white/20 backdrop-blur-md text-white hover:bg-white hover:text-primary border border-white/30 drop-shadow-md'
                   }`}>
                   Iniciar Sesión
                 </Link>
@@ -122,7 +120,7 @@ const Navbar = () => {
               <Link to="/" className="text-xl font-black text-primary uppercase" onClick={() => setMenuOpen(false)}>Inicio</Link>
               <Link to="/acerca" className="text-xl font-black text-primary uppercase" onClick={() => setMenuOpen(false)}>Nosotros</Link>
               <Link to="/contacto" className="text-xl font-black text-primary uppercase" onClick={() => setMenuOpen(false)}>Contacto</Link>
-              
+
               <div className="h-px w-full bg-secondary/30"></div>
               {usuario ? (
                 <div className="flex flex-col gap-3">
@@ -145,7 +143,7 @@ const Navbar = () => {
 
       {/* MODAL DEL PERFIL */}
       {mostrarModal && usuario && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-fade-in" onClick={() => setMostrarModal(false)}>
+        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-fade-in" onClick={() => setMostrarModal(false)}>
           <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden relative animate-scale-up border-t-8 border-accent-orange flex flex-col max-h-[90vh]" onClick={e => e.stopPropagation()}>
             <button onClick={() => setMostrarModal(false)} className="absolute top-4 right-4 text-primary/40 hover:text-red-500 transition-colors bg-secondary/30 p-2 rounded-full z-10"><FaTimes /></button>
             <div className="p-8 text-center bg-secondary/10 border-b border-secondary/20">

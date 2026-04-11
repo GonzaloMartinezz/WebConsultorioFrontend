@@ -127,7 +127,7 @@ const Login = () => {
           navigate("/admin");
           window.location.reload(); // Forzamos carga limpia para resetear estados globales
         } else {
-          navigate("/mi-perfil");
+          navigate("/");
         }
       }
     } catch (err) {

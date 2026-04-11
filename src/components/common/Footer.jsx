@@ -5,8 +5,8 @@ const Footer = () => {
   const navLinkClass = "relative text-sm font-bold text-primary/70 hover:text-accent-orange transition-colors duration-300";
 
   return (
-    <footer className="bg-gradient-to-b from-orange-50/40 via-orange-100/50 to-accent-orange/10 text-primary mt-auto border-t-4 border-accent-orange relative overflow-hidden">
-      
+    <footer className="bg-linear-to-b from-orange-50/40 via-orange-100/50 to-accent-orange/10 text-primary mt-auto border-t-4 border-accent-orange relative overflow-hidden">
+
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 relative z-10">
 
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3 md:gap-8">
@@ -38,7 +38,7 @@ const Footer = () => {
               <li><Link to="/" className={navLinkClass}>Inicio</Link></li>
               <li><Link to="/acerca" className={navLinkClass}>Nuestro Centro</Link></li>
               <li><Link to="/contacto" className={navLinkClass}>Contacto</Link></li>
-              <li><Link to="/turnos" className={`${navLinkClass} !text-accent-orange hover:brightness-110`}>Reservar turno online</Link></li>
+              <li><Link to="/turnos" className={`${navLinkClass} text-accent-orange! hover:brightness-110`}>Reservar turno online</Link></li>
             </ul>
           </div>
 
@@ -48,7 +48,7 @@ const Footer = () => {
             <ul className="space-y-3 flex flex-col items-center md:items-start text-primary/80 text-sm font-medium">
               <li className="flex items-start gap-3">
                 <FaMapMarkerAlt className="text-accent-orange shrink-0 text-lg mt-0.5" />
-                <span>Calle Jose Rondeau 827,<br/>San Miguel de Tucumán</span>
+                <span>Calle Jose Rondeau 827,<br />San Miguel de Tucumán</span>
               </li>
               <li className="flex items-center gap-3">
                 <FaWhatsapp className="text-green-600 shrink-0 text-xl" />

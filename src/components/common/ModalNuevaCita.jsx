@@ -73,7 +73,7 @@ const ModalNuevaCita = ({ onClose, onTurnoCreado, initialDate, initialTime }) =>
   ).slice(0, 5);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-primary/40 backdrop-blur-md animate-fade-in">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-primary/40 backdrop-blur-md animate-fade-in">
       <div className="bg-white rounded-[2.5rem] shadow-2xl w-full max-w-lg overflow-hidden scale-in-center border border-secondary/50">
         
         {/* Cabecera Premium */}
@@ -121,7 +121,7 @@ const ModalNuevaCita = ({ onClose, onTurnoCreado, initialDate, initialTime }) =>
 
             {/* Resultados de búsqueda */}
             {busqueda && !formData.pacienteId && !cargandoPacientes && (
-              <div className="absolute z-[110] left-0 right-0 top-full mt-2 bg-white border border-secondary/50 rounded-2xl shadow-2xl overflow-hidden animate-fade-in max-h-48 overflow-y-auto">
+              <div className="absolute z-110 left-0 right-0 top-full mt-2 bg-white border border-secondary/50 rounded-2xl shadow-2xl overflow-hidden animate-fade-in max-h-48 overflow-y-auto">
                 {pacientesFiltrados.length > 0 ? (
                   pacientesFiltrados.map(p => (
                     <button 

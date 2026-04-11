@@ -130,7 +130,7 @@ const OdontogramaAvanzado = () => {
       {/* ======================================================== */}
       {/* PANEL SUPERIOR: BUSCADOR Y FICHA DEL PACIENTE */}
       {/* ======================================================== */}
-      <div className="bg-white rounded-[2rem] shadow-sm border border-secondary/20 p-4 shrink-0 flex flex-col md:flex-row gap-6 items-center z-20">
+      <div className="bg-white rounded-4xl shadow-sm border border-secondary/20 p-4 shrink-0 flex flex-col md:flex-row gap-6 items-center z-20">
 
         {/* Buscador inteligente */}
         <div className="w-full md:w-1/3 relative">
@@ -147,7 +147,7 @@ const OdontogramaAvanzado = () => {
 
           {/* Resultados de búsqueda flotantes */}
           {pacientesFiltrados.length > 0 && (
-            <div className="absolute top-14 left-0 w-full bg-white border border-secondary/20 shadow-2xl rounded-2xl overflow-hidden max-h-60 overflow-y-auto animate-fade-in z-[60]">
+            <div className="absolute top-14 left-0 w-full bg-white border border-secondary/20 shadow-2xl rounded-2xl overflow-hidden max-h-60 overflow-y-auto animate-fade-in z-60">
               {pacientesFiltrados.map(p => (
                 <button
                   key={p._id}
@@ -287,7 +287,7 @@ const OdontogramaAvanzado = () => {
       {/* MODAL DIAGNÓSTICO */}
       {/* ======================================================== */}
       {dienteActivo && (
-        <div className="fixed inset-0 bg-primary/40 backdrop-blur-md z-[100] flex items-center justify-center p-4 animate-fade-in">
+        <div className="fixed inset-0 bg-primary/40 backdrop-blur-md z-100 flex items-center justify-center p-4 animate-fade-in">
           <div className="bg-white rounded-[2.5rem] p-8 w-full max-w-sm shadow-2xl border border-secondary relative animate-scale-in">
             <button onClick={() => setDienteActivo(null)} className="absolute top-6 right-6 w-10 h-10 flex items-center justify-center rounded-xl bg-secondary/10 text-primary hover:bg-red-500 hover:text-white transition-all">
               <FaTimes className="text-xl" />
