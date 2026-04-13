@@ -124,10 +124,9 @@ const Login = () => {
 
         // 3. Redirección Inteligente y a prueba de mayúsculas
         if (usuarioLogueado && usuarioLogueado.rol && usuarioLogueado.rol.toLowerCase() === 'admin') {
-          navigate("/admin");
-          window.location.reload(); // Forzamos carga limpia para resetear estados globales
+          navigate("/admin/dashboard"); // Si es admin
         } else {
-          navigate("/");
+          navigate("/"); // Si es un PACIENTE, lo mandamos al Inicio
         }
       }
     } catch (err) {

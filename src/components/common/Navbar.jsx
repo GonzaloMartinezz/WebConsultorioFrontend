@@ -30,15 +30,32 @@ const Navbar = () => {
   const abrirModalPerfil = async () => {
     setMostrarModal(true);
     setCargandoTurnos(true);
+    
     try {
-      const respuesta = await api.get('/turnos');
+      // Obtenemos el token guardado del localStorage
+      const token = localStorage.getItem('token');
+      
+      // Hacemos la petición a la API enviando el token (por si el backend lo exige)
+      const respuesta = await api.get('/turnos', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      
+      // Filtramos solo los turnos del paciente logueado
       const filtrados = respuesta.data.filter(t =>
         t.nombrePaciente?.trim().toLowerCase() === usuario.nombre?.trim().toLowerCase() &&
         t.apellidoPaciente?.trim().toLowerCase() === usuario.apellido?.trim().toLowerCase()
       );
+      
       setMisTurnos(filtrados);
+      
     } catch (error) {
-      console.error("Error al cargar los turnos:", error);
+      // ¡AQUÍ CAPTURAMOS EL ERROR PARA QUE NO ROMPA LA APP!
+      console.error("Error exacto de Axios al cargar turnos:", error.response || error);
+      
+      // Si da un error de permisos (401 o 403), vaciamos la lista de turnos para que no quede cargando infinito
+      setMisTurnos([]); 
     } finally {
       setCargandoTurnos(false);
     }
