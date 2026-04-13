@@ -52,16 +52,15 @@ const LayoutAdmin = ({ children }) => {
     }
   };
 
-  // ====== MENÚ ACTUALIZADO (Sin Odontograma suelto) ======
+  // ====== MENÚ ACTUALIZADO ======
   const menuItems = [
-    { name: "Panel Principal", path: "/admin", icon: FaHome },
     { name: "Turnos Pendientes", path: "/admin/pendientes", icon: FaBell },
-    { name: "Agenda (Calendario)", path: "/admin/agenda", icon: FaCalendarAlt },
     { name: "Directorio Pacientes", path: "/admin/pacientes", icon: FaUserInjured },
+    { name: "Panel Principal", path: "/admin", icon: FaHome },
+    { name: "Agenda (Calendario)", path: "/admin/agenda", icon: FaCalendarAlt },
     { name: "Historia Clínica", path: "/admin/historia-clinica", icon: FaFileMedical },
     { name: "Odontograma", path: "/admin/odontograma-avanzado", icon: FaTeeth },
     { name: "Estadísticas", path: "/admin/estadisticas", icon: FaChartLine },
-    // { name: "Resultados (Encuestas)", path: "/admin/encuestas", icon: FaSmileBeam },
     { name: "Configuración", path: "/admin/configuracion", icon: FaCogs },
   ];
 

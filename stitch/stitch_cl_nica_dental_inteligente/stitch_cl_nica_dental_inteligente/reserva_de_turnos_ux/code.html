@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Clinical Atelier | Appointment Booking</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed": "#ffdcc2",
+                        "surface-dim": "#fbd2b3",
+                        "on-surface": "#2b1704",
+                        "on-primary-fixed": "#321200",
+                        "on-primary-container": "#5c2800",
+                        "on-secondary-container": "#795b42",
+                        "on-secondary-fixed-variant": "#5d412a",
+                        "outline-variant": "#e0c0af",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#ffede2",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#fff1e9",
+                        "on-error-container": "#93000a",
+                        "outline": "#8c7263",
+                        "background": "#fff8f5",
+                        "surface-tint": "#994700",
+                        "primary-fixed-dim": "#ffb68b",
+                        "on-tertiary-fixed-variant": "#783200",
+                        "tertiary-fixed": "#ffdbca",
+                        "surface-variant": "#ffdcc2",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb690",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#ffdcc2",
+                        "secondary": "#775840",
+                        "surface-container-high": "#ffe3cf",
+                        "tertiary": "#9d4300",
+                        "primary": "#994700",
+                        "on-primary-fixed-variant": "#753400",
+                        "primary-fixed": "#ffdbc8",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#5f2600",
+                        "on-tertiary": "#ffffff",
+                        "surface-bright": "#fff8f5",
+                        "on-tertiary-fixed": "#341100",
+                        "secondary-fixed-dim": "#e7bfa1",
+                        "inverse-primary": "#ffb68b",
+                        "secondary-container": "#fed5b6",
+                        "on-surface-variant": "#584235",
+                        "primary-container": "#ff7a00",
+                        "error-container": "#ffdad6",
+                        "surface": "#fff8f5",
+                        "inverse-surface": "#432b16",
+                        "tertiary-container": "#ff7a23",
+                        "surface-container": "#ffeadc",
+                        "on-secondary-fixed": "#2b1704",
+                        "on-background": "#2b1704"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "xxl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .glass-nav {
+            background: rgba(255, 248, 245, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body min-h-screen selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 glass-nav shadow-sm shadow-stone-200/50">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-on-background font-headline">The Clinical Atelier</div>
+<div class="hidden md:flex items-center gap-8 font-headline font-semibold text-sm tracking-tight">
+<a class="text-stone-600 hover:text-orange-800 transition-colors" href="#">Services</a>
+<a class="text-stone-600 hover:text-orange-800 transition-colors" href="#">Facilities</a>
+<a class="text-orange-700 border-b-2 border-orange-600 pb-1" href="#">Booking</a>
+<a class="text-stone-600 hover:text-orange-800 transition-colors" href="#">Portal</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-lg font-bold hover:opacity-80 transition-all duration-300 active:scale-95">
+                    Book Appointment
+                </button>
+<span class="material-symbols-outlined text-on-surface cursor-pointer text-2xl">account_circle</span>
+</div>
+</div>
+</nav>
+<main class="pt-28 pb-20 px-6 max-w-5xl mx-auto">
+<!-- Progress Ribbon -->
+<div class="mb-12">
+<div class="flex justify-between items-center mb-4 px-2">
+<div class="flex flex-col">
+<span class="text-xs uppercase tracking-widest text-on-surface-variant font-bold">Step 02 of 02</span>
+<h1 class="font-headline text-3xl font-bold text-on-surface tracking-tight">Consultation Details</h1>
+</div>
+<div class="hidden sm:flex gap-2">
+<div class="h-1.5 w-16 rounded-full bg-primary"></div>
+<div class="h-1.5 w-16 rounded-full bg-primary"></div>
+</div>
+</div>
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="w-full h-full bg-gradient-to-r from-primary to-tertiary"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+<!-- Booking Form Section -->
+<div class="lg:col-span-7 space-y-10">
+<!-- Section: Specialist Selection -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">clinical_notes</span>
+<h2 class="font-headline text-xl font-bold">Select Specialist</h2>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<div class="group relative flex items-center p-4 bg-surface-container-lowest rounded-xxl border-2 border-primary-container transition-all cursor-pointer">
+<div class="h-14 w-14 rounded-xl overflow-hidden mr-4">
+<img class="h-full w-full object-cover" data-alt="Professional male dentist in white clinical coat with a warm friendly smile in a high-end modern medical office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBthC0hg2SLH88v_Tpw1Ql5iIS_ASKgFX_kyB95pqZDDAccSOv7hxOXjzy7h880SCwvPeMKHnSJ3FQalWHFNWsaf0szzzVMhPHhsKfOzXRN94CuGEV8cF3m1eoyHRxSP_HG5ZATLfs8ljqOzNBhn_ZY4wgXSx1ts3yQ1YX_1_bs4n-ct4V6TThtrlS1s3vEHuycrTSo9AWYb-9WLpPkvQzqwZzHq8CmLiGRSr3pjvNRBdNCo5qBaqyyJfbky-vJQ1bYJZkasowHtBA"/>
+</div>
+<div class="flex-1">
+<p class="font-bold text-on-surface">Dr. Julian Thorne</p>
+<p class="text-xs text-on-surface-variant">Orthodontics &amp; Aesthetics</p>
+</div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="group relative flex items-center p-4 bg-surface-container-low rounded-xxl border-2 border-transparent hover:border-outline-variant transition-all cursor-pointer">
+<div class="h-14 w-14 rounded-xl overflow-hidden mr-4 opacity-80">
+<img class="h-full w-full object-cover" data-alt="Professional female specialist in clinical uniform looking confident and caring in a well-lit medical studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyxZejb9WaLP685ekEkNp--b0iU-avfZxo7EFqeQWvlvRwWc0BKKNCNqOb7InNRR3LRPbZqFzNdIs3DOhipjD7EzspqiOehoGTgf_O_Tdy6lsi2dTZO3O6ZktiIQPuQFqLWQ0A84rK-MT7W0D-68LhyLE29kCnwVxjgLymnI4mJkSCKPHMT3H2XiJ9M7Fa6utS-WFcRCr_orqz19k0PDyRZDLE2AHWjuFsrwsYmEJWgJRjZpqINRbjxOGwcqbYs2GpQBYrCBX7aSu1"/>
+</div>
+<div class="flex-1">
+<p class="font-bold text-on-surface">Dr. Elena Vance</p>
+<p class="text-xs text-on-surface-variant">General Dentistry</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant">radio_button_unchecked</span>
+</div>
+</div>
+</section>
+<!-- Section: Date & Time -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">calendar_today</span>
+<h2 class="font-headline text-xl font-bold">Preferred Schedule</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs uppercase tracking-widest font-bold text-on-surface-variant ml-1">Date</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-surface-container-highest transition-colors text-on-surface font-medium" type="date" value="2024-11-24"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs uppercase tracking-widest font-bold text-on-surface-variant ml-1">Time Slot</label>
+<select class="w-full bg-surface-container-low border-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-surface-container-highest transition-colors text-on-surface font-medium appearance-none">
+<option>09:30 AM</option>
+<option selected="">10:45 AM</option>
+<option>02:15 PM</option>
+<option>04:00 PM</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Section: Motive -->
+<section class="space-y-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">edit_note</span>
+<h2 class="font-headline text-xl font-bold">Motive for Consultation</h2>
+</div>
+<textarea class="w-full bg-surface-container-low border-none rounded-xxl py-4 px-5 focus:ring-0 focus:bg-surface-container-highest transition-colors text-on-surface resize-none" placeholder="Please briefly describe your symptoms or the reason for your visit..." rows="4"></textarea>
+</section>
+</div>
+<!-- Side Summary Panel (Asymmetric Editorial Style) -->
+<div class="lg:col-span-5 sticky top-32">
+<div class="bg-white rounded-xxl p-8 shadow-2xl shadow-on-surface/5 border border-outline-variant/10 relative overflow-hidden">
+<!-- Subtle brand background element -->
+<div class="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-primary-fixed/20 rounded-full blur-3xl"></div>
+<h3 class="font-headline text-2xl font-bold mb-8">Booking Summary</h3>
+<div class="space-y-8 relative z-10">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-xs uppercase tracking-widest font-bold text-on-surface-variant mb-1">Patient</p>
+<p class="font-bold text-lg">Alex Rivers</p>
+<p class="text-sm text-on-surface-variant">+1 (555) 0123-4567</p>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary transition-colors">edit</span>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 p-3 bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-primary p-2 bg-white rounded-lg">event</span>
+<div>
+<p class="text-xs font-bold text-on-surface-variant">Date &amp; Time</p>
+<p class="font-semibold">Nov 24, 2024 — 10:45 AM</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-3 bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-primary p-2 bg-white rounded-lg">medication</span>
+<div>
+<p class="text-xs font-bold text-on-surface-variant">Service</p>
+<p class="font-semibold">Clinical Aesthetic Consultation</p>
+</div>
+</div>
+</div>
+<div class="pt-6 border-t border-outline-variant/30">
+<div class="flex items-center gap-2 mb-6">
+<div class="bg-green-100 text-green-700 p-1 rounded">
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.767 5.767 0 3.18 2.586 5.766 5.767 5.766 3.18 0 5.766-2.586 5.766-5.766 0-3.181-2.586-5.767-5.766-5.767zm0 10.511c-2.615 0-4.744-2.129-4.744-4.744 0-2.615 2.129-4.744 4.744-4.744 2.615 0 4.744 2.129 4.744 4.744 0 2.615-2.129 4.744-4.744 4.744zm5.031-10.741c.427 0 .773-.346.773-.773s-.346-.773-.773-.773-.773.346-.773.773.346.773.773.773zm-10.062 0c.427 0 .773-.346.773-.773s-.346-.773-.773-.773-.773.346-.773.773.346.773.773.773zm11.531 1.5c.346 0 .627-.281.627-.627s-.281-.627-.627-.627-.627.281-.627.627.281.627.627.627zm-13 0c.346 0 .627-.281.627-.627s-.281-.627-.627-.627-.627.281-.627.627.281.627.627.627zm11.469 11.5c.346 0 .627-.281.627-.627s-.281-.627-.627-.627-.627.281-.627.627.281.627.627.627zm-10 0c.346 0 .627-.281.627-.627s-.281-.627-.627-.627-.627.281-.627.627.281.627.627.627z"></path></svg>
+</div>
+<span class="text-xs text-on-surface-variant leading-tight">Confirmation and reminders will be sent via <span class="font-bold">WhatsApp</span>.</span>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container py-5 rounded-xl font-bold text-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20">
+                                Confirmar Turno
+                            </button>
+<p class="text-center mt-4 text-xs text-on-surface-variant">By confirming, you agree to our Terms of Clinical Service.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-stone-950 w-full py-12 px-8 border-t border-stone-800">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+<div class="space-y-4">
+<div class="font-headline font-bold text-stone-100 text-xl">The Clinical Atelier</div>
+<p class="text-stone-500 text-xs tracking-widest leading-relaxed">MODERN PRECISION. <br/>BESPOKE CLINICAL EXCELLENCE.</p>
+</div>
+<div>
+<h4 class="text-stone-300 font-bold mb-4 text-xs uppercase tracking-widest">Navigation</h4>
+<ul class="space-y-2 text-xs font-['Inter'] uppercase tracking-widest">
+<li><a class="text-stone-500 hover:text-stone-200 transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-stone-500 hover:text-stone-200 transition-colors" href="#">Terms of Service</a></li>
+<li><a class="text-stone-500 hover:text-stone-200 transition-colors" href="#">Accessibility</a></li>
+<li><a class="text-stone-500 hover:text-stone-200 transition-colors" href="#">Contact Us</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-stone-300 font-bold mb-4 text-xs uppercase tracking-widest">Location</h4>
+<p class="text-stone-500 text-xs tracking-widest leading-relaxed">
+                    Avenue of Arts 1250<br/>
+                    Medical District, London
+                </p>
+</div>
+<div class="flex flex-col justify-between">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-orange-500 cursor-pointer hover:opacity-80">share</span>
+<span class="material-symbols-outlined text-orange-500 cursor-pointer hover:opacity-80">mail</span>
+</div>
+<p class="text-stone-500 text-[10px] uppercase tracking-[0.2em] mt-8">© 2024 The Clinical Atelier. Modern Precision.</p>
+</div>
+</div>
+</footer>
+</body></html>

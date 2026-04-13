@@ -16,7 +16,7 @@ const AdminDashboard = () => {
   // ========================================================
   // EL CEREBRO MATEMÁTICO (Cálculos Dinámicos en Tiempo Real)
   // ========================================================
-  
+
   // A. Obtener la fecha de hoy exacta en formato YYYY-MM-DD
   const fechaHoy = new Date().toISOString().split('T')[0];
 
@@ -29,12 +29,12 @@ const AdminDashboard = () => {
   // D. Calcular Ingresos Estimados de Hoy
   const ticketPromedio = 37500;
   const calculoIngresos = (turnosHoy * ticketPromedio);
-  
+
   // Formateamos el número
-  const ingresosEstimadosTexto = calculoIngresos === 0 
-    ? "$0" 
-    : calculoIngresos > 999999 
-      ? `$${(calculoIngresos / 1000000).toFixed(1)}M` 
+  const ingresosEstimadosTexto = calculoIngresos === 0
+    ? "$0"
+    : calculoIngresos > 999999
+      ? `$${(calculoIngresos / 1000000).toFixed(1)}M`
       : `$${(calculoIngresos / 1000).toFixed(0)}k`;
 
   // Array de stats dinámico
@@ -51,11 +51,11 @@ const AdminDashboard = () => {
         setTurnos(respuesta.data);
       } catch (error) {
         console.error("Error al cargar los turnos:", error);
-        
+
         // EL GUARDIÁN: Si el backend dice 401 (Sin llave) o 403 (No es admin)...
         if (error.response?.status === 401 || error.response?.status === 403) {
           // ...lo expulsamos a la pantalla de login de inmediato.
-          navigate('/login'); 
+          navigate('/login');
         }
       } finally {
         setCargando(false);
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
 
     // Sincronización en tiempo real cada 10 segundos
     const interval = setInterval(() => {
-        obtenerTurnosDeBD();
+      obtenerTurnosDeBD();
     }, 10000);
 
     return () => clearInterval(interval);
@@ -84,7 +84,7 @@ const AdminDashboard = () => {
     const id = turno._id;
     try {
       await api.patch(`/turnos/${id}/estado`, { estado: 'Confirmado' });
-      setTurnos(prevTurnos => 
+      setTurnos(prevTurnos =>
         prevTurnos.map(t => t._id === id ? { ...t, estado: 'Confirmado' } : t)
       );
       showToast('¡Turno Confirmado! Guardado en la agenda oficial.', 'success');
@@ -93,24 +93,24 @@ const AdminDashboard = () => {
       let startTime = '090000';
       let endTime = '130000';
       if (turno.hora && turno.hora.includes('Tarde')) {
-          startTime = '160000';
-          endTime = '200000';
+        startTime = '160000';
+        endTime = '200000';
       }
-      
+
       const fechaLimpia = turno.fecha ? turno.fecha.replace(/-/g, '') : '';
-      const gcalLink = fechaLimpia 
-          ? `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Turno Odontológico: ' + turno.profesional)}&dates=${fechaLimpia}T${startTime}/${fechaLimpia}T${endTime}&details=${encodeURIComponent('Consulta por: ' + turno.motivo)}`
-          : '';
+      const gcalLink = fechaLimpia
+        ? `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Turno Odontológico: ' + turno.profesional)}&dates=${fechaLimpia}T${startTime}/${fechaLimpia}T${endTime}&details=${encodeURIComponent('Consulta por: ' + turno.motivo)}`
+        : '';
 
       // --- INTEGRACIÓN: Redirigir a WhatsApp al paciente ---
       const telefonoLimpio = turno.telefono ? turno.telefono.replace(/\D/g, '') : '';
       if (telefonoLimpio) {
-          const fechaLegible = turno.fecha ? turno.fecha.split('-').reverse().join('/') : '';
-          const mensaje = `Hola ${turno.nombrePaciente}, ¡tu turno ha sido confirmado! ✅\n\n🦷 *Profesional:* ${turno.profesional}\n📅 *Fecha:* ${fechaLegible}\n⏰ *Horario:* ${turno.hora}\n\nAgendalo en tu Google Calendar para no olvidarte:\n👉 ${gcalLink}\n\n¡Te esperamos!`;
-          const waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
-          window.open(waUrl, '_blank');
+        const fechaLegible = turno.fecha ? turno.fecha.split('-').reverse().join('/') : '';
+        const mensaje = `Hola ${turno.nombrePaciente}, ¡tu turno ha sido confirmado! ✅\n\n🦷 *Profesional:* ${turno.profesional}\n📅 *Fecha:* ${fechaLegible}\n⏰ *Horario:* ${turno.hora}\n\nAgendalo en tu Google Calendar para no olvidarte:\n👉 ${gcalLink}\n\n¡Te esperamos!`;
+        const waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+        window.open(waUrl, '_blank');
       } else {
-          showToast('Advertencia: El paciente no dejó un teléfono.', 'error');
+        showToast('Advertencia: El paciente no dejó un teléfono.', 'error');
       }
 
     } catch (error) {
@@ -121,7 +121,7 @@ const AdminDashboard = () => {
   const handleReject = async (id) => {
     try {
       await api.patch(`/turnos/${id}/estado`, { estado: 'Cancelado' });
-      setTurnos(prevTurnos => 
+      setTurnos(prevTurnos =>
         prevTurnos.map(turno => turno._id === id ? { ...turno, estado: 'Cancelado' } : turno)
       );
       showToast('Turno Rechazado y espacio liberado de la agenda.', 'error');
@@ -139,45 +139,45 @@ const AdminDashboard = () => {
   const handleConfirmEdit = async (e) => {
     e.preventDefault();
     if (!turnoAEditar) return;
-    
+
     try {
-      await api.patch(`/turnos/${turnoAEditar._id}/estado`, { 
+      await api.patch(`/turnos/${turnoAEditar._id}/estado`, {
         estado: 'Confirmado', // Lo validamos como confirmado oficialmente
-        fecha: editForm.fecha, 
-        hora: editForm.hora 
+        fecha: editForm.fecha,
+        hora: editForm.hora
       });
 
-      setTurnos(prevTurnos => 
+      setTurnos(prevTurnos =>
         prevTurnos.map(t => t._id === turnoAEditar._id ? { ...t, estado: 'Confirmado', fecha: editForm.fecha, hora: editForm.hora } : t)
       );
-      
+
       // --- INTEGRACIÓN: Generar Link de Google Calendar ---
       let startTime = '090000';
       let endTime = '130000';
       if (editForm.hora.includes(':')) {
-          const partes = editForm.hora.replace(/[^0-9:]/g, '').split(':');
-          if (partes.length >= 2) {
-              startTime = `${partes[0].padStart(2, '0')}${partes[1].padStart(2, '0')}00`;
-              const endH = (parseInt(partes[0]) + 1).toString().padStart(2, '0');
-              endTime = `${endH}${partes[1].padStart(2, '0')}00`;
-          }
+        const partes = editForm.hora.replace(/[^0-9:]/g, '').split(':');
+        if (partes.length >= 2) {
+          startTime = `${partes[0].padStart(2, '0')}${partes[1].padStart(2, '0')}00`;
+          const endH = (parseInt(partes[0]) + 1).toString().padStart(2, '0');
+          endTime = `${endH}${partes[1].padStart(2, '0')}00`;
+        }
       } else if (editForm.hora.includes('Tarde')) {
-          startTime = '160000';
-          endTime = '200000';
+        startTime = '160000';
+        endTime = '200000';
       }
-      
+
       const fechaLimpia = editForm.fecha ? editForm.fecha.replace(/-/g, '') : '';
-      const gcalLink = fechaLimpia 
-          ? `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Turno Odontológico: ' + turnoAEditar.profesional)}&dates=${fechaLimpia}T${startTime}/${fechaLimpia}T${endTime}&details=${encodeURIComponent('Consulta por: ' + turnoAEditar.motivo)}`
-          : '';
+      const gcalLink = fechaLimpia
+        ? `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Turno Odontológico: ' + turnoAEditar.profesional)}&dates=${fechaLimpia}T${startTime}/${fechaLimpia}T${endTime}&details=${encodeURIComponent('Consulta por: ' + turnoAEditar.motivo)}`
+        : '';
 
       // --- INTEGRACIÓN: Redirigir a WhatsApp al paciente ---
       const telefonoLimpio = turnoAEditar.telefono ? turnoAEditar.telefono.replace(/\D/g, '') : '';
       if (telefonoLimpio) {
-          const fechaLegible = editForm.fecha ? editForm.fecha.split('-').reverse().join('/') : '';
-          const mensaje = `Hola ${turnoAEditar.nombrePaciente}, ¡tu turno ha sido asignado y confirmado! ✅\n\n🦷 *Profesional:* ${turnoAEditar.profesional}\n📅 *Fecha:* ${fechaLegible}\n⏰ *Horario:* ${editForm.hora}\n\nAgendalo en tu Google Calendar para no olvidarte:\n👉 ${gcalLink}\n\n¡Te esperamos!`;
-          const waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
-          window.open(waUrl, '_blank');
+        const fechaLegible = editForm.fecha ? editForm.fecha.split('-').reverse().join('/') : '';
+        const mensaje = `Hola ${turnoAEditar.nombrePaciente}, ¡tu turno ha sido asignado y confirmado! ✅\n\n🦷 *Profesional:* ${turnoAEditar.profesional}\n📅 *Fecha:* ${fechaLegible}\n⏰ *Horario:* ${editForm.hora}\n\nAgendalo en tu Google Calendar para no olvidarte:\n👉 ${gcalLink}\n\n¡Te esperamos!`;
+        const waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+        window.open(waUrl, '_blank');
       }
 
       showToast(`Turno confirmado para el ${editForm.fecha} a las ${editForm.hora}.`, 'success');
@@ -273,42 +273,42 @@ const AdminDashboard = () => {
                     // y mostrar turnos confirmados/atendidos desde HOY en adelante
                     if (turno.estado === 'Pendiente') return true;
                     return turno.fecha >= fechaHoy;
-                  }) 
+                  })
                   .map((turno) => (
-                  <tr key={turno._id} className="border-b border-secondary/20 hover:bg-secondary/10 transition-colors group">
-                    <td className="px-6 py-5 font-black text-primary text-lg">{turno.hora}</td>
-                    <td className="px-6 py-5 font-bold text-text text-base">{turno.nombrePaciente} {turno.apellidoPaciente}</td>
-                    <td className="px-6 py-5 font-semibold text-text-light text-sm">{turno.profesional}</td>
-                    <td className="px-6 py-5 text-text-light text-sm">{turno.motivo}</td>
-                    <td className="px-6 py-5">
-                      <span className={`inline-block px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider
+                    <tr key={turno._id} className="border-b border-secondary/20 hover:bg-secondary/10 transition-colors group">
+                      <td className="px-6 py-5 font-black text-primary text-lg">{turno.hora}</td>
+                      <td className="px-6 py-5 font-bold text-text text-base">{turno.nombrePaciente} {turno.apellidoPaciente}</td>
+                      <td className="px-6 py-5 font-semibold text-text-light text-sm">{turno.profesional}</td>
+                      <td className="px-6 py-5 text-text-light text-sm">{turno.motivo}</td>
+                      <td className="px-6 py-5">
+                        <span className={`inline-block px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider
                         ${turno.estado === 'Confirmado' ? 'bg-green-100 text-green-700 border border-green-200' :
-                          turno.estado === 'Cancelado' ? 'bg-red-100 text-red-700 border border-red-200' :
-                            'bg-yellow-100 text-yellow-700 border border-yellow-200 shadow-inner'}`}>
-                        {turno.estado}
-                      </span>
-                    </td>
+                            turno.estado === 'Cancelado' ? 'bg-red-100 text-red-700 border border-red-200' :
+                              'bg-yellow-100 text-yellow-700 border border-yellow-200 shadow-inner'}`}>
+                          {turno.estado}
+                        </span>
+                      </td>
 
-                    {/* FUNCIONALIDAD DE BOTONES QUE ALTERA EL ESTADO (y lanza las alertas) */}
-                    <td className="px-6 py-5 text-right">
-                      <div className="flex items-center justify-end gap-3 opacity-90 group-hover:opacity-100 transition-opacity">
-                        {turno.estado !== 'Confirmado' && (
-                          <button onClick={() => handleApprove(turno)} className="text-green-600 bg-green-50 hover:bg-green-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Aprobar Turno y Notificar">
-                            <FaCheckCircle className="text-xl" />
+                      {/* FUNCIONALIDAD DE BOTONES QUE ALTERA EL ESTADO (y lanza las alertas) */}
+                      <td className="px-6 py-5 text-right">
+                        <div className="flex items-center justify-end gap-3 opacity-90 group-hover:opacity-100 transition-opacity">
+                          {turno.estado !== 'Confirmado' && (
+                            <button onClick={() => handleApprove(turno)} className="text-green-600 bg-green-50 hover:bg-green-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Aprobar Turno y Notificar">
+                              <FaCheckCircle className="text-xl" />
+                            </button>
+                          )}
+                          {turno.estado !== 'Cancelado' && (
+                            <button onClick={() => handleReject(turno._id)} className="text-red-500 bg-red-50 hover:bg-red-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Rechazar Turno">
+                              <FaTimesCircle className="text-xl" />
+                            </button>
+                          )}
+                          <button onClick={() => abrirModalEdicion(turno)} className="text-primary bg-secondary/30 hover:bg-secondary/50 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Reagendar (Feha y Hora)">
+                            <FaPen className="text-xl" />
                           </button>
-                        )}
-                        {turno.estado !== 'Cancelado' && (
-                          <button onClick={() => handleReject(turno._id)} className="text-red-500 bg-red-50 hover:bg-red-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Rechazar Turno">
-                            <FaTimesCircle className="text-xl" />
-                          </button>
-                        )}
-                        <button onClick={() => abrirModalEdicion(turno)} className="text-primary bg-secondary/30 hover:bg-secondary/50 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Reagendar (Feha y Hora)">
-                          <FaPen className="text-xl" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -322,10 +322,10 @@ const AdminDashboard = () => {
       {modalEditOpen && turnoAEditar && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
           <div className="bg-white rounded-4xl w-full max-w-md overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative border border-secondary/30" data-aos="zoom-in" data-aos-duration="300">
-            
+
             {/* Cabecera del modal */}
             <div className="bg-primary px-8 pt-8 pb-6 text-white relative">
-              <button 
+              <button
                 onClick={() => setModalEditOpen(false)}
                 className="absolute top-5 right-5 text-white/50 hover:text-accent-orange transition-colors"
                 aria-label="Cerrar modal"
@@ -353,11 +353,11 @@ const AdminDashboard = () => {
                 <label className="text-xs font-black text-primary uppercase tracking-widest flex items-center gap-2">
                   <FaCalendarDay className="text-accent-orange" /> Fecha de Atención
                 </label>
-                <input 
-                  type="date" 
+                <input
+                  type="date"
                   required
                   value={editForm.fecha}
-                  onChange={(e) => setEditForm({...editForm, fecha: e.target.value})}
+                  onChange={(e) => setEditForm({ ...editForm, fecha: e.target.value })}
                   className="w-full px-4 py-3.5 bg-secondary/10 border-2 border-secondary/40 rounded-xl font-bold text-primary focus:border-accent-orange focus:bg-white outline-none transition-all shadow-inner"
                 />
               </div>
@@ -366,10 +366,10 @@ const AdminDashboard = () => {
                 <label className="text-xs font-black text-primary uppercase tracking-widest flex items-center gap-2">
                   <FaUserClock className="text-accent-orange" /> Horario Exacto
                 </label>
-                <select 
+                <select
                   required
                   value={editForm.hora}
-                  onChange={(e) => setEditForm({...editForm, hora: e.target.value})}
+                  onChange={(e) => setEditForm({ ...editForm, hora: e.target.value })}
                   className="w-full px-4 py-3.5 bg-secondary/10 border-2 border-secondary/40 rounded-xl font-bold text-primary focus:border-accent-orange focus:bg-white outline-none transition-all shadow-inner appearance-none cursor-pointer"
                 >
                   <option value="" disabled>Seleccionar un horario preciso...</option>
@@ -397,21 +397,21 @@ const AdminDashboard = () => {
                   </optgroup>
                 </select>
                 <div className="absolute right-4 top-[38px] pointer-events-none text-primary/60">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
               </div>
 
               {/* Botones */}
               <div className="pt-4 flex gap-3">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={() => setModalEditOpen(false)}
                   className="flex-1 py-4 px-4 rounded-xl border border-secondary-dark text-text-light font-black uppercase text-sm hover:bg-secondary/30 transition-colors"
                 >
                   Cancelar
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="flex-1 py-4 px-4 rounded-xl bg-accent-orange text-white font-black uppercase text-sm shadow-lg shadow-accent-orange/30 hover:scale-[1.03] active:scale-[0.98] transition-all flex justify-center items-center gap-2"
                 >
                   <FaCheckCircle className="text-lg" /> Asignar y Confirmar Turno

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reserva de Turnos | ODONTO_LAB</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#e5e2e1",
+                        "secondary-container": "#74390d",
+                        "inverse-on-surface": "#313030",
+                        "on-secondary-fixed": "#321200",
+                        "primary-fixed-dim": "#ffb68b",
+                        "on-primary": "#522300",
+                        "on-primary-fixed": "#321200",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary-container": "#5c2800",
+                        "error-container": "#93000a",
+                        "on-tertiary-container": "#003a5c",
+                        "on-tertiary": "#003352",
+                        "tertiary-fixed-dim": "#95ccff",
+                        "secondary": "#ffb68b",
+                        "surface-variant": "#353534",
+                        "outline-variant": "#584235",
+                        "on-error-container": "#ffdad6",
+                        "outline": "#a78b7c",
+                        "inverse-primary": "#994700",
+                        "primary": "#ffb68b",
+                        "on-surface-variant": "#e0c0af",
+                        "surface-container": "#201f1f",
+                        "on-surface": "#e5e2e1",
+                        "background": "#131313",
+                        "on-secondary-fixed-variant": "#71370b",
+                        "on-secondary": "#522300",
+                        "surface-bright": "#3a3939",
+                        "surface-tint": "#ffb68b",
+                        "surface-container-high": "#2a2a2a",
+                        "primary-fixed": "#ffdbc8",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-tertiary-fixed": "#001d32",
+                        "error": "#ffb4ab",
+                        "tertiary-container": "#00a8ff",
+                        "on-primary-fixed-variant": "#753400",
+                        "tertiary-fixed": "#cde5ff",
+                        "surface-dim": "#131313",
+                        "on-error": "#690005",
+                        "tertiary": "#95ccff",
+                        "secondary-fixed": "#ffdbc8",
+                        "on-tertiary-fixed-variant": "#004a75",
+                        "surface-container-highest": "#353534",
+                        "primary-container": "#ff7a00",
+                        "on-secondary-container": "#f9a571",
+                        "surface-container-low": "#1c1b1b",
+                        "surface": "#131313",
+                        "secondary-fixed-dim": "#ffb68b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(42, 42, 42, 0.4);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="bg-[#131313] w-full top-0 border-b border-[#2A2A2A] flex justify-between items-center px-6 h-16 z-50">
+<div class="flex items-center gap-8">
+<span class="text-xl font-black tracking-tighter text-orange-500">ODONTO_LAB</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-[#E0C0AF] hover:text-white transition-colors font-inter tracking-tight" href="#">Dashboard</a>
+<a class="text-[#E0C0AF] hover:text-white transition-colors font-inter tracking-tight" href="#">Agenda</a>
+<a class="text-[#E0C0AF] hover:text-white transition-colors font-inter tracking-tight" href="#">Pacientes</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex bg-surface-container-low px-3 py-1.5 rounded border border-[#2A2A2A] items-center gap-2">
+<span class="material-symbols-outlined text-sm text-on-surface-variant">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-32" placeholder="Buscar..." type="text"/>
+</div>
+<button class="text-[#E0C0AF] hover:text-white transition-colors p-1.5 rounded-full scale-95 active:duration-100">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-[#E0C0AF] hover:text-white transition-colors p-1.5 rounded-full scale-95 active:duration-100">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-orange-500/30">
+<img alt="User Profile" data-alt="close-up portrait of a professional male doctor in a dark modern clinic setting with subtle orange lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsTKRFWhXDGvHIwfMa2MJhWEqtL9c7EIIIQY0bqqk0_w-P1MXswWjRXq_J7xNUD_YCtEzSbz-1An8fCsogGtUoKbY698xuwdUw7mAifK-5I00gNEQehqWzju8_SwVk1giJVzBqEoIdOrDTm24GYGNQYMD0WEGgJH7VhMT9NA0eC33pwiPdTJpWzVbs_6ljTpvwSB_5VJoI23-WN2gCXu30Q0CBWnNj0UQLwot8XskWKaL8eR2YxDME0Wl7LKEzErm16tJ-3OgGYdk3"/>
+</div>
+</div>
+</header>
+<!-- Main Content centered -->
+<div class="flex-1 overflow-y-auto bg-surface-dim p-6 md:p-12">
+<main class="max-w-3xl mx-auto w-full">
+<div class="mb-12 text-center">
+<h1 class="text-4xl md:text-5xl font-black tracking-tight text-on-surface mb-3 uppercase">Solicitud de Turno Online</h1>
+<p class="text-on-surface-variant font-medium tracking-wide">Complete el formulario para coordinar su próxima visita</p>
+</div>
+<!-- Form Section -->
+<div class="space-y-8">
+<!-- Section 1: DATOS PERSONALES -->
+<section class="bg-surface-container-low rounded-xl p-8 border-l-4 border-orange-500 shadow-2xl">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">person</span>
+<h2 class="text-xl font-bold tracking-tight uppercase">Datos Personales</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Nombre</label>
+<input class="w-full bg-surface-container-high border-none border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface rounded px-4 py-3.5 transition-all duration-300" placeholder="Ej. Juan" type="text"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Apellido</label>
+<input class="w-full bg-surface-container-high border-none border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface rounded px-4 py-3.5 transition-all duration-300" placeholder="Ej. Pérez" type="text"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Documento (DNI)</label>
+<input class="w-full bg-surface-container-high border-none border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface rounded px-4 py-3.5 transition-all duration-300" placeholder="Ej. 34.567.890" type="number"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Correo Electrónico</label>
+<input class="w-full bg-surface-container-high border-none border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface rounded px-4 py-3.5 transition-all duration-300" placeholder="juan@ejemplo.com" type="email"/>
+</div>
+<div class="md:col-span-2 space-y-1.5">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Teléfono / WhatsApp</label>
+<div class="flex">
+<div class="bg-surface-container-highest px-4 py-3.5 rounded-l border-r border-[#2A2A2A] text-on-surface-variant text-sm flex items-center">
+                                    +54
+                                </div>
+<input class="w-full bg-surface-container-high border-none border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface rounded-r px-4 py-3.5 transition-all duration-300" placeholder="11 2345-6789" type="tel"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: DETALLES DE LA CONSULTA -->
+<section class="bg-surface-container-low rounded-xl p-8 border-l-4 border-tertiary-container shadow-2xl">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-tertiary text-3xl">medical_information</span>
+<h2 class="text-xl font-bold tracking-tight uppercase">Detalles de la Consulta</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Especialista Preferido</label>
+<select class="w-full bg-surface-container-high border-none border-b border-outline-variant focus:border-tertiary focus:ring-0 text-on-surface rounded px-4 py-3.5 transition-all duration-300 appearance-none">
+<option value="">Seleccionar profesional...</option>
+<option>Dra. Elena Martínez (Ortodoncia)</option>
+<option>Dr. Marcos Silva (Implantes)</option>
+<option>Dra. Sofía Ricci (Estética)</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Día Tentativo</label>
+<input class="w-full bg-surface-container-high border-none border-b border-outline-variant focus:border-tertiary focus:ring-0 text-on-surface rounded px-4 py-3.5 transition-all duration-300" type="date"/>
+</div>
+<div class="md:col-span-2 space-y-1.5">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Franja Horaria</label>
+<div class="grid grid-cols-3 gap-4">
+<button class="flex flex-col items-center justify-center py-5 bg-surface-container-high rounded-lg hover:bg-surface-container-highest border border-transparent hover:border-tertiary-container transition-all group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-tertiary mb-1">light_mode</span>
+<span class="text-xs font-bold uppercase tracking-tighter">Mañana</span>
+</button>
+<button class="flex flex-col items-center justify-center py-5 bg-[#131313] rounded-lg border border-tertiary-container group">
+<span class="material-symbols-outlined text-tertiary mb-1">sunny</span>
+<span class="text-xs font-bold uppercase tracking-tighter text-tertiary">Tarde</span>
+</button>
+<button class="flex flex-col items-center justify-center py-5 bg-surface-container-high rounded-lg hover:bg-surface-container-highest border border-transparent hover:border-tertiary-container transition-all group">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-tertiary mb-1">dark_mode</span>
+<span class="text-xs font-bold uppercase tracking-tighter">Noche</span>
+</button>
+</div>
+</div>
+<div class="md:col-span-2 space-y-1.5">
+<label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest ml-1">Motivo de la Consulta</label>
+<textarea class="w-full bg-surface-container-high border-none border-b border-outline-variant focus:border-tertiary focus:ring-0 text-on-surface rounded px-4 py-3.5 transition-all duration-300 resize-none" placeholder="Describa brevemente su síntoma o tratamiento deseado..." rows="4"></textarea>
+</div>
+</div>
+</section>
+<div class="flex flex-col gap-5 pt-4">
+<button class="w-full py-6 bg-[#FF7A00] text-black font-black text-2xl tracking-tighter rounded-xl hover:shadow-[0_0_30px_rgba(255,122,0,0.4)] transform active:scale-[0.99] transition-all flex items-center justify-center gap-4">
+<span class="material-symbols-outlined font-black text-3xl">check_circle</span>
+                        CONFIRMAR TURNO
+                    </button>
+<p class="text-center text-on-surface-variant text-sm font-medium italic">
+                        Al enviar, se abrirá WhatsApp para finalizar la reserva con el equipo de atención.
+                    </p>
+</div>
+</div>
+<footer class="mt-16 pb-12 text-center">
+<p class="text-[10px] text-on-surface-variant uppercase tracking-[0.3em] font-bold mb-4">Odonto_Lab Management Systems</p>
+<div class="flex justify-center gap-6 text-on-surface-variant">
+<span class="material-symbols-outlined text-lg cursor-pointer hover:text-white transition-colors">info</span>
+<span class="material-symbols-outlined text-lg cursor-pointer hover:text-white transition-colors">policy</span>
+<span class="material-symbols-outlined text-lg cursor-pointer hover:text-white transition-colors">contact_support</span>
+</div>
+</footer>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<footer class="md:hidden bg-[#131313] h-16 flex justify-around items-center px-4 fixed bottom-0 w-full z-50 border-t border-[#2A2A2A]">
+<button class="flex flex-col items-center gap-1 text-[#E0C0AF]">
+<span class="material-symbols-outlined text-xl">home</span>
+<span class="text-[10px] font-medium">Inicio</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-orange-500">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="text-[10px] font-bold">Turnos</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#E0C0AF]">
+<span class="material-symbols-outlined text-xl">person</span>
+<span class="text-[10px] font-medium">Perfil</span>
+</button>
+</footer>
+</body></html>

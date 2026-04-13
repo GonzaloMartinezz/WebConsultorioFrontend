@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
+import NeoOdontograma from '../../components/common/NeoOdontograma.jsx';
 import api from '../../api/axios.js';
 import {
   FaArrowLeft, FaSave, FaTooth, FaUserInjured, FaCalendarCheck,
@@ -8,24 +9,9 @@ import {
 } from 'react-icons/fa';
 
 // =============================================
-// NUMERACIÓN FDI - DIENTES ADULTOS
-// =============================================
-const topRow = [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28];
-const bottomRow = [48, 47, 46, 45, 44, 43, 42, 41, 31, 32, 33, 34, 35, 36, 37, 38];
-
-// =============================================
 // CONFIGURACIÓN DE ESTADOS DENTALES
 // =============================================
-const ESTADOS_DIENTE = {
-  sano:       { label: 'Sano',       color: 'text-[#f0f0f0]', legendColor: 'bg-gray-200 border-gray-300' },
-  caries:     { label: 'Caries',     color: 'text-red-400',   legendColor: 'bg-red-500 border-red-600' },
-  obturacion: { label: 'Obturación', color: 'text-blue-400',  legendColor: 'bg-blue-500 border-blue-600' },
-  ausente:    { label: 'Ausente',    color: 'text-secondary/30', legendColor: 'bg-gray-400 border-gray-500' },
-  implante:   { label: 'Implante',   color: 'text-emerald-500', legendColor: 'bg-emerald-500 border-emerald-600' },
-  endodoncia: { label: 'Endodoncia', color: 'text-purple-400',  legendColor: 'bg-purple-500 border-purple-600' },
-};
-
-const CICLO_ESTADOS = ['sano', 'caries', 'obturacion', 'ausente', 'implante', 'endodoncia'];
+// Ya no usados en esta pantalla porque se delegan a NeoOdontograma
 
 const AdminFichaPaciente = () => {
   const { id } = useParams();
@@ -81,29 +67,13 @@ const AdminFichaPaciente = () => {
     cargarFichaCompleta();
   }, [id]);
 
-  // =============================================
-  // ODONTOGRAMA: Click en diente (ciclo de estados)
-  // =============================================
-  const manejarClickDiente = (numeroDiente) => {
-    const estadoActual = dientes[numeroDiente] || 'sano';
-    const indexActual = CICLO_ESTADOS.indexOf(estadoActual);
-    const siguienteIndex = (indexActual + 1) % CICLO_ESTADOS.length;
-    const nuevoEstado = CICLO_ESTADOS[siguienteIndex];
-
-    setDientes(prev => ({
-      ...prev,
-      [numeroDiente]: nuevoEstado
-    }));
-  };
-
-  const resetearOdontograma = () => {
-    setDientes({});
-  };
+  const [guardando, setGuardando] = useState(false);
 
   // =============================================
   // GUARDAR TODO
   // =============================================
   const handleGuardarFicha = async () => {
+    setGuardando(true);
     try {
       // Convertir mapa de dientes a array para el backend
       const odontogramaArray = Object.entries(dientes)
@@ -120,75 +90,10 @@ const AdminFichaPaciente = () => {
       window.location.reload();
     } catch (error) {
       alert('Hubo un error al guardar');
+    } finally {
+      setGuardando(false);
     }
   };
-
-  // =============================================
-  // COMPONENTE VISUAL DE DIENTE (idéntico al avanzado)
-  // =============================================
-  const DienteVisual = ({ number }) => {
-    const estado = dientes[number] || 'sano';
-    const config = ESTADOS_DIENTE[estado];
-
-    return (
-      <div
-        className="flex flex-col items-center gap-1 group cursor-pointer hover:scale-110 transition-transform active:scale-95"
-        onClick={() => manejarClickDiente(number)}
-        title={`Diente ${number}: ${config.label} — Click para cambiar`}
-      >
-        <span className="text-[10px] font-black text-text-light group-hover:text-primary transition-colors">
-          {number}
-        </span>
-
-        <div className="relative w-10 h-14 flex items-center justify-center">
-          <FaTooth
-            className={`w-8 h-10 transition-colors duration-200 ${config.color} ${estado === 'ausente' ? 'opacity-30' : 'drop-shadow-md'}`}
-            style={{ strokeWidth: '15', stroke: '#cbd5e1' }}
-          />
-
-          {estado === 'ausente' && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-red-500 font-bold text-3xl select-none rotate-12 opacity-60">X</span>
-            </div>
-          )}
-          {estado === 'caries' && (
-            <div className="absolute w-3 h-3 bg-red-500 rounded-full top-[40%] right-[30%] shadow-sm border border-white animate-pulse"></div>
-          )}
-          {estado === 'obturacion' && (
-            <div className="absolute w-4 h-3 bg-blue-500 rounded-sm top-[38%] left-1/2 -translate-x-1/2 border border-white shadow-sm"></div>
-          )}
-          {estado === 'implante' && (
-            <div className="absolute w-4 h-2 bg-emerald-600 border border-white top-[45%] left-1/2 -translate-x-1/2 shadow-sm rounded-sm"></div>
-          )}
-          {estado === 'endodoncia' && (
-            <div className="absolute w-1 h-5 bg-purple-500 bottom-[10%] left-1/2 -translate-x-1/2 rounded-full"></div>
-          )}
-        </div>
-
-        {/* Grid clínico de superficies (5 caras) */}
-        <div className="w-5 h-5 grid grid-cols-3 grid-rows-3 gap-px bg-secondary p-px mt-1 opacity-40 group-hover:opacity-100 transition-opacity">
-          <div className="bg-white col-start-2"></div>
-          <div className="bg-white col-start-1 row-start-2"></div>
-          <div className={`col-start-2 row-start-2 ${estado !== 'sano' ? 'bg-current' : 'bg-white'}`} style={{ color: estado === 'caries' ? '#ef4444' : estado === 'obturacion' ? '#3b82f6' : 'white' }}></div>
-          <div className="bg-white col-start-3 row-start-2"></div>
-          <div className="bg-white col-start-2 row-start-3"></div>
-        </div>
-      </div>
-    );
-  };
-
-  // Contar dientes por estado
-  const contarEstados = () => {
-    const conteo = {};
-    CICLO_ESTADOS.forEach(e => { conteo[e] = 0; });
-    Object.values(dientes).forEach(estado => {
-      conteo[estado] = (conteo[estado] || 0) + 1;
-    });
-    conteo.sano = 32 - Object.values(dientes).filter(e => e !== 'sano').length;
-    return conteo;
-  };
-
-  const conteo = contarEstados();
 
   if (cargando) return <LayoutAdmin><div className="flex flex-col items-center justify-center py-32 gap-4"><FaSpinner className="text-5xl text-accent-orange animate-spin" /><p className="text-text-light font-bold text-sm uppercase tracking-wider">Cargando legajo médico...</p></div></LayoutAdmin>;
 
@@ -199,8 +104,8 @@ const AdminFichaPaciente = () => {
         <Link to="/admin/lista-pacientes" className="flex items-center gap-2 text-text-light font-bold hover:text-primary transition-colors">
           <FaArrowLeft /> Volver al Directorio
         </Link>
-        <button onClick={handleGuardarFicha} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-xl font-black shadow-lg flex items-center gap-2 transition-all">
-          <FaSave /> Guardar Toda la Ficha
+        <button onClick={handleGuardarFicha} disabled={guardando} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-xl font-black shadow-lg flex items-center gap-2 transition-all disabled:opacity-50">
+          <FaSave /> {guardando ? 'Guardando...' : 'Guardar Toda la Ficha'}
         </button>
       </div>
 
@@ -267,80 +172,18 @@ const AdminFichaPaciente = () => {
       </div>
 
       {/* ========== 3. ODONTOGRAMA INTERACTIVO AVANZADO ========== */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-secondary/40 mb-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-          <div>
-            <h2 className="text-xl font-black text-primary flex items-center gap-2">
-              <FaTooth /> Odontograma Interactivo
-            </h2>
-            <p className="text-sm text-text-light mt-1">
-              Cada clic avanza el estado: <strong>Sano → Caries → Obturación → Ausente → Implante → Endodoncia</strong>
-            </p>
-          </div>
-          <button onClick={resetearOdontograma} className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold border border-secondary hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-all">
-            <FaUndo /> Resetear
-          </button>
-        </div>
-
-        {/* Leyenda */}
-        <div className="flex flex-wrap gap-2 items-center mb-6 bg-background/50 p-3 rounded-xl border border-secondary/30">
-          <span className="text-xs font-black text-text-light uppercase tracking-wider mr-2">Leyenda:</span>
-          {CICLO_ESTADOS.map(estado => (
-            <div key={estado} className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg">
-              <div className={`w-3 h-3 rounded-full border ${ESTADOS_DIENTE[estado].legendColor}`}></div>
-              {ESTADOS_DIENTE[estado].label}
-            </div>
-          ))}
-        </div>
-
-        {/* Resumen rápido */}
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-6">
-          {CICLO_ESTADOS.map(estado => (
-            <div key={estado} className="bg-background/50 rounded-xl p-3 text-center border border-secondary/30">
-              <p className="text-2xl font-black text-primary">{conteo[estado]}</p>
-              <p className="text-[10px] font-bold text-text-light uppercase tracking-wider">{ESTADOS_DIENTE[estado].label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Mapa dental con ambas arcadas */}
-        <div className="bg-background/30 rounded-2xl p-6 lg:p-10 overflow-x-auto custom-scrollbar">
-          <div className="min-w-[750px] flex flex-col items-center gap-10 relative">
-            {/* Líneas divisorias */}
-            <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-secondary/30"></div>
-            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-secondary/30"></div>
-
-            {/* Cuadrante labels */}
-            <div className="absolute top-2 left-4 text-[10px] font-black text-primary/30 uppercase">Q1</div>
-            <div className="absolute top-2 right-4 text-[10px] font-black text-primary/30 uppercase">Q2</div>
-            <div className="absolute bottom-2 left-4 text-[10px] font-black text-primary/30 uppercase">Q4</div>
-            <div className="absolute bottom-2 right-4 text-[10px] font-black text-primary/30 uppercase">Q3</div>
-
-            {/* Arcada Superior */}
-            <div>
-              <p className="text-[10px] font-black text-center text-text-light uppercase tracking-widest mb-3">Arcada Superior</p>
-              <div className="flex justify-center gap-1 sm:gap-2">
-                {topRow.map(tooth => <DienteVisual key={tooth} number={tooth} />)}
-              </div>
-            </div>
-
-            {/* Arcada Inferior */}
-            <div>
-              <div className="flex justify-center gap-1 sm:gap-2">
-                {bottomRow.map(tooth => <DienteVisual key={tooth} number={tooth} />)}
-              </div>
-              <p className="text-[10px] font-black text-center text-text-light uppercase tracking-widest mt-3">Arcada Inferior</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Nota informativa */}
-        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-4 flex items-start gap-3 mt-6">
-          <FaInfoCircle className="text-blue-500 text-lg mt-0.5 shrink-0" />
-          <p className="text-xs text-blue-800/80 leading-relaxed font-medium">
-            Se utiliza la nomenclatura <strong>FDI</strong> (Federación Dental Internacional). Los cambios se guardan al presionar "Guardar Toda la Ficha".
-          </p>
-        </div>
+      <div className="bg-white rounded-3xl p-6 shadow-sm border border-secondary/40 mb-8">
+        <h2 className="text-xl font-black text-primary mb-5 flex items-center gap-2">
+          <FaTooth /> Odontograma Interactivo Avanzado
+        </h2>
+        <NeoOdontograma 
+          dientes={dientes || {}} 
+          setDientes={setDientes} 
+          pacienteNombre={`${paciente?.nombre || 'Doc.'} ${paciente?.apellido || 'Ficticio'}`} 
+          patientId={id ? id.substring(Math.max(0, id.length - 6)).toUpperCase() : '0000'}
+          onSave={handleGuardarFicha}
+          isSaving={guardando}
+        />
       </div>
 
       {/* ========== 4. HISTORIAL DE CONSULTAS ========== */}

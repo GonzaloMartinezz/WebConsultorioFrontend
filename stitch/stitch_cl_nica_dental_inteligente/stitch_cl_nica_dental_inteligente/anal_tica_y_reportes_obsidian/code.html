@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clinical Analytics | Obsidian Core</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#cde5ff",
+                    "on-background": "#e5e2e1",
+                    "tertiary-fixed-dim": "#95ccff",
+                    "on-primary": "#522300",
+                    "surface-container": "#201f1f",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-surface": "#e5e2e1",
+                    "on-secondary-fixed-variant": "#71370b",
+                    "secondary-fixed-dim": "#ffb68b",
+                    "outline": "#a78b7c",
+                    "on-tertiary-fixed": "#001d32",
+                    "on-error": "#690005",
+                    "surface-container-low": "#1c1b1b",
+                    "on-primary-fixed": "#321200",
+                    "on-tertiary-fixed-variant": "#004a75",
+                    "secondary-container": "#74390d",
+                    "surface-dim": "#131313",
+                    "on-primary-fixed-variant": "#753400",
+                    "error": "#ffb4ab",
+                    "primary-fixed": "#ffdbc8",
+                    "on-surface-variant": "#e0c0af",
+                    "surface-variant": "#353534",
+                    "primary-fixed-dim": "#ffb68b",
+                    "primary": "#ffb68b",
+                    "surface-tint": "#ffb68b",
+                    "on-primary-container": "#5c2800",
+                    "outline-variant": "#584235",
+                    "on-secondary-fixed": "#321200",
+                    "inverse-primary": "#994700",
+                    "inverse-on-surface": "#313030",
+                    "surface-container-high": "#2a2a2a",
+                    "on-tertiary": "#003352",
+                    "on-secondary": "#522300",
+                    "on-secondary-container": "#f9a571",
+                    "on-error-container": "#ffdad6",
+                    "inverse-surface": "#e5e2e1",
+                    "tertiary": "#95ccff",
+                    "secondary": "#ffb68b",
+                    "error-container": "#93000a",
+                    "on-tertiary-container": "#003a5c",
+                    "surface-container-highest": "#353534",
+                    "secondary-fixed": "#ffdbc8",
+                    "background": "#131313",
+                    "tertiary-container": "#00a8ff",
+                    "surface": "#131313",
+                    "surface-bright": "#3a3939",
+                    "primary-container": "#ff7a00"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #131313; font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass { background: rgba(19, 19, 19, 0.8); backdrop-filter: blur(20px); }
+        .chart-glow-amber { filter: drop-shadow(0 0 8px rgba(255, 122, 0, 0.3)); }
+        .chart-glow-blue { filter: drop-shadow(0 0 8px rgba(0, 168, 255, 0.3)); }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl flex justify-between items-center px-6 h-16 w-full shadow-[0px_24px_48px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-8">
+<span class="text-xl font-black tracking-tighter text-[#E5E2E1]">Obsidian Core</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-[#E0C0AF] hover:text-[#E5E2E1] font-['Inter'] tracking-tight transition-colors duration-200" href="#">Clinical Overview</a>
+<a class="text-orange-500 font-bold border-b-2 border-orange-500 pb-1 font-['Inter'] tracking-tight" href="#">Analytics</a>
+<a class="text-[#E0C0AF] hover:text-[#E5E2E1] font-['Inter'] tracking-tight transition-colors duration-200" href="#">Inventory</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-[#2A2A2A] transition-colors duration-200 rounded-lg text-[#E0C0AF]">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 hover:bg-[#2A2A2A] transition-colors duration-200 rounded-lg text-[#E0C0AF]">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-container-high border border-outline-variant/30 flex items-center justify-center overflow-hidden">
+<img alt="Chief Dental Surgeon Profile" data-alt="close-up portrait of a professional male doctor in high-tech medical environment with clean minimal lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFw6fl5RHM7DRurtJ0Ps8AIN4gQPaki3HVlrJWmFF9FRuaJXxU4_28R5Mj3yZodWdIjVVMKGYivFUU6PgTz8kvCS1VxA4HOXG8p2dT68vbRxeYu9CtNoBo5I_nLJdmt9qoD55LV5dMI-Jcr_FSN1H-WCP4x7LA2-vvVHRphhHGyOxzOM_9N1FB2zK0dhTwF4nuA79zg5n1sZLnlddSXUdBJVQ0ajGwVOMIYOc8jDP9YA8qVveaDdseeIG-0LAFPOzFinfiSZcvA096"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-[#0E0E0E] flex flex-col pt-20 pb-6 px-4 border-r border-[#353534]/15">
+<div class="mb-8 px-2">
+<h2 class="text-lg font-bold text-orange-500">Obsidian Dental</h2>
+<p class="text-xs text-on-surface-variant/60 font-medium">Precision Suite</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#E0C0AF] hover:bg-[#131313] hover:text-[#E5E2E1] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span> Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#E0C0AF] hover:bg-[#131313] hover:text-[#E5E2E1] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">medical_services</span> Clinical
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#E0C0AF] hover:bg-[#131313] hover:text-[#E5E2E1] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">group</span> Patients
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#E0C0AF] hover:bg-[#131313] hover:text-[#E5E2E1] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">calendar_today</span> Schedule
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#E0C0AF] hover:bg-[#131313] hover:text-[#E5E2E1] transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">payments</span> Finance
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-[#2A2A2A] text-orange-500 border-r-4 border-orange-500 transition-all duration-200 ease-in-out font-['Inter'] text-sm font-medium" href="#">
+<span class="material-symbols-outlined">analytics</span> Analytics
+            </a>
+</nav>
+<div class="mt-auto space-y-4">
+<button class="w-full py-2 bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed font-bold text-sm rounded-lg">
+                New Appointment
+            </button>
+<div class="pt-4 border-t border-outline-variant/10 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#E0C0AF] hover:text-[#E5E2E1] text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-sm">contact_support</span> Support
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#E0C0AF] hover:text-[#E5E2E1] text-xs font-medium" href="#">
+<span class="material-symbols-outlined text-sm">terminal</span> Terminal
+                </a>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 pt-24 px-8 pb-12">
+<!-- Header Section -->
+<header class="flex justify-between items-end mb-10">
+<div>
+<span class="text-on-surface-variant text-xs font-bold tracking-widest uppercase">System Intelligence</span>
+<h1 class="text-4xl font-black tracking-tight mt-1">Clinical Analytics</h1>
+</div>
+<div class="flex gap-3">
+<div class="flex bg-surface-container-low p-1 rounded-lg">
+<button class="px-4 py-1.5 text-xs font-bold bg-surface-container-highest rounded text-primary">Live</button>
+<button class="px-4 py-1.5 text-xs font-bold text-on-surface-variant">7D</button>
+<button class="px-4 py-1.5 text-xs font-bold text-on-surface-variant">30D</button>
+</div>
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-high hover:bg-surface-container-highest transition-colors text-xs font-bold rounded-lg border border-outline-variant/10">
+<span class="material-symbols-outlined text-base">filter_list</span>
+                    Refine Data
+                </button>
+</div>
+</header>
+<!-- KPI Bento Grid -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<!-- Treatment Success Rate -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-low p-6 rounded-xl border-l-4 border-primary">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-on-surface-variant text-sm font-medium">Treatment Success</p>
+<h3 class="text-3xl font-black text-on-surface mt-1">98.4%</h3>
+</div>
+<span class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg">verified</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[98.4%] chart-glow-amber"></div>
+</div>
+<p class="text-xs text-on-surface-variant mt-4 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-green-400">trending_up</span>
+<span class="text-green-400">+1.2%</span> from previous cycle
+                </p>
+</div>
+<!-- Professional Productivity -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-low p-6 rounded-xl border-l-4 border-tertiary">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-on-surface-variant text-sm font-medium">Productivity Index</p>
+<h3 class="text-3xl font-black text-on-surface mt-1">42.8 <span class="text-lg font-normal text-on-surface-variant/40">u/h</span></h3>
+</div>
+<span class="material-symbols-outlined text-tertiary bg-tertiary/10 p-2 rounded-lg">speed</span>
+</div>
+<div class="flex items-end gap-1 h-8">
+<div class="w-2 bg-tertiary/20 h-4 rounded-t-sm"></div>
+<div class="w-2 bg-tertiary/40 h-6 rounded-t-sm"></div>
+<div class="w-2 bg-tertiary/60 h-5 rounded-t-sm"></div>
+<div class="w-2 bg-tertiary h-8 rounded-t-sm chart-glow-blue"></div>
+<div class="w-2 bg-tertiary/80 h-7 rounded-t-sm"></div>
+</div>
+<p class="text-xs text-on-surface-variant mt-4 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">info</span>
+                    Optimizing surgical turnaround
+                </p>
+</div>
+<!-- Patient Retention -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-low p-6 rounded-xl border-l-4 border-orange-700">
+<div class="flex justify-between items-start mb-4">
+<div>
+<p class="text-on-surface-variant text-sm font-medium">Patient Retention</p>
+<h3 class="text-3xl font-black text-on-surface mt-1">89.2%</h3>
+</div>
+<span class="material-symbols-outlined text-orange-700 bg-orange-700/10 p-2 rounded-lg">favorite</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<img alt="User 1" class="w-6 h-6 rounded-full border-2 border-surface-container-low" data-alt="Portrait of a young man smiling softly, professional headshot with dark studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGcmj_biYVeXJldyo0IEjeLWm2xfSQnZ9bZXbcIZogSHK2fcCLMqGK6xD6EZNw2iWYORqn0DKr_Op4wgH5BK7SQJYcgQkQLuALxZqBnpe3sB0cKSLCQIiHUx6EJ6oodwQvt-__OYAFyCEn7HMXVFOm7zfOWh0v42cO68XAeeCftN4Ji2KE124d3XagceFWKWVPZz3FYDSf6x95WY0L6XKHGG7ow_pIgo-kN2Bv4EK-rq_7Q4ox67dI9UDJKhuWzYLM54dxyWEZY10n"/>
+<img alt="User 2" class="w-6 h-6 rounded-full border-2 border-surface-container-low" data-alt="Professional woman portrait, clear lighting, modern clinical style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFz9e39ovLXDU26sfoJsmgs5d_vLwvBOs4FDljYi5DjlOmpPn_fMUrUpQmatEgUURQuqZ0IBtyysq-SlDgKBhYLU9Cj5QWmZIud6bNyv-HNZeOaE8y8tRxnSyP8y6XNKBTyY_XH57dtRAKqOmrKbUvxcTohzOhnn1tQ2qKq4-OyJxXa9G0Jf74I2nEbX0xDGorfe75uWARuWRjhq8ZwSP6qDNAUf7Bq6EZK2nu0Xuak47Sj9BFfP0DfQ1wbF1bR52PQChjuawH9LOW"/>
+<img alt="User 3" class="w-6 h-6 rounded-full border-2 border-surface-container-low" data-alt="Middle-aged man in business attire, confident expression, soft focus medical office background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUNoP3Q4BTYQQ6d0oTijH6Py8DZQnLWFVbHi_3hRX3KnKM1xrY_ugzqm8PgWfFuX_43ir4Jejiib9zA9Rbng63kQ81lewEPy40QsBXLEJjOnW5IkVaUYKpPqR3nW-JUwTedY7nPl8f2gPLgOMn2a_DSscKW4wxZ3RggCn-r3_WG9FVxwIzgBHUj3t01W0I3V1D5JuxOO8BjdvdVeITiG0wops-02qjwevx9yoK8tGZo-uEQDdWhLc6zrt6oaCACOJ9wqEO0SWy5o7T"/>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">+240 new this month</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-4 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-green-400">arrow_upward</span>
+<span class="text-green-400">+5.4%</span> above target
+                </p>
+</div>
+</div>
+<!-- Large Content Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Clinical Efficiency Chart -->
+<div class="col-span-12 xl:col-span-8 bg-surface-container-low rounded-xl p-8 relative overflow-hidden group">
+<div class="flex justify-between items-start mb-12">
+<div>
+<h4 class="text-xl font-black">Clinical Efficiency Trends</h4>
+<p class="text-on-surface-variant text-sm mt-1">Operational velocity across departments</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Surgery</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Diagnostics</span>
+</div>
+</div>
+</div>
+<div class="h-64 flex items-end justify-between gap-2 relative">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between opacity-5 pointer-events-none">
+<div class="border-t border-on-surface w-full"></div>
+<div class="border-t border-on-surface w-full"></div>
+<div class="border-t border-on-surface w-full"></div>
+<div class="border-t border-on-surface w-full"></div>
+</div>
+<!-- Fake Bar Chart Visualization -->
+<div class="flex-1 flex items-end justify-center gap-4 h-full relative z-10">
+<div class="flex flex-col items-center gap-2 group/bar">
+<div class="flex gap-1 items-end">
+<div class="w-3 bg-primary/40 rounded-t-sm h-32 group-hover/bar:bg-primary transition-all"></div>
+<div class="w-3 bg-tertiary/40 rounded-t-sm h-40 group-hover/bar:bg-tertiary transition-all"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">MON</span>
+</div>
+<div class="flex flex-col items-center gap-2 group/bar">
+<div class="flex gap-1 items-end">
+<div class="w-3 bg-primary/40 rounded-t-sm h-48 group-hover/bar:bg-primary transition-all"></div>
+<div class="w-3 bg-tertiary/40 rounded-t-sm h-36 group-hover/bar:bg-tertiary transition-all"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">TUE</span>
+</div>
+<div class="flex flex-col items-center gap-2 group/bar">
+<div class="flex gap-1 items-end">
+<div class="w-3 bg-primary/40 rounded-t-sm h-40 group-hover/bar:bg-primary transition-all"></div>
+<div class="w-3 bg-tertiary/40 rounded-t-sm h-52 group-hover/bar:bg-tertiary transition-all"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">WED</span>
+</div>
+<div class="flex flex-col items-center gap-2 group/bar">
+<div class="flex gap-1 items-end">
+<div class="w-3 bg-primary h-56 chart-glow-amber rounded-t-sm"></div>
+<div class="w-3 bg-tertiary/40 rounded-t-sm h-44 group-hover/bar:bg-tertiary transition-all"></div>
+</div>
+<span class="text-[10px] font-bold text-primary">THU</span>
+</div>
+<div class="flex flex-col items-center gap-2 group/bar">
+<div class="flex gap-1 items-end">
+<div class="w-3 bg-primary/40 rounded-t-sm h-32 group-hover/bar:bg-primary transition-all"></div>
+<div class="w-3 bg-tertiary h-48 chart-glow-blue rounded-t-sm"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">FRI</span>
+</div>
+<div class="flex flex-col items-center gap-2 group/bar">
+<div class="flex gap-1 items-end">
+<div class="w-3 bg-primary/40 rounded-t-sm h-12 group-hover/bar:bg-primary transition-all"></div>
+<div class="w-3 bg-tertiary/40 rounded-t-sm h-16 group-hover/bar:bg-tertiary transition-all"></div>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">SAT</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Performance Leaderboard -->
+<div class="col-span-12 xl:col-span-4 bg-surface-container-low rounded-xl overflow-hidden">
+<div class="p-6 border-b border-outline-variant/10">
+<h4 class="text-sm font-black uppercase tracking-widest text-on-surface-variant">Clinical Performance</h4>
+</div>
+<div class="p-2">
+<div class="flex items-center gap-4 p-4 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded bg-primary/20 flex items-center justify-center text-primary font-black">01</div>
+<div class="flex-1">
+<p class="text-sm font-bold">Dr. Sarah Miller</p>
+<p class="text-xs text-on-surface-variant">Orthodontics Specialist</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-black text-primary">124%</p>
+<p class="text-[10px] uppercase text-on-surface-variant/60 font-bold">Target</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-black">02</div>
+<div class="flex-1">
+<p class="text-sm font-bold">Dr. James Wilson</p>
+<p class="text-xs text-on-surface-variant">Endodontist</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-black text-on-surface">112%</p>
+<p class="text-[10px] uppercase text-on-surface-variant/60 font-bold">Target</p>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 hover:bg-surface-container-high rounded-lg transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-black">03</div>
+<div class="flex-1">
+<p class="text-sm font-bold">Dr. Elena Rodriguez</p>
+<p class="text-xs text-on-surface-variant">Oral Surgeon</p>
+</div>
+<div class="text-right">
+<p class="text-sm font-black text-on-surface">98%</p>
+<p class="text-[10px] uppercase text-on-surface-variant/60 font-bold">Target</p>
+</div>
+</div>
+</div>
+<div class="p-6 bg-surface-container-high/50 text-center">
+<button class="text-xs font-bold text-primary hover:underline">View Detailed Personnel Report</button>
+</div>
+</div>
+</div>
+<!-- System Alerts & Real-time Logs -->
+<div class="mt-8 bg-surface-container-lowest rounded-xl border border-outline-variant/10 overflow-hidden">
+<div class="px-6 py-4 flex justify-between items-center bg-surface-container-low/50 border-b border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+<h5 class="text-xs font-bold uppercase tracking-wider">Operational Signal Feed</h5>
+</div>
+<span class="text-[10px] text-on-surface-variant font-mono">STREAMS_ACTIVE: 12</span>
+</div>
+<div class="p-4 font-mono text-[11px] space-y-2">
+<div class="flex gap-4 opacity-80">
+<span class="text-on-surface-variant">[14:02:45]</span>
+<span class="text-green-400">SUCCESS</span>
+<span class="text-on-surface">System recalibrated treatment success matrix for Lab-A</span>
+</div>
+<div class="flex gap-4 opacity-80">
+<span class="text-on-surface-variant">[14:05:12]</span>
+<span class="text-primary">INFO</span>
+<span class="text-on-surface">Patient retention forecast adjusted (+2.1%) based on Q4 historicals</span>
+</div>
+<div class="flex gap-4">
+<span class="text-on-surface-variant">[14:10:01]</span>
+<span class="text-tertiary">SIGNAL</span>
+<span class="text-on-surface">Dr. Miller exceeded daily productivity benchmark by 15.4%</span>
+</div>
+<div class="flex gap-4 opacity-60">
+<span class="text-on-surface-variant">[14:12:33]</span>
+<span class="text-on-surface-variant">SYSTEM</span>
+<span class="text-on-surface">Routine database compression and integrity check complete</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Trigger (Conditional) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-105 transition-transform">
+<span class="material-symbols-outlined font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</body></html>

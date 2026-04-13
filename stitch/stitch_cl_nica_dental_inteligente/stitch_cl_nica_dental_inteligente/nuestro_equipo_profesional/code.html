@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Equipo Médico | The Clinical Atelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#5d412a",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#fff8f5",
+                        "surface-tint": "#994700",
+                        "surface-container-high": "#ffe3cf",
+                        "primary-fixed": "#ffdbc8",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#341100",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#ff7a23",
+                        "on-primary-fixed-variant": "#753400",
+                        "tertiary-fixed": "#ffdbca",
+                        "surface-dim": "#fbd2b3",
+                        "on-error": "#ffffff",
+                        "tertiary": "#9d4300",
+                        "secondary-fixed": "#ffdcc2",
+                        "on-tertiary-fixed-variant": "#783200",
+                        "surface-container-highest": "#ffdcc2",
+                        "primary-container": "#ff7a00",
+                        "on-secondary-container": "#795b42",
+                        "surface-container-low": "#fff1e9",
+                        "surface": "#fff8f5",
+                        "secondary-fixed-dim": "#e7bfa1",
+                        "on-background": "#2b1704",
+                        "secondary-container": "#fed5b6",
+                        "inverse-on-surface": "#ffede2",
+                        "on-secondary-fixed": "#2b1704",
+                        "primary-fixed-dim": "#ffb68b",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#321200",
+                        "inverse-surface": "#432b16",
+                        "on-primary-container": "#5c2800",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#5f2600",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb690",
+                        "secondary": "#775840",
+                        "surface-variant": "#ffdcc2",
+                        "outline-variant": "#e0c0af",
+                        "on-error-container": "#93000a",
+                        "outline": "#8c7263",
+                        "inverse-primary": "#ffb68b",
+                        "primary": "#994700",
+                        "on-surface-variant": "#584235",
+                        "surface-container": "#ffeadc",
+                        "on-surface": "#2b1704",
+                        "background": "#fff8f5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-shadow {
+            box-shadow: 0 40px 60px -15px rgba(43, 23, 4, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-bold text-stone-900 font-headline tracking-tight">The Clinical Atelier</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-stone-600 font-medium hover:text-stone-900 transition-colors font-label" href="#">Home</a>
+<a class="text-orange-600 font-bold border-b-2 border-orange-500 pb-1 font-label" href="#">Services</a>
+<a class="text-stone-600 font-medium hover:text-stone-900 transition-colors font-label" href="#">Contact</a>
+<a class="text-stone-600 font-medium hover:text-stone-900 transition-colors font-label" href="#">My Profile</a>
+</div>
+<button class="bg-primary-container text-on-primary-container px-8 py-3 rounded-lg font-bold font-label hover:opacity-90 active:scale-95 transition-all duration-200">
+                Book Appointment
+            </button>
+</div>
+</nav>
+<main class="pt-24">
+<!-- Hero Section: Nuestra Esencia -->
+<section class="relative overflow-hidden py-24 px-8 max-w-7xl mx-auto">
+<div class="grid lg:grid-cols-2 gap-16 items-center">
+<div class="z-10">
+<span class="text-primary font-bold tracking-widest uppercase text-xs mb-4 block">Nuestra Esencia</span>
+<h1 class="font-headline text-5xl md:text-6xl font-extrabold tracking-tight text-on-background leading-tight mb-8">
+                        Donde la precisión <br/> encuentra la <span class="text-primary italic">calidez</span>.
+                    </h1>
+<p class="text-on-surface-variant text-lg leading-relaxed max-w-xl mb-10">
+                        En The Clinical Atelier, entendemos que la odontología es tanto una ciencia exacta como una disciplina artística. Nuestro equipo combina décadas de maestría clínica con un enfoque profundamente humano.
+                    </p>
+<div class="flex gap-4 items-center">
+<div class="w-12 h-[1px] bg-outline-variant"></div>
+<span class="text-secondary font-medium italic">Un nuevo estándar en salud dental.</span>
+</div>
+</div>
+<div class="relative">
+<div class="aspect-[4/5] rounded-3xl overflow-hidden editorial-shadow rotate-2 hover:rotate-0 transition-transform duration-700">
+<img class="w-full h-full object-cover" data-alt="Modern dental clinic interior with warm wood accents, minimalist furniture, and soft ambient lighting creating a luxury wellness retreat atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEhjo2LGUlrN3x_tekS_WTe4c2pwCsN03xbpgaM-w9h-DScDnXb_Bmts23UWnyg_zzyjLWRAwlThwdza1T_o7GBpdtE0YK5Nuu49FI_S5x7dWDy4GnvGPKgzn5_Sm6d9uv3YR0kadXcbWyWQyb86NlkZXLYLMZ9vmHTdOFJEAFUqEM21vYvYT9Ehj2HcbXkP4XdjNmQXyK9LXLeuX-37a5CX4ylXR1zvZJOsKeHGgCWM09ZGC60eh2WqFnqPgq1Ne9RLVrdQkqBmZ3"/>
+</div>
+<div class="absolute -bottom-8 -left-8 bg-surface-container-high p-8 rounded-2xl editorial-shadow max-w-[240px]">
+<p class="font-headline font-bold text-primary text-3xl mb-1">15+</p>
+<p class="text-on-surface-variant text-sm font-medium">Años redefiniendo la experiencia del paciente.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Team Section: Especialistas -->
+<section class="bg-surface-container-low py-32 px-8">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+<div class="max-w-2xl">
+<h2 class="font-headline text-4xl font-bold mb-4">El Atelier Médico</h2>
+<p class="text-on-surface-variant">Conoce a los artesanos detrás de tu sonrisa. Un equipo multidisciplinar dedicado a la excelencia estética y funcional.</p>
+</div>
+<div class="flex gap-2">
+<button class="p-3 rounded-full bg-white text-on-surface hover:bg-primary-container hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-3 rounded-full bg-white text-on-surface hover:bg-primary-container hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid / Asymmetric Layout for Staff -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Dr. Card 1 (Large Focus) -->
+<div class="md:col-span-7 group relative overflow-hidden rounded-3xl bg-white editorial-shadow transition-all duration-500 hover:-translate-y-2">
+<div class="grid md:grid-cols-2 h-full">
+<div class="aspect-[3/4] md:aspect-auto overflow-hidden">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="Professional portrait of a male dentist in a clean white lab coat, smiling confidently in a high-end medical studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzRIDsyg70AWaLL_elTvOqPUW1mYiBh3gkQJtRSQR1f1v44wIjPs6r8eeHlTTPpliM0LTY_a-AjWiLGFpqulHHXjrGgBPXCrGr-9JPyCtEn27SZgrFp1-ux8WmgRMORBxj9GTWIeX3oaCVYZOyPJrj_GAusYNVFlXoq1Ws6h-pKcZHs_65uLoUyMyLjmi9ATCh6Kz467xNkboGR4lIdBa4kfgiqLh6N_ERG-2dYAe774dw7oQhfVYhEj96uuHUvEQyPxTUzt2gGsUi"/>
+</div>
+<div class="p-10 flex flex-col justify-center">
+<span class="text-primary font-bold text-xs tracking-widest uppercase mb-2">Director Médico</span>
+<h3 class="font-headline text-3xl font-bold mb-2">Dr. Julián Arango</h3>
+<p class="text-on-surface-variant mb-6">Especialista en Rehabilitación Oral y Estética Avanzada con formación en Zúrich.</p>
+<div class="space-y-3">
+<div class="flex items-center gap-3 text-sm text-secondary">
+<span class="material-symbols-outlined text-primary text-lg">verified</span>
+<span>Máster en Implantología Oral</span>
+</div>
+<div class="flex items-center gap-3 text-sm text-secondary">
+<span class="material-symbols-outlined text-primary text-lg">history_edu</span>
+<span>12+ Publicaciones Científicas</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Dr. Card 2 -->
+<div class="md:col-span-5 group relative rounded-3xl bg-white editorial-shadow p-4 transition-all duration-500 hover:-translate-y-2">
+<div class="aspect-square rounded-2xl overflow-hidden mb-6">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="Close-up portrait of a female orthodontist with a friendly expression, soft lighting, professional clinical background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAepQhDAHvjv7vUACsGnrZkdXG7uVus4tpwe2y5Wy2mODQZoBH-b8JdZf6qoPWDlysIBP5q2YAqxdInCOySYzUv6I-L5HfUNwR2msqc9XW5QzOv9-cC_QyAroyuppkgpaMVo-oYqTUzJoSf7FWg_BUVK5C7k7Pysr2RJ9-MYtx8S3Tun9fdP0MJcLUrVVXqYH0SheGVItPfsAq1pq_xatL8plXUh2Ht6VHStsB0wPyBg2q_JLD0qPDRz2JVJOU4EiLR3sWlqIDSRZ70"/>
+</div>
+<div class="px-4 pb-4">
+<span class="text-tertiary font-bold text-xs tracking-widest uppercase mb-1 block">Ortodoncia Invisible</span>
+<h3 class="font-headline text-2xl font-bold mb-1">Dra. Elena Valdés</h3>
+<p class="text-on-surface-variant text-sm">Experta en sistemas Invisalign y biomecánica dental compleja.</p>
+</div>
+</div>
+<!-- Dr. Card 3 -->
+<div class="md:col-span-4 group relative rounded-3xl bg-white editorial-shadow p-4 transition-all duration-500 hover:-translate-y-2">
+<div class="aspect-[4/3] rounded-2xl overflow-hidden mb-6">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="Male surgeon in clinical scrubs looking at a digital tablet in a clean, modern medical office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNn7nd0ugBFowhOw3cBUviyVYIWrzIlbwOlpJ95ylHDqpOng--ZaUg2RKmPwHAFiUP5NmsBiMb4kZ0PwgMex5xaUdhDhMJ6peLyzfSKR6XkwjZOZ8oHVqsId-QNvm0ufRYZGM6ZDjg0fi2dYaDd2Dr0SUEAgtPvCYBOBm1RvwqkCVngzaNsydd5jXfjQ1BYY3EdnsaaJzSo2BapCDIcWNUxMkDpd85Rn-6Fhqu5nHdpLg6TP_HciJtDGtlXu8Oo-8xkrAsnHtHxtCH"/>
+</div>
+<div class="px-4 pb-4">
+<span class="text-tertiary font-bold text-xs tracking-widest uppercase mb-1 block">Cirugía Maxilofacial</span>
+<h3 class="font-headline text-2xl font-bold mb-1">Dr. Marc Segura</h3>
+<p class="text-on-surface-variant text-sm">Cirujano especialista en regeneración ósea y microcirugía.</p>
+</div>
+</div>
+<!-- Dr. Card 4 (Horizontal) -->
+<div class="md:col-span-8 group relative rounded-3xl bg-surface-container overflow-hidden transition-all duration-500 hover:-translate-y-2">
+<div class="flex flex-col md:flex-row h-full">
+<div class="p-10 md:w-1/2 flex flex-col justify-center">
+<span class="text-primary font-bold text-xs tracking-widest uppercase mb-2">Odontopediatría</span>
+<h3 class="font-headline text-3xl font-bold mb-2">Dra. Sofia Mendez</h3>
+<p class="text-on-surface-variant mb-6">Transformando la primera visita al dentista en una aventura de confianza para los más pequeños.</p>
+<button class="flex items-center gap-2 text-primary font-bold hover:gap-4 transition-all">
+                                    Ver Perfil Completo <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="md:w-1/2 h-64 md:h-full">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="Smiling pediatric dentist interacting kindly with a child in a colorful but professional clinic environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYA6t8TkVw-UDDjS5BDQMcPyt8yVPOYAAYdp_Xh1MXKgu2akhUxNOPtWhAXij_KGjAFnBvHETY7zqyBUMZjgQmaVk_hyXuBPS2nyq8jHbHQjD-nCI02yDQCD_z_83qAPWoPXFa4PeFhhCjw3K0b3ntewvvwRDRclRL5VoJLG2isb-ihpovYIPtVUqzM1XwEyule4QE7Zlnv_itcVl8F4aygfEHS4S0qF1GUYVUMGoB9VPgJ9w4FESL1pt0NF9PijWIGwRV2BsmFzOq"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-24 px-8 text-center bg-white">
+<div class="max-w-3xl mx-auto">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary-container text-white mb-8">
+<span class="material-symbols-outlined text-3xl" data-weight="fill">calendar_month</span>
+</div>
+<h2 class="font-headline text-4xl font-extrabold mb-6 tracking-tight">Comienza tu viaje hacia la sonrisa perfecta</h2>
+<p class="text-on-surface-variant text-lg mb-10">Agenda una valoración inicial con nuestros especialistas y descubre el plan de tratamiento diseñado exclusivamente para ti.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button class="bg-primary-container text-on-primary-container px-10 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-all shadow-lg shadow-orange-500/20">
+                        Agendar Cita Ahora
+                    </button>
+<button class="bg-white text-primary border border-outline-variant px-10 py-4 rounded-lg font-bold text-lg hover:bg-surface-container-low transition-all">
+                        Consultar Precios
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-stone-200 bg-stone-100 dark:bg-stone-950">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 px-8 py-12 max-w-7xl mx-auto">
+<div class="col-span-1 md:col-span-1">
+<div class="font-headline font-bold text-stone-900 mb-6 text-xl">The Clinical Atelier</div>
+<p class="text-stone-500 text-sm leading-relaxed">Redefiniendo la estética dental a través de la maestría clínica y el diseño artesanal.</p>
+</div>
+<div>
+<h4 class="font-bold text-stone-900 mb-6">Enlaces Rápidos</h4>
+<ul class="space-y-4">
+<li><a class="text-stone-500 hover:text-orange-500 hover:underline transition-all font-label text-sm" href="#">Contact Info</a></li>
+<li><a class="text-stone-500 hover:text-orange-500 hover:underline transition-all font-label text-sm" href="#">Location Map</a></li>
+<li><a class="text-stone-500 hover:text-orange-500 hover:underline transition-all font-label text-sm" href="#">Privacy Policy</a></li>
+<li><a class="text-stone-500 hover:text-orange-500 hover:underline transition-all font-label text-sm" href="#">Terms of Service</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-stone-900 mb-6">Nuestros Servicios</h4>
+<ul class="space-y-4">
+<li class="text-stone-500 text-sm">Implantes Avanzados</li>
+<li class="text-stone-500 text-sm">Estética Dental</li>
+<li class="text-stone-500 text-sm">Ortodoncia Invisible</li>
+<li class="text-stone-500 text-sm">Cirugía Oral</li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-stone-900 mb-6">Contacto</h4>
+<div class="space-y-4 text-sm text-stone-500">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary text-sm">location_on</span>
+<span>Av. de las Artes 123, <br/>Distrito Médico, Ciudad</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-sm">call</span>
+<span>+34 900 123 456</span>
+</div>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-8 py-6 border-t border-stone-200/50 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-sm text-stone-500">© 2024 The Clinical Atelier. Precision in Dentistry.</p>
+<div class="flex gap-6">
+<a class="text-stone-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
+<a class="text-stone-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">language</span></a>
+</div>
+</div>
+</footer>
+</body></html>

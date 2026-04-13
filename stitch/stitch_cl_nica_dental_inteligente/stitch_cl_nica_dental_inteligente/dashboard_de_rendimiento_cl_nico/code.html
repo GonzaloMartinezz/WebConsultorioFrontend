@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Dashboard de Métricas | The Clinical Atelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#5d412a",
+                      "on-secondary": "#ffffff",
+                      "surface-bright": "#fff8f5",
+                      "surface-tint": "#994700",
+                      "surface-container-high": "#ffe3cf",
+                      "primary-fixed": "#ffdbc8",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed": "#341100",
+                      "error": "#ba1a1a",
+                      "tertiary-container": "#ff7a23",
+                      "on-primary-fixed-variant": "#753400",
+                      "tertiary-fixed": "#ffdbca",
+                      "surface-dim": "#fbd2b3",
+                      "on-error": "#ffffff",
+                      "tertiary": "#9d4300",
+                      "secondary-fixed": "#ffdcc2",
+                      "on-tertiary-fixed-variant": "#783200",
+                      "surface-container-highest": "#ffdcc2",
+                      "primary-container": "#ff7a00",
+                      "on-secondary-container": "#795b42",
+                      "surface-container-low": "#fff1e9",
+                      "surface": "#fff8f5",
+                      "secondary-fixed-dim": "#e7bfa1",
+                      "on-background": "#2b1704",
+                      "secondary-container": "#fed5b6",
+                      "inverse-on-surface": "#ffede2",
+                      "on-secondary-fixed": "#2b1704",
+                      "primary-fixed-dim": "#ffb68b",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed": "#321200",
+                      "inverse-surface": "#432b16",
+                      "on-primary-container": "#5c2800",
+                      "error-container": "#ffdad6",
+                      "on-tertiary-container": "#5f2600",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed-dim": "#ffb690",
+                      "secondary": "#775840",
+                      "surface-variant": "#ffdcc2",
+                      "outline-variant": "#e0c0af",
+                      "on-error-container": "#93000a",
+                      "outline": "#8c7263",
+                      "inverse-primary": "#ffb68b",
+                      "primary": "#994700",
+                      "on-surface-variant": "#584235",
+                      "surface-container": "#ffeadc",
+                      "on-surface": "#2b1704",
+                      "background": "#fff8f5"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "xxl": "1.5rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          }
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="hidden md:flex flex-col h-screen w-64 border-r border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 font-inter text-sm font-medium p-4 gap-2 fixed left-0 top-0">
+<div class="flex items-center gap-3 px-4 py-6">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-white">medical_services</span>
+</div>
+<div>
+<div class="text-lg font-bold text-stone-800 dark:text-stone-100">Clinical Admin</div>
+<div class="text-xs text-stone-500">Clinic Management</div>
+</div>
+</div>
+<nav class="flex flex-col gap-1 mt-4 flex-1">
+<a class="flex items-center gap-3 text-stone-500 dark:text-stone-400 px-4 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800/50 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+                Agenda
+            </a>
+<a class="flex items-center gap-3 text-stone-500 dark:text-stone-400 px-4 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800/50 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+                Patients
+            </a>
+<!-- Active Tab: Records (closest to "Métricas/Rendimiento") -->
+<a class="flex items-center gap-3 bg-white dark:bg-stone-800 text-orange-600 dark:text-orange-400 rounded-xl px-4 py-3 shadow-sm translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="description" style="font-variation-settings: 'FILL' 1;">description</span>
+                Records
+            </a>
+<a class="flex items-center gap-3 text-stone-500 dark:text-stone-400 px-4 py-3 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-stone-100 dark:hover:bg-stone-800/50 rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-stone-200 flex flex-col gap-1">
+<button class="bg-primary-container text-on-primary-container font-semibold py-3 px-4 rounded-xl mb-4 hover:opacity-90 active:scale-95 transition-all">
+                Add New Patient
+            </button>
+<a class="flex items-center gap-3 text-stone-500 px-4 py-3 hover:text-stone-900 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 text-stone-500 px-4 py-3 hover:text-stone-900 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 bg-surface min-h-screen pb-12">
+<!-- TopAppBar (Authority: JSON) -->
+<header class="fixed top-0 right-0 left-0 md:left-64 z-50 bg-white/80 backdrop-blur-xl transition-colors">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
+<h1 class="text-2xl font-bold text-stone-900 font-headline tracking-tight">The Clinical Atelier</h1>
+<div class="hidden lg:flex items-center gap-8 font-manrope font-semibold tracking-tight">
+<a class="text-stone-600 font-medium hover:text-stone-900" href="#">Home</a>
+<a class="text-stone-600 font-medium hover:text-stone-900" href="#">Services</a>
+<a class="text-stone-600 font-medium hover:text-stone-900" href="#">Contact</a>
+<a class="text-orange-600 font-bold border-b-2 border-orange-500 pb-1" href="#">My Profile</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 text-stone-600 hover:bg-stone-100 rounded-full">search</button>
+<button class="bg-primary-container text-white px-6 py-2.5 rounded-xl font-bold text-sm active:scale-95 duration-200 transition-all shadow-sm">
+                        Book Appointment
+                    </button>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="pt-24 px-8 max-w-7xl mx-auto">
+<!-- Header Section -->
+<div class="mb-10">
+<h2 class="text-4xl font-extrabold text-on-background mb-2 tracking-tight">Rendimiento Clínico</h2>
+<p class="text-on-surface-variant font-medium">Panel administrativo de métricas y conciliación de turnos.</p>
+</div>
+<!-- KPI Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xxl shadow-[0_40px_60px_-15px_rgba(43,23,4,0.04)] border border-outline-variant/10 group hover:bg-surface-container-low transition-colors duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-primary-fixed rounded-xl text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person_add</span>
+</div>
+<span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">+12%</span>
+</div>
+<p class="text-on-surface-variant text-sm font-semibold uppercase tracking-wider mb-1">Pacientes Registrados</p>
+<h3 class="text-3xl font-extrabold text-on-background">1,284</h3>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xxl shadow-[0_40px_60px_-15px_rgba(43,23,4,0.04)] border border-outline-variant/10 group hover:bg-surface-container-low transition-colors duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-secondary-fixed rounded-xl text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_available</span>
+</div>
+<span class="text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded-lg">94%</span>
+</div>
+<p class="text-on-surface-variant text-sm font-semibold uppercase tracking-wider mb-1">Turnos Conciliados</p>
+<h3 class="text-3xl font-extrabold text-on-background">842</h3>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xxl shadow-[0_40px_60px_-15px_rgba(43,23,4,0.04)] border border-outline-variant/10 group hover:bg-surface-container-low transition-colors duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-tertiary-fixed rounded-xl text-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">+8.4k</span>
+</div>
+<p class="text-on-surface-variant text-sm font-semibold uppercase tracking-wider mb-1">Ingresos Mensuales</p>
+<h3 class="text-3xl font-extrabold text-on-background">$42,500</h3>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-container-lowest p-6 rounded-xxl shadow-[0_40px_60px_-15px_rgba(43,23,4,0.04)] border border-outline-variant/10 group hover:bg-surface-container-low transition-colors duration-300">
+<div class="flex justify-between items-start mb-4">
+<div class="p-3 bg-primary-container/20 rounded-xl text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">rate_review</span>
+</div>
+<span class="text-xs font-bold text-primary bg-primary-fixed px-2 py-1 rounded-lg">4.9/5</span>
+</div>
+<p class="text-on-surface-variant text-sm font-semibold uppercase tracking-wider mb-1">Satisfacción</p>
+<h3 class="text-3xl font-extrabold text-on-background">98%</h3>
+</div>
+</div>
+<!-- Charts & Lists Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Main Chart (Asymmetric Span) -->
+<div class="lg:col-span-2 bg-white rounded-xxl p-8 shadow-[0_40px_60px_-15px_rgba(43,23,4,0.04)] relative overflow-hidden">
+<div class="flex justify-between items-end mb-12">
+<div>
+<h4 class="text-xl font-bold text-on-background">Motivos de Consulta</h4>
+<p class="text-on-surface-variant text-sm">Distribución de tratamientos solicitados este mes.</p>
+</div>
+<div class="flex gap-2">
+<button class="text-xs font-bold px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant">Mensual</button>
+<button class="text-xs font-bold px-3 py-1.5 rounded-lg text-on-surface-variant">Anual</button>
+</div>
+</div>
+<!-- Bar Chart Visual Representation -->
+<div class="flex items-end justify-between h-64 gap-4 px-4">
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container rounded-t-xl group-hover:bg-primary-container transition-all duration-300 relative h-[60%]">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold text-primary opacity-0 group-hover:opacity-100">45%</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant mt-4 text-center">Limpieza</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container rounded-t-xl group-hover:bg-primary-container transition-all duration-300 relative h-[85%]">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold text-primary opacity-0 group-hover:opacity-100">72%</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant mt-4 text-center">Ortodoncia</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container rounded-t-xl group-hover:bg-primary-container transition-all duration-300 relative h-[40%]">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold text-primary opacity-0 group-hover:opacity-100">30%</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant mt-4 text-center">Implantes</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container rounded-t-xl group-hover:bg-primary-container transition-all duration-300 relative h-[95%]">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold text-primary opacity-0 group-hover:opacity-100">88%</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant mt-4 text-center">Urgencias</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container rounded-t-xl group-hover:bg-primary-container transition-all duration-300 relative h-[55%]">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold text-primary opacity-0 group-hover:opacity-100">42%</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant mt-4 text-center">Estética</span>
+</div>
+<div class="flex-1 flex flex-col items-center group">
+<div class="w-full bg-surface-container rounded-t-xl group-hover:bg-primary-container transition-all duration-300 relative h-[70%]">
+<span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs font-bold text-primary opacity-0 group-hover:opacity-100">58%</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant mt-4 text-center">Endodoncia</span>
+</div>
+</div>
+</div>
+<!-- Doctor Workload List -->
+<div class="bg-surface-container-low rounded-xxl p-8">
+<h4 class="text-xl font-bold text-on-background mb-6">Carga por Doctor</h4>
+<div class="space-y-6">
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-xl object-cover shadow-sm" data-alt="portrait of a professional male dentist in white clinical coat with a warm friendly smile in a modern clinic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdUho5DUngXh_CpwpFz-jVkI2mmo_ghfoHuPiEE_srBSwiBQsNF2Jwxhowvp8mi04McQMTF1xQnqfvARr9P4PCoMdvtXRlIMHLDMg9ezt6nK6i8gLbJ6WHCCTCoNe9aMXFRsnGfxlManU5I7s1SlrADBJpaBwzDwDd2C8NBmJ4xZq1N_z3rv03exudezL_rCdTMlCXDersmsHeLacO4yp0-CG5KjGI9zEV_O1LEC0D9Jyr30wdrAoCvuwGQQWGaxW1tI92fl_N0VkB"/>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<span class="text-sm font-bold text-on-background">Dr. Elena Ruiz</span>
+<span class="text-xs font-bold text-primary">85%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 85%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-xl object-cover shadow-sm" data-alt="portrait of a confident female medical professional in scrubs looking at the camera in a bright clinical hallway" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpcfWSHJIXC9Ds8QQzZcZvRl6yb7YHYYIfNFqZOxkGhwBs6a46Ls0Nh5dJvwGXygOfIi1uWhxDJzfEApwymZ8ULLrQWX6g-oaS4OAv7VoGmns5fnOao0EJ-ScpSwOfpx9UtnQO9ZCG8qe_QEe8DYJJsKrnMKKPMOuobp-BFINcB7nNhCuujkZCPHnJ4XN-cpIyNCFs_2-_Hd5hQAOiVpFbGMhwR4H3mlhu3AS_-7RITS5xCer2C-4dBeLShAZO54WNE8xNYMunNnEz"/>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<span class="text-sm font-bold text-on-background">Dr. Marco Valls</span>
+<span class="text-xs font-bold text-primary">62%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 62%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-xl object-cover shadow-sm" data-alt="close-up portrait of a male orthodontist wearing clinical gear and glasses in a clean professional environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWzr84XV6Zo0Gna-RD2TD_B4ZbYMt20mFdmw2OYAJxMk1FB7Pi1AuZo-FAxWIBV-j_ofGDDYBVpuDFl1Rplk7vyNZNVCF5qqV_zgArM8zSfZKHQf7119lHDTxYGeFwMnPyJDzPzNHiWg6WWZUCeTnPtGWm4p5EPy7RTMXn_Emc1fLbQLrBGJlkeWAbfZ60s6MJmciTO36RSq1j1rZJDCVXWWl1SHDpRpcGDWyVMtuWzM9NgO_jC9c331dA-veSn2BMsXU9vdIu9j1p"/>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<span class="text-sm font-bold text-on-background">Dra. Sarah Bloom</span>
+<span class="text-xs font-bold text-primary">94%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 94%"></div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<img class="w-12 h-12 rounded-xl object-cover shadow-sm" data-alt="professional headshot of a female doctor in a white lab coat against a soft neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAOTzmj2ra1_0WUDySXwL0cSY1QPwd7FNM-iSpDU7ONEAcqzybEXQIQX7SgOQ59RlmlmQU4YgZlnG0KoRpS6RC-jjbee8ljPI-n0galhRbLf0FSBLfvT5io6WnFsU6Xg_cP1tCKj1G-WiPST7SwXysqZTByfr0JYENqLMy30nhQc1AzwduGB6om7TR8fW0688XkS3pAkrqYIejw_NUvXHnmCNlZXK6ax7l6HXp806a6JFRtQdVS3SNF7j5nltt3NO4uePHDHqK_fvlu"/>
+<div class="flex-1">
+<div class="flex justify-between mb-1">
+<span class="text-sm font-bold text-on-background">Dr. James Chen</span>
+<span class="text-xs font-bold text-primary">48%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 48%"></div>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full mt-8 py-3 bg-white border border-outline-variant/30 rounded-xl text-xs font-bold text-secondary hover:bg-stone-50 transition-all">
+                        Ver Detalle de Personal
+                    </button>
+</div>
+</div>
+<!-- Detailed Workload Table Section -->
+<div class="mt-12">
+<div class="bg-surface-container-lowest rounded-xxl p-8 shadow-[0_40px_60px_-15px_rgba(43,23,4,0.04)] overflow-hidden">
+<div class="flex justify-between items-center mb-8">
+<h4 class="text-2xl font-bold text-on-background">Agenda de Hoy</h4>
+<div class="flex items-center gap-4">
+<div class="flex -space-x-3">
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="avatar of doctor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZuLHZEN-Y76kqsDe7DTgSSgByk1SN911681er2pM4TUK-oYfQXVNOZo-Ym2bYkO22vrBPx7ZRd4nvrqq3LOqSiriTeB-19mAbqYaJW60jzVMMz2X64gU9FGck58F7RghzWgMgNPXVTn2SmZqOQ8ji4lU3PuiHZFOnk_BWmzkDDf3vASHiGktfRVvzlnWoT5oleF85znap6SnA14j4hwN051Nn_rIxBmt1g08YveLRD-AobA89kxwHmxkMSS3Jq-C7YhJrGQ4m7fGt"/>
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="avatar of doctor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAX2gnt-eiTQZf9PhIiMhyCnLvCUFb3_RMZIlv-cWfP8MBzd2oenRO26BxomJV0PjSJlU8zgVohsmnzc5ij3FsZpbDPfP2Oa_UCkuu-5XuU3FJBUOiukLM_MtIveYPTPnG1bg_PawyImVG87bx58NXMfDc-eseaqS9kjRiDFRTY6AvK0bFeqPWuqjzLwoctuHNomRpIdCrcVbMLJhEF3Mszy4pUBsT28JoALOVnL3vIvxBMwQem_nNP4gD6heRYxOPByOjBcvTEHXuY"/>
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" data-alt="avatar of doctor" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGJiJ1L9GNFAYCLk-NzjjK8mbWl_fPCOu5MFwNZ9Gw-LsFWEl_Ials26QSJU3_ufFeBtPBmPv32wDruUucIXH_zPh6qhnPDM2qz22AvXsOjbuh3t5xFyxGKZyx3CwDi3xa92Ltj1HXo28I24KMy3pwjqES-RLjtV_00ZENJfTjm_2R6hut8_yUSlPwE3XUGlcpG12iEz5XtA-Ymrz9chQDrBguvFXhUMEHaDweC60K25IUt52SLn5oZ5HvX4_uGXyghIjUJWzBXmEk"/>
+</div>
+<span class="text-sm font-medium text-on-surface-variant">+4 doctores activos</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-on-surface-variant border-b border-outline-variant/10">
+<th class="pb-4 font-bold text-xs uppercase tracking-wider">Paciente</th>
+<th class="pb-4 font-bold text-xs uppercase tracking-wider">Doctor</th>
+<th class="pb-4 font-bold text-xs uppercase tracking-wider">Tratamiento</th>
+<th class="pb-4 font-bold text-xs uppercase tracking-wider">Horario</th>
+<th class="pb-4 font-bold text-xs uppercase tracking-wider">Estado</th>
+<th class="pb-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="py-5 font-semibold text-on-background">Beatriz Soler</td>
+<td class="py-5 text-on-surface-variant">Dr. Elena Ruiz</td>
+<td class="py-5">
+<span class="px-3 py-1 rounded-full bg-primary-fixed text-primary text-xs font-bold">Limpieza Profunda</span>
+</td>
+<td class="py-5 text-on-surface-variant font-medium">09:30 AM</td>
+<td class="py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="text-xs font-bold text-emerald-600">Completado</span>
+</div>
+</td>
+<td class="py-5 text-right">
+<button class="material-symbols-outlined text-stone-400 group-hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="py-5 font-semibold text-on-background">Carlos Méndez</td>
+<td class="py-5 text-on-surface-variant">Dra. Sarah Bloom</td>
+<td class="py-5">
+<span class="px-3 py-1 rounded-full bg-secondary-fixed text-secondary text-xs font-bold">Ajuste Ortodoncia</span>
+</td>
+<td class="py-5 text-on-surface-variant font-medium">11:00 AM</td>
+<td class="py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></div>
+<span class="text-xs font-bold text-orange-600">En Curso</span>
+</div>
+</td>
+<td class="py-5 text-right">
+<button class="material-symbols-outlined text-stone-400 group-hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+<tr class="group hover:bg-surface-container-low transition-colors">
+<td class="py-5 font-semibold text-on-background">Lucía Martínez</td>
+<td class="py-5 text-on-surface-variant">Dr. Marco Valls</td>
+<td class="py-5">
+<span class="px-3 py-1 rounded-full bg-tertiary-fixed text-tertiary text-xs font-bold">Implante Dental</span>
+</td>
+<td class="py-5 text-on-surface-variant font-medium">02:15 PM</td>
+<td class="py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-stone-300"></div>
+<span class="text-xs font-bold text-stone-400">Pendiente</span>
+</div>
+</td>
+<td class="py-5 text-right">
+<button class="material-symbols-outlined text-stone-400 group-hover:text-primary transition-colors">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer (Authority: JSON) -->
+<footer class="mt-20 w-full border-t border-stone-200 bg-stone-100 font-inter text-sm text-stone-500">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8 px-8 py-12 max-w-7xl mx-auto">
+<div class="col-span-1">
+<h5 class="font-manrope font-bold text-stone-900 mb-4">The Clinical Atelier</h5>
+<p class="mb-4">Especialistas en odontología de precisión y bienestar dental personalizado.</p>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-stone-400 hover:text-orange-500 cursor-pointer">social_leaderboard</span>
+<span class="material-symbols-outlined text-stone-400 hover:text-orange-500 cursor-pointer">camera_alt</span>
+</div>
+</div>
+<div>
+<h6 class="font-bold text-stone-900 mb-4">Servicios</h6>
+<ul class="space-y-2">
+<li><a class="hover:underline hover:text-orange-500" href="#">Ortodoncia Invisible</a></li>
+<li><a class="hover:underline hover:text-orange-500" href="#">Implantes</a></li>
+<li><a class="hover:underline hover:text-orange-500" href="#">Estética Dental</a></li>
+</ul>
+</div>
+<div>
+<h6 class="font-bold text-stone-900 mb-4">Recursos</h6>
+<ul class="space-y-2">
+<li><a class="hover:underline hover:text-orange-500" href="#">Contact Info</a></li>
+<li><a class="hover:underline hover:text-orange-500" href="#">Location Map</a></li>
+</ul>
+</div>
+<div>
+<h6 class="font-bold text-stone-900 mb-4">Legal</h6>
+<ul class="space-y-2">
+<li><a class="hover:underline hover:text-orange-500" href="#">Privacy Policy</a></li>
+<li><a class="hover:underline hover:text-orange-500" href="#">Terms of Service</a></li>
+</ul>
+</div>
+</div>
+<div class="px-8 py-6 text-center border-t border-stone-200">
+                © 2024 The Clinical Atelier. Precision in Dentistry.
+            </div>
+</footer>
+</main>
+<!-- Contextual FAB (Authority: Shared Comp Rules) -->
+<div class="fixed bottom-8 right-8 md:right-12 z-40">
+<button class="flex items-center gap-3 bg-primary text-white p-4 rounded-full shadow-2xl hover:bg-tertiary transition-all hover:scale-105 active:scale-95 group">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 font-bold whitespace-nowrap">Agendar Turno</span>
+</button>
+</div>
+</body></html>

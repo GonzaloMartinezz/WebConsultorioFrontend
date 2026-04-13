@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Patient Welcome Dashboard - The Clinical Atelier</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed": "#ffdcc2",
+                    "surface-dim": "#fbd2b3",
+                    "on-surface": "#2b1704",
+                    "on-primary-fixed": "#321200",
+                    "on-primary-container": "#5c2800",
+                    "on-secondary-container": "#795b42",
+                    "on-secondary-fixed-variant": "#5d412a",
+                    "outline-variant": "#e0c0af",
+                    "on-primary": "#ffffff",
+                    "inverse-on-surface": "#ffede2",
+                    "on-secondary": "#ffffff",
+                    "surface-container-low": "#fff1e9",
+                    "on-error-container": "#93000a",
+                    "outline": "#8c7263",
+                    "background": "#fff8f5",
+                    "surface-tint": "#994700",
+                    "primary-fixed-dim": "#ffb68b",
+                    "on-tertiary-fixed-variant": "#783200",
+                    "tertiary-fixed": "#ffdbca",
+                    "surface-variant": "#ffdcc2",
+                    "on-error": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb690",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-highest": "#ffdcc2",
+                    "secondary": "#775840",
+                    "surface-container-high": "#ffe3cf",
+                    "tertiary": "#9d4300",
+                    "primary": "#994700",
+                    "on-primary-fixed-variant": "#753400",
+                    "primary-fixed": "#ffdbc8",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#5f2600",
+                    "on-tertiary": "#ffffff",
+                    "surface-bright": "#fff8f5",
+                    "on-tertiary-fixed": "#341100",
+                    "secondary-fixed-dim": "#e7bfa1",
+                    "inverse-primary": "#ffb68b",
+                    "secondary-container": "#fed5b6",
+                    "on-surface-variant": "#584235",
+                    "primary-container": "#ff7a00",
+                    "error-container": "#ffdad6",
+                    "surface": "#fff8f5",
+                    "inverse-surface": "#432b16",
+                    "tertiary-container": "#ff7a23",
+                    "surface-container": "#ffeadc",
+                    "on-secondary-fixed": "#2b1704",
+                    "on-background": "#2b1704"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        }
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-effect {
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-stone-950/80 backdrop-blur-xl shadow-sm shadow-stone-200/50 dark:shadow-none">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-stone-900 dark:text-stone-50 font-headline">The Clinical Atelier</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-orange-700 dark:text-orange-500 border-b-2 border-orange-600 pb-1 font-headline font-semibold tracking-tight" href="#">Services</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-orange-800 transition-colors font-headline font-semibold tracking-tight" href="#">Facilities</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-orange-800 transition-colors font-headline font-semibold tracking-tight" href="#">Booking</a>
+<a class="text-stone-600 dark:text-stone-400 hover:text-orange-800 transition-colors font-headline font-semibold tracking-tight" href="#">Portal</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-primary-container text-on-primary-container px-6 py-2.5 rounded-lg font-headline font-bold hover:opacity-80 transition-all duration-300 active:scale-95">Book Appointment</button>
+<div class="text-stone-900 dark:text-stone-100 cursor-pointer">
+<span class="material-symbols-outlined text-3xl">account_circle</span>
+</div>
+</div>
+</div>
+</nav>
+<div class="flex pt-20">
+<!-- SideNavBar (Hidden on Mobile, visible on LG) -->
+<aside class="h-screen w-64 fixed left-0 top-0 hidden lg:flex flex-col bg-stone-50 dark:bg-stone-900 z-40 border-r border-stone-200/40 pt-24">
+<div class="flex flex-col gap-2 p-6">
+<div class="mb-8">
+<p class="text-stone-500 text-xs uppercase tracking-widest font-bold">Welcome back,</p>
+<h2 class="text-lg font-black text-stone-900 dark:text-stone-100 font-headline">Alex Rivers</h2>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-stone-200/50 dark:bg-stone-800 text-orange-700 dark:text-orange-400 rounded-lg font-bold transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800/60 rounded-lg transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">dentistry</span>
+<span>Treatments</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800/60 rounded-lg transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">medication</span>
+<span>Prescriptions</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800/60 rounded-lg transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Payments</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800/60 rounded-lg transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1 border-t border-stone-200/40 pt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800/60 rounded-lg transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-stone-800/60 rounded-lg transition-transform duration-200 hover:translate-x-1" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 lg:ml-64 p-8 min-h-screen">
+<div class="max-w-6xl mx-auto space-y-12">
+<!-- Hero Greeting Section -->
+<section class="relative overflow-hidden rounded-[2rem] bg-on-surface text-on-primary p-12 lg:p-16">
+<div class="absolute inset-0 opacity-20" data-alt="close-up of clean modern dental studio with soft warm lighting and high-end clinical equipment in soft focus" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA6gNeWhxBDBiO0s0ykBTgt3GAVvU7-l8ALDg3dcL0B65WMMj_8VrhWXLefk5vKWe4h0HaAp_NDsWbjby4RbNBodJ0ntwL4XyuNaqRb6KsuzgOl4yLv6YeJog6llhllQJPC24Hg5u3vKGi6IKXOqac5nyuoyCQzkvnR3vCdQprILOckcw2_f2zsS_Yyrot_WBpFux84Dz_tJDm69U5kS8SNQr7yf_zzw_nImPouK7K37aNajICuFyzbOpVYXtUi-kt8PDKmkw7rt1j1')"></div>
+<div class="absolute inset-0 bg-gradient-to-br from-primary/40 to-transparent"></div>
+<div class="relative z-10 space-y-4">
+<span class="inline-block px-4 py-1 rounded-full bg-primary-container/20 text-primary-fixed border border-primary-fixed/20 text-xs font-bold uppercase tracking-widest">Digital Health Portal</span>
+<h1 class="text-4xl md:text-6xl font-black font-headline tracking-tighter leading-none max-w-2xl">Bienvenido a nuestra App</h1>
+<p class="text-lg text-surface-container-highest max-w-lg font-medium opacity-90">Su viaje hacia una salud dental de excelencia comienza aquí. Gestione su bienestar con precisión clínica y calidez humana.</p>
+<div class="pt-6 flex flex-wrap gap-4">
+<button class="bg-primary-container text-on-primary-container px-8 py-4 rounded-xl font-bold flex items-center gap-2 hover:translate-y-[-2px] transition-all shadow-xl shadow-primary-container/20">
+<span class="material-symbols-outlined">calendar_today</span>
+                                Nuevo Turno
+                            </button>
+<button class="bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-xl font-bold hover:bg-white/20 transition-all">
+                                Ver Mi Historial
+                            </button>
+</div>
+</div>
+</section>
+<!-- Bento Grid for Quick Links -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Gestión de Turnos -->
+<div class="group relative overflow-hidden bg-surface-container-lowest rounded-3xl p-8 border border-outline-variant/15 hover:shadow-2xl hover:shadow-on-surface/5 transition-all duration-500 md:col-span-1">
+<div class="mb-6 w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl">event_available</span>
+</div>
+<h3 class="text-xl font-bold font-headline text-on-surface mb-3">Gestión de Turnos</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">Programe, reprograme o cancele sus citas con un solo toque. Sincronización en tiempo real con nuestra agenda clínica.</p>
+<a class="inline-flex items-center text-primary font-bold gap-2 group-hover:gap-4 transition-all" href="#">
+                            Acceder <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<!-- Información de Excelencia -->
+<div class="group relative overflow-hidden bg-surface-container-lowest rounded-3xl p-8 border border-outline-variant/15 hover:shadow-2xl hover:shadow-on-surface/5 transition-all duration-500 md:col-span-1">
+<div class="mb-6 w-14 h-14 rounded-2xl bg-secondary-container flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl">verified_user</span>
+</div>
+<h3 class="text-xl font-bold font-headline text-on-surface mb-3">Información de Excelencia</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">Acceda a sus resultados de laboratorio, planes de tratamiento y material educativo curado por especialistas.</p>
+<a class="inline-flex items-center text-secondary font-bold gap-2 group-hover:gap-4 transition-all" href="#">
+                            Explorar <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<!-- Soporte Inteligente -->
+<div class="group relative overflow-hidden bg-surface-container-lowest rounded-3xl p-8 border border-outline-variant/15 hover:shadow-2xl hover:shadow-on-surface/5 transition-all duration-500 md:col-span-1">
+<div class="mb-6 w-14 h-14 rounded-2xl bg-tertiary-fixed flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-3xl">smart_toy</span>
+</div>
+<h3 class="text-xl font-bold font-headline text-on-surface mb-3">Soporte Inteligente</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6">¿Tiene dudas? Nuestro asistente virtual y equipo de conserjería están disponibles 24/7 para asistirle.</p>
+<a class="inline-flex items-center text-tertiary font-bold gap-2 group-hover:gap-4 transition-all" href="#">
+                            Consultar <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- Featured Section: Next Appointment -->
+<section class="flex flex-col lg:flex-row gap-8 items-stretch">
+<div class="flex-1 bg-surface-container-high rounded-[2rem] p-8 lg:p-10 flex flex-col justify-between overflow-hidden relative">
+<div class="relative z-10">
+<h3 class="text-xs uppercase tracking-[0.2em] font-bold text-on-surface-variant mb-4">Próxima Visita</h3>
+<div class="space-y-2">
+<div class="text-5xl font-black font-headline text-on-surface tracking-tighter">14 Octubre</div>
+<div class="text-2xl font-bold text-primary">09:30 AM</div>
+</div>
+<div class="mt-8 flex items-center gap-4 bg-white/40 backdrop-blur px-6 py-4 rounded-2xl w-fit">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white">
+<img class="w-full h-full object-cover" data-alt="professional female dentist smiling in clinical attire with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDijf2TL3DgTG8Wj0TEoMhwjmBC1201MZU_GmZo4nsQXjnyzmAoc5Z4KHO9z9njk-SOeF5VYOiDjbAcBYAB66fX_nPchTy8arSg5_1n6z1jm66PNiN4dQG5Pw7UqDyTj9Rqu6pq2LxKdxuC3x5r0ym7MX0I6TrblgRh60uGIblB1vGfNhGR7l5pml2Nb1rsXE1VOS2fDCkxo_2M7B2BhEc_9MQyRfjHuf4jCTjqg1mSGGAoLVvdLqOsBZBf05zRuK-sHGmluCVuqdOb"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface leading-tight">Dra. Martina Rossi</p>
+<p class="text-xs text-on-surface-variant">Odontología Estética</p>
+</div>
+</div>
+</div>
+<div class="absolute -right-10 -bottom-10 opacity-10">
+<span class="material-symbols-outlined text-[200px]">dentistry</span>
+</div>
+</div>
+<div class="lg:w-1/3 bg-white border border-outline-variant/30 rounded-[2rem] p-8 flex flex-col justify-center gap-6">
+<div class="flex items-center justify-between">
+<h4 class="font-bold text-lg font-headline">Estado de Cuenta</h4>
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+</div>
+<div class="space-y-1">
+<p class="text-xs text-on-surface-variant font-medium">Saldo Pendiente</p>
+<p class="text-3xl font-black font-headline">$0.00</p>
+</div>
+<div class="h-1.5 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-full"></div>
+</div>
+<button class="w-full py-4 rounded-xl border-2 border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all">Ver Facturación</button>
+</div>
+</section>
+<!-- Health Tips Editorial -->
+<section class="space-y-8">
+<div class="flex items-end justify-between px-2">
+<div>
+<h2 class="text-3xl font-black font-headline tracking-tighter">Tu bienestar</h2>
+<p class="text-on-surface-variant">Consejos personalizados para Alex</p>
+</div>
+<a class="text-primary font-bold flex items-center gap-1 hover:underline" href="#">Ver más <span class="material-symbols-outlined text-sm">open_in_new</span></a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="group cursor-pointer">
+<div class="aspect-[16/9] rounded-3xl overflow-hidden mb-4 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="macro close-up of clear water droplets on a fresh green leaf, morning light, refreshing mood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgMJaqrTZBCeZUL2QQDImFDUn_3IV61_UQSy4U31MO2Ots7FkFwYmdlHyjt43b8QScEoQDTdo_vRdkLYC4CRwggxbgrHDH3v7fb6qy1tfdbd0cOSTI2-icMET66l9nbz5JEZRiPdKpCMB4AeoR3O3HNAqXK-MG1o58b5pqRaZEjmj6K17VLexisbkjae1hyGwFpjavTF_pXIrKiCxxjzo2DW27Yj8pNo4EQo2xl918Oclt5kymJUOO_yiRKWpyV-el4zwe_Ndere_V"/>
+<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full text-xs font-bold text-primary">Higiene</div>
+</div>
+<h4 class="text-xl font-bold font-headline mb-2">El arte del cepillado consciente</h4>
+<p class="text-on-surface-variant text-sm line-clamp-2">Descubra por qué 2 minutos no son solo una cifra, sino un ritual necesario para su salud a largo plazo.</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-[16/9] rounded-3xl overflow-hidden mb-4 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="selection of colorful fresh organic fruits and vegetables on a rustic wooden table with soft side lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6mJ1nmhAfxSCjEJjUJaMEl7Ny0XLuY4DukaE3ZvUPfc75XV097-PEkItbe7jAteD5YRvyXSGUKNEGyte0BznF2NgD6CTHWGmSA-7sdpAFbkt8-dC3PSnIc5mEF33-g9Jb28MysAg7ZxhmphE8pnsIOk30GIn7qluT7b_zd3Q-No7obnoOrjnHvnCcI12qXVsjGVZOEgLjUD5mkFB4tRL8OnwBisnYKIT3od6IV9pe_Gs1aQyVCX1lEoYwFA5HSKdbZDLzk3e1RKQP"/>
+<div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full text-xs font-bold text-primary">Nutrición</div>
+</div>
+<h4 class="text-xl font-bold font-headline mb-2">Alimentos que fortalecen el esmalte</h4>
+<p class="text-on-surface-variant text-sm line-clamp-2">Una guía sobre superalimentos que actúan como un escudo natural para su sonrisa.</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-stone-950 dark:bg-black w-full py-12 px-8 mt-12">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+<div class="space-y-4">
+<div class="font-headline font-bold text-stone-100 text-xl">The Clinical Atelier</div>
+<p class="text-stone-400 text-sm leading-relaxed">Redefiniendo la precisión dental a través del diseño y la tecnología centrada en el paciente.</p>
+</div>
+<div class="flex flex-col gap-3">
+<span class="font-['Inter'] text-xs uppercase tracking-widest text-stone-400 mb-2">Legal</span>
+<a class="text-stone-500 hover:text-stone-200 transition-colors duration-300 text-xs" href="#">Privacy Policy</a>
+<a class="text-stone-500 hover:text-stone-200 transition-colors duration-300 text-xs" href="#">Terms of Service</a>
+<a class="text-stone-500 hover:text-stone-200 transition-colors duration-300 text-xs" href="#">Accessibility</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="font-['Inter'] text-xs uppercase tracking-widest text-stone-400 mb-2">Contacto</span>
+<a class="text-stone-500 hover:text-stone-200 transition-colors duration-300 text-xs" href="#">Contact Us</a>
+<a class="text-stone-500 hover:text-stone-200 transition-colors duration-300 text-xs" href="#">Urgencias 24/7</a>
+<a class="text-stone-500 hover:text-stone-200 transition-colors duration-300 text-xs" href="#">Sede Central</a>
+</div>
+<div class="space-y-4">
+<span class="font-['Inter'] text-xs uppercase tracking-widest text-stone-400 mb-2">Newsletter</span>
+<div class="flex border-b border-stone-800 pb-2">
+<input class="bg-transparent border-none focus:ring-0 text-white text-sm w-full placeholder:text-stone-600" placeholder="Email" type="email"/>
+<button class="text-orange-500 hover:text-orange-400">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+<div class="text-stone-500 text-[10px] uppercase tracking-widest mt-8">
+                    © 2024 The Clinical Atelier. Modern Precision.
+                </div>
+</div>
+</div>
+</footer>
+</body></html>

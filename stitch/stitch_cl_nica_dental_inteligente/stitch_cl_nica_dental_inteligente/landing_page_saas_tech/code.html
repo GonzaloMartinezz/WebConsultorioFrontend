@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OdontoCare | Clinical Terminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#71370b",
+            "on-surface": "#e5e2e1",
+            "surface-tint": "#ffb68b",
+            "primary": "#ffb68b",
+            "on-secondary-container": "#f9a571",
+            "inverse-surface": "#e5e2e1",
+            "on-tertiary": "#003352",
+            "on-surface-variant": "#e0c0af",
+            "surface-container-high": "#2a2a2a",
+            "on-background": "#e5e2e1",
+            "on-primary": "#522300",
+            "surface-container-low": "#1c1b1b",
+            "on-tertiary-container": "#003a5c",
+            "surface": "#131313",
+            "primary-container": "#ff7a00",
+            "surface-bright": "#3a3939",
+            "surface-container-highest": "#353534",
+            "tertiary-fixed-dim": "#95ccff",
+            "error-container": "#93000a",
+            "secondary-container": "#74390d",
+            "on-primary-fixed": "#321200",
+            "on-secondary": "#522300",
+            "secondary": "#ffb68b",
+            "surface-container-lowest": "#0e0e0e",
+            "on-error-container": "#ffdad6",
+            "error": "#ffb4ab",
+            "tertiary": "#95ccff",
+            "on-primary-fixed-variant": "#753400",
+            "secondary-fixed": "#ffdbc8",
+            "on-primary-container": "#5c2800",
+            "on-secondary-fixed": "#321200",
+            "inverse-on-surface": "#313030",
+            "tertiary-fixed": "#cde5ff",
+            "inverse-primary": "#994700",
+            "outline": "#a78b7c",
+            "surface-container": "#201f1f",
+            "on-error": "#690005",
+            "surface-variant": "#353534",
+            "background": "#131313",
+            "primary-fixed-dim": "#ffb68b",
+            "surface-dim": "#131313",
+            "tertiary-container": "#00a8ff",
+            "secondary-fixed-dim": "#ffb68b",
+            "on-tertiary-fixed": "#001d32",
+            "on-tertiary-fixed-variant": "#004a75",
+            "primary-fixed": "#ffdbc8",
+            "outline-variant": "#584235"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "headline": ["Inter"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+    .kinetic-glow:hover {
+      box-shadow: 0 0 15px rgba(255, 122, 0, 0.2);
+    }
+    .glass-panel {
+      background: rgba(25, 25, 25, 0.7);
+      backdrop-filter: blur(12px);
+    }
+    .odontogram-grid {
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      gap: 4px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary-container selection:text-on-primary-fixed">
+<!-- TopNavBar Implementation -->
+<nav class="sticky top-0 z-50 flex justify-between items-center px-8 h-16 bg-[#131313]/80 backdrop-blur-md border-b border-[#353534]/15 shadow-[0px_24px_48px_rgba(0,0,0,0.5)]">
+<div class="flex items-center gap-3">
+<span class="text-[#FF7A00] font-black text-xl tracking-tighter">OdontoCare</span>
+<div class="h-4 w-[1px] bg-outline-variant/30 mx-2"></div>
+<span class="text-on-surface-variant font-label text-sm tracking-tight">Clinical Terminal</span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-[#FF7A00] font-bold font-label text-sm" href="#">Dashboard</a>
+<a class="text-[#E0C0AF] hover:text-[#FFB68B] font-label text-sm transition-colors" href="#">Patients</a>
+<a class="text-[#E0C0AF] hover:text-[#FFB68B] font-label text-sm transition-colors" href="#">Clinical Records</a>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group hidden sm:block">
+<input class="bg-surface-container-lowest border-none border-b border-outline-variant/30 focus:ring-0 focus:border-primary text-sm w-48 transition-all duration-300 focus:w-64" placeholder="Search terminal..." type="text"/>
+<span class="material-symbols-outlined absolute right-2 top-1.5 text-on-surface-variant text-base">search</span>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded bg-surface-container-high border border-outline-variant/20 overflow-hidden">
+<img alt="Dr. Smith Profile" class="w-full h-full object-cover" data-alt="Professional portrait of a male dentist in a modern clinic setting, soft clinical lighting, confident expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX7OkHGzChO8C8uKBqkQyqumWdWes1FPDlvnTPJulCSX_BGV1jdqvQSywejxBEJ9bE53WYM8S_WjfJeotSxeC3xkannBAYsg_6zmAN87XlFdeud4HmtGJmI47K8KcuC6pcoQhC3MOXF9V1rblaayz8UBqR22WW5QTRqZzualCFERhbQmlSszAMdbS_ebO0kBAVAdAGs7lSwaECRaB9w4rvAx7hx5xZMp0EA5UyO9OrfyDQe0oLNrfVhbimi-gvf3BnxtDts9OG86Is"/>
+</div>
+</div>
+</nav>
+<main>
+<!-- Hero Section: The Kinetic Laboratory -->
+<section class="relative min-h-[921px] flex flex-col items-center justify-center overflow-hidden px-6 pt-20">
+<div class="absolute inset-0 z-0 overflow-hidden">
+<div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary-container/10 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-tertiary/5 blur-[100px] rounded-full"></div>
+<div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(53, 53, 52, 0.15) 1px, transparent 0); background-size: 32px 32px;"></div>
+</div>
+<div class="relative z-10 max-w-6xl w-full text-center">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-surface-container-high border border-outline-variant/20 mb-8">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="text-[10px] uppercase tracking-[0.2em] font-bold text-on-surface-variant">Version 4.2.0 Stable Release</span>
+</div>
+<h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-6 bg-gradient-to-b from-on-surface to-on-surface-variant bg-clip-text text-transparent">
+          Clinical Precision.<br/>Technical Authority.
+        </h1>
+<p class="max-w-2xl mx-auto text-on-surface-variant text-lg md:text-xl font-medium mb-12 leading-relaxed">
+          The high-performance workstation for modern dentistry. Real-time patient intelligence delivered through a terminal-grade interface.
+        </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+<button class="px-8 py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary-fixed font-bold rounded-lg shadow-lg hover:scale-[1.02] transition-transform flex items-center gap-2">
+            Initialize Workspace
+            <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="px-8 py-4 bg-surface-container-high border border-outline-variant/30 text-on-surface font-semibold rounded-lg hover:bg-surface-container-highest transition-colors">
+            View Documentation
+          </button>
+</div>
+</div>
+<!-- Odontogram Preview Component -->
+<div class="relative z-10 w-full max-w-5xl mt-24 px-4">
+<div class="bg-surface-container-low border border-outline-variant/15 rounded-xl p-6 shadow-2xl">
+<div class="flex items-center justify-between mb-8 pb-4 border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="px-3 py-1 bg-[#0E0E0E] rounded font-mono text-xs text-primary tracking-widest border border-primary/20">PREVIEW_MODE</div>
+<h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant">Interactive Odontogram</h3>
+</div>
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-error/20 border border-error/40"></div>
+<div class="w-3 h-3 rounded-full bg-primary/20 border border-primary/40"></div>
+<div class="w-3 h-3 rounded-full bg-on-surface-variant/20 border border-on-surface-variant/40"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div class="space-y-6">
+<div class="odontogram-grid">
+<!-- Top Row Teeth -->
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">18</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">17</div>
+<div class="aspect-square bg-error-container/40 border border-error/30 rounded-sm flex items-center justify-center text-[10px] text-error font-bold">16</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">15</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">14</div>
+<div class="aspect-square bg-primary-container/20 border border-primary/40 rounded-sm flex items-center justify-center text-[10px] text-primary font-bold">13</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">12</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">11</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">21</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">22</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">23</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">24</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">25</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">26</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">27</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">28</div>
+</div>
+<div class="odontogram-grid">
+<!-- Bottom Row Teeth -->
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">48</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">47</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">46</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">45</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">44</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">43</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">42</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">41</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">31</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">32</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">33</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">34</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">35</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">36</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">37</div>
+<div class="aspect-square bg-surface-container-highest border border-outline-variant/20 rounded-sm flex items-center justify-center text-[10px] text-on-surface-variant">38</div>
+</div>
+</div>
+<div class="p-4 bg-surface-container-highest rounded border border-outline-variant/10">
+<h4 class="text-xs font-bold text-primary tracking-widest uppercase mb-4">Diagnostics: tooth_16</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between text-xs">
+<span class="text-on-surface-variant">Pathology</span>
+<span class="text-error font-bold">Deep Caries</span>
+</div>
+<div class="flex items-center justify-between text-xs">
+<span class="text-on-surface-variant">Status</span>
+<span class="text-on-surface">Urgent Treatment</span>
+</div>
+<div class="w-full bg-[#0E0E0E] h-[1px] my-2"></div>
+<div class="text-[11px] text-on-surface-variant/80 italic leading-snug">
+                  Analysis indicates distal-occlusal decay approaching pulp chamber. Endodontic evaluation required.
+                </div>
+<button class="w-full py-2 bg-primary-container/10 border border-primary/30 text-primary text-[10px] uppercase font-bold tracking-widest hover:bg-primary-container/20 transition-all">
+                  Schedule Root Canal
+                </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid Sections -->
+<section class="py-32 px-8 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Clinical Precision -->
+<div class="md:col-span-8 bg-surface-container-low rounded-xl p-10 border border-outline-variant/10 flex flex-col justify-between overflow-hidden relative group">
+<div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-9xl">biotech</span>
+</div>
+<div class="max-w-md relative z-10">
+<span class="text-primary font-bold text-xs uppercase tracking-widest mb-4 block">Clinical Precision</span>
+<h2 class="text-3xl font-bold tracking-tight mb-6 text-on-surface">Sub-Millimeter Accuracy in Every Record.</h2>
+<p class="text-on-surface-variant leading-relaxed">
+              Our proprietary rendering engine processes intraoral scans and DICOM files with zero latency. Map every restoration, cavity, and anatomical feature on a dynamic, high-fidelity canvas.
+            </p>
+</div>
+<div class="mt-12 flex gap-4">
+<div class="p-4 bg-surface-container-highest rounded border border-outline-variant/10 text-center flex-1">
+<div class="text-2xl font-black text-primary mb-1">0.02mm</div>
+<div class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Resolution Depth</div>
+</div>
+<div class="p-4 bg-surface-container-highest rounded border border-outline-variant/10 text-center flex-1">
+<div class="text-2xl font-black text-primary mb-1">REAL-TIME</div>
+<div class="text-[10px] text-on-surface-variant uppercase tracking-tighter">3D Synthesis</div>
+</div>
+</div>
+</div>
+<!-- Automated Workflows -->
+<div class="md:col-span-4 bg-surface-container-low rounded-xl p-10 border border-outline-variant/10 flex flex-col justify-between">
+<div>
+<span class="text-primary font-bold text-xs uppercase tracking-widest mb-4 block">Automated Workflows</span>
+<h2 class="text-3xl font-bold tracking-tight mb-6 text-on-surface">The 0-Click Terminal.</h2>
+<p class="text-on-surface-variant leading-relaxed mb-8">
+              Voice-to-charting, automatic insurance verification, and AI-driven follow-up sequences.
+            </p>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-3 p-3 bg-[#0E0E0E] rounded border border-outline-variant/5">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span class="text-xs text-on-surface font-medium">Smart Billing Sync</span>
+</div>
+<div class="flex items-center gap-3 p-3 bg-[#0E0E0E] rounded border border-outline-variant/5">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span class="text-xs text-on-surface font-medium">Auto-Charting Voice AI</span>
+</div>
+</div>
+</div>
+<!-- Patient Intelligence -->
+<div class="md:col-span-12 bg-[#0E0E0E] rounded-xl p-12 border border-outline-variant/10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<div>
+<span class="text-primary font-bold text-xs uppercase tracking-widest mb-4 block">Patient Intelligence</span>
+<h2 class="text-4xl font-black tracking-tighter mb-6 text-on-surface">Anticipate Outcomes Before They Happen.</h2>
+<p class="text-on-surface-variant text-lg leading-relaxed mb-8">
+              Leverage the power of 12M+ clinical data points to predict long-term periodontal health and restoration longevity. OdontoCare doesn't just record the past; it designs the future of your patient's smile.
+            </p>
+<button class="text-primary font-bold flex items-center gap-2 group">
+              Explore Predictive Engine
+              <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+</button>
+</div>
+<div class="relative aspect-video rounded-lg overflow-hidden border border-outline-variant/20 shadow-2xl">
+<img alt="Clinical Analytics Dashboard" class="w-full h-full object-cover opacity-60" data-alt="Modern digital interface showing complex dental analytics, heat maps of patient health, and sleek data visualizations in dark mode" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV7QskSYncT4iv-skMBz4M_6ykP_CPPvkObUF1qnqgJfMAxWdY9ug-g1bMC5ugiS2po4xrSgSsrEWwJ4ZiHPjaLJr_9h_UpkN-v4jE73CszAxD7sQJ5_T5sTlm70ojlVAp72sZCKR7Lym5Dk-prJRhnB2MRIZpGsZ0OS68ttjNbITdOuL0VR_uXRgnZAXc-20YubbbWM9VzT2kO0OgBrf3ln6Q31BLd1JRWrYigxJwkckVPt4UdzWV6hj653VX1F_DZpouQJiMjjCX"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0E0E0E] to-transparent"></div>
+<div class="absolute bottom-6 left-6 p-4 bg-surface/80 backdrop-blur-sm rounded border border-primary/20">
+<div class="flex items-center gap-2 mb-2">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="text-[10px] font-bold text-on-surface uppercase tracking-widest">Active Analysis</span>
+</div>
+<div class="text-sm font-mono text-primary">PT_INDEX: 94.2% (OPTIMAL)</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Visual Divider -->
+<div class="h-[1px] w-full bg-gradient-to-r from-transparent via-outline-variant/30 to-transparent"></div>
+<!-- Call to Action -->
+<section class="py-32 px-8 text-center bg-surface">
+<div class="max-w-3xl mx-auto">
+<h2 class="text-5xl font-black tracking-tighter mb-8">Ready to upgrade your clinical interface?</h2>
+<p class="text-on-surface-variant mb-12 text-lg">Join 4,500+ clinics using the industry's most advanced dental terminal.</p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<input class="bg-surface-container-low border-outline-variant/20 focus:border-primary px-6 py-4 rounded-lg w-full max-w-sm text-sm" placeholder="clinic@hospital.com" type="email"/>
+<button class="bg-primary-container text-on-primary-fixed font-bold px-8 py-4 rounded-lg kinetic-glow transition-all">Request Demo Access</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer implementation -->
+<footer class="ml-0 md:ml-0 px-12 py-16 bg-[#0E0E0E] border-t border-[#353534]/15 grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="flex flex-col gap-6">
+<div class="text-[#FF7A00] font-black text-2xl tracking-tighter">OdontoCare</div>
+<p class="text-[#E0C0AF] font-['Inter'] text-[10px] uppercase tracking-widest leading-relaxed">
+        Terminal v4.2.0<br/>The professional standard for digital dentistry. Built for clinicians, by engineers.
+      </p>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="text-[#E5E2E1] font-bold text-xs uppercase tracking-widest">System</h4>
+<a class="text-[#E0C0AF] font-['Inter'] text-[10px] uppercase tracking-widest hover:text-[#FF7A00] transition-colors" href="#">API Docs</a>
+<a class="text-[#E0C0AF] font-['Inter'] text-[10px] uppercase tracking-widest hover:text-[#FF7A00] transition-colors" href="#">System Status</a>
+<a class="text-[#E0C0AF] font-['Inter'] text-[10px] uppercase tracking-widest hover:text-[#FF7A00] transition-colors" href="#">Change Log</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="text-[#E5E2E1] font-bold text-xs uppercase tracking-widest">Legal</h4>
+<a class="text-[#E0C0AF] font-['Inter'] text-[10px] uppercase tracking-widest hover:text-[#FF7A00] transition-colors" href="#">Privacy Policy</a>
+<a class="text-[#E0C0AF] font-['Inter'] text-[10px] uppercase tracking-widest hover:text-[#FF7A00] transition-colors" href="#">Terms of Service</a>
+<a class="text-[#E0C0AF] font-['Inter'] text-[10px] uppercase tracking-widest hover:text-[#FF7A00] transition-colors" href="#">HIPAA Compliance</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="text-[#E5E2E1] font-bold text-xs uppercase tracking-widest">Support</h4>
+<a class="text-[#E0C0AF] font-['Inter'] text-[10px] uppercase tracking-widest hover:text-[#FF7A00] transition-colors" href="#">Help Center</a>
+<a class="text-[#E0C0AF] font-['Inter'] text-[10px] uppercase tracking-widest hover:text-[#FF7A00] transition-colors" href="#">Community</a>
+<div class="mt-4 text-[#E0C0AF] font-['Inter'] text-[10px] uppercase tracking-widest">
+        © 2024 OdontoCare Terminal. All rights reserved.
+      </div>
+</div>
+</footer>
+</body></html>
