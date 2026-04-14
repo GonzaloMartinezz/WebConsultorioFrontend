@@ -16,7 +16,8 @@ import Turnos from "./pages/Turnos.jsx";
 import AcercaDe from "./pages/AcercaDe.jsx";
 import Contacto from "./pages/Contacto.jsx";
 import Login from "./pages/Login.jsx";
-import MiPerfil from "./pages/MiPerfil.jsx";
+import PortalPaciente from "./pages/PortalPaciente.jsx";
+import Estructura from "./pages/Estructura.jsx";
 
 // =========================================
 // IMPORTACIONES PRIVADAS (Panel Admin)
@@ -68,6 +69,8 @@ export default function App() {
         {/* Portal de Acceso */}
         <Route path="/login" element={<Login />} />
 
+        <Route path="/estructura" element={<Estructura />} />
+
         {/* ========================================= */}
         {/* EL MUNDO PRIVADO DEL PACIENTE               */}
         {/* ========================================= */}
@@ -75,7 +78,7 @@ export default function App() {
           path="/mi-perfil" 
           element={
             <ProtectedRoute>
-              <MiPerfil />
+              <PortalPaciente />
             </ProtectedRoute>
           } 
         />

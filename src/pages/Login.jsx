@@ -160,10 +160,10 @@ const Login = () => {
 
       <div className="mb-8">
         <h2 className="text-xl font-bold text-white mb-2">
-          {modoRecuperar ? 'Password Recovery Protocol' : isRegistro ? 'System Registration' : 'System Authentication'}
+          {modoRecuperar ? 'Recuperar Contraseña' : isRegistro ? 'Registro de Paciente' : 'Iniciar Sesión'}
         </h2>
         <p className="text-xs font-medium text-gray-500">
-          {modoRecuperar ? 'Establish a new secure key for your credentials.' : isRegistro ? 'Request new clearance to access the database.' : 'Initialize secure session via encrypted gateway.'}
+          {modoRecuperar ? 'Establece una nueva clave de acceso seguro.' : isRegistro ? 'Crea tu cuenta para acceder a tu historial y turnos.' : 'Ingresa tus credenciales para acceder a tu portal personal.'}
         </p>
       </div>
 
@@ -185,14 +185,14 @@ const Login = () => {
         {isRegistro && !modoRecuperar && (
           <div className="flex gap-4">
             <div className="w-1/2 space-y-1.5">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Operator Name</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Nombre</label>
               <input
                 name="nombre" type="text" value={form.nombre} onChange={handleChange} required
                 className="w-full bg-[#1e1e1e] border border-zinc-800 rounded-lg px-4 py-3 text-sm text-gray-200 outline-none focus:border-orange-500/50 transition-colors"
               />
             </div>
             <div className="w-1/2 space-y-1.5">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Surname</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Apellido</label>
               <input
                 name="apellido" type="text" value={form.apellido} onChange={handleChange} required
                 className="w-full bg-[#1e1e1e] border border-zinc-800 rounded-lg px-4 py-3 text-sm text-gray-200 outline-none focus:border-orange-500/50 transition-colors"
@@ -204,12 +204,12 @@ const Login = () => {
         {/* USER EMAIL */}
         <div className="space-y-1.5">
           <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-            {isRegistro ? 'Network Email' : 'Terminal ID / Email'}
+            Correo Electrónico
           </label>
           <div className="relative">
             <input
               name="email" type="email" value={form.email} onChange={handleChange} required
-              placeholder="operator@cm-dental.net"
+              placeholder="correo@ejemplo.com"
               className="w-full bg-[#1e1e1e] border border-zinc-800 rounded-lg pl-10 pr-4 py-3 text-sm text-gray-200 outline-none focus:border-orange-500/50 transition-colors placeholder:text-zinc-700 font-mono"
             />
             <svg className="absolute top-1/2 left-4 transform -translate-y-1/2 text-zinc-600" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" /></svg>
@@ -220,16 +220,16 @@ const Login = () => {
         <div className="space-y-1.5">
           <div className="flex justify-between items-end">
             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-              {modoRecuperar ? 'New Access Key' : 'Access Key'}
+              {modoRecuperar ? 'Nueva Contraseña' : 'Contraseña'}
             </label>
             {!isRegistro && !modoRecuperar && (
               <button type="button" onClick={() => toggleModo('recuperar')} className="text-[9px] font-bold text-orange-400 hover:text-orange-300 uppercase tracking-widest transition-colors">
-                Recover Key
+                ¿Olvidaste tu contraseña?
               </button>
             )}
             {modoRecuperar && (
               <button type="button" onClick={() => toggleModo('login')} className="text-[9px] font-bold text-orange-400 hover:text-orange-300 uppercase tracking-widest transition-colors">
-                Cancel Auth Override
+                Cancelar y Volver
               </button>
             )}
           </div>
@@ -246,7 +246,7 @@ const Login = () => {
         {/* CONFIRMAR PASSWORD */}
         {modoRecuperar && (
           <div className="space-y-1.5 pt-2">
-            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Confirm New Key</label>
+            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Confirmar Contraseña</label>
             <input
               name="confirmarPassword" type="password" value={form.confirmarPassword} onChange={handleChange} required minLength={4}
               placeholder="••••••••••••"
@@ -261,7 +261,7 @@ const Login = () => {
             type="submit" disabled={cargando}
             className="w-full bg-gradient-to-r from-orange-400 to-orange-500 text-orange-950 px-4 py-3.5 rounded-lg font-black text-sm uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(251,146,60,0.15)] disabled:opacity-50"
           >
-            {cargando ? 'PROCESSING...' : modoRecuperar ? 'UPDATE CLEARANCE' : isRegistro ? 'INITIALIZE NODE' : 'EXECUTE ACCESS'}
+            {cargando ? 'PROCESANDO...' : modoRecuperar ? 'ACTUALIZAR CONTRASEÑA' : isRegistro ? 'REGISTRARSE' : 'INICIAR SESIÓN'}
             {!cargando && <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" /><polyline points="10 17 15 12 10 7" /><line x1="15" y1="12" x2="3" y2="12" /></svg>}
           </button>
         </div>
@@ -271,7 +271,7 @@ const Login = () => {
           <div className="pt-6">
             <div className="flex items-center gap-4 mb-4">
               <div className="h-px bg-zinc-800 flex-1"></div>
-              <span className="text-[9px] font-bold text-gray-600 uppercase tracking-widest bg-[#141414] px-2">Alternative Protocols</span>
+              <span className="text-[9px] font-bold text-gray-600 uppercase tracking-widest bg-[#141414] px-2">Otros Métodos</span>
               <div className="h-px bg-zinc-800 flex-1"></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -290,10 +290,10 @@ const Login = () => {
 
     {/* FOOTER SWITCHER */}
     <div className="mt-8 text-center z-10 flex flex-col gap-4 items-center">
-      <p className="text-xs text-gray-500 font-medium">
-        {isRegistro ? 'Current clearance authorized?' : 'Unregistered terminal?'}
-        <button onClick={() => toggleModo(isRegistro ? 'login' : 'registro')} className="ml-2 font-bold text-orange-400 hover:text-orange-300 transition-colors">
-          {isRegistro ? 'Initialize Session' : 'Request Credentials'}
+      <p className="text-sm text-gray-400 font-medium tracking-wide">
+        {isRegistro ? '¿Ya tienes una cuenta?' : '¿No tienes cuenta?'}
+        <button onClick={() => toggleModo(isRegistro ? 'login' : 'registro')} className="ml-2 font-bold text-orange-400 hover:text-orange-300 transition-colors uppercase tracking-wider">
+          {isRegistro ? 'Inicia Sesión' : 'Regístrate'}
         </button>
       </p>
 
@@ -314,7 +314,7 @@ const Login = () => {
 
     <div className="absolute top-6 left-6 z-10 hidden md:block">
       <Link to="/" className="text-[10px] font-bold text-gray-500 hover:text-orange-400 uppercase tracking-widest transition-colors flex items-center gap-2">
-        &larr; Exit Secure Node
+        &larr; Volver al Inicio
       </Link>
     </div>
   </main> 

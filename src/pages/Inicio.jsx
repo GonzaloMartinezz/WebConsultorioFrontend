@@ -1,9 +1,9 @@
 import SeccionAtencionInmediata from "../components/SeccionAtencionInmediata";
-import SeccionMapa from "../components/SeccionMapa";
-import SeccionPreguntasFrecuentes from "../components/SeccionPreguntasFrecuentes";
-import BannerPlanes from "../components/BannerPlanes"; 
+import Instalaciones from "../components/Instalaciones";
 import SeccionPlanesAtencion from "../components/SeccionPlanesAtencion";
-import SeccionExpertos from "../components/SeccionExpertos";
+import SeccionProfesionales from "../components/SeccionProfesionales";
+import SeccionPreguntasFrecuentes from "../components/SeccionPreguntasFrecuentes";
+import BannerPlanes from "../components/BannerPlanes";
 import HeroCarousel from "../components/HeroCarousel";
 
 const Inicio = () => {
@@ -20,13 +20,10 @@ const Inicio = () => {
       <SeccionAtencionInmediata />
 
       {/* 4. SECCIÓN PROFESIONALES */}
-      <SeccionPlanesAtencion />
+      <SeccionProfesionales />
 
       {/* 5. MAPA Y UBICACIÓN */}
-      <SeccionMapa />
-
-      {/* 6. EXPERTOS Y COMUNIDAD */}
-      <SeccionExpertos />
+      <Instalaciones />
 
       {/* 7. PREGUNTAS FRECUENTES */}
       <SeccionPreguntasFrecuentes />

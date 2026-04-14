@@ -89,10 +89,10 @@ const Navbar = () => {
             <BrandLogo scrolled={scrolled} />
           </Link>
 
-          {/* CENTRO: Menú Desktop */}
           <div className="hidden lg:flex items-center gap-10 font-bold text-sm">
             <Link to="/" className={`transition-colors ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>Inicio</Link>
             <Link to="/acerca" className={`transition-colors ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>Nosotros</Link>
+            <Link to="/estructura" className={`transition-colors ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>Estructura</Link>
             <Link to="/contacto" className={`transition-colors ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>Contacto</Link>
           </div>
 
@@ -136,6 +136,7 @@ const Navbar = () => {
             <div className="flex flex-col p-6 space-y-6">
               <Link to="/" className="text-xl font-black text-primary uppercase" onClick={() => setMenuOpen(false)}>Inicio</Link>
               <Link to="/acerca" className="text-xl font-black text-primary uppercase" onClick={() => setMenuOpen(false)}>Nosotros</Link>
+              <Link to="/estructura" className="text-xl font-black text-primary uppercase" onClick={() => setMenuOpen(false)}>Estructura</Link>
               <Link to="/contacto" className="text-xl font-black text-primary uppercase" onClick={() => setMenuOpen(false)}>Contacto</Link>
 
               <div className="h-px w-full bg-secondary/30"></div>
