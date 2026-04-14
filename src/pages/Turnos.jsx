@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { User, ClipboardList, CheckCircle2, Circle, CalendarDays, FileEdit, Calendar, Pill } from 'lucide-react';
 
 const Turnos = () => {
   const { user } = useAuth();
@@ -13,8 +14,10 @@ const Turnos = () => {
     email: "",
     telefono: "",
     doctor: "",
-    fecha: "",
-    horaTentativa: "Mañana",
+    fechaDia: "",
+    fechaMes: "",
+    fechaAno: "",
+    horaTentativa: "09:00",
     motivo: "",
   });
 
@@ -49,13 +52,14 @@ const Turnos = () => {
     setCargando(true);
     setMensaje({ texto: "", tipo: "" });
 
-    if (!form.nombre || !form.apellido || !form.dni || !form.telefono || !form.doctor || !form.fecha || !form.motivo) {
+    if (!form.nombre || !form.apellido || !form.dni || !form.telefono || !form.doctor || !form.fechaDia || !form.fechaMes || !form.fechaAno || !form.motivo) {
         setMensaje({ texto: "Por favor complete todos los datos requeridos.", tipo: "error" });
         setCargando(false);
         return;
     }
 
     const telefonoCompleto = `+549${form.telefono.replace(/\s+/g, '')}`;
+    const fechaCompleta = `${form.fechaAno}-${form.fechaMes.padStart(2, '0')}-${String(form.fechaDia).padStart(2, '0')}`;
 
     const formDataBackend = {
       nombrePaciente: form.nombre,
@@ -64,7 +68,7 @@ const Turnos = () => {
       email: form.email,
       telefono: telefonoCompleto,
       profesional: form.doctor,
-      fecha: form.fecha,
+      fecha: fechaCompleta,
       hora: form.horaTentativa,
       motivo: form.motivo,
       estado: 'Pendiente'
@@ -83,7 +87,7 @@ const Turnos = () => {
 
 *Detalles del turno:*
 - Profesional: ${form.doctor}
-- Fecha Tentativa: ${form.fecha.split('-').reverse().join('/')}
+- Fecha Tentativa: ${form.fechaDia}/${form.fechaMes}/${form.fechaAno}
 - Turno: ${form.horaTentativa}
 - Motivo: ${form.motivo}`;
 
@@ -96,7 +100,7 @@ const Turnos = () => {
 
       setForm({
         ...form,
-        dni: "", doctor: "", fecha: "", horaTentativa: "Mañana", motivo: "",
+        dni: "", doctor: "", fechaDia: "", fechaMes: "", fechaAno: "", horaTentativa: "Temprano", motivo: "",
       });
 
       window.location.href = url;
@@ -148,7 +152,7 @@ const Turnos = () => {
             {/* Section: Personal Info */}
             <section className="space-y-6">
               <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-[#994700]">person</span>
+                <User className="text-[#994700]" size={28} />
                 <h2 className="text-xl font-bold">Datos Personales</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -163,7 +167,7 @@ const Turnos = () => {
             {/* Section: Specialist Selection */}
             <section className="space-y-6">
               <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-[#994700]">clinical_notes</span>
+                <ClipboardList className="text-[#994700]" size={28} />
                 <h2 className="text-xl font-bold">Elegir Profesional</h2>
               </div>
               <div className="grid grid-cols-1 gap-4">
@@ -176,9 +180,7 @@ const Turnos = () => {
                     <p className="font-bold text-[#2b1704]">Dr. Adolfo Martinez</p>
                     <p className="text-xs text-[#584235]">Implantología & Cirugía</p>
                   </div>
-                  <span className="material-symbols-outlined text-[#994700]" style={{fontVariationSettings: form.doctor === 'Dr. Adolfo Martinez' ? "'FILL' 1" : "'FILL' 0"}}>
-                    {form.doctor === 'Dr. Adolfo Martinez' ? 'check_circle' : 'radio_button_unchecked'}
-                  </span>
+                  {form.doctor === 'Dr. Adolfo Martinez' ? <CheckCircle2 className="text-[#ff7a00]" size={28} /> : <Circle className="text-[#994700]" size={28} />}
                 </div>
 
                 <div onClick={() => handleSelectDoctor('Dra. Erina Carcara')} className={`group relative flex items-center p-4 rounded-[1.5rem] border-2 transition-all cursor-pointer ${form.doctor === 'Dra. Erina Carcara' ? 'bg-[#ffffff] border-[#ff7a00]' : 'bg-[#fff1e9] border-transparent hover:border-[#e0c0af]'}`}>
@@ -189,9 +191,7 @@ const Turnos = () => {
                     <p className="font-bold text-[#2b1704]">Dra. Erina Carcara</p>
                     <p className="text-xs text-[#584235]">Ortodoncia & Estética</p>
                   </div>
-                  <span className="material-symbols-outlined text-[#994700]" style={{fontVariationSettings: form.doctor === 'Dra. Erina Carcara' ? "'FILL' 1" : "'FILL' 0"}}>
-                    {form.doctor === 'Dra. Erina Carcara' ? 'check_circle' : 'radio_button_unchecked'}
-                  </span>
+                  {form.doctor === 'Dra. Erina Carcara' ? <CheckCircle2 className="text-[#ff7a00]" size={28} /> : <Circle className="text-[#994700]" size={28} />}
                 </div>
 
               </div>
@@ -200,22 +200,64 @@ const Turnos = () => {
             {/* Section: Date & Time */}
             <section className="space-y-6">
               <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-[#994700]">calendar_today</span>
+                <CalendarDays className="text-[#994700]" size={28} />
                 <h2 className="text-xl font-bold">Fecha Preferida</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-xs uppercase tracking-widest font-bold text-[#584235] ml-1">Fecha</label>
-                  <div className="relative">
-                    <input name="fecha" value={form.fecha} onChange={handleChange} min={fechaHoy} required className="w-full bg-[#fff1e9] border-none outline-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium" type="date" />
+                  <div className="flex gap-2">
+                    <select name="fechaDia" value={form.fechaDia} onChange={handleChange} required className="w-1/3 bg-[#fff1e9] border-none outline-none rounded-xl py-4 px-3 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none text-center cursor-pointer">
+                      <option value="" disabled>Día</option>
+                      {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
+                        <option key={d} value={d}>{d}</option>
+                      ))}
+                    </select>
+                    <select name="fechaMes" value={form.fechaMes} onChange={handleChange} required className="w-1/3 bg-[#fff1e9] border-none outline-none rounded-xl py-4 px-3 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none text-center cursor-pointer">
+                      <option value="" disabled>Mes</option>
+                      {["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"].map((m, idx) => (
+                        <option key={m} value={m}>{['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'][idx]}</option>
+                      ))}
+                    </select>
+                    <select name="fechaAno" value={form.fechaAno} onChange={handleChange} required className="w-1/3 bg-[#fff1e9] border-none outline-none rounded-xl py-4 px-3 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none text-center cursor-pointer">
+                      <option value="" disabled>Año</option>
+                      {Array.from({ length: 3 }, (_, i) => new Date().getFullYear() + i).map(y => (
+                        <option key={y} value={y}>{y}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-bold text-[#584235] ml-1">Turno</label>
-                  <select name="horaTentativa" value={form.horaTentativa} onChange={handleChange} required className="w-full bg-[#fff1e9] border-none outline-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none">
-                    <option value="Mañana">Mañana (09:00 - 13:00)</option>
-                    <option value="Tarde">Tarde (16:00 - 20:00)</option>
-                    <option value="Noche">Noche (20:00 - 23:00)</option>
+                  <label className="text-xs uppercase tracking-widest font-bold text-[#584235] ml-1">Horario</label>
+                  <select name="horaTentativa" value={form.horaTentativa} onChange={handleChange} required className="w-full bg-[#fff1e9] border-none outline-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none cursor-pointer">
+                    <optgroup label="Mañana">
+                      <option value="09:00">09:00 hs</option>
+                      <option value="09:30">09:30 hs</option>
+                      <option value="10:00">10:00 hs</option>
+                      <option value="10:30">10:30 hs</option>
+                      <option value="11:00">11:00 hs</option>
+                      <option value="11:30">11:30 hs</option>
+                      <option value="12:00">12:00 hs</option>
+                      <option value="12:30">12:30 hs</option>
+                      <option value="13:00">13:00 hs</option>
+                    </optgroup>
+                    <optgroup label="Tarde">
+                      <option value="14:00">14:00 hs</option>
+                      <option value="14:30">14:30 hs</option>
+                      <option value="15:00">15:00 hs</option>
+                      <option value="15:30">15:30 hs</option>
+                      <option value="16:00">16:00 hs</option>
+                      <option value="16:30">16:30 hs</option>
+                      <option value="17:00">17:00 hs</option>
+                      <option value="17:30">17:30 hs</option>
+                      <option value="18:00">18:00 hs</option>
+                    </optgroup>
+                    <optgroup label="Noche">
+                      <option value="18:30">18:30 hs</option>
+                      <option value="19:00">19:00 hs</option>
+                      <option value="19:30">19:30 hs</option>
+                      <option value="20:00">20:00 hs</option>
+                    </optgroup>
                   </select>
                 </div>
               </div>
@@ -224,10 +266,19 @@ const Turnos = () => {
             {/* Section: Motive */}
             <section className="space-y-6">
               <div className="flex items-center gap-3">
-                <span className="material-symbols-outlined text-[#994700]">edit_note</span>
+                <FileEdit className="text-[#994700]" size={28} />
                 <h2 className="text-xl font-bold">Motivo de Consulta</h2>
               </div>
-              <textarea name="motivo" value={form.motivo} onChange={handleChange} required className="w-full bg-[#fff1e9] border-none outline-none rounded-[1.5rem] py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] resize-none" placeholder="Por favor describa brevemente el síntoma o la razón de su visita..." rows="4"></textarea>
+              <select name="motivo" value={form.motivo} onChange={handleChange} required className="w-full bg-[#fff1e9] border-none outline-none rounded-[1.5rem] py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none cursor-pointer">
+                <option value="" disabled>Seleccione el motivo de su visita</option>
+                <option value="Consulta de control general">Consulta de control general</option>
+                <option value="Limpieza dental profunda">Limpieza dental profunda</option>
+                <option value="Dolor o molestia urgente">Dolor o molestia urgente</option>
+                <option value="Evaluación para ortodoncia">Evaluación para ortodoncia</option>
+                <option value="Implantes o prótesis">Implantes o prótesis</option>
+                <option value="Estética dental (blanqueamiento, carillas)">Estética dental (blanqueamiento, carillas)</option>
+                <option value="Otro">Otro especialista</option>
+              </select>
             </section>
 
           </div>
@@ -247,19 +298,19 @@ const Turnos = () => {
                     <p className="font-bold text-lg">{form.nombre || 'Nombre'} {form.apellido || 'Apellido'}</p>
                     <p className="text-sm text-[#584235]">{form.telefono || '+54 9...'}</p>
                   </div>
-                  <span className="material-symbols-outlined text-[#8c7263]">person</span>
+                  <User className="text-[#8c7263]" size={24} />
                 </div>
 
                 <div className="space-y-4">
                   <div className="flex items-center gap-4 p-3 bg-[#fff1e9] rounded-xl">
-                    <span className="material-symbols-outlined text-[#994700] p-2 bg-white rounded-lg shadow-sm">event</span>
+                    <Calendar className="text-[#994700] p-2 bg-white rounded-xl shadow-sm w-10 h-10" />
                     <div>
                       <p className="text-[10px] uppercase font-bold tracking-widest text-[#584235]">Fecha y Hora</p>
-                      <p className="font-semibold text-sm">{form.fecha ? form.fecha.split('-').reverse().join('/') : 'Sin definir'} — {form.horaTentativa}</p>
+                      <p className="font-semibold text-sm">{(form.fechaDia && form.fechaMes && form.fechaAno) ? `${form.fechaDia}/${form.fechaMes}/${form.fechaAno}` : 'Sin definir'} — {form.horaTentativa}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 p-3 bg-[#fff1e9] rounded-xl">
-                    <span className="material-symbols-outlined text-[#994700] p-2 bg-white rounded-lg shadow-sm">medication</span>
+                    <Pill className="text-[#994700] p-2 bg-white rounded-xl shadow-sm w-10 h-10" />
                     <div>
                       <p className="text-[10px] uppercase font-bold tracking-widest text-[#584235]">Servicio</p>
                       <p className="font-semibold text-sm line-clamp-1">{form.doctor || 'Profesional a asignar'}</p>

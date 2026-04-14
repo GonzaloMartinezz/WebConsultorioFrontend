@@ -14,8 +14,9 @@ const MiPerfil = () => {
       try {
         const res = await api.get('/turnos');
         // Filtramos para que solo vea los suyos (usando su nombre o email)
-        // Nota: En una app real usaríamos el ID del usuario, pero aquí filtramos por nombre según la sugerencia
-        const misTurnosFiltrados = res.data.filter(t => t.pacienteNombre === usuario.nombre);
+        const misTurnosFiltrados = res.data.filter(t => 
+          t.nombrePaciente?.trim().toLowerCase() === usuario.nombre?.trim().toLowerCase()
+        );
         setMisTurnos(misTurnosFiltrados);
       } catch (error) {
         console.error("Error al cargar turnos", error);
@@ -89,7 +90,7 @@ const MiPerfil = () => {
                       Tratamiento: <span className="text-primary font-black uppercase text-xs">{turno.tipoTratamiento || turno.motivo}</span>
                     </p>
                     <p className="text-sm text-text-light font-medium flex justify-between">
-                      Profesional: <span className="text-primary font-black uppercase text-xs">Dr. Carlos Martínez</span>
+                      Profesional: <span className="text-primary font-black uppercase text-xs">{turno.profesional || "Por Asignar"}</span>
                     </p>
                   </div>
                 </div>

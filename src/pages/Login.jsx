@@ -124,7 +124,7 @@ const Login = () => {
 
         // 3. Redirección Inteligente y a prueba de mayúsculas
         if (usuarioLogueado && usuarioLogueado.rol && usuarioLogueado.rol.toLowerCase() === 'admin') {
-          navigate("/admin/dashboard"); // Si es admin
+          navigate("/admin"); // Redirige correctamente a la raíz de administración
         } else {
           navigate("/"); // Si es un PACIENTE, lo mandamos al Inicio
         }

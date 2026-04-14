@@ -28,6 +28,7 @@ const AppRouter = () => {
 
       {/* ADMIN */}
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/admin/dashboard" element={<AdminDashboard />} />
       <Route path="/admin/analytics" element={<AdminAnalytics />} />
       <Route path="/admin/odontograma" element={<AdminOdontograma />} />
       <Route path="/admin/pacientes" element={<AdminPacientes />} />

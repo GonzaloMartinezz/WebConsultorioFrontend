@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
-import { FaCalendarDay, FaUserClock, FaHistory, FaPlus, FaCheckCircle, FaTimesCircle, FaPen, FaFileInvoiceDollar } from 'react-icons/fa';
+import { FaCalendarDay, FaUserClock, FaPlus, FaCheckCircle, FaTimesCircle, FaPen, FaEnvelope, FaTrash, FaWhatsapp } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../api/axios.js';
 
@@ -9,7 +9,8 @@ const AdminDashboard = () => {
   const [cargando, setCargando] = useState(true);
   const [modalEditOpen, setModalEditOpen] = useState(false);
   const [turnoAEditar, setTurnoAEditar] = useState(null);
-  const [editForm, setEditForm] = useState({ fecha: '', hora: '' });
+  const [editForm, setEditForm] = useState({ fechaDia: '', fechaMes: '', fechaAno: '', hora: '09:00' });
+  const [notificacionPendiente, setNotificacionPendiente] = useState(null);
 
   const navigate = useNavigate();
 
@@ -26,22 +27,10 @@ const AdminDashboard = () => {
   // C. Calcular Consultas Pendientes GLOBALES (Filtramos por estado)
   const consultasPendientes = turnos.filter(turno => turno.estado === 'Pendiente').length;
 
-  // D. Calcular Ingresos Estimados de Hoy
-  const ticketPromedio = 37500;
-  const calculoIngresos = (turnosHoy * ticketPromedio);
-
-  // Formateamos el número
-  const ingresosEstimadosTexto = calculoIngresos === 0
-    ? "$0"
-    : calculoIngresos > 999999
-      ? `$${(calculoIngresos / 1000000).toFixed(1)}M`
-      : `$${(calculoIngresos / 1000).toFixed(0)}k`;
-
-  // Array de stats dinámico
+  // Array de stats dinámico (solo 2 cards compactas)
   const stats = [
-    { name: "Turnos para Hoy", value: cargando ? '-' : turnosHoy.toString(), icon: FaCalendarDay, color: "text-primary" },
-    { name: "Consultas Pendientes", value: cargando ? '-' : consultasPendientes.toString(), icon: FaUserClock, color: "text-red-500" },
-    { name: "Ingresos Estimados", value: cargando ? '-' : ingresosEstimadosTexto, icon: FaFileInvoiceDollar, color: "text-green-600" },
+    { name: "Turnos Hoy", value: cargando ? '-' : turnosHoy.toString(), icon: FaCalendarDay, color: "text-primary" },
+    { name: "Pendientes", value: cargando ? '-' : consultasPendientes.toString(), icon: FaUserClock, color: "text-red-500" },
   ];
 
   useEffect(() => {
@@ -79,7 +68,47 @@ const AdminDashboard = () => {
     setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 4000);
   };
 
-  // Acciones Funcionales Reales Visualmente
+  // ====== HELPER: Obtener rangos horarios para Google Calendar ======
+  const obtenerRangoHorario = (turnoHora) => {
+    switch (turnoHora) {
+      case 'Temprano': return { start: '080000', end: '100000' };
+      case 'Media mañana': return { start: '100000', end: '130000' };
+      case 'Tarde': return { start: '140000', end: '180000' };
+      case 'Noche': return { start: '180000', end: '210000' };
+      default:
+        if (turnoHora && turnoHora.includes(':')) {
+          const p = turnoHora.replace(/[^0-9:]/g, '').split(':');
+          if (p.length >= 2) {
+            const s = `${p[0].padStart(2, '0')}${p[1].padStart(2, '0')}00`;
+            const eH = (parseInt(p[0]) + 1).toString().padStart(2, '0');
+            return { start: s, end: `${eH}${p[1].padStart(2, '0')}00` };
+          }
+        }
+        return { start: '090000', end: '130000' };
+    }
+  };
+
+  // ====== HELPER: Generar URLs de notificación ======
+  const generarUrlsNotificacion = (turnoData, fechaLegible, horarioTexto) => {
+    const telefonoLimpio = turnoData.telefono ? turnoData.telefono.replace(/\D/g, '') : '';
+    let waUrl = '';
+    let mailUrl = '';
+
+    if (telefonoLimpio) {
+      const mensaje = `Hola ${turnoData.nombrePaciente}, tu turno ha sido confirmado!\n\nProfesional: ${turnoData.profesional}\nFecha: ${fechaLegible}\nHorario: ${horarioTexto}\n\nTe esperamos!\nC&M Dental`;
+      waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
+    }
+
+    if (turnoData.email) {
+      const asunto = encodeURIComponent(`Turno Confirmado - C&M Dental (${fechaLegible})`);
+      const cuerpo = encodeURIComponent(`Hola ${turnoData.nombrePaciente}, tu turno fue confirmado.\n\nProfesional: ${turnoData.profesional}\nFecha: ${fechaLegible}\nHorario: ${horarioTexto}\nMotivo: ${turnoData.motivo || 'Consulta general'}\n\nTe esperamos!\nC&M Dental`);
+      mailUrl = `mailto:${turnoData.email}?subject=${asunto}&body=${cuerpo}`;
+    }
+
+    return { waUrl, mailUrl, nombrePaciente: turnoData.nombrePaciente, telefono: turnoData.telefono, email: turnoData.email };
+  };
+
+  // Acciones Funcionales
   const handleApprove = async (turno) => {
     const id = turno._id;
     try {
@@ -87,34 +116,14 @@ const AdminDashboard = () => {
       setTurnos(prevTurnos =>
         prevTurnos.map(t => t._id === id ? { ...t, estado: 'Confirmado' } : t)
       );
-      showToast('¡Turno Confirmado! Guardado en la agenda oficial.', 'success');
 
-      // --- INTEGRACIÓN: Generar Link de Google Calendar ---
-      let startTime = '090000';
-      let endTime = '130000';
-      if (turno.hora && turno.hora.includes('Tarde')) {
-        startTime = '160000';
-        endTime = '200000';
-      }
-
-      const fechaLimpia = turno.fecha ? turno.fecha.replace(/-/g, '') : '';
-      const gcalLink = fechaLimpia
-        ? `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Turno Odontológico: ' + turno.profesional)}&dates=${fechaLimpia}T${startTime}/${fechaLimpia}T${endTime}&details=${encodeURIComponent('Consulta por: ' + turno.motivo)}`
-        : '';
-
-      // --- INTEGRACIÓN: Redirigir a WhatsApp al paciente ---
-      const telefonoLimpio = turno.telefono ? turno.telefono.replace(/\D/g, '') : '';
-      if (telefonoLimpio) {
-        const fechaLegible = turno.fecha ? turno.fecha.split('-').reverse().join('/') : '';
-        const mensaje = `Hola ${turno.nombrePaciente}, ¡tu turno ha sido confirmado! ✅\n\n🦷 *Profesional:* ${turno.profesional}\n📅 *Fecha:* ${fechaLegible}\n⏰ *Horario:* ${turno.hora}\n\nAgendalo en tu Google Calendar para no olvidarte:\n👉 ${gcalLink}\n\n¡Te esperamos!`;
-        const waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
-        window.open(waUrl, '_blank');
-      } else {
-        showToast('Advertencia: El paciente no dejó un teléfono.', 'error');
-      }
+      const fechaLegible = turno.fecha ? turno.fecha.split('-').reverse().join('/') : '';
+      const urls = generarUrlsNotificacion(turno, fechaLegible, turno.hora);
+      setNotificacionPendiente(urls);
+      showToast('Turno confirmado. Enviá las notificaciones abajo.', 'success');
 
     } catch (error) {
-      alert("Hubo un error al confirmar el turno");
+      showToast('Error al confirmar el turno.', 'error');
     }
   };
 
@@ -124,64 +133,63 @@ const AdminDashboard = () => {
       setTurnos(prevTurnos =>
         prevTurnos.map(turno => turno._id === id ? { ...turno, estado: 'Cancelado' } : turno)
       );
-      showToast('Turno Rechazado y espacio liberado de la agenda.', 'error');
+      showToast('Turno Cancelado.', 'error');
     } catch (error) {
-      alert("Hubo un error al rechazar el turno");
+      showToast('Error al cancelar el turno.', 'error');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('¿Eliminar este turno definitivamente?')) return;
+    try {
+      await api.delete(`/turnos/${id}`);
+      setTurnos(prevTurnos => prevTurnos.filter(t => t._id !== id));
+      showToast('Turno eliminado.', 'success');
+    } catch (error) {
+      showToast('Error al eliminar.', 'error');
     }
   };
 
   const abrirModalEdicion = (turno) => {
     setTurnoAEditar(turno);
-    setEditForm({ fecha: turno.fecha, hora: turno.hora });
+    // Parsear la fecha existente del turno en día/mes/año
+    const partes = turno.fecha ? turno.fecha.split('-') : ['', '', ''];
+    setEditForm({
+      fechaAno: partes[0] || new Date().getFullYear().toString(),
+      fechaMes: partes[1] || '',
+      fechaDia: partes[2] ? parseInt(partes[2]).toString() : '',
+      hora: turno.hora || '09:00'
+    });
     setModalEditOpen(true);
   };
 
-  const handleConfirmEdit = async (e) => {
-    e.preventDefault();
+  const handleConfirmEdit = async () => {
     if (!turnoAEditar) return;
+    if (!editForm.fechaDia || !editForm.fechaMes || !editForm.fechaAno) {
+      showToast('Seleccioná día, mes y año.', 'error');
+      return;
+    }
+
+    const fechaCompleta = `${editForm.fechaAno}-${editForm.fechaMes.padStart(2, '0')}-${String(editForm.fechaDia).padStart(2, '0')}`;
 
     try {
       await api.patch(`/turnos/${turnoAEditar._id}/estado`, {
-        estado: 'Confirmado', // Lo validamos como confirmado oficialmente
-        fecha: editForm.fecha,
+        estado: 'Confirmado',
+        fecha: fechaCompleta,
         hora: editForm.hora
       });
 
       setTurnos(prevTurnos =>
-        prevTurnos.map(t => t._id === turnoAEditar._id ? { ...t, estado: 'Confirmado', fecha: editForm.fecha, hora: editForm.hora } : t)
+        prevTurnos.map(t => t._id === turnoAEditar._id ? { ...t, estado: 'Confirmado', fecha: fechaCompleta, hora: editForm.hora } : t)
       );
 
-      // --- INTEGRACIÓN: Generar Link de Google Calendar ---
-      let startTime = '090000';
-      let endTime = '130000';
-      if (editForm.hora.includes(':')) {
-        const partes = editForm.hora.replace(/[^0-9:]/g, '').split(':');
-        if (partes.length >= 2) {
-          startTime = `${partes[0].padStart(2, '0')}${partes[1].padStart(2, '0')}00`;
-          const endH = (parseInt(partes[0]) + 1).toString().padStart(2, '0');
-          endTime = `${endH}${partes[1].padStart(2, '0')}00`;
-        }
-      } else if (editForm.hora.includes('Tarde')) {
-        startTime = '160000';
-        endTime = '200000';
-      }
-
-      const fechaLimpia = editForm.fecha ? editForm.fecha.replace(/-/g, '') : '';
-      const gcalLink = fechaLimpia
-        ? `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Turno Odontológico: ' + turnoAEditar.profesional)}&dates=${fechaLimpia}T${startTime}/${fechaLimpia}T${endTime}&details=${encodeURIComponent('Consulta por: ' + turnoAEditar.motivo)}`
-        : '';
-
-      // --- INTEGRACIÓN: Redirigir a WhatsApp al paciente ---
-      const telefonoLimpio = turnoAEditar.telefono ? turnoAEditar.telefono.replace(/\D/g, '') : '';
-      if (telefonoLimpio) {
-        const fechaLegible = editForm.fecha ? editForm.fecha.split('-').reverse().join('/') : '';
-        const mensaje = `Hola ${turnoAEditar.nombrePaciente}, ¡tu turno ha sido asignado y confirmado! ✅\n\n🦷 *Profesional:* ${turnoAEditar.profesional}\n📅 *Fecha:* ${fechaLegible}\n⏰ *Horario:* ${editForm.hora}\n\nAgendalo en tu Google Calendar para no olvidarte:\n👉 ${gcalLink}\n\n¡Te esperamos!`;
-        const waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
-        window.open(waUrl, '_blank');
-      }
-
-      showToast(`Turno confirmado para el ${editForm.fecha} a las ${editForm.hora}.`, 'success');
       setModalEditOpen(false);
+
+      const fechaLegible = `${editForm.fechaDia}/${editForm.fechaMes}/${editForm.fechaAno}`;
+      const urls = generarUrlsNotificacion(turnoAEditar, fechaLegible, editForm.hora);
+      setNotificacionPendiente(urls);
+
+      showToast(`Turno confirmado para el ${fechaLegible} a las ${editForm.hora}.`, 'success');
     } catch (error) {
       console.error("Error editando turno:", error);
       showToast('Hubo un error al guardar los cambios.', 'error');
@@ -217,93 +225,105 @@ const AdminDashboard = () => {
           to="/turnos"
           className="w-full md:w-auto px-8 py-3.5 text-white font-bold text-sm rounded-xl bg-primary shadow-lg hover:bg-primary/90 active:scale-95 transition-all uppercase tracking-wide flex items-center justify-center gap-3 hover:-translate-y-1 hover:shadow-xl"
         >
-          <FaPlus /> Crear Nuevo Turno FrontDesk
+          <FaPlus /> Crear Nuevo Turno
         </Link>
       </header>
 
-      <main className="space-y-10 pb-10">
+      <main className="space-y-6 pb-10">
 
-        {/* ======================================================== */}
-        {/* CARDS ESTRICTAMENTE ABAJO DEL TÍTULO */}
-        {/* ======================================================== */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-6" data-aos="fade-up" data-aos-delay="100">
+        {/* STATS COMPACTAS - solo 2 cards */}
+        <section className="grid grid-cols-2 gap-4">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
             return (
-              <div key={index} className="bg-white rounded-4xl p-8 shadow-sm border border-secondary/60 flex items-center justify-between hover:border-accent-orange transition-colors group cursor-pointer">
+              <div key={index} className="bg-white rounded-2xl p-5 shadow-sm border border-secondary/60 flex items-center justify-between hover:border-accent-orange transition-colors group">
                 <div>
-                  <p className="text-text-light text-xs font-black uppercase tracking-widest mb-2">{stat.name}</p>
-                  <p className="text-text text-5xl font-black leading-none tracking-tighter">{stat.value}</p>
+                  <p className="text-text-light text-[10px] font-black uppercase tracking-widest mb-1">{stat.name}</p>
+                  <p className="text-text text-3xl font-black leading-none">{stat.value}</p>
                 </div>
-                <div className={`p-4 rounded-full bg-secondary/30 ${stat.color} group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon className="text-4xl" />
+                <div className={`p-3 rounded-full bg-secondary/30 ${stat.color}`}>
+                  <Icon className="text-2xl" />
                 </div>
               </div>
             );
           })}
         </section>
 
-        {/* ======================================================== */}
-        {/* TABLA DE LA AGENDA DE HOY (Con interactividad real en memoria) */}
-        {/* ======================================================== */}
-        <div data-aos="fade-up" data-aos-delay="200" className="pt-4">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-primary text-2xl font-black uppercase tracking-tight">Agenda Completa y Pendientes</h2>
-            <Link to="/admin/pendientes" className="text-sm font-bold text-accent-orange hover:underline flex items-center gap-2">
-              Ver Todos los Pendientes <span className="bg-red-500 text-white rounded-full px-2 py-0.5 text-xs">{consultasPendientes}</span>
+        {/* TABLA AGENDA */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-primary text-xl font-black uppercase tracking-tight">Agenda y Pendientes</h2>
+            <Link to="/admin/pendientes" className="text-xs font-bold text-accent-orange hover:underline flex items-center gap-1.5">
+              Ver Pendientes <span className="bg-red-500 text-white rounded-full px-1.5 py-0.5 text-[10px]">{consultasPendientes}</span>
             </Link>
           </div>
 
-          <div className="bg-white rounded-[2.5rem] p-6 shadow-sm border border-secondary/50 overflow-hidden w-full overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[800px]">
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-secondary/50 w-full">
+            <table className="w-full text-left border-collapse">
               <thead className="border-b-2 border-primary/10">
                 <tr>
-                  <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-primary">Hora</th>
-                  <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-primary">Paciente</th>
-                  <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-primary">Profesional</th>
-                  <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-primary">Motivo</th>
-                  <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-primary">Estado</th>
-                  <th className="px-6 py-5 text-xs font-black uppercase tracking-widest text-primary text-right">Acciones Rápidas</th>
+                  <th className="px-3 py-3 text-[10px] font-black uppercase tracking-widest text-primary">Fecha</th>
+                  <th className="px-3 py-3 text-[10px] font-black uppercase tracking-widest text-primary">Hora</th>
+                  <th className="px-3 py-3 text-[10px] font-black uppercase tracking-widest text-primary">Paciente</th>
+                  <th className="px-3 py-3 text-[10px] font-black uppercase tracking-widest text-primary hidden md:table-cell">Profesional</th>
+                  <th className="px-3 py-3 text-[10px] font-black uppercase tracking-widest text-primary hidden lg:table-cell">Motivo</th>
+                  <th className="px-3 py-3 text-[10px] font-black uppercase tracking-widest text-primary">Estado</th>
+                  <th className="px-3 py-3 text-[10px] font-black uppercase tracking-widest text-primary text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 {turnos
                   .filter(turno => {
-                    // Mostrar turnos pendientes SIEMPRE (para que no se pierdan)
-                    // y mostrar turnos confirmados/atendidos desde HOY en adelante
-                    if (turno.estado === 'Pendiente') return true;
-                    return turno.fecha >= fechaHoy;
+                    // Ocultar cancelados siempre
+                    if (turno.estado === 'Cancelado') return false;
+                    
+                    // Si la fecha del turno es ANTERIOR a hoy, lo ocultamos automáticamente
+                    // Así "se borran" de la vista al día siguiente
+                    if (turno.fecha && turno.fecha < fechaHoy) return false;
+
+                    // Mostrar los de hoy en adelante (Pendientes y Confirmados)
+                    return true;
+                  })
+                  .sort((a, b) => {
+                    // Pendientes primero, luego por fecha
+                    if (a.estado === 'Pendiente' && b.estado !== 'Pendiente') return -1;
+                    if (a.estado !== 'Pendiente' && b.estado === 'Pendiente') return 1;
+                    return (a.fecha || '').localeCompare(b.fecha || '');
                   })
                   .map((turno) => (
                     <tr key={turno._id} className="border-b border-secondary/20 hover:bg-secondary/10 transition-colors group">
-                      <td className="px-6 py-5 font-black text-primary text-lg">{turno.hora}</td>
-                      <td className="px-6 py-5 font-bold text-text text-base">{turno.nombrePaciente} {turno.apellidoPaciente}</td>
-                      <td className="px-6 py-5 font-semibold text-text-light text-sm">{turno.profesional}</td>
-                      <td className="px-6 py-5 text-text-light text-sm">{turno.motivo}</td>
-                      <td className="px-6 py-5">
-                        <span className={`inline-block px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider
+                      <td className="px-3 py-3 font-bold text-text-light text-xs">
+                        {turno.fecha ? turno.fecha.split('-').reverse().join('/') : '-'}
+                      </td>
+                      <td className="px-3 py-3 font-black text-primary text-sm">{turno.hora}</td>
+                      <td className="px-3 py-3 font-bold text-text text-sm">{turno.nombrePaciente} {turno.apellidoPaciente}</td>
+                      <td className="px-3 py-3 font-semibold text-text-light text-xs hidden md:table-cell">{turno.profesional}</td>
+                      <td className="px-3 py-3 text-text-light text-xs hidden lg:table-cell">{turno.motivo}</td>
+                      <td className="px-3 py-3">
+                        <span className={`inline-block px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider
                         ${turno.estado === 'Confirmado' ? 'bg-green-100 text-green-700 border border-green-200' :
-                            turno.estado === 'Cancelado' ? 'bg-red-100 text-red-700 border border-red-200' :
-                              'bg-yellow-100 text-yellow-700 border border-yellow-200 shadow-inner'}`}>
+                            'bg-yellow-100 text-yellow-700 border border-yellow-200'}`}>
                           {turno.estado}
                         </span>
                       </td>
 
-                      {/* FUNCIONALIDAD DE BOTONES QUE ALTERA EL ESTADO (y lanza las alertas) */}
-                      <td className="px-6 py-5 text-right">
-                        <div className="flex items-center justify-end gap-3 opacity-90 group-hover:opacity-100 transition-opacity">
-                          {turno.estado !== 'Confirmado' && (
-                            <button onClick={() => handleApprove(turno)} className="text-green-600 bg-green-50 hover:bg-green-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Aprobar Turno y Notificar">
-                              <FaCheckCircle className="text-xl" />
+                      <td className="px-3 py-3 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {turno.estado === 'Pendiente' && (
+                            <button onClick={() => handleApprove(turno)} className="text-green-600 bg-green-50 hover:bg-green-100 p-2 rounded-lg hover:scale-110 transition-transform" title="Confirmar">
+                              <FaCheckCircle className="text-sm" />
                             </button>
                           )}
-                          {turno.estado !== 'Cancelado' && (
-                            <button onClick={() => handleReject(turno._id)} className="text-red-500 bg-red-50 hover:bg-red-100 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Rechazar Turno">
-                              <FaTimesCircle className="text-xl" />
+                          {turno.estado === 'Pendiente' && (
+                            <button onClick={() => handleReject(turno._id)} className="text-red-500 bg-red-50 hover:bg-red-100 p-2 rounded-lg hover:scale-110 transition-transform" title="Cancelar">
+                              <FaTimesCircle className="text-sm" />
                             </button>
                           )}
-                          <button onClick={() => abrirModalEdicion(turno)} className="text-primary bg-secondary/30 hover:bg-secondary/50 p-2.5 rounded-xl hover:scale-110 transition-transform shadow-sm" title="Reagendar (Feha y Hora)">
-                            <FaPen className="text-xl" />
+                          <button onClick={() => abrirModalEdicion(turno)} className="text-primary bg-secondary/30 hover:bg-secondary/50 p-2 rounded-lg hover:scale-110 transition-transform" title="Reagendar">
+                            <FaPen className="text-sm" />
+                          </button>
+                          <button onClick={() => handleDelete(turno._id)} className="text-gray-400 bg-gray-50 hover:bg-gray-100 p-2 rounded-lg hover:scale-110 transition-transform" title="Eliminar">
+                            <FaTrash className="text-sm" />
                           </button>
                         </div>
                       </td>
@@ -311,69 +331,146 @@ const AdminDashboard = () => {
                   ))}
               </tbody>
             </table>
+            {turnos.filter(t => t.estado !== 'Cancelado' && (t.estado === 'Pendiente' || t.fecha >= fechaHoy)).length === 0 && (
+              <p className="text-center text-text-light text-sm font-bold py-8">No hay turnos pendientes ni futuros.</p>
+            )}
           </div>
         </div>
 
       </main>
 
-      {/* ======================================================== */}
-      {/* MODAL DE EDICIÓN PROFESIONAL DE HORARIOS                 */}
-      {/* ======================================================== */}
-      {modalEditOpen && turnoAEditar && (
+      {/* MODAL DE NOTIFICACIONES POST-CONFIRMACIÓN */}
+      {notificacionPendiente && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-white rounded-4xl w-full max-w-md overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative border border-secondary/30" data-aos="zoom-in" data-aos-duration="300">
-
-            {/* Cabecera del modal */}
-            <div className="bg-primary px-8 pt-8 pb-6 text-white relative">
-              <button
-                onClick={() => setModalEditOpen(false)}
-                className="absolute top-5 right-5 text-white/50 hover:text-accent-orange transition-colors"
-                aria-label="Cerrar modal"
-              >
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-hidden shadow-2xl relative border border-secondary/30 flex flex-col">
+            
+            <div className="bg-green-500 px-6 pt-8 pb-6 text-white relative text-center">
+              <button onClick={() => setNotificacionPendiente(null)} className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors">
                 <FaTimesCircle className="text-2xl" />
               </button>
-              <h2 className="text-2xl font-black uppercase tracking-tight flex items-center gap-3">
-                <FaCalendarDay className="text-accent-orange text-3xl" /> Reagendar Cita
+              <FaCheckCircle className="text-6xl mx-auto mb-4 text-white drop-shadow-md" />
+              <h2 className="text-2xl font-black uppercase tracking-tight">
+                ¡Turno Confirmado!
               </h2>
-              <div className="mt-4 bg-white/10 border border-white/20 p-3 rounded-xl flex items-center justify-between">
+              <p className="mt-2 text-green-100 text-sm font-medium">
+                El turno de <span className="font-bold">{notificacionPendiente.nombrePaciente}</span> se ha guardado exitosamente.
+              </p>
+            </div>
+
+            <div className="p-6 space-y-4 bg-gray-50 flex-1">
+              <h3 className="text-xs font-black text-primary uppercase tracking-widest text-center mb-2">Notificar al Paciente</h3>
+              
+              <div className="grid grid-cols-1 gap-3">
+                {notificacionPendiente.waUrl ? (
+                  <a
+                    href={notificacionPendiente.waUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-3 w-full p-4 bg-white hover:bg-green-50 border-2 border-green-500 rounded-xl text-green-700 font-bold text-base transition-all hover:scale-[1.02] active:scale-95 shadow-sm"
+                  >
+                    <FaWhatsapp className="text-2xl text-green-500" />
+                    Enviar WhatsApp
+                  </a>
+                ) : (
+                  <div className="flex items-center justify-center gap-3 w-full p-4 bg-gray-100 border-2 border-gray-200 rounded-xl text-gray-400 font-bold text-base cursor-not-allowed">
+                    <FaWhatsapp className="text-2xl" />
+                    Sin WhatsApp registrado
+                  </div>
+                )}
+                
+                {notificacionPendiente.mailUrl ? (
+                  <a
+                    href={notificacionPendiente.mailUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-3 w-full p-4 bg-white hover:bg-blue-50 border-2 border-blue-500 rounded-xl text-blue-700 font-bold text-base transition-all hover:scale-[1.02] active:scale-95 shadow-sm"
+                  >
+                    <FaEnvelope className="text-2xl text-blue-500" />
+                    Enviar Email
+                  </a>
+                ) : (
+                  <div className="flex items-center justify-center gap-3 w-full p-4 bg-gray-100 border-2 border-gray-200 rounded-xl text-gray-400 font-bold text-base cursor-not-allowed">
+                    <FaEnvelope className="text-2xl" />
+                    Sin Email registrado
+                  </div>
+                )}
+              </div>
+              
+              <p className="text-[10px] text-text-light font-bold mt-4 text-center uppercase tracking-widest">
+                La ventana abrirá la aplicación correspondiente.
+              </p>
+            </div>
+
+            <div className="p-4 bg-white border-t border-gray-100">
+               <button 
+                  onClick={() => setNotificacionPendiente(null)}
+                  className="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl transition-colors uppercase text-sm tracking-wider"
+               >
+                 Cerrar y volver al panel
+               </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE REAGENDAR */}
+      {modalEditOpen && turnoAEditar && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
+          <div className="bg-white rounded-2xl w-full max-w-sm max-h-[90vh] overflow-y-auto shadow-2xl relative border border-secondary/30">
+
+            <div className="bg-primary px-5 pt-5 pb-4 text-white relative">
+              <button onClick={() => setModalEditOpen(false)} className="absolute top-3 right-3 text-white/50 hover:text-accent-orange transition-colors">
+                <FaTimesCircle className="text-xl" />
+              </button>
+              <h2 className="text-lg font-black uppercase tracking-tight flex items-center gap-2">
+                <FaCalendarDay className="text-accent-orange text-xl" /> Reagendar Cita
+              </h2>
+              <div className="mt-3 bg-white/10 border border-white/20 p-2.5 rounded-lg flex items-center justify-between text-xs">
                 <div>
-                  <p className="text-[10px] uppercase font-bold text-white/60 tracking-widest">Paciente</p>
-                  <p className="font-bold text-white">{turnoAEditar.nombrePaciente} {turnoAEditar.apellidoPaciente}</p>
+                  <p className="text-[9px] uppercase font-bold text-white/50 tracking-widest">Paciente</p>
+                  <p className="font-bold text-white text-sm">{turnoAEditar.nombrePaciente} {turnoAEditar.apellidoPaciente}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-[10px] uppercase font-bold text-white/60 tracking-widest">Profesional</p>
-                  <p className="font-semibold text-white/90 text-sm">{turnoAEditar.profesional}</p>
+                  <p className="text-[9px] uppercase font-bold text-white/50 tracking-widest">Profesional</p>
+                  <p className="font-semibold text-white/90 text-xs">{turnoAEditar.profesional}</p>
                 </div>
               </div>
             </div>
 
-            {/* Cuerpo del Formulario */}
-            <form onSubmit={handleConfirmEdit} className="p-8 space-y-6">
-              <div className="space-y-2">
-                <label className="text-xs font-black text-primary uppercase tracking-widest flex items-center gap-2">
-                  <FaCalendarDay className="text-accent-orange" /> Fecha de Atención
+            <div className="p-5 space-y-4">
+              {/* Fecha */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black text-primary uppercase tracking-widest flex items-center gap-1.5">
+                  <FaCalendarDay className="text-accent-orange" /> Fecha
                 </label>
-                <input
-                  type="date"
-                  required
-                  value={editForm.fecha}
-                  onChange={(e) => setEditForm({ ...editForm, fecha: e.target.value })}
-                  className="w-full px-4 py-3.5 bg-secondary/10 border-2 border-secondary/40 rounded-xl font-bold text-primary focus:border-accent-orange focus:bg-white outline-none transition-all shadow-inner"
-                />
+                <div className="flex gap-1.5">
+                  <select value={editForm.fechaDia} onChange={(e) => setEditForm({ ...editForm, fechaDia: e.target.value })} className="w-1/3 px-2 py-2.5 bg-secondary/10 border-2 border-secondary/40 rounded-lg font-bold text-primary text-sm focus:border-accent-orange outline-none transition-all appearance-none text-center cursor-pointer">
+                    <option value="" disabled>Día</option>
+                    {Array.from({ length: 31 }, (_, i) => i + 1).map(d => <option key={d} value={d}>{d}</option>)}
+                  </select>
+                  <select value={editForm.fechaMes} onChange={(e) => setEditForm({ ...editForm, fechaMes: e.target.value })} className="w-1/3 px-2 py-2.5 bg-secondary/10 border-2 border-secondary/40 rounded-lg font-bold text-primary text-sm focus:border-accent-orange outline-none transition-all appearance-none text-center cursor-pointer">
+                    <option value="" disabled>Mes</option>
+                    {["01","02","03","04","05","06","07","08","09","10","11","12"].map((m, idx) => <option key={m} value={m}>{['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][idx]}</option>)}
+                  </select>
+                  <select value={editForm.fechaAno} onChange={(e) => setEditForm({ ...editForm, fechaAno: e.target.value })} className="w-1/3 px-2 py-2.5 bg-secondary/10 border-2 border-secondary/40 rounded-lg font-bold text-primary text-sm focus:border-accent-orange outline-none transition-all appearance-none text-center cursor-pointer">
+                    <option value="" disabled>Año</option>
+                    {Array.from({ length: 3 }, (_, i) => new Date().getFullYear() + i).map(y => <option key={y} value={y}>{y}</option>)}
+                  </select>
+                </div>
               </div>
 
-              <div className="space-y-2 relative">
-                <label className="text-xs font-black text-primary uppercase tracking-widest flex items-center gap-2">
-                  <FaUserClock className="text-accent-orange" /> Horario Exacto
+              {/* Hora exacta */}
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-black text-primary uppercase tracking-widest flex items-center gap-1.5">
+                  <FaUserClock className="text-accent-orange" /> Horario
                 </label>
                 <select
-                  required
                   value={editForm.hora}
                   onChange={(e) => setEditForm({ ...editForm, hora: e.target.value })}
-                  className="w-full px-4 py-3.5 bg-secondary/10 border-2 border-secondary/40 rounded-xl font-bold text-primary focus:border-accent-orange focus:bg-white outline-none transition-all shadow-inner appearance-none cursor-pointer"
+                  className="w-full px-3 py-2.5 bg-secondary/10 border-2 border-secondary/40 rounded-lg font-bold text-primary text-sm focus:border-accent-orange outline-none transition-all appearance-none cursor-pointer"
                 >
-                  <option value="" disabled>Seleccionar un horario preciso...</option>
-                  <optgroup label="Turno Mañana">
+                  <optgroup label="Mañana">
                     <option value="09:00">09:00 hs</option>
                     <option value="09:30">09:30 hs</option>
                     <option value="10:00">10:00 hs</option>
@@ -384,40 +481,52 @@ const AdminDashboard = () => {
                     <option value="12:30">12:30 hs</option>
                     <option value="13:00">13:00 hs</option>
                   </optgroup>
-                  <optgroup label="Turno Tarde">
+                  <optgroup label="Tarde">
+                    <option value="14:00">14:00 hs</option>
+                    <option value="14:30">14:30 hs</option>
+                    <option value="15:00">15:00 hs</option>
+                    <option value="15:30">15:30 hs</option>
                     <option value="16:00">16:00 hs</option>
                     <option value="16:30">16:30 hs</option>
                     <option value="17:00">17:00 hs</option>
                     <option value="17:30">17:30 hs</option>
                     <option value="18:00">18:00 hs</option>
+                  </optgroup>
+                  <optgroup label="Noche">
                     <option value="18:30">18:30 hs</option>
                     <option value="19:00">19:00 hs</option>
                     <option value="19:30">19:30 hs</option>
                     <option value="20:00">20:00 hs</option>
                   </optgroup>
                 </select>
-                <div className="absolute right-4 top-[38px] pointer-events-none text-primary/60">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
+              </div>
+
+              {/* Info contacto */}
+              <div className="space-y-1.5">
+                {turnoAEditar?.telefono && (
+                  <div className="flex items-center gap-2 p-2 bg-green-50 border border-green-200 rounded-lg">
+                    <FaWhatsapp className="text-green-600" />
+                    <p className="text-xs font-bold text-green-800">{turnoAEditar.telefono}</p>
+                  </div>
+                )}
+                {turnoAEditar?.email && (
+                  <div className="flex items-center gap-2 p-2 bg-blue-50 border border-blue-200 rounded-lg">
+                    <FaEnvelope className="text-blue-500" />
+                    <p className="text-xs font-bold text-blue-800">{turnoAEditar.email}</p>
+                  </div>
+                )}
               </div>
 
               {/* Botones */}
-              <div className="pt-4 flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setModalEditOpen(false)}
-                  className="flex-1 py-4 px-4 rounded-xl border border-secondary-dark text-text-light font-black uppercase text-sm hover:bg-secondary/30 transition-colors"
-                >
+              <div className="flex gap-2 pt-1">
+                <button type="button" onClick={() => setModalEditOpen(false)} className="flex-1 py-3 px-3 rounded-xl border border-secondary-dark text-text-light font-black uppercase text-xs hover:bg-secondary/30 transition-colors">
                   Cancelar
                 </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-4 px-4 rounded-xl bg-accent-orange text-white font-black uppercase text-sm shadow-lg shadow-accent-orange/30 hover:scale-[1.03] active:scale-[0.98] transition-all flex justify-center items-center gap-2"
-                >
-                  <FaCheckCircle className="text-lg" /> Asignar y Confirmar Turno
+                <button type="button" onClick={handleConfirmEdit} className="flex-1 py-3 px-3 rounded-xl bg-accent-orange text-white font-black uppercase text-xs shadow-lg hover:scale-[1.03] active:scale-[0.98] transition-all flex justify-center items-center gap-1.5">
+                  <FaCheckCircle /> Confirmar
                 </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
