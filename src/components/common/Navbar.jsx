@@ -10,10 +10,6 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [usuario, setUsuario] = useState(null);
 
-  const [mostrarModal, setMostrarModal] = useState(false);
-  const [misTurnos, setMisTurnos] = useState([]);
-  const [cargandoTurnos, setCargandoTurnos] = useState(false);
-
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
@@ -27,47 +23,12 @@ const Navbar = () => {
     }
   }, []);
 
-  const abrirModalPerfil = async () => {
-    setMostrarModal(true);
-    setCargandoTurnos(true);
-    
-    try {
-      // Obtenemos el token guardado del localStorage
-      const token = localStorage.getItem('token');
-      
-      // Hacemos la petición a la API enviando el token (por si el backend lo exige)
-      const respuesta = await api.get('/turnos', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      
-      // Filtramos solo los turnos del paciente logueado
-      const filtrados = respuesta.data.filter(t =>
-        t.nombrePaciente?.trim().toLowerCase() === usuario.nombre?.trim().toLowerCase() &&
-        t.apellidoPaciente?.trim().toLowerCase() === usuario.apellido?.trim().toLowerCase()
-      );
-      
-      setMisTurnos(filtrados);
-      
-    } catch (error) {
-      // ¡AQUÍ CAPTURAMOS EL ERROR PARA QUE NO ROMPA LA APP!
-      console.error("Error exacto de Axios al cargar turnos:", error.response || error);
-      
-      // Si da un error de permisos (401 o 403), vaciamos la lista de turnos para que no quede cargando infinito
-      setMisTurnos([]); 
-    } finally {
-      setCargandoTurnos(false);
-    }
-  };
-
   const handleLogout = async () => {
     try {
       await api.post('/auth/logout').catch(() => { });
       localStorage.removeItem('token');
       localStorage.removeItem('perfilUsuario');
       setUsuario(null);
-      setMostrarModal(false);
       navigate('/');
       window.location.reload();
     } catch (error) {
@@ -112,9 +73,9 @@ const Navbar = () => {
               </>
             ) : (
               <div className="flex items-center gap-3">
-                <button onClick={abrirModalPerfil} className={`flex items-center gap-2 font-bold text-sm transition-all ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>
+                <Link to="/mi-perfil" className={`flex items-center gap-2 font-bold text-sm transition-all ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>
                   <FaUserCircle className="text-xl" /> Mi Perfil
-                </button>
+                </Link>
                 <button onClick={handleLogout} className={`p-2.5 rounded-full transition-all ${scrolled ? 'bg-red-50 text-red-500 hover:bg-red-500 hover:text-white' : 'bg-red-500/80 backdrop-blur-sm text-white hover:bg-red-600 border border-white/20 drop-shadow-md'}`} title="Cerrar Sesión">
                   <FaSignOutAlt />
                 </button>
@@ -142,10 +103,10 @@ const Navbar = () => {
               <div className="h-px w-full bg-secondary/30"></div>
               {usuario ? (
                 <div className="flex flex-col gap-3">
-                  <button className="bg-primary text-white p-4 rounded-2xl flex items-center justify-between" onClick={() => { setMenuOpen(false); abrirModalPerfil(); }}>
+                  <Link to="/mi-perfil" className="bg-primary text-white p-4 rounded-2xl flex items-center justify-between" onClick={() => setMenuOpen(false)}>
                     <span className="font-bold">Mi Perfil ({usuario.nombre})</span>
                     <span className="bg-white/10 p-2 rounded-full">&rarr;</span>
-                  </button>
+                  </Link>
                   <button onClick={() => { setMenuOpen(false); handleLogout(); }} className="bg-red-50 text-red-500 font-bold p-4 rounded-2xl text-center">Cerrar Sesión</button>
                 </div>
               ) : (
@@ -158,45 +119,6 @@ const Navbar = () => {
           </div>
         )}
       </nav>
-
-      {/* MODAL DEL PERFIL */}
-      {mostrarModal && usuario && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-fade-in" onClick={() => setMostrarModal(false)}>
-          <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden relative animate-scale-up border-t-8 border-accent-orange flex flex-col max-h-[90vh]" onClick={e => e.stopPropagation()}>
-            <button onClick={() => setMostrarModal(false)} className="absolute top-4 right-4 text-primary/40 hover:text-red-500 transition-colors bg-secondary/30 p-2 rounded-full z-10"><FaTimes /></button>
-            <div className="p-8 text-center bg-secondary/10 border-b border-secondary/20">
-              <div className="w-20 h-20 rounded-full bg-primary text-white flex items-center justify-center font-black text-4xl shadow-xl mx-auto mb-4">
-                {usuario.nombre?.charAt(0)?.toUpperCase()}
-              </div>
-              <h2 className="text-2xl font-black text-primary leading-tight uppercase tracking-tight">{usuario.nombre} {usuario.apellido}</h2>
-              <p className="text-accent-orange font-bold text-xs uppercase tracking-widest mt-2 flex items-center justify-center gap-2"><FaUserCircle /> {usuario.email}</p>
-            </div>
-            <div className="p-8 bg-white overflow-y-auto grow">
-              <h3 className="text-xs font-black text-primary/40 uppercase tracking-widest mb-6 flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-accent-orange"></div> Próximas Citas</h3>
-              <div className="space-y-4">
-                {cargandoTurnos ? (<p className="text-center text-primary/50 font-bold animate-pulse py-8">Buscando turnos...</p>) : misTurnos.length === 0 ? (
-                  <div className="bg-secondary/10 rounded-2xl p-8 text-center border border-dashed border-secondary/30">
-                    <p className="text-primary/60 font-bold text-xs uppercase">No tienes citas programadas.</p>
-                    <Link to="/turnos" onClick={() => setMostrarModal(false)} className="bg-accent-orange text-white text-[10px] font-black uppercase px-6 py-2 rounded-full mt-4 inline-block shadow-md">Solicitar Nueva</Link>
-                  </div>
-                ) : (
-                  misTurnos.map((turno) => (
-                    <div key={turno._id} className="bg-secondary/5 rounded-2xl p-5 border border-secondary/20 flex justify-between items-center">
-                      <div>
-                        <p className="font-black text-primary text-sm uppercase">{turno.motivo}</p>
-                        <p className="text-[10px] text-primary/60 font-bold uppercase mt-1">📅 {turno.fecha?.split('-').reverse().join('/')} • ⏰ {turno.hora}hs</p>
-                      </div>
-                      <span className={`text-[10px] font-black px-3 py-1.5 rounded-full uppercase shadow-sm ${turno.estado === 'Confirmado' ? 'bg-green-500 text-white' : turno.estado === 'Cancelado' ? 'bg-red-500 text-white' : 'bg-accent-orange text-white'}`}>
-                        {turno.estado}
-                      </span>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };

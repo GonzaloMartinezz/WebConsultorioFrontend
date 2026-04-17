@@ -16,7 +16,7 @@ import Turnos from "./pages/Turnos.jsx";
 import AcercaDe from "./pages/AcercaDe.jsx";
 import Contacto from "./pages/Contacto.jsx";
 import Login from "./pages/Login.jsx";
-import PortalPaciente from "./pages/PortalPaciente.jsx";
+import MiPerfil from "./pages/MiPerfil.jsx";
 import Estructura from "./pages/Estructura.jsx";
 
 // =========================================
@@ -61,7 +61,7 @@ export default function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Inicio />} />
           <Route path="inicio" element={<Inicio />} />
-          <Route path="turnos" element={<Turnos />} />
+          <Route path="turnos" element={<ProtectedRoute><Turnos /></ProtectedRoute>} />
           <Route path="acerca" element={<AcercaDe />} />
           <Route path="contacto" element={<Contacto />} />
         </Route>
@@ -78,7 +78,7 @@ export default function App() {
           path="/mi-perfil" 
           element={
             <ProtectedRoute>
-              <PortalPaciente />
+              <MiPerfil />
             </ProtectedRoute>
           } 
         />

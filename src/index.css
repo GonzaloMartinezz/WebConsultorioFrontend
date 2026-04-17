@@ -2,52 +2,177 @@
 
 @theme {
   /* Paleta Carcara • Martínez (Actualizada con el nuevo logo naranja) */
-  --color-background: #F4F2EE;    /* Blanco/crema suave del piso y paredes lisas */
-  --color-primary: #4A3623;       /* Marrón nogal oscuro (madera de las sillas) */
-  --color-primary-hover: #332416; /* Marrón más profundo para los hover */
-  --color-secondary: #D4D0C8;     /* Greige/Beige claro de los tablones de la pared */
-  --color-accent: #CFA04F;        /* Mostaza/Ocre de los tapizados (Amarillo cálido) - Para calidez */
-  --color-accent-orange: #FF7800; /* Naranja del nuevo logo - Para marca principal */
-  --color-text: #1A1A1A;          /* Casi negro, inspirado en el fondo del cartel principal */
-  --color-text-light: #7A6352;    /* Marrón intermedio/ceniza para textos secundarios */
-  --color-text-orange: #FF7800;   /* Naranja del nuevo logo - Para marca principal */
+  --color-background: #F4F2EE;
+  /* Blanco/crema suave del piso y paredes lisas */
+  --color-primary: #4A3623;
+  /* Marrón nogal oscuro (madera de las sillas) */
+  --color-primary-hover: #332416;
+  /* Marrón más profundo para los hover */
+  --color-secondary: #D4D0C8;
+  /* Greige/Beige claro de los tablones de la pared */
+  --color-accent: #CFA04F;
+  /* Mostaza/Ocre de los tapizados (Amarillo cálido) - Para calidez */
+  --color-accent-orange: #FF7800;
+  /* Naranja del nuevo logo - Para marca principal */
+  --color-text: #1A1A1A;
+  /* Casi negro, inspirado en el fondo del cartel principal */
+  --color-text-light: #7A6352;
+  /* Marrón intermedio/ceniza para textos secundarios */
+  --color-text-orange: #FF7800;
+  /* Naranja del nuevo logo - Para marca principal */
   /* Tipografía Global */
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 }
 
 @layer base {
+
   html,
   body {
     @apply bg-background text-text font-sans antialiased;
-    /* Evita que el texto se vea muy pequeño en celulares */
-    font-size: 16px; 
+    /* Ajuste de escala: +5% sobre los 13px anteriores para optimizar densidad visual */
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0.015em;
+  }
+
+  @media (min-width: 1536px) {
+    html {
+      font-size: 14px;
+    }
+
+    /* En pantallas muy grandes mantenemos una escala un poco mayor pero aún reducida */
+  }
+
+  @media (max-width: 768px) {
+    html {
+      font-size: 12px;
+    }
+
+    /* Compacto en mobile sin perder legibilidad */
   }
 
   #root {
     @apply min-h-screen flex flex-col;
   }
 
-  /* Títulos prominentes */
-  h1, h2, h3 {
-    @apply font-bold text-text tracking-tight;
+  /* Títulos prominentes más compactos */
+  h1,
+  h2,
+  h3 {
+    @apply font-bold text-text tracking-tighter;
   }
 }
 
 /* Animaciones Custom para Odontograma y Modales */
-.animate-fade-in, .fade-in { animation: fadeIn 0.3s ease-out forwards; }
-.animate-scale-in, .scale-in-center { animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-fade-in,
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-scale-in,
+.scale-in-center {
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* REAC-BIG-CALENDAR (si aún se usa en alguna parte) */
+.rbc-calendar {
+  font-family: inherit;
+}
+
+.rbc-toolbar button {
+  border-radius: 8px !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.7rem;
+  color: #4A3623;
+  border: 1px solid #D4D0C8 !important;
+  padding: 4px 10px !important;
+  transition: all 0.2s ease;
+}
+
+.rbc-toolbar button:hover {
+  background-color: #F4F2EE !important;
+  border-color: #FF7800 !important;
+  color: #FF7800 !important;
+}
+
+.rbc-toolbar button.rbc-active {
+  background-color: #FF7800 !important;
+  color: white !important;
+  border-color: #FF7800 !important;
+}
+
+.rbc-toolbar-label {
+  font-weight: 900;
+  text-transform: capitalize;
+  color: #4A3623;
+  font-size: 1rem;
+}
+
+.rbc-header {
+  padding: 8px 0;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #4A3623;
+  border-bottom: 2px solid #FF7800 !important;
+  font-size: 0.7rem;
+}
+
+.rbc-event {
+  border-radius: 4px !important;
+  padding: 1px 4px !important;
+}
+
+@media (max-width: 640px) {
+  .rbc-toolbar {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .rbc-toolbar-label {
+    font-size: 0.85rem;
+  }
+
+  .rbc-toolbar button {
+    font-size: 0.6rem !important;
+    padding: 4px 8px !important;
+  }
+}

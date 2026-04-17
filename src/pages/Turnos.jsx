@@ -1,22 +1,39 @@
 import { useState, useEffect } from "react";
 import api from "../api/axios.js";
 import { useAuth } from "../context/AuthContext.jsx";
-import { User, ClipboardList, CheckCircle2, Circle, CalendarDays, FileEdit, Calendar, Pill } from 'lucide-react';
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  User, 
+  ClipboardList, 
+  CalendarDays, 
+  Check,
+  ChevronRight,
+  ChevronLeft,
+  Phone,
+  ShieldCheck,
+  Clock,
+  Send,
+  Sparkles,
+  Info,
+  Activity
+} from 'lucide-react';
 
 const Turnos = () => {
   const { user } = useAuth();
-  const fechaHoy = new Date().toISOString().split('T')[0];
+  const [step, setStep] = useState(1);
+  const totalSteps = 3;
 
   const [form, setForm] = useState({
     nombre: "",
     apellido: "",
-    dni: "",
     email: "",
     telefono: "",
+    dni: "",
     doctor: "",
-    fechaDia: "",
-    fechaMes: "",
-    fechaAno: "",
+    fechaDia: "17",
+    fechaMes: "04",
+    fechaAno: "2026",
+    turnoFranja: "Mañana",
     horaTentativa: "09:00",
     motivo: "",
   });
@@ -26,39 +43,38 @@ const Turnos = () => {
 
   useEffect(() => {
     if (user) {
-      setForm((prev) => ({
+      setForm(prev => ({
         ...prev,
-        nombre: user.nombre || prev.nombre,
-        apellido: user.apellido || prev.apellido,
-        email: user.email || prev.email,
-        telefono: user.telefono || prev.telefono,
+        nombre: user.nombre || "",
+        apellido: user.apellido || "",
+        email: user.email || "",
+        telefono: user.telefono || "",
+        dni: user.dni || "",
       }));
     }
   }, [user]);
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectDoctor = (doc) => {
-    setForm({ ...form, doctor: doc });
+  const handleNext = () => {
+    if (step < totalSteps) setStep(step + 1);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setCargando(true);
-    setMensaje({ texto: "", tipo: "" });
+  const handleBack = () => {
+    if (step > 1) setStep(step - 1);
+  };
 
-    if (!form.nombre || !form.apellido || !form.dni || !form.telefono || !form.doctor || !form.fechaDia || !form.fechaMes || !form.fechaAno || !form.motivo) {
-        setMensaje({ texto: "Por favor complete todos los datos requeridos.", tipo: "error" });
-        setCargando(false);
+  const handleSubmit = async () => {
+    if (!form.motivo || !form.doctor) {
+        setMensaje({ texto: "Por favor complete todos los campos requeridos.", tipo: "error" });
         return;
     }
 
-    const telefonoCompleto = `+549${form.telefono.replace(/\s+/g, '')}`;
+    setCargando(true);
+    const telefonoCompleto = `+549${form.telefono.replace(/\s+/g, '').replace(/^\+?549?/, '')}`;
     const fechaCompleta = `${form.fechaAno}-${form.fechaMes.padStart(2, '0')}-${String(form.fechaDia).padStart(2, '0')}`;
 
     const formDataBackend = {
@@ -71,273 +87,241 @@ const Turnos = () => {
       fecha: fechaCompleta,
       hora: form.horaTentativa,
       motivo: form.motivo,
-      estado: 'Pendiente'
+      estado: 'Pendiente',
+      pacienteId: user?._id || user?.id || null,
     };
 
     try {
       await api.post("/turnos", formDataBackend);
 
       const numeroWhatsApp = "5493816242482";
-      const textoMensaje = `Hola, quiero solicitar un turno online.
-*Mis datos:*
-- Nombre: ${form.nombre} ${form.apellido}
-- DNI: ${form.dni}
-- Teléfono: ${telefonoCompleto}
-- Email: ${form.email}
+      const textoMensaje = `🦷 *NUEVA ORDEN DE CITA - C&M*
+---------------------------------------
+👤 *PACIENTE:* ${form.nombre.toUpperCase()} ${form.apellido.toUpperCase()}
+📇 *DNI:* ${form.dni}
+📱 *TEL:* ${telefonoCompleto}
 
-*Detalles del turno:*
-- Profesional: ${form.doctor}
-- Fecha Tentativa: ${form.fechaDia}/${form.fechaMes}/${form.fechaAno}
-- Turno: ${form.horaTentativa}
-- Motivo: ${form.motivo}`;
+🏢 *CATEGORÍA:* ${form.motivo.toUpperCase()}
+👨‍⚕️ *PROFESIONAL:* ${form.doctor.toUpperCase()}
+📅 *AGENDA:* ${form.fechaDia}/${form.fechaMes}/${form.fechaAno}
+⏰ *HORARIO:* ${form.horaTentativa} HS (${form.turnoFranja})
+
+_Enviado desde el Portal Oficial de Turnos._`;
 
       const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(textoMensaje)}`;
-
-      setMensaje({
-        texto: "¡Solicitud creada! Abriendo WhatsApp...",
-        tipo: "success",
-      });
-
-      setForm({
-        ...form,
-        dni: "", doctor: "", fechaDia: "", fechaMes: "", fechaAno: "", horaTentativa: "Temprano", motivo: "",
-      });
-
-      window.location.href = url;
+      setMensaje({ texto: "¡Solicitud procesada con éxito!", tipo: "success" });
+      setTimeout(() => window.location.href = url, 1200);
 
     } catch (error) {
-      console.error("Error al registrar el turno:", error);
-      setMensaje({
-        texto: "Hubo un error de conexión. Contáctanos por WhatsApp.",
-        tipo: "error",
-      });
+      setMensaje({ texto: "Error de red. Intente WhatsApp directo.", tipo: "error" });
     } finally {
       setCargando(false);
     }
   };
 
+  const consultationTypes = [
+    "Consulta Diagnóstico (Primera vez)",
+    "Urgencia Dental (Dolor agudo)",
+    "Limpieza y Control General",
+    "Ortodoncia (Brackets/Alineadores)",
+    "Implantes Dentales",
+    "Estética: Blanqueamiento / Carillas",
+    "Tratamiento de Conducto (Endodoncia)",
+    "Extracción Dental / Cirugía",
+    "Prótesis y Coronas",
+    "Odontopediatría (Consulta Niños)"
+  ];
+
   return (
-    <div className="bg-[#fff8f5] text-[#2b1704] font-sans min-h-screen selection:bg-[#ffdbc8] selection:text-[#321200]">
-      <main className="pt-28 pb-20 px-6 max-w-6xl mx-auto">
+    <div className="bg-[#FAF9F6] min-h-screen text-[#2D1F16] selection:bg-accent-orange/10 flex flex-col">
+      <main className="pt-28 pb-20 px-4 md:px-8 max-w-7xl mx-auto w-full flex-1">
         
-        {/* Progress Ribbon */}
-        <div className="mb-12">
-          <div className="flex justify-between items-center mb-4 px-2">
-            <div className="flex flex-col">
-              <span className="text-xs uppercase tracking-widest text-[#584235] font-bold">Reserva Online</span>
-              <h1 className="text-3xl font-bold text-[#2b1704] tracking-tight">Detalles de la Consulta</h1>
-            </div>
-            <div className="hidden sm:flex gap-2">
-              <div className="h-1.5 w-16 rounded-full bg-accent-orange"></div>
-              <div className="h-1.5 w-16 rounded-full bg-accent-orange opacity-40"></div>
-            </div>
-          </div>
-          <div className="w-full h-1 bg-[#ffdcc2] rounded-full overflow-hidden">
-            <div className="w-full h-full bg-gradient-to-r from-[#994700] to-[#ff7a23]"></div>
-          </div>
-        </div>
-
-        {mensaje.texto && (
-          <div className={`mb-8 p-4 rounded-xl flex items-center justify-center gap-4 text-xs font-bold uppercase tracking-widest ${mensaje.tipo === "success" ? "bg-green-100 text-green-700 border border-green-200" : "bg-red-100 text-red-700 border border-red-200"}`}>
-            <span className={`w-2 h-2 rounded-full animate-pulse ${mensaje.tipo === "success" ? "bg-green-500" : "bg-red-500"}`}></span> 
-            {mensaje.texto}
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
-          {/* Booking Form Section */}
-          <div className="lg:col-span-7 space-y-10">
-            
-            {/* Section: Personal Info */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3">
-                <User className="text-[#994700]" size={28} />
-                <h2 className="text-xl font-bold">Datos Personales</h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <input name="nombre" value={form.nombre} onChange={handleChange} required placeholder="Nombre" className="w-full bg-[#fff1e9] border-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium outline-none" />
-                 <input name="apellido" value={form.apellido} onChange={handleChange} required placeholder="Apellido" className="w-full bg-[#fff1e9] border-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium outline-none" />
-                 <input name="dni" value={form.dni} onChange={handleChange} required placeholder="DNI" className="w-full bg-[#fff1e9] border-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium outline-none" />
-                 <input name="telefono" value={form.telefono} onChange={handleChange} required placeholder="Teléfono" className="w-full bg-[#fff1e9] border-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium outline-none" type="tel" />
-                 <input name="email" value={form.email} onChange={handleChange} required placeholder="Correo Electrónico" className="w-full md:col-span-2 bg-[#fff1e9] border-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium outline-none" type="email" />
-              </div>
-            </section>
+          {/* COLUMNA IZQUIERDA: STEPPER */}
+          <div className="lg:col-span-7 space-y-8">
+            <div className="space-y-2 mb-10">
+                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-orange">Gestión de Citas 2026</span>
+                <h1 className="text-4xl font-black uppercase tracking-tighter italic leading-none">Nueva <span className="text-accent-orange">Solicitud</span></h1>
+            </div>
 
-            {/* Section: Specialist Selection */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3">
-                <ClipboardList className="text-[#994700]" size={28} />
-                <h2 className="text-xl font-bold">Elegir Profesional</h2>
-              </div>
-              <div className="grid grid-cols-1 gap-4">
-                
-                <div onClick={() => handleSelectDoctor('Dr. Adolfo Martinez')} className={`group relative flex items-center p-4 rounded-[1.5rem] border-2 transition-all cursor-pointer ${form.doctor === 'Dr. Adolfo Martinez' ? 'bg-[#ffffff] border-[#ff7a00]' : 'bg-[#fff1e9] border-transparent hover:border-[#e0c0af]'}`}>
-                  <div className="h-14 w-14 rounded-xl overflow-hidden mr-4 bg-orange-100 flex items-center justify-center text-2xl border border-orange-200">
-                    👨‍⚕️
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-[#2b1704]">Dr. Adolfo Martinez</p>
-                    <p className="text-xs text-[#584235]">Implantología & Cirugía</p>
-                  </div>
-                  {form.doctor === 'Dr. Adolfo Martinez' ? <CheckCircle2 className="text-[#ff7a00]" size={28} /> : <Circle className="text-[#994700]" size={28} />}
-                </div>
+            {/* Indicador de Pasos */}
+            <div className="flex gap-2 max-w-xs mb-8">
+              {[1, 2, 3].map(i => (
+                <div key={i} className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${step >= i ? 'bg-accent-orange shadow-[0_0_10px_rgba(255,120,0,0.4)]' : 'bg-[#EADDCA]'}`}></div>
+              ))}
+            </div>
 
-                <div onClick={() => handleSelectDoctor('Dra. Erina Carcara')} className={`group relative flex items-center p-4 rounded-[1.5rem] border-2 transition-all cursor-pointer ${form.doctor === 'Dra. Erina Carcara' ? 'bg-[#ffffff] border-[#ff7a00]' : 'bg-[#fff1e9] border-transparent hover:border-[#e0c0af]'}`}>
-                  <div className="h-14 w-14 rounded-xl overflow-hidden mr-4 opacity-80 bg-orange-100 flex items-center justify-center text-2xl border border-orange-200">
-                    👩‍⚕️
+            <AnimatePresence mode="wait">
+              {step === 1 && (
+                <motion.div key="s1" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-[#EADDCA]/60 shadow-sm space-y-8">
+                  <div className="flex items-center gap-3">
+                    <User className="text-accent-orange" />
+                    <h2 className="text-xs font-black uppercase tracking-widest text-[#5C4D42]">01. Identificación</h2>
                   </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-[#2b1704]">Dra. Erina Carcara</p>
-                    <p className="text-xs text-[#584235]">Ortodoncia & Estética</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input name="nombre" value={form.nombre} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm focus:ring-2 ring-accent-orange/20" placeholder="Nombre" />
+                    <input name="apellido" value={form.apellido} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm focus:ring-2 ring-accent-orange/20" placeholder="Apellido" />
+                    <input name="dni" value={form.dni} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm focus:ring-2 ring-accent-orange/20" placeholder="Documento" />
+                    <input name="telefono" value={form.telefono} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm text-green-700 focus:ring-2 ring-accent-orange/20" placeholder="WhatsApp" />
                   </div>
-                  {form.doctor === 'Dra. Erina Carcara' ? <CheckCircle2 className="text-[#ff7a00]" size={28} /> : <Circle className="text-[#994700]" size={28} />}
-                </div>
+                </motion.div>
+              )}
 
-              </div>
-            </section>
+              {step === 2 && (
+                <motion.div key="s2" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-[#EADDCA]/60 shadow-sm space-y-8">
+                  <div className="flex items-center gap-3">
+                    <ClipboardList className="text-accent-orange" />
+                    <h2 className="text-xs font-black uppercase tracking-widest text-[#5C4D42]">02. Profesional</h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {['Dr. Adolfo Martinez', 'Dra. Erina Carcara'].map(name => (
+                      <div key={name} onClick={() => setForm({...form, doctor: name})} className={`cursor-pointer p-6 rounded-[2rem] border-2 transition-all flex items-center justify-between ${form.doctor === name ? 'bg-accent-orange text-white border-accent-orange shadow-lg shadow-accent-orange/20' : 'bg-[#FAF9F6] border-transparent hover:border-[#EADDCA]'}`}>
+                        <span className="font-black text-[10px] uppercase tracking-widest">{name}</span>
+                        {form.doctor === name && <Check size={16} />}
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
 
-            {/* Section: Date & Time */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3">
-                <CalendarDays className="text-[#994700]" size={28} />
-                <h2 className="text-xl font-bold">Fecha Preferida</h2>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-bold text-[#584235] ml-1">Fecha</label>
-                  <div className="flex gap-2">
-                    <select name="fechaDia" value={form.fechaDia} onChange={handleChange} required className="w-1/3 bg-[#fff1e9] border-none outline-none rounded-xl py-4 px-3 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none text-center cursor-pointer">
-                      <option value="" disabled>Día</option>
-                      {Array.from({ length: 31 }, (_, i) => i + 1).map(d => (
-                        <option key={d} value={d}>{d}</option>
-                      ))}
-                    </select>
-                    <select name="fechaMes" value={form.fechaMes} onChange={handleChange} required className="w-1/3 bg-[#fff1e9] border-none outline-none rounded-xl py-4 px-3 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none text-center cursor-pointer">
-                      <option value="" disabled>Mes</option>
-                      {["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"].map((m, idx) => (
-                        <option key={m} value={m}>{['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'][idx]}</option>
-                      ))}
-                    </select>
-                    <select name="fechaAno" value={form.fechaAno} onChange={handleChange} required className="w-1/3 bg-[#fff1e9] border-none outline-none rounded-xl py-4 px-3 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none text-center cursor-pointer">
-                      <option value="" disabled>Año</option>
-                      {Array.from({ length: 3 }, (_, i) => new Date().getFullYear() + i).map(y => (
-                        <option key={y} value={y}>{y}</option>
-                      ))}
+              {step === 3 && (
+                <motion.div key="s3" initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-[#EADDCA]/60 shadow-sm space-y-8">
+                  <div className="flex items-center gap-3">
+                    <CalendarDays className="text-accent-orange" />
+                    <h2 className="text-xs font-black uppercase tracking-widest text-[#5C4D42]">03. Planificación</h2>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[9px] font-black uppercase text-accent-orange tracking-widest ml-1">Motivo de Consulta</label>
+                    <select name="motivo" value={form.motivo} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl font-bold text-sm outline-none border-2 border-transparent focus:border-accent-orange transition-all">
+                      <option value="" disabled>Seleccione una opción</option>
+                      {consultationTypes.map(t => <option key={t} value={t}>{t}</option>)}
                     </select>
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-bold text-[#584235] ml-1">Horario</label>
-                  <select name="horaTentativa" value={form.horaTentativa} onChange={handleChange} required className="w-full bg-[#fff1e9] border-none outline-none rounded-xl py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none cursor-pointer">
-                    <optgroup label="Mañana">
-                      <option value="09:00">09:00 hs</option>
-                      <option value="09:30">09:30 hs</option>
-                      <option value="10:00">10:00 hs</option>
-                      <option value="10:30">10:30 hs</option>
-                      <option value="11:00">11:00 hs</option>
-                      <option value="11:30">11:30 hs</option>
-                      <option value="12:00">12:00 hs</option>
-                      <option value="12:30">12:30 hs</option>
-                      <option value="13:00">13:00 hs</option>
-                    </optgroup>
-                    <optgroup label="Tarde">
-                      <option value="14:00">14:00 hs</option>
-                      <option value="14:30">14:30 hs</option>
-                      <option value="15:00">15:00 hs</option>
-                      <option value="15:30">15:30 hs</option>
-                      <option value="16:00">16:00 hs</option>
-                      <option value="16:30">16:30 hs</option>
-                      <option value="17:00">17:00 hs</option>
-                      <option value="17:30">17:30 hs</option>
-                      <option value="18:00">18:00 hs</option>
-                    </optgroup>
-                    <optgroup label="Noche">
-                      <option value="18:30">18:30 hs</option>
-                      <option value="19:00">19:00 hs</option>
-                      <option value="19:30">19:30 hs</option>
-                      <option value="20:00">20:00 hs</option>
-                    </optgroup>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <select name="fechaMes" value={form.fechaMes} onChange={handleChange} className="bg-[#FAF9F6] p-4 rounded-xl outline-none font-black text-xs uppercase tracking-widest">
+                      <option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option>
+                    </select>
+                    <select name="fechaDia" value={form.fechaDia} onChange={handleChange} className="bg-[#FAF9F6] p-4 rounded-xl outline-none font-black text-xs">
+                      {["17", "18", "19", "20", "21", "22", "23"].map(d => <option key={d} value={d}>{d}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="flex gap-4">
+                     {['Mañana', 'Tarde'].map(f => (
+                       <button key={f} type="button" onClick={() => setForm({...form, turnoFranja: f, horaTentativa: f === 'Mañana' ? '09:00' : '15:00'})} className={`flex-1 p-4 rounded-xl font-black text-[9px] uppercase tracking-widest transition-all ${form.turnoFranja === f ? 'bg-[#1A110B] text-white' : 'bg-[#FAF9F6] text-[#5C4D42]'}`}>
+                         {f}
+                       </button>
+                     ))}
+                  </div>
+
+                  <select name="horaTentativa" value={form.horaTentativa} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl font-black text-xs text-center border-none outline-none">
+                    {form.turnoFranja === 'Mañana' ? ["09:00", "10:00", "11:00"].map(h => <option key={h} value={h}>{h} HS</option>) : ["14:00", "15:00", "16:00", "17:00", "18:00"].map(h => <option key={h} value={h}>{h} HS</option>)}
                   </select>
-                </div>
-              </div>
-            </section>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-            {/* Section: Motive */}
-            <section className="space-y-6">
-              <div className="flex items-center gap-3">
-                <FileEdit className="text-[#994700]" size={28} />
-                <h2 className="text-xl font-bold">Motivo de Consulta</h2>
-              </div>
-              <select name="motivo" value={form.motivo} onChange={handleChange} required className="w-full bg-[#fff1e9] border-none outline-none rounded-[1.5rem] py-4 px-5 focus:ring-0 focus:bg-[#ffdcc2] transition-colors text-[#2b1704] font-medium appearance-none cursor-pointer">
-                <option value="" disabled>Seleccione el motivo de su visita</option>
-                <option value="Consulta de control general">Consulta de control general</option>
-                <option value="Limpieza dental profunda">Limpieza dental profunda</option>
-                <option value="Dolor o molestia urgente">Dolor o molestia urgente</option>
-                <option value="Evaluación para ortodoncia">Evaluación para ortodoncia</option>
-                <option value="Implantes o prótesis">Implantes o prótesis</option>
-                <option value="Estética dental (blanqueamiento, carillas)">Estética dental (blanqueamiento, carillas)</option>
-                <option value="Otro">Otro especialista</option>
-              </select>
-            </section>
-
-          </div>
-
-          {/* Side Summary Panel (Asymmetric Editorial Style) */}
-          <div className="lg:col-span-5 sticky top-32">
-            <div className="bg-white rounded-[1.5rem] p-8 shadow-xl shadow-[#2b1704]/5 border border-[#e0c0af]/30 relative overflow-hidden">
-              {/* Subtle brand background element */}
-              <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-[#ffdbc8]/40 rounded-full blur-3xl"></div>
-              
-              <h3 className="text-2xl font-bold mb-8 relative z-10 text-primary">Resumen del Turno</h3>
-              
-              <div className="space-y-8 relative z-10">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-[#584235] mb-1">Paciente</p>
-                    <p className="font-bold text-lg">{form.nombre || 'Nombre'} {form.apellido || 'Apellido'}</p>
-                    <p className="text-sm text-[#584235]">{form.telefono || '+54 9...'}</p>
-                  </div>
-                  <User className="text-[#8c7263]" size={24} />
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex items-center gap-4 p-3 bg-[#fff1e9] rounded-xl">
-                    <Calendar className="text-[#994700] p-2 bg-white rounded-xl shadow-sm w-10 h-10" />
-                    <div>
-                      <p className="text-[10px] uppercase font-bold tracking-widest text-[#584235]">Fecha y Hora</p>
-                      <p className="font-semibold text-sm">{(form.fechaDia && form.fechaMes && form.fechaAno) ? `${form.fechaDia}/${form.fechaMes}/${form.fechaAno}` : 'Sin definir'} — {form.horaTentativa}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 p-3 bg-[#fff1e9] rounded-xl">
-                    <Pill className="text-[#994700] p-2 bg-white rounded-xl shadow-sm w-10 h-10" />
-                    <div>
-                      <p className="text-[10px] uppercase font-bold tracking-widest text-[#584235]">Servicio</p>
-                      <p className="font-semibold text-sm line-clamp-1">{form.doctor || 'Profesional a asignar'}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-[#e0c0af]/30">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-[#e6f4ea] text-[#137333] p-1.5 rounded-full shrink-0">
-                      <svg className="w-4 h-4 fill-current"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.767 5.767 0 3.18 2.586 5.766 5.767 5.766 3.18 0 5.766-2.586 5.766-5.766 0-3.181-2.586-5.767-5.766-5.767zm0 10.511c-2.615 0-4.744-2.129-4.744-4.744 0-2.615 2.129-4.744 4.744-4.744 2.615 0 4.744 2.129 4.744 4.744 0 2.615-2.129 4.744-4.744 4.744zm5.031-10.741c.427 0 .773-.346.773-.773s-.346-.773-.773-.773-.773.346-.773.773.346.773.773.773zm-10.062 0c.427 0 .773-.346.773-.773s-.346-.773-.773-.773-.773.346-.773.773.346.773.773.773zm11.531 1.5c.346 0 .627-.281.627-.627s-.281-.627-.627-.627-.627.281-.627.627.281.627.627.627zm-13 0c.346 0 .627-.281.627-.627s-.281-.627-.627-.627-.627.281-.627.627.281.627.627.627zm11.469 11.5c.346 0 .627-.281.627-.627s-.281-.627-.627-.627-.627.281-.627.627.281.627.627.627zm-10 0c.346 0 .627-.281.627-.627s-.281-.627-.627-.627-.627.281-.627.627.281.627.627.627z"></path></svg>
-                    </div>
-                    <span className="text-xs text-[#584235] leading-tight">Su confirmación se realizará vía <span className="font-bold">WhatsApp</span>.</span>
-                  </div>
-
-                  <button onClick={handleSubmit} disabled={cargando} className="w-full bg-[#ff7a00] text-white py-5 rounded-xl font-bold text-lg hover:opacity-90 active:scale-[0.98] transition-all shadow-lg shadow-[#ff7a00]/20 disabled:opacity-50">
-                    {cargando ? 'PROCESANDO...' : 'Confirmar Turno'}
-                  </button>
-                  <p className="text-center mt-4 text-[10px] text-[#8c7263] uppercase tracking-widest">
-                    Al confirmar, acepta nuestros Términos de Servicio.
-                  </p>
-                </div>
-              </div>
+            {/* BOTONES DE ACCIÓN (Naranjas con efectos) */}
+            <div className="mt-8 flex items-center gap-4">
+              {step > 1 && (
+                <button onClick={handleBack} className="w-14 h-14 rounded-2xl bg-white border border-[#EADDCA] flex items-center justify-center text-[#5C4D42] hover:bg-white/60 transition-colors">
+                  <ChevronLeft size={20} />
+                </button>
+              )}
+              {step < totalSteps ? (
+                <button 
+                  onClick={handleNext} 
+                  className="flex-1 h-14 rounded-3xl bg-accent-orange text-white font-black uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-[0_10px_30px_rgba(255,120,0,0.3)] active:scale-[0.98] transition-all"
+                >
+                  Continuar <ChevronRight size={16} />
+                </button>
+              ) : (
+                <button 
+                  onClick={handleSubmit} 
+                  disabled={cargando}
+                  className="flex-1 h-14 rounded-3xl bg-accent-orange text-white font-black uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-[0_10px_30px_rgba(255,120,0,0.4)] active:scale-[0.98] transition-all"
+                >
+                  {cargando ? 'Transmitiendo...' : 'Registrar y Enviar'} <Send size={16} />
+                </button>
+              )}
             </div>
           </div>
+
+          {/* COLUMNA DERECHA: RESUMEN (Siempre visible) */}
+          <div className="lg:col-span-5 sticky top-32">
+            <div className="bg-[#1A110B] p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden border border-white/5 space-y-8">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-accent-orange/10 rounded-full blur-[60px] -mr-16 -mt-16"></div>
+              
+              <div className="flex items-center gap-4 border-b border-white/5 pb-8">
+                 <ShieldCheck className="text-accent-orange" size={32} />
+                 <div>
+                    <h3 className="text-xl font-black uppercase tracking-tighter">Orden de Consulta</h3>
+                    <p className="text-[8px] uppercase font-bold text-white/30 tracking-widest">Estado: Calibrando Datos</p>
+                 </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-end">
+                    <p className="text-[8px] font-black uppercase text-white/20 tracking-[0.3em]">Paciente</p>
+                    <p className="font-black text-sm uppercase tracking-tight italic">{form.nombre || '...' } {form.apellido || ''}</p>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <p className="text-[8px] font-black uppercase text-white/20 tracking-[0.3em]">DNI</p>
+                    <p className="font-black text-sm uppercase tracking-tight">{form.dni || '---'}</p>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <p className="text-[8px] font-black uppercase text-white/20 tracking-[0.3em]">Profesional</p>
+                    <p className="font-black text-sm uppercase tracking-tight italic text-accent-orange">{form.doctor || 'Sin asignar'}</p>
+                  </div>
+                </div>
+
+                <div className="bg-white/5 p-5 rounded-2xl border border-white/5 space-y-4">
+                   <div className="flex items-center gap-4">
+                      <Clock className="text-accent-orange/40" size={18} />
+                      <div>
+                        <p className="text-[7px] font-black uppercase text-white/30 tracking-widest">Agenda Solicitada</p>
+                        <p className="font-bold text-xs tracking-widest">{form.fechaDia}/{form.fechaMes}/26 — {form.horaTentativa} HS</p>
+                      </div>
+                   </div>
+                   <div className="flex items-center gap-4">
+                      <Activity className="text-accent-orange/40" size={18} />
+                      <div>
+                        <p className="text-[7px] font-black uppercase text-white/30 tracking-widest">Motivo</p>
+                        <p className="font-bold text-xs tracking-widest uppercase line-clamp-1">{form.motivo || 'No definido'}</p>
+                      </div>
+                   </div>
+                </div>
+              </div>
+
+              <div className="pt-4 flex flex-col items-center gap-4">
+                 <div className="w-1.5 h-1.5 bg-accent-orange rounded-full animate-ping"></div>
+                 <p className="text-[7px] text-center font-bold text-white/20 uppercase tracking-[0.4em] leading-relaxed">
+                   Confirmación requerida vía WhatsApp <br/> según protocolo institucional Carcara & Martínez.
+                 </p>
+              </div>
+            </div>
+
+            {mensaje.texto && (
+              <div className={`mt-6 p-4 rounded-xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest ${mensaje.tipo === "success" ? "text-green-500 bg-green-500/5 border border-green-500/20" : "text-red-500 bg-red-500/5 border border-red-500/20"}`}>
+                <Info size={14} /> {mensaje.texto}
+              </div>
+            )}
+          </div>
+
         </div>
       </main>
+
+      {/* Footer Fijo Mobile */}
+      <footer className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-[#EADDCA] p-4 flex justify-between items-center z-50">
+          <div className="flex flex-col">
+            <span className="text-[8px] font-black uppercase text-accent-orange">Paso {step}/3</span>
+          </div>
+          <button onClick={handleSubmit} disabled={cargando} className="bg-accent-orange text-white px-6 py-2 rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg">Enviar WhatsApp</button>
+      </footer>
     </div>
   );
 };
