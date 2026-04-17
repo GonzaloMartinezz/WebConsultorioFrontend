@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Users, 
-  Heart, 
-  Zap, 
-  Target, 
-  Clock, 
-  Sparkles 
+import {
+  Users,
+  Heart,
+  Zap,
+  Target,
+  Clock,
+  Sparkles
 } from 'lucide-react';
 
 const BENEFITS = [
@@ -22,9 +22,9 @@ const BannerPlanes = () => {
   return (
     <>
       {/* SECCIÓN HERO (Restaurada con degradado naranja) */}
-      <section className="bg-gradient-to-b from-accent-orange/10 via-background to-background py-16 md:py-24 px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center relative overflow-hidden">
+      <section className="bg-linear-to-b from-accent-orange/10 via-background to-background py-16 md:py-24 px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center relative overflow-hidden">
         {/* Decoración difuminada naranja */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-accent-orange/5 via-transparent to-transparent pointer-events-none opacity-60"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_top,var(--tw-gradient-stops))] from-accent-orange/5 via-transparent to-transparent pointer-events-none opacity-60"></div>
 
         <div className="max-w-4xl mx-auto relative z-10">
           <span className="inline-block py-2 px-6 rounded-full bg-accent-orange/10 text-accent-orange font-bold text-[10px] md:text-xs mb-6 tracking-widest uppercase border border-accent-orange/20 shadow-sm">
@@ -57,38 +57,39 @@ const BannerPlanes = () => {
           <p className="text-center text-[10px] md:text-xs font-black tracking-[0.4em] text-white/30 uppercase mb-16">
             ¿Por qué elegirnos?
           </p>
-          
+
           <div className="flex overflow-hidden group/marquee relative py-4">
             {/* Máscaras laterales para el ancho completo */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#1A110B] to-transparent z-20 pointer-events-none"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#1A110B] to-transparent z-20 pointer-events-none"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-linear-to-r from-[#1A110B] to-transparent z-20 pointer-events-none"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-linear-to-l from-[#1A110B] to-transparent z-20 pointer-events-none"></div>
 
-            <div 
+            <div
               className="flex gap-6 animate-marquee group-hover/marquee:[animation-play-state:paused]"
-              style={{ 
+              style={{
                 width: 'max-content',
                 animation: 'marquee 35s linear infinite'
               }}
             >
               {[...BENEFITS, ...BENEFITS, ...BENEFITS, ...BENEFITS, ...BENEFITS].map((item, index) => (
-                <div 
+                <div
                   key={index}
                   className="w-48 h-48 md:w-56 md:h-56 flex flex-col items-center justify-center p-8 bg-[#2D1F16] border border-white/5 rounded-2xl transition-all duration-500 hover:scale-[1.03] hover:border-accent-orange/30 group/card relative"
                 >
                   <div className="bg-accent-orange/10 p-5 rounded-2xl text-accent-orange mb-6 group-hover/card:bg-accent-orange group-hover/card:text-white transition-all duration-500 shadow-inner">
                     <item.icon size={32} strokeWidth={1.5} />
                   </div>
-                  
+
                   <h3 className="text-white text-xs md:text-sm font-black uppercase tracking-[0.15em] text-center">
                     {item.title}
                   </h3>
-                  
+
                   <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-accent-orange/20 rounded-full group-hover/card:bg-accent-orange transition-all duration-500 group-hover/card:w-16"></div>
                 </div>
               ))}
             </div>
-            
-            <style dangerouslySetInnerHTML={{ __html: `
+
+            <style dangerouslySetInnerHTML={{
+              __html: `
               @keyframes marquee {
                 0% { transform: translateX(0); }
                 100% { transform: translateX(-20%); }

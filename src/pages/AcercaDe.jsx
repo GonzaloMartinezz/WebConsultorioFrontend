@@ -153,7 +153,7 @@ const AcercaDe = () => {
             <div className="w-full lg:w-1/2" data-aos="fade-left" data-aos-delay="200">
               <div className="relative rounded-xl overflow-hidden border border-white/10 shadow-2xl shadow-orange-900/20">
                 {/* Barra de ventana */}
-                <div className="flex items-center gap-2 px-4 py-2.5 bg-[#1A1A1A] border-b border-white/10">
+                <div className="flex items-center gap-2 px-4 py-2.5 bg-text border-b border-white/10">
                   <span className="w-3 h-3 rounded-full bg-red-500/80" />
                   <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
                   <span className="w-3 h-3 rounded-full bg-green-500/80" />
@@ -180,7 +180,7 @@ const AcercaDe = () => {
             {techCards.map((card, i) => (
               <div
                 key={card.title}
-                className="group bg-[#141414] border border-white/[0.06] rounded-xl overflow-hidden hover:border-[#FF7800]/30 transition-all duration-300"
+                className="group bg-[#141414] border border-white/6 rounded-xl overflow-hidden hover:border-[#FF7800]/30 transition-all duration-300"
                 data-aos="fade-up"
                 data-aos-delay={i * 80}
               >
@@ -204,7 +204,7 @@ const AcercaDe = () => {
         </div>
 
         {/* ── Infraestructura Tecnológica Core (split) ─────────── */}
-        <div className="bg-[#111111] border-t border-white/[0.06]">
+        <div className="bg-[#111111] border-t border-white/6">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
             <div className="flex flex-col lg:flex-row gap-14 lg:gap-20 items-center">
 

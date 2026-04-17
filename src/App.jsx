@@ -145,8 +145,12 @@ export default function App() {
 
         {/* Herramientas de Gestion */}
         <Route 
+          path="/admin/estadisticas" 
+          element={<ProtectedRoute requireAdmin={true}><AdminEstadisticas /></ProtectedRoute>} 
+        />
+        <Route 
           path="/admin/analytics" 
-          element={<ProtectedRoute requireAdmin={true}><AdminAnalytics /></ProtectedRoute>} 
+          element={<ProtectedRoute requireAdmin={true}><AdminEstadisticas /></ProtectedRoute>} 
         />
         <Route 
           path="/admin/configuracion" 

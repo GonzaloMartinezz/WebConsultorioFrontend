@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import api from "../api/axios.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  User, 
-  ClipboardList, 
-  CalendarDays, 
+import {
+  User,
+  ClipboardList,
+  CalendarDays,
   Check,
   ChevronRight,
   ChevronLeft,
@@ -23,6 +23,7 @@ const Turnos = () => {
   const [step, setStep] = useState(1);
   const totalSteps = 3;
 
+  const hoy = new Date();
   const [form, setForm] = useState({
     nombre: "",
     apellido: "",
@@ -30,8 +31,8 @@ const Turnos = () => {
     telefono: "",
     dni: "",
     doctor: "",
-    fechaDia: "17",
-    fechaMes: "04",
+    fechaDia: String(hoy.getDate()).padStart(2, '0'),
+    fechaMes: String(hoy.getMonth() + 1).padStart(2, '0'),
     fechaAno: "2026",
     turnoFranja: "Mañana",
     horaTentativa: "09:00",
@@ -69,8 +70,8 @@ const Turnos = () => {
 
   const handleSubmit = async () => {
     if (!form.motivo || !form.doctor) {
-        setMensaje({ texto: "Por favor complete todos los campos requeridos.", tipo: "error" });
-        return;
+      setMensaje({ texto: "Por favor complete todos los campos requeridos.", tipo: "error" });
+      return;
     }
 
     setCargando(true);
@@ -110,7 +111,9 @@ _Enviado desde el Portal Oficial de Turnos._`;
 
       const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(textoMensaje)}`;
       setMensaje({ texto: "¡Solicitud procesada con éxito!", tipo: "success" });
-      setTimeout(() => window.location.href = url, 1200);
+      setTimeout(() => {
+        window.open(url, '_blank');
+      }, 1200);
 
     } catch (error) {
       setMensaje({ texto: "Error de red. Intente WhatsApp directo.", tipo: "error" });
@@ -135,14 +138,14 @@ _Enviado desde el Portal Oficial de Turnos._`;
   return (
     <div className="bg-[#FAF9F6] min-h-screen text-[#2D1F16] selection:bg-accent-orange/10 flex flex-col">
       <main className="pt-28 pb-20 px-4 md:px-8 max-w-7xl mx-auto w-full flex-1">
-        
+
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* COLUMNA IZQUIERDA: STEPPER */}
           <div className="lg:col-span-7 space-y-8">
             <div className="space-y-2 mb-10">
-                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-orange">Gestión de Citas 2026</span>
-                <h1 className="text-4xl font-black uppercase tracking-tighter italic leading-none">Nueva <span className="text-accent-orange">Solicitud</span></h1>
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-orange">Gestión de Citas 2026</span>
+              <h1 className="text-4xl font-black uppercase tracking-tighter italic leading-none">Nueva <span className="text-accent-orange">Solicitud</span></h1>
             </div>
 
             {/* Indicador de Pasos */}
@@ -162,8 +165,9 @@ _Enviado desde el Portal Oficial de Turnos._`;
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <input name="nombre" value={form.nombre} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm focus:ring-2 ring-accent-orange/20" placeholder="Nombre" />
                     <input name="apellido" value={form.apellido} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm focus:ring-2 ring-accent-orange/20" placeholder="Apellido" />
-                    <input name="dni" value={form.dni} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm focus:ring-2 ring-accent-orange/20" placeholder="Documento" />
-                    <input name="telefono" value={form.telefono} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm text-green-700 focus:ring-2 ring-accent-orange/20" placeholder="WhatsApp" />
+                    <input name="dni" value={form.dni} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm focus:ring-2 ring-accent-orange/20" placeholder="DNI / Documento" />
+                    <input name="telefono" value={form.telefono} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm text-green-700 focus:ring-2 ring-accent-orange/20" placeholder="WhatsApp (Sin 0 ni 15)" />
+                    <input name="email" value={form.email} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl outline-none font-bold text-sm md:col-span-2 focus:ring-2 ring-accent-orange/20" placeholder="Correo Electrónico" />
                   </div>
                 </motion.div>
               )}
@@ -176,7 +180,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {['Dr. Adolfo Martinez', 'Dra. Erina Carcara'].map(name => (
-                      <div key={name} onClick={() => setForm({...form, doctor: name})} className={`cursor-pointer p-6 rounded-[2rem] border-2 transition-all flex items-center justify-between ${form.doctor === name ? 'bg-accent-orange text-white border-accent-orange shadow-lg shadow-accent-orange/20' : 'bg-[#FAF9F6] border-transparent hover:border-[#EADDCA]'}`}>
+                      <div key={name} onClick={() => setForm({ ...form, doctor: name })} className={`cursor-pointer p-6 rounded-4xl border-2 transition-all flex items-center justify-between ${form.doctor === name ? 'bg-accent-orange text-white border-accent-orange shadow-lg shadow-accent-orange/20' : 'bg-[#FAF9F6] border-transparent hover:border-[#EADDCA]'}`}>
                         <span className="font-black text-[10px] uppercase tracking-widest">{name}</span>
                         {form.doctor === name && <Check size={16} />}
                       </div>
@@ -200,22 +204,63 @@ _Enviado desde el Portal Oficial de Turnos._`;
                     </select>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <select name="fechaMes" value={form.fechaMes} onChange={handleChange} className="bg-[#FAF9F6] p-4 rounded-xl outline-none font-black text-xs uppercase tracking-widest">
-                      <option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option>
-                    </select>
-                    <select name="fechaDia" value={form.fechaDia} onChange={handleChange} className="bg-[#FAF9F6] p-4 rounded-xl outline-none font-black text-xs">
-                      {["17", "18", "19", "20", "21", "22", "23"].map(d => <option key={d} value={d}>{d}</option>)}
-                    </select>
-                  </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      {/* Generación dinámica de meses y días */}
+                      <div className="bg-[#FAF9F6] p-4 rounded-xl flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-[#5C4D42]">Mes</span>
+                        <span className="font-black text-xs uppercase text-accent-orange">
+                          {new Date(2026, parseInt(form.fechaMes) - 1).toLocaleString('es-ES', { month: 'long' })}
+                        </span>
+                      </div>
+                      
+                      <select 
+                        name="fechaDia" 
+                        value={form.fechaDia} 
+                        onChange={(e) => {
+                          const selectedDay = e.target.value;
+                          const offset = e.target.selectedIndex;
+                          const d = new Date();
+                          d.setDate(d.getDate() + offset);
+                          const mesStr = String(d.getMonth() + 1).padStart(2, '0');
+                          setForm({ ...form, fechaDia: selectedDay, fechaMes: mesStr });
+                        }} 
+                        className="bg-[#FAF9F6] p-4 rounded-xl outline-none font-black text-xs border-2 border-transparent focus:border-accent-orange transition-all"
+                      >
+                        {Array.from({ length: 14 }, (_, i) => {
+                          const d = new Date();
+                          d.setDate(d.getDate() + i);
+                          const diaStr = String(d.getDate()).padStart(2, '0');
+                          const mesStr = String(d.getMonth() + 1).padStart(2, '0');
+                          const diaNombre = d.toLocaleString('es-ES', { weekday: 'short' });
+                          return (
+                            <option key={i} value={diaStr}>
+                              {diaNombre.toUpperCase()} {diaStr}/{mesStr}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
 
-                  <div className="flex gap-4">
-                     {['Mañana', 'Tarde'].map(f => (
-                       <button key={f} type="button" onClick={() => setForm({...form, turnoFranja: f, horaTentativa: f === 'Mañana' ? '09:00' : '15:00'})} className={`flex-1 p-4 rounded-xl font-black text-[9px] uppercase tracking-widest transition-all ${form.turnoFranja === f ? 'bg-[#1A110B] text-white' : 'bg-[#FAF9F6] text-[#5C4D42]'}`}>
-                         {f}
-                       </button>
-                     ))}
-                  </div>
+                    <div className="flex gap-4">
+                      {['Mañana', 'Tarde'].map(f => (
+                        <button 
+                          key={f} 
+                          type="button" 
+                          onClick={() => {
+                            const d = new Date(); 
+                            // Actualizar mes si el día seleccionado corresponde al mes siguiente
+                            setForm({ 
+                              ...form, 
+                              turnoFranja: f, 
+                              horaTentativa: f === 'Mañana' ? '09:00' : '15:00' 
+                            });
+                          }} 
+                          className={`flex-1 p-4 rounded-xl font-black text-[9px] uppercase tracking-widest transition-all ${form.turnoFranja === f ? 'bg-[#1A110B] text-white shadow-xl shadow-black/20' : 'bg-[#FAF9F6] text-[#5C4D42] hover:bg-[#EADDCA]/30'}`}
+                        >
+                          {f}
+                        </button>
+                      ))}
+                    </div>
 
                   <select name="horaTentativa" value={form.horaTentativa} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl font-black text-xs text-center border-none outline-none">
                     {form.turnoFranja === 'Mañana' ? ["09:00", "10:00", "11:00"].map(h => <option key={h} value={h}>{h} HS</option>) : ["14:00", "15:00", "16:00", "17:00", "18:00"].map(h => <option key={h} value={h}>{h} HS</option>)}
@@ -232,15 +277,15 @@ _Enviado desde el Portal Oficial de Turnos._`;
                 </button>
               )}
               {step < totalSteps ? (
-                <button 
-                  onClick={handleNext} 
+                <button
+                  onClick={handleNext}
                   className="flex-1 h-14 rounded-3xl bg-accent-orange text-white font-black uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-[0_10px_30px_rgba(255,120,0,0.3)] active:scale-[0.98] transition-all"
                 >
                   Continuar <ChevronRight size={16} />
                 </button>
               ) : (
-                <button 
-                  onClick={handleSubmit} 
+                <button
+                  onClick={handleSubmit}
                   disabled={cargando}
                   className="flex-1 h-14 rounded-3xl bg-accent-orange text-white font-black uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2 hover:brightness-110 hover:shadow-[0_10px_30px_rgba(255,120,0,0.4)] active:scale-[0.98] transition-all"
                 >
@@ -254,24 +299,28 @@ _Enviado desde el Portal Oficial de Turnos._`;
           <div className="lg:col-span-5 sticky top-32">
             <div className="bg-[#1A110B] p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden border border-white/5 space-y-8">
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent-orange/10 rounded-full blur-[60px] -mr-16 -mt-16"></div>
-              
+
               <div className="flex items-center gap-4 border-b border-white/5 pb-8">
-                 <ShieldCheck className="text-accent-orange" size={32} />
-                 <div>
-                    <h3 className="text-xl font-black uppercase tracking-tighter">Orden de Consulta</h3>
-                    <p className="text-[8px] uppercase font-bold text-white/30 tracking-widest">Estado: Calibrando Datos</p>
-                 </div>
+                <ShieldCheck className="text-accent-orange" size={32} />
+                <div>
+                  <h3 className="text-xl font-black uppercase tracking-tighter">Orden de Consulta</h3>
+                  <p className="text-[8px] uppercase font-bold text-white/30 tracking-widest">Estado: Calibrando Datos</p>
+                </div>
               </div>
 
               <div className="space-y-6">
                 <div className="space-y-4">
                   <div className="flex justify-between items-end">
                     <p className="text-[8px] font-black uppercase text-white/20 tracking-[0.3em]">Paciente</p>
-                    <p className="font-black text-sm uppercase tracking-tight italic">{form.nombre || '...' } {form.apellido || ''}</p>
+                    <p className="font-black text-sm uppercase tracking-tight italic">{form.nombre || '...'} {form.apellido || ''}</p>
                   </div>
                   <div className="flex justify-between items-end">
                     <p className="text-[8px] font-black uppercase text-white/20 tracking-[0.3em]">DNI</p>
                     <p className="font-black text-sm uppercase tracking-tight">{form.dni || '---'}</p>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <p className="text-[8px] font-black uppercase text-white/20 tracking-[0.3em]">Email</p>
+                    <p className="font-black text-[10px] lowercase tracking-tight opacity-80">{form.email || '---'}</p>
                   </div>
                   <div className="flex justify-between items-end">
                     <p className="text-[8px] font-black uppercase text-white/20 tracking-[0.3em]">Profesional</p>
@@ -280,28 +329,28 @@ _Enviado desde el Portal Oficial de Turnos._`;
                 </div>
 
                 <div className="bg-white/5 p-5 rounded-2xl border border-white/5 space-y-4">
-                   <div className="flex items-center gap-4">
-                      <Clock className="text-accent-orange/40" size={18} />
-                      <div>
-                        <p className="text-[7px] font-black uppercase text-white/30 tracking-widest">Agenda Solicitada</p>
-                        <p className="font-bold text-xs tracking-widest">{form.fechaDia}/{form.fechaMes}/26 — {form.horaTentativa} HS</p>
-                      </div>
-                   </div>
-                   <div className="flex items-center gap-4">
-                      <Activity className="text-accent-orange/40" size={18} />
-                      <div>
-                        <p className="text-[7px] font-black uppercase text-white/30 tracking-widest">Motivo</p>
-                        <p className="font-bold text-xs tracking-widest uppercase line-clamp-1">{form.motivo || 'No definido'}</p>
-                      </div>
-                   </div>
+                  <div className="flex items-center gap-4">
+                    <Clock className="text-accent-orange/40" size={18} />
+                    <div>
+                      <p className="text-[7px] font-black uppercase text-white/30 tracking-widest">Agenda Solicitada</p>
+                      <p className="font-bold text-xs tracking-widest">{form.fechaDia}/{form.fechaMes}/26 — {form.horaTentativa} HS</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <Activity className="text-accent-orange/40" size={18} />
+                    <div>
+                      <p className="text-[7px] font-black uppercase text-white/30 tracking-widest">Motivo</p>
+                      <p className="font-bold text-xs tracking-widest uppercase line-clamp-1">{form.motivo || 'No definido'}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div className="pt-4 flex flex-col items-center gap-4">
-                 <div className="w-1.5 h-1.5 bg-accent-orange rounded-full animate-ping"></div>
-                 <p className="text-[7px] text-center font-bold text-white/20 uppercase tracking-[0.4em] leading-relaxed">
-                   Confirmación requerida vía WhatsApp <br/> según protocolo institucional Carcara & Martínez.
-                 </p>
+                <div className="w-1.5 h-1.5 bg-accent-orange rounded-full animate-ping"></div>
+                <p className="text-[7px] text-center font-bold text-white/20 uppercase tracking-[0.4em] leading-relaxed">
+                  Confirmación requerida vía WhatsApp <br /> según protocolo institucional Carcara & Martínez.
+                </p>
               </div>
             </div>
 
@@ -317,10 +366,10 @@ _Enviado desde el Portal Oficial de Turnos._`;
 
       {/* Footer Fijo Mobile */}
       <footer className="md:hidden fixed bottom-0 left-0 w-full bg-white border-t border-[#EADDCA] p-4 flex justify-between items-center z-50">
-          <div className="flex flex-col">
-            <span className="text-[8px] font-black uppercase text-accent-orange">Paso {step}/3</span>
-          </div>
-          <button onClick={handleSubmit} disabled={cargando} className="bg-accent-orange text-white px-6 py-2 rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg">Enviar WhatsApp</button>
+        <div className="flex flex-col">
+          <span className="text-[8px] font-black uppercase text-accent-orange">Paso {step}/3</span>
+        </div>
+        <button onClick={handleSubmit} disabled={cargando} className="bg-accent-orange text-white px-6 py-2 rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg">Enviar WhatsApp</button>
       </footer>
     </div>
   );

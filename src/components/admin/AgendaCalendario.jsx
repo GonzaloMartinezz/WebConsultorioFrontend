@@ -104,37 +104,69 @@ const AgendaCalendario = () => {
     };
   };
 
-  // ─── Helper: URLs de notificación (WhatsApp + Email) ────────
-  const generarUrlsNotificacion = (turnoData) => {
+  // ─── Helper: Generar enlace de Google Calendar ──────────────
+  const generarGoogleCalendarUrl = (turnoData) => {
+    let horaInicioStr = '09:00';
+    const timeMatch = turnoData.hora?.match(/(\d{1,2}:\d{2})/);
+    if (timeMatch) horaInicioStr = timeMatch[1];
+
+    const [year, month, day] = turnoData.fecha.split('-');
+    const [hour, minute] = horaInicioStr.split(':');
+
+    const startDate = new Date(year, month - 1, day, hour, minute);
+    const endDate = new Date(startDate.getTime() + 30 * 60000);
+
+    // Formato Google Calendar: YYYYMMDDTHHmmssZ
+    const formatGCal = (date) => date.toISOString().replace(/-|:|\.\d\d\d/g, '');
+
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(`Turno Odontológico - ${turnoData.profesional}`)}&dates=${formatGCal(startDate)}/${formatGCal(endDate)}&details=${encodeURIComponent(`Motivo: ${turnoData.motivo || 'Consulta general'}\nPaciente: ${turnoData.nombrePaciente} ${turnoData.apellidoPaciente}`)}&location=${encodeURIComponent('Jose Rondeau 827, San Miguel de Tucumán')}`;
+  };
+
+  // ─── Helper: URLs de notificación (WhatsApp + Email + Calendar) ─
+  const generarUrlsNotificacion = (turnoData, googleCalUrl) => {
     const fechaLegible = turnoData.fecha ? turnoData.fecha.split('-').reverse().join('/') : '';
-    const telefonoLimpio = turnoData.telefono ? turnoData.telefono.replace(/\D/g, '') : '';
+    // Normalizar teléfono: quitar todo menos dígitos, asegurar prefijo argentino
+    let telefonoLimpio = turnoData.telefono ? turnoData.telefono.replace(/\D/g, '') : '';
+    if (telefonoLimpio.startsWith('0')) telefonoLimpio = '549' + telefonoLimpio.substring(1);
+    if (telefonoLimpio.startsWith('15')) telefonoLimpio = '549381' + telefonoLimpio.substring(2);
+    if (telefonoLimpio.length > 0 && telefonoLimpio.length <= 10 && !telefonoLimpio.startsWith('54')) {
+      telefonoLimpio = '549' + telefonoLimpio;
+    }
+
     let waUrl = '';
     let mailUrl = '';
 
     if (telefonoLimpio) {
-      const mensaje = `¡Hola ${turnoData.nombrePaciente}! 🦷\nTe escribimos de *Carcara • Martínez Centro Odontológico*.\n\nQueremos informarte que tu turno ha sido *CONFIRMADO* ✅:\n- 👨‍⚕️ Profesional: ${turnoData.profesional}\n- 📅 Fecha: ${fechaLegible}\n- ⏰ Horario: ${turnoData.hora}\n\nTe esperamos en Jose Rondeau 827. ¡Que tengas un excelente día!`;
+      const mensaje = `¡Hola ${turnoData.nombrePaciente}! 🦷\nTe escribimos de *C&M Centro Odontológico*.\n\nTu turno ha sido *CONFIRMADO* ✅\n\n👨‍⚕️ Profesional: ${turnoData.profesional}\n📅 Fecha: ${fechaLegible}\n⏰ Horario: ${turnoData.hora}\n🦷 Motivo: ${turnoData.motivo || 'Consulta general'}\n📍 Jose Rondeau 827, S.M. de Tucumán\n\n🗓️ *Agendalo en tu celular:*\n${googleCalUrl}\n\n¡Te esperamos!`;
       waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
     }
 
     if (turnoData.email) {
-      const asunto = encodeURIComponent(`Turno Confirmado - C&M Dental (${fechaLegible})`);
-      const cuerpo = encodeURIComponent(`Hola ${turnoData.nombrePaciente}, tu turno fue confirmado.\n\nProfesional: ${turnoData.profesional}\nFecha: ${fechaLegible}\nHorario: ${turnoData.hora}\nMotivo: ${turnoData.motivo || 'Consulta general'}\n\nTe esperamos!\nC&M Dental`);
+      const asunto = encodeURIComponent(`✅ Turno Confirmado - C&M Dental (${fechaLegible})`);
+      const cuerpo = encodeURIComponent(`Hola ${turnoData.nombrePaciente},\n\nTu turno fue confirmado exitosamente.\n\nProfesional: ${turnoData.profesional}\nFecha: ${fechaLegible}\nHorario: ${turnoData.hora}\nMotivo: ${turnoData.motivo || 'Consulta general'}\n\n📅 Agrega este turno a tu calendario:\n${googleCalUrl}\n\nDirección: Jose Rondeau 827, San Miguel de Tucumán\n\n¡Te esperamos!\nEquipo C&M Dental`);
       mailUrl = `mailto:${turnoData.email}?subject=${asunto}&body=${cuerpo}`;
     }
 
-    return { waUrl, mailUrl, nombrePaciente: turnoData.nombrePaciente, telefono: turnoData.telefono, email: turnoData.email };
+    return { waUrl, mailUrl, googleCalUrl, nombrePaciente: turnoData.nombrePaciente, telefono: turnoData.telefono, email: turnoData.email };
   };
 
-  // ─── Confirmar Turno (PATCH real de tu backend) ─────────────
+  // ─── Confirmar Turno (PATCH + Google Calendar + Notificación) ─
   const confirmarTurno = async () => {
     setProcesando(true);
     const turno = turnoSeleccionado.resource;
 
     try {
+      // 1. ACTUALIZAR ESTADO EN BASE DE DATOS
       await api.patch(`/turnos/${turno._id}/estado`, { estado: 'Confirmado' });
 
+      // 2. GENERAR ENLACE DE GOOGLE CALENDAR
+      const googleCalUrl = generarGoogleCalendarUrl(turno);
+
+      // 3. PREPARAR URLS DE NOTIFICACIÓN (WhatsApp + Email + Calendar)
+      const urls = generarUrlsNotificacion(turno, googleCalUrl);
+
+      // 4. CERRAR MODAL Y MOSTRAR PANEL DE NOTIFICACIONES
       setTurnoSeleccionado(null);
-      const urls = generarUrlsNotificacion(turno);
       setNotificacionPendiente(urls);
       await cargarTurnos();
 
@@ -230,16 +262,15 @@ const AgendaCalendario = () => {
           ══════════════════════════════════════════════════════ */}
       {turnoSeleccionado && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={() => setTurnoSeleccionado(null)}>
-          <div className="bg-white rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-4xl w-full max-w-lg shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
 
             {/* Header */}
             <div className="bg-primary p-6 text-white relative">
               <button onClick={() => setTurnoSeleccionado(null)} className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors">
                 <FaTimes className="text-xl" />
               </button>
-              <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-3 ${
-                turnoSeleccionado.resource.estado === 'Confirmado' ? 'bg-green-500 text-white' : 'bg-accent-orange text-white'
-              }`}>
+              <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-3 ${turnoSeleccionado.resource.estado === 'Confirmado' ? 'bg-green-500 text-white' : 'bg-accent-orange text-white'
+                }`}>
                 Estado: {turnoSeleccionado.resource.estado}
               </span>
               <h2 className="text-2xl font-black uppercase leading-tight">
@@ -336,7 +367,7 @@ const AgendaCalendario = () => {
                   </div>
                 )}
                 {notificacionPendiente.mailUrl ? (
-                  <a href={notificacionPendiente.mailUrl} target="_blank" rel="noopener noreferrer"
+                  <a href={notificacionPendiente.mailUrl}
                     className="flex items-center justify-center gap-3 w-full p-4 bg-white hover:bg-blue-50 border-2 border-blue-500 rounded-xl text-blue-700 font-bold text-base transition-all hover:scale-[1.02] active:scale-95 shadow-sm">
                     <FaEnvelope className="text-2xl text-blue-500" /> Enviar Email
                   </a>
@@ -345,9 +376,15 @@ const AgendaCalendario = () => {
                     <FaEnvelope className="text-2xl" /> Sin Email registrado
                   </div>
                 )}
+                {notificacionPendiente.googleCalUrl && (
+                  <a href={notificacionPendiente.googleCalUrl} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-3 w-full p-4 bg-white hover:bg-orange-50 border-2 border-accent-orange rounded-xl text-primary font-bold text-base transition-all hover:scale-[1.02] active:scale-95 shadow-sm">
+                    📅 Ver en Google Calendar
+                  </a>
+                )}
               </div>
               <p className="text-[10px] text-text-light font-bold mt-4 text-center uppercase tracking-widest">
-                La ventana abrirá la aplicación correspondiente.
+                El enlace de Google Calendar se incluye en el WhatsApp y Email.
               </p>
             </div>
 

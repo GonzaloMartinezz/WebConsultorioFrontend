@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { FaGoogle, FaEnvelope, FaLock, FaCheckCircle, FaExclamationCircle } from 'react-icons/fa';
+import { useGoogleLogin, GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Login = () => {
   const [form, setForm] = useState({
     nombre: "",
     apellido: "",
+    dni: "",
     email: "",
     telefono: "",
     password: "",
@@ -42,9 +44,53 @@ const Login = () => {
     setMensajeExito("");
   };
 
-  const handleGoogleLogin = () => {
-    window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`;
+  // =============================================
+  // LOGICA LOGIN CON GOOGLE
+  // =============================================
+  const handleGoogleSuccess = async (tokenResponse) => {
+    setCargando(true);
+    setError("");
+    try {
+      // Nota: tokenResponse.access_token es el token de acceso
+      // Pero nuestro backend espera un idToken si usamos verifyIdToken.
+      // O podemos usar el access_token para pedir info a google desde el backend.
+      // Usaremos un flujo mas directo enviando el token al nuevo endpoint
+
+      const respuesta = await api.post('/auth/google', {
+        idToken: tokenResponse.credential
+      });
+
+      const usuarioLogueado = respuesta.data.usuario || respuesta.data;
+      login(respuesta.data);
+      if (respuesta.data.token) localStorage.setItem('token', respuesta.data.token);
+      localStorage.setItem('perfilUsuario', JSON.stringify(usuarioLogueado));
+
+      if (usuarioLogueado && usuarioLogueado.rol && usuarioLogueado.rol.toLowerCase() === 'admin') {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+    } catch (err) {
+      console.error("Error Google Login:", err);
+      setError("Fallo el inicio con Google. Intente nuevamente.");
+    } finally {
+      setCargando(false);
+    }
   };
+
+  // Usamos el componente pre-construido de Google por simplicidad y cumplimiento de politicas
+  // Pero si el usuario prefiere su boton, usamos el Custom Hook.
+  // Usaremos el Custom Hook para mantener su diseño premium.
+
+  const loginGoogle = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      // El flow 'implicit' nos da un access_token. 
+      // Para obtener el idToken con useGoogleLogin hay que configurar un poco mas o usar GoogleLogin component.
+      // Usaremos el approach de enviar el access_token y que el backend pida la info.
+      // Pero mejor, usaremos el componente GoogleLogin oficial que es mas robusto para JWT.
+    },
+    onError: () => setError("Error al conectar con Google")
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,6 +115,7 @@ const Login = () => {
         const respuesta = await api.post('/auth/register', {
           nombre: form.nombre,
           apellido: form.apellido,
+          dni: form.dni, // Clave para vincular con Historia Clínica
           email: form.email.toLowerCase(),
           telefono: form.telefono || '',
           password: form.password,
@@ -110,7 +157,7 @@ const Login = () => {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000"
         style={{ backgroundImage: "url('/escritorio erina 3.jpeg')" }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-black/95 via-black/80 to-[#FF7800]/30 mix-blend-multiply"></div>
+        <div className="absolute inset-0 bg-linear-to-br from-black/95 via-black/80 to-[#FF7800]/30 mix-blend-multiply"></div>
         {/* Difuminados Naranja y Negro extendidos */}
         <div className="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-accent-orange/10 rounded-full blur-[180px]"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-accent-orange/15 rounded-full blur-[200px]"></div>
@@ -130,8 +177,8 @@ const Login = () => {
       <div className="relative z-10 w-full max-w-7xl px-6 flex flex-col lg:flex-row items-center justify-between gap-12">
 
         {/* LADO IZQUIERDO: LOGO CIRCULAR GIGANTE Y ESTETICO */}
-        <div className="hidden lg:flex flex-col items-center animate-fade-in-left group">
-          <div className="w-56 h-56 md:w-72 md:h-72 rounded-full p-2 bg-gradient-to-br from-white/10 to-transparent backdrop-blur-3xl border border-white/10 shadow-[0_0_80px_rgba(255,120,0,0.1)] relative overflow-hidden flex items-center justify-center">
+        <div className="hidden lg:flex flex-col items-center animate-fade-in-left group lg:mt-12 lg:translate-y-8">
+          <div className="w-56 h-56 md:w-72 md:h-72 rounded-full p-2 bg-linear-to-br from-white/10 to-transparent backdrop-blur-3xl border border-white/10 shadow-[0_0_80px_rgba(255,120,0,0.1)] relative overflow-hidden flex items-center justify-center">
             <div className="absolute inset-0 bg-accent-orange/5 group-hover:bg-accent-orange/15 transition-all duration-700"></div>
             {/* Imagen del logo que cubre los bordes del circulo */}
             <img
@@ -178,23 +225,36 @@ const Login = () => {
                 )}
 
                 {isRegistro && !modoRecuperar && (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/30 px-1 italic">Nombre</label>
-                      <input name="nombre" value={form.nombre} onChange={handleChange} required className="w-full bg-white/[0.03] border border-white/5 rounded-2xl px-5 py-4 text-sm text-white focus:bg-white/[0.08] focus:border-accent-orange/50 transition-all outline-none" placeholder="JUAN" />
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/30 px-1 italic">Nombre</label>
+                        <input name="nombre" value={form.nombre} onChange={handleChange} required className="w-full bg-white/3 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white focus:bg-white/8 focus:border-accent-orange/50 transition-all outline-none" placeholder="JUAN" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/30 px-1 italic">Apellido</label>
+                        <input name="apellido" value={form.apellido} onChange={handleChange} required className="w-full bg-white/3 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white focus:bg-white/8 focus:border-accent-orange/50 transition-all outline-none" placeholder="MARTÍNEZ" />
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-white/30 px-1 italic">Apellido</label>
-                      <input name="apellido" value={form.apellido} onChange={handleChange} required className="w-full bg-white/[0.03] border border-white/5 rounded-2xl px-5 py-4 text-sm text-white focus:bg-white/[0.08] focus:border-accent-orange/50 transition-all outline-none" placeholder="MARTÍNEZ" />
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-accent-orange px-1">Identidad (DNI)</label>
+                        <input name="dni" value={form.dni} onChange={handleChange} required className="w-full bg-white/5 border border-accent-orange/20 rounded-2xl px-5 py-4 text-sm text-white focus:bg-white/10 focus:border-accent-orange outline-none shadow-[0_0_15px_rgba(255,145,0,0.1)]" placeholder="12345678" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-widest text-white/30 px-1 italic">Teléfono</label>
+                        <input name="telefono" value={form.telefono} onChange={handleChange} required className="w-full bg-white/3 border border-white/5 rounded-2xl px-5 py-4 text-sm text-white focus:bg-white/8 focus:border-accent-orange/50 transition-all outline-none" placeholder="381" />
+                      </div>
                     </div>
                   </div>
                 )}
+
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-white/30 px-1 italic">Correo Electrónico</label>
                   <div className="relative">
                     <FaEnvelope className="absolute left-5 top-1/2 -translate-y-1/2 text-accent-orange/40" />
-                    <input name="email" type="email" value={form.email} onChange={handleChange} required className="w-full bg-white/[0.03] border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:bg-white/[0.08] focus:border-accent-orange/50 transition-all outline-none" placeholder="CORREO@EJEMPLO.COM" />
+                    <input name="email" type="email" value={form.email} onChange={handleChange} required className="w-full bg-white/3 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:bg-white/8 focus:border-accent-orange/50 transition-all outline-none" placeholder="CORREO@EJEMPLO.COM" />
                   </div>
                 </div>
 
@@ -202,7 +262,7 @@ const Login = () => {
                   <label className="text-[10px] font-black uppercase tracking-widest text-white/30 px-1 italic">Contraseña</label>
                   <div className="relative">
                     <FaLock className="absolute left-5 top-1/2 -translate-y-1/2 text-accent-orange/40" />
-                    <input name="password" type="password" value={form.password} onChange={handleChange} required className="w-full bg-white/[0.03] border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:bg-white/[0.08] focus:border-accent-orange/50 transition-all outline-none" placeholder="••••••••" />
+                    <input name="password" type="password" value={form.password} onChange={handleChange} required className="w-full bg-white/3 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:bg-white/8 focus:border-accent-orange/50 transition-all outline-none" placeholder="••••••••" />
                   </div>
                 </div>
 
@@ -210,22 +270,32 @@ const Login = () => {
                   <label className="text-[10px] font-black uppercase tracking-widest text-white/30 px-1 italic">Confirmar Clave</label>
                   <div className="relative">
                     <FaLock className="absolute left-5 top-1/2 -translate-y-1/2 text-accent-orange/40" />
-                    <input name="confirmarPassword" type="password" value={form.confirmarPassword} onChange={handleChange} required className="w-full bg-white/[0.03] border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:bg-white/[0.08] focus:border-accent-orange/50 transition-all outline-none" placeholder="••••••••" />
+                    <input name="confirmarPassword" type="password" value={form.confirmarPassword} onChange={handleChange} required className="w-full bg-white/3 border border-white/5 rounded-2xl pl-12 pr-5 py-4 text-sm text-white focus:bg-white/8 focus:border-accent-orange/50 transition-all outline-none" placeholder="••••••••" />
                   </div>
                 </div>
 
                 <div className="pt-4">
-                  <button disabled={cargando} className="w-full relative group/btn overflow-hidden bg-accent-orange text-white py-5 rounded-[2rem] font-black uppercase tracking-[0.2em] text-[11px] transition-all hover:brightness-110 active:scale-[0.98] shadow-[0_15px_40px_rgba(255,120,0,0.4)] disabled:opacity-50">
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-orange-600 translate-x-[-100%] group-hover/btn:translate-x-0 transition-transform duration-500"></div>
+                  <button disabled={cargando} className="w-full relative group/btn overflow-hidden bg-accent-orange text-white py-5 rounded-4xl font-black uppercase tracking-[0.2em] text-[11px] transition-all hover:brightness-110 active:scale-[0.98] shadow-[0_15px_40px_rgba(255,120,0,0.4)] disabled:opacity-50">
+                    <div className="absolute inset-0 bg-linear-to-r from-orange-400 to-orange-600 -translate-x-full group-hover/btn:translate-x-0 transition-transform duration-500"></div>
                     <span className="relative z-10">{cargando ? 'MODO SEGURO...' : modoRecuperar ? 'ACTUALIZAR' : isRegistro ? 'CREAR MI CUENTA' : 'INGRESAR'}</span>
                   </button>
                 </div>
               </form>
 
+
               {/* GOOGLE AUTH AL FINAL COMO BOTON PREMIUM */}
-              <button onClick={handleGoogleLogin} className="w-full mt-6 bg-white/[0.02] border border-white/5 hover:bg-white/[0.08] py-4 rounded-2xl flex items-center justify-center gap-4 text-white font-black text-[10px] uppercase tracking-widest transition-all group/google">
-                <FaGoogle className="text-accent-orange text-lg group-hover/google:scale-110 transition-transform" /> Iniciar con Google
-              </button>
+              <div className="mt-6 flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => setError("Error en la autenticación con Google")}
+                  useOneTap
+                  theme="filled_black"
+                  shape="pill"
+                  size="large"
+                  text="signin_with"
+                  width="100%"
+                />
+              </div>
 
               <div className="mt-8 text-center flex flex-col gap-3">
                 <button onClick={() => toggleModo(isRegistro ? 'login' : 'registro')} className="text-xs font-black text-white/40 hover:text-accent-orange transition-all uppercase tracking-widest">

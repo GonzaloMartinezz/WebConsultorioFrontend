@@ -25,7 +25,14 @@ const AdminAgenda = () => {
     try {
       setCargando(true);
       const res = await api.get('/turnos');
-      setTurnos(res.data.filter(t => t.estado !== 'Cancelado'));
+      const hoyStr = new Date().toISOString().split('T')[0];
+
+      // Filtramos turnos que no sean cancelados y que sean de hoy en adelante (comparación de strings segura)
+      const turnosFiltrados = res.data.filter(t => {
+        return t.estado !== 'Cancelado' && t.fecha >= hoyStr;
+      });
+
+      setTurnos(turnosFiltrados);
     } catch (error) {
       console.error("Error al cargar agenda", error);
     } finally {
@@ -63,9 +70,24 @@ const AdminAgenda = () => {
   const nombresDias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
   const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
+  // Rango de horas para la agenda
+  const HORARIOS = [
+    "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
+    "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30",
+    "18:00", "18:30", "19:00", "19:30", "20:00"
+  ];
+
   const moverSemana = (dir) => {
     const nueva = new Date(fechaActual);
     nueva.setDate(nueva.getDate() + (dir * 7));
+
+    // Evitar navegar a semanas pasadas si el usuario quiere "desde hoy en adelante"
+    const hoy = new Date();
+    const inicioHoy = obtenerInicioSemana(hoy);
+    if (dir < 0 && nueva < inicioHoy) {
+      setFechaActual(hoy);
+      return;
+    }
     setFechaActual(nueva);
   };
 
@@ -80,18 +102,24 @@ const AdminAgenda = () => {
   // ─── URLs de notificación ────────────────────────────────
   const generarUrlsNotificacion = (turnoData) => {
     const fechaLegible = turnoData.fecha ? turnoData.fecha.split('-').reverse().join('/') : '';
-    const telefonoLimpio = turnoData.telefono ? turnoData.telefono.replace(/\D/g, '') : '';
+    let telefonoLimpio = turnoData.telefono ? turnoData.telefono.replace(/\D/g, '') : '';
+    if (telefonoLimpio.startsWith('0')) telefonoLimpio = '549' + telefonoLimpio.substring(1);
+    if (telefonoLimpio.startsWith('15')) telefonoLimpio = '549381' + telefonoLimpio.substring(2);
+    if (telefonoLimpio.length > 0 && telefonoLimpio.length <= 10 && !telefonoLimpio.startsWith('54')) {
+      telefonoLimpio = '549' + telefonoLimpio;
+    }
+
     let waUrl = '';
     let mailUrl = '';
 
     if (telefonoLimpio) {
-      const msg = `¡Hola ${turnoData.nombrePaciente}! 🦷\nTe escribimos de *Carcara • Martínez Centro Odontológico*.\n\nTu turno ha sido *CONFIRMADO* ✅:\n- 👨‍⚕️ Profesional: ${turnoData.profesional}\n- 📅 Fecha: ${fechaLegible}\n- ⏰ Horario: ${turnoData.hora}\n\nTe esperamos en Jose Rondeau 827. ¡Que tengas un excelente día!`;
+      const msg = `¡Hola ${turnoData.nombrePaciente}! 🦷\nTe escribimos de *C&M Centro Odontológico*.\n\nTu turno ha sido *CONFIRMADO* ✅\n\n📅 Fecha: ${fechaLegible}\n⏰ Horario: ${turnoData.hora}\n🦷 Motivo: ${turnoData.motivo || 'Consulta'}\n\n¡Te esperamos!`;
       waUrl = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(msg)}`;
     }
 
     if (turnoData.email) {
-      const asunto = encodeURIComponent(`Turno Confirmado - C&M Dental (${fechaLegible})`);
-      const cuerpo = encodeURIComponent(`Hola ${turnoData.nombrePaciente}, tu turno fue confirmado.\n\nProfesional: ${turnoData.profesional}\nFecha: ${fechaLegible}\nHorario: ${turnoData.hora}\nMotivo: ${turnoData.motivo || 'Consulta'}\n\nTe esperamos!\nC&M Dental`);
+      const asunto = encodeURIComponent(`✅ Turno Confirmado - C&M Dental (${fechaLegible})`);
+      const cuerpo = encodeURIComponent(`Hola ${turnoData.nombrePaciente},\n\nTu turno fue confirmado exitosamente.\n\n📅 Detalles de tu cita:\n- Profesional: ${turnoData.profesional}\n- Fecha: ${fechaLegible}\n- Horario: ${turnoData.hora} hs\n- Motivo: ${turnoData.motivo || 'Consulta general'}\n\n📍 Ubicación: Jose Rondeau 827, San Miguel de Tucumán\n\n📌 Recordatorio: Te sugerimos configurar una notificación en tu calendario 24hs antes del turno.\n\n¡Te esperamos!\n\nEquipo C&M Centro Odontológico`);
       mailUrl = `mailto:${turnoData.email}?subject=${asunto}&body=${cuerpo}`;
     }
 
@@ -133,8 +161,9 @@ const AdminAgenda = () => {
   };
 
   const irAHistoriaClinica = (turno) => {
-    if (turno.pacienteId) {
-      navigate(`/admin/historia-clinica/${turno.pacienteId}`, {
+    const pId = turno.pacienteId?._id || turno.pacienteId;
+    if (pId) {
+      navigate(`/admin/historia-clinica/${pId}`, {
         state: { nombreBusqueda: turno.nombrePaciente }
       });
     } else {
@@ -152,18 +181,17 @@ const AdminAgenda = () => {
         {/* ══════ HEADER ══════ */}
         <header className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4 bg-white p-4 rounded-2xl shadow-sm border border-secondary/20 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="bg-primary/10 p-2.5 rounded-xl">
-              <FaCalendarCheck className="text-xl text-primary" />
+            <div className="bg-primary/10 p-2.5 rounded-xl text-primary font-black">
+              <FaCalendarCheck className="text-xl" />
             </div>
             <div>
               <h1 className="text-xl font-black text-primary capitalize leading-tight">
                 {meses[fechaActual.getMonth()]} {fechaActual.getFullYear()}
               </h1>
-              <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">Agenda Clínica</p>
+              <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">Panel de Agenda Digital</p>
             </div>
           </div>
 
-          {/* Navegación */}
           <div className="flex items-center gap-2 bg-background/50 p-1.5 rounded-lg border border-secondary/30">
             <button onClick={() => moverMes(-1)} className="p-1.5 hover:bg-white rounded text-text-light hover:text-primary transition-colors">
               <FaChevronLeft className="text-[10px]" />
@@ -184,88 +212,97 @@ const AdminAgenda = () => {
             </button>
           </div>
 
-          {/* Leyenda */}
-          <div className="hidden md:flex items-center gap-3 text-[10px] font-bold uppercase tracking-wider">
-            <span className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-full bg-amber-500" /> Pendiente</span>
-            <span className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-full bg-green-500" /> Confirmado</span>
+          <div className="hidden md:flex items-center gap-4 text-[9px] font-black uppercase tracking-widest">
+            <span className="flex items-center gap-2 p-2 bg-emerald-50 text-emerald-600 rounded-lg border border-emerald-100">
+              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Dra. Erina C.
+            </span>
+            <span className="flex items-center gap-2 p-2 bg-blue-50 text-blue-600 rounded-lg border border-blue-100">
+              <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" /> Dr. Adolfo M.
+            </span>
           </div>
         </header>
 
-        {/* ══════ GRILLA DE LA SEMANA ══════ */}
-        <div className="flex-1 bg-white rounded-2xl shadow-md border border-secondary/20 overflow-hidden flex flex-col">
+        {/* ══════ GRILLA TIPO CALENDARIO ══════ */}
+        <div className="flex-1 bg-white rounded-3xl shadow-xl border border-secondary/10 overflow-hidden flex flex-col">
 
           {/* Cabecera de días */}
-          <div className="grid grid-cols-1 md:grid-cols-6 border-b border-secondary/20 bg-background/30 shrink-0">
+          <div className="flex border-b border-secondary/10 bg-background/20 shrink-0 ml-[80px]">
             {diasSemana.map((dia, index) => (
-              <div key={index} className={`py-2.5 text-center border-r border-secondary/10 last:border-0 ${esHoy(dia) ? 'bg-primary/5 border-b-2 border-b-accent-orange' : ''}`}>
-                <p className={`text-[10px] font-bold uppercase tracking-wider ${esHoy(dia) ? 'text-accent-orange' : 'text-text-light'}`}>{nombresDias[index]}</p>
-                <p className={`text-xl font-black ${esHoy(dia) ? 'text-primary' : 'text-text'}`}>{dia.getDate()}</p>
+              <div key={index} className={`flex-1 py-4 text-center border-r border-secondary/5 last:border-0 ${esHoy(dia) ? 'bg-primary/5 relative' : ''}`}>
+                <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${esHoy(dia) ? 'text-accent-orange' : 'text-text-light/60'}`}>{nombresDias[index]}</p>
+                <p className={`text-2xl font-black ${esHoy(dia) ? 'text-primary' : 'text-text'}`}>{dia.getDate()}</p>
+                {esHoy(dia) && <div className="absolute bottom-0 left-0 w-full h-1 bg-accent-orange"></div>}
               </div>
             ))}
           </div>
 
-          {/* Contenido */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar bg-gray-50/50">
-            {cargando ? (
-              <div className="flex flex-col items-center justify-center h-full gap-2">
-                <div className="w-8 h-8 border-2 border-accent-orange border-t-transparent rounded-full animate-spin"></div>
-                <p className="text-[10px] font-black text-text-light uppercase tracking-widest">Sincronizando...</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-6 min-h-full">
-                {diasSemana.map((dia, index) => {
-                  const turnosDelDia = turnos
-                    .filter(t => t.fecha === formatearFechaDB(dia))
-                    .sort((a, b) => (a.hora || '').localeCompare(b.hora || ''));
+          {/* Cuerpo con Scroll y Horas a la izquierda */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar relative flex bg-gray-50/30">
 
-                  return (
-                    <div key={index} className={`border-r border-secondary/10 last:border-0 p-1.5 min-h-[400px] ${esHoy(dia) ? 'bg-primary/[0.03]' : ''}`}>
-                      {turnosDelDia.length === 0 ? (
-                        <p className="text-[10px] font-bold text-center text-secondary mt-8 opacity-30 uppercase tracking-widest">- Libre -</p>
-                      ) : (
-                        <div className="flex flex-col gap-1.5">
-                          {turnosDelDia.map(turno => (
+            {/* Columna de Horas */}
+            <div className="w-[80px] bg-white border-r border-secondary/10 shadow-sm sticky left-0 z-10">
+              {HORARIOS.map((hora) => (
+                <div key={hora} className="h-[100px] border-b border-secondary/5 flex items-start justify-center pt-3 relative">
+                  <span className="text-[10px] font-black text-primary/40 tracking-tighter bg-white px-2 rounded-full border border-secondary/5 shadow-xs">
+                    {hora}
+                  </span>
+                  {/* Línea horizontal que cruza */}
+                  <div className="absolute top-0 left-[80px] w-[2000px] h-px bg-secondary/5 pointer-events-none"></div>
+                </div>
+              ))}
+            </div>
+
+            {/* Columnas de los Días */}
+            <div className="flex flex-1 min-w-[900px]">
+              {diasSemana.map((dia) => {
+                const turnosDelDia = turnos.filter(t => t.fecha === formatearFechaDB(dia));
+
+                return (
+                  <div key={dia} className={`flex-1 border-r border-secondary/5 last:border-0 relative ${esHoy(dia) ? 'bg-primary/2' : ''}`}>
+                    {HORARIOS.map(hora => {
+                      const turnoEnHora = turnosDelDia.find(t => t.hora === hora);
+
+                      return (
+                        <div key={`${dia}-${hora}`} className="h-[100px] p-1.5 border-b border-secondary/5 relative group">
+                          {turnoEnHora ? (
                             <div
-                              key={turno._id}
-                              onClick={() => { setTurnoSeleccionado(turno); setConfirmarCancelar(false); }}
-                              className={`p-2.5 rounded-xl border shadow-sm hover:shadow-lg transition-all cursor-pointer group hover:-translate-y-0.5 relative overflow-hidden
-                                ${turno.estado === 'Confirmado'
-                                  ? 'bg-white border-l-4 border-l-green-500 hover:border-l-green-600'
-                                  : 'bg-amber-50 border-l-4 border-l-amber-500 hover:border-l-amber-600'
-                                }`}
+                              onClick={() => { setTurnoSeleccionado(turnoEnHora); setConfirmarCancelar(false); }}
+                              className={`h-full w-full rounded-2xl p-3 shadow-md border-l-[6px] transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between hover:scale-[1.03] hover:shadow-xl z-20 group
+                                ${turnoEnHora.profesional?.toLowerCase().includes('erina')
+                                  ? 'bg-emerald-50 border-l-emerald-500 hover:bg-emerald-100/80 shadow-emerald-500/10'
+                                  : 'bg-blue-50 border-l-blue-500 hover:bg-blue-100/80 shadow-blue-500/10'}`}
                             >
-                              {/* ─── HORA (pequeña) ─── */}
-                              <div className="flex justify-between items-center mb-1.5">
-                                <p className="text-[10px] font-black text-text-light flex items-center gap-1">
-                                  <FaClock className={turno.estado === 'Confirmado' ? 'text-green-500' : 'text-amber-600'} />
-                                  {turno.hora}
-                                </p>
-                                <span className="text-[8px] font-bold text-text-light bg-background/80 px-1.5 py-0.5 rounded uppercase tracking-tighter">
-                                  {turno.profesional?.includes('Adolfo') ? 'DR. AM' : 'DRA. EC'}
-                                </span>
+                              <div className="flex justify-between items-start gap-1">
+                                <div>
+                                  <p className="text-[10px] font-black text-primary/40 uppercase tracking-widest">{turnoEnHora.hora}</p>
+                                  <p className="font-black text-primary text-[11px] leading-tight uppercase mt-1 truncate max-w-[120px]">
+                                    {turnoEnHora.nombrePaciente} {turnoEnHora.apellidoPaciente}
+                                  </p>
+                                </div>
+                                <div className={`p-1 rounded-lg ${turnoEnHora.estado === 'Confirmado' ? 'bg-green-500/20 text-green-600' : 'bg-amber-500/20 text-amber-600'}`}>
+                                  <FaCheckCircle className="text-xs" />
+                                </div>
                               </div>
-
-                              {/* ─── NOMBRE Y APELLIDO (prominente) ─── */}
-                              <p className="font-black text-primary text-sm leading-tight group-hover:text-accent-orange transition-colors uppercase tracking-tight">
-                                {turno.nombrePaciente}
-                              </p>
-                              <p className="font-bold text-primary/70 text-xs leading-tight uppercase tracking-tight">
-                                {turno.apellidoPaciente || ''}
-                              </p>
-
-                              {/* ─── MOTIVO DE CONSULTA ─── */}
-                              <p className="text-[10px] font-medium text-text mt-1 truncate opacity-70 italic leading-tight">
-                                🦷 {turno.motivo || 'Consulta general'}
-                              </p>
+                              <div className="mt-1 flex items-center justify-between">
+                                <p className="text-[9px] font-bold text-primary/60 truncate italic">🦷 {turnoEnHora.motivo || 'Consulta'}</p>
+                                <div className={`text-[8px] font-black px-2 py-0.5 rounded-full text-white ${turnoEnHora.profesional?.toLowerCase().includes('erina') ? 'bg-emerald-500' : 'bg-blue-500'}`}>
+                                  {turnoEnHora.profesional?.includes('Adolfo') ? 'DR. AM' : 'DRA. EC'}
+                                </div>
+                              </div>
                             </div>
-                          ))}
+                          ) : (
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                              <span className="text-[9px] font-black text-primary/10 tracking-[0.3em] uppercase">Horario Libre</span>
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                      );
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
         </div>
       </div>
@@ -275,16 +312,15 @@ const AdminAgenda = () => {
           ════════════════════════════════════════════════════════════ */}
       {turnoSeleccionado && !confirmarCancelar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={() => setTurnoSeleccionado(null)}>
-          <div className="bg-white rounded-[2rem] w-full max-w-lg shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-4xl w-full max-w-lg shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
 
             {/* Header */}
             <div className="bg-primary p-6 text-white relative">
               <button onClick={() => setTurnoSeleccionado(null)} className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors">
                 <FaTimes className="text-xl" />
               </button>
-              <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-3 ${
-                turnoSeleccionado.estado === 'Confirmado' ? 'bg-green-500' : 'bg-accent-orange'
-              } text-white`}>
+              <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest mb-3 ${turnoSeleccionado.estado === 'Confirmado' ? 'bg-green-500' : 'bg-accent-orange'
+                } text-white`}>
                 {turnoSeleccionado.estado}
               </span>
               <h2 className="text-2xl font-black uppercase leading-tight">
@@ -448,7 +484,7 @@ const AdminAgenda = () => {
                   </div>
                 )}
                 {notificacionPendiente.mailUrl ? (
-                  <a href={notificacionPendiente.mailUrl} target="_blank" rel="noopener noreferrer"
+                  <a href={notificacionPendiente.mailUrl}
                     className="flex items-center justify-center gap-3 w-full p-4 bg-white hover:bg-blue-50 border-2 border-blue-500 rounded-xl text-blue-700 font-bold text-base transition-all hover:scale-[1.02] active:scale-95 shadow-sm">
                     <FaEnvelope className="text-2xl text-blue-500" /> Enviar Email
                   </a>
@@ -458,6 +494,9 @@ const AdminAgenda = () => {
                   </div>
                 )}
               </div>
+              <p className="text-[10px] text-text-light font-bold mt-3 text-center uppercase tracking-widest">
+                📧 El email de confirmación se envió automáticamente al paciente.
+              </p>
             </div>
 
             <div className="p-4 bg-white border-t border-gray-100">

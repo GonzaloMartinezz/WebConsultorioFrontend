@@ -94,8 +94,8 @@ const AppointmentForm = () => {
         dni: "", doctor: "", fecha: "", horaTentativa: "", motivo: "",
       });
 
-      // 4. LA MAGIA PARA QUE NO SE BLOQUEE: Redirigimos la pestaña actual
-      window.location.href = url;
+      // 4. LA MAGIA PARA QUE NO SE BLOQUEE: Abrimos en pestaña nueva
+      window.open(url, '_blank');
 
     } catch (error) {
       console.error("Error al registrar el turno:", error);

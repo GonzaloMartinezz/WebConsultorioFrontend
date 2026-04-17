@@ -54,14 +54,13 @@ const LayoutAdmin = ({ children }) => {
 
   // ====== MENÚ ACTUALIZADO ======
   const menuItems = [
-    { name: "Turnos Pendientes", path: "/admin/pendientes", icon: FaBell },
-    { name: "Directorio Pacientes", path: "/admin/pacientes", icon: FaUserInjured },
     { name: "Panel Principal", path: "/admin", icon: FaHome },
+    { name: "Turnos pendientes", path: "/admin/pendientes", icon: FaBell },
+    { name: "Directorio de pacientes", path: "/admin/pacientes", icon: FaUserInjured },
     { name: "Agenda (Calendario)", path: "/admin/agenda", icon: FaCalendarAlt },
-    { name: "Historia Clínica", path: "/admin/historia-clinica", icon: FaFileMedical },
-    { name: "Odontograma", path: "/admin/odontograma-avanzado", icon: FaTeeth },
-    { name: "Estadísticas", path: "/admin/estadisticas", icon: FaChartLine },
-    { name: "Configuración", path: "/admin/configuracion", icon: FaCogs },
+    { name: "Historia Clinica Pacientes", path: "/admin/historia-clinica", icon: FaFileMedical },
+    { name: "Estadisticas", path: "/admin/estadisticas", icon: FaChartLine },
+    { name: "Configuracion", path: "/admin/configuracion", icon: FaCogs },
   ];
 
   return (

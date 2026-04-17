@@ -21,24 +21,31 @@ const AdminOdontograma = () => {
       }
 
       try {
-        const resPacientes = await api.get('/auth/pacientes');
-        const paciente = resPacientes.data.find(p => p._id === id);
-        if (paciente) {
-          setPacienteNombre(`${paciente.nombre} ${paciente.apellido}`);
+        // Intentar con /pacientes primero
+        let paciente = null;
+        try {
+          const resPacientes = await api.get('/pacientes');
+          paciente = resPacientes.data.find(p => p._id === id);
+        } catch {
+          // Fallback a /auth/pacientes
+          try {
+            const resPacientes = await api.get('/auth/pacientes');
+            paciente = resPacientes.data.find(p => p._id === id);
+          } catch {
+            console.warn("No se pudo cargar la lista de pacientes");
+          }
         }
 
-        try {
-          const resHistoria = await api.get(`/historias/paciente/${id}`);
-          if (resHistoria.data?.odontograma) {
-            // Convertir formato backend {idDiente, estado} a {numero: estado}
+        if (paciente) {
+          setPacienteNombre(`${paciente.nombre} ${paciente.apellido}`);
+          // Cargar odontograma existente del paciente
+          if (paciente.odontograma && paciente.odontograma.length > 0) {
             const map = {};
-            resHistoria.data.odontograma.forEach(d => {
-              map[d.idDiente] = d.estado;
+            paciente.odontograma.forEach(d => {
+              map[d.numero] = d.estado;
             });
             setDientes(map);
           }
-        } catch {
-          // Sin datos previos
         }
       } catch (err) {
         console.error("Error al cargar odontograma:", err);
@@ -58,15 +65,19 @@ const AdminOdontograma = () => {
 
     setGuardando(true);
     try {
-      // Convertir {numero: estado} a backend {idDiente, estado}
-      const odontogramaArray = Object.entries(dientes)
-        .filter(([_, estado]) => estado !== 'sano' && estado !== 'Sano')
-        .map(([num, estado]) => ({
-          idDiente: parseInt(num),
-          estado: estado
-      }));
+      // Guardar cada diente modificado usando PATCH /api/pacientes/:id/odontograma
+      const dientesMapeados = Object.entries(dientes)
+        .filter(([_, estado]) => estado !== 'sano' && estado !== 'Sano');
 
-      await api.put(`/historias/odontograma/${id}`, { odontograma: odontogramaArray });
+      // Enviar cada diente actualizado
+      for (const [num, estado] of dientesMapeados) {
+        await api.patch(`/pacientes/${id}/odontograma`, {
+          numero: parseInt(num),
+          estado: estado,
+          notas: ''
+        });
+      }
+
       setMensaje({ texto: '¡Odontograma guardado exitosamente!', tipo: 'success' });
       
       setTimeout(() => setMensaje({ texto: '', tipo: '' }), 4000);
@@ -105,7 +116,7 @@ const AdminOdontograma = () => {
         )}
 
         {mensaje.texto && (
-          <div className={`p-4 rounded-2xl text-sm font-bold border animate-in slide-in-from-top duration-300 ${
+          <div className={`p-4 rounded-2xl text-sm font-bold border ${
             mensaje.tipo === 'success' ? 'bg-green-50 border-green-200 text-green-700' :
             mensaje.tipo === 'error' ? 'bg-red-50 border-red-200 text-red-700' :
             'bg-blue-50 border-blue-200 text-blue-700'
@@ -117,7 +128,10 @@ const AdminOdontograma = () => {
         {!id ? (
           <div className="bg-white p-8 rounded-2xl text-center">
             <h2 className="text-xl font-bold mb-4">No se ha seleccionado paciente</h2>
-            <Link to="/admin/lista-pacientes" className="text-blue-500 underline">Volver al listado de pacientes</Link>
+            <p className="text-text-light mb-4">Para acceder al odontograma, seleccioná un paciente desde el directorio.</p>
+            <Link to="/admin/pacientes" className="bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-primary/90 transition-colors">
+              Ir al Directorio de Pacientes
+            </Link>
           </div>
         ) : (
           <NeoOdontograma 
@@ -135,10 +149,10 @@ const AdminOdontograma = () => {
             <FaInfoCircle className="text-3xl" />
           </div>
           <div>
-            <h4 className="text-lg font-black text-primary mb-1">Nueva Experiencia Interactiva</h4>
+            <h4 className="text-lg font-black text-primary mb-1">Sistema de Odontograma Interactivo</h4>
             <p className="text-sm text-text-light font-medium leading-relaxed">
-              Hemos actualizado el odontograma con el nuevo sistema visual clásico de 5 caras por pieza. 
-              Ahora podés ver claramente la arcada completa en un solo formato, idéntico al estándar internacional.
+              Hacé clic en cada cara del diente para cambiar su estado. Los cambios se guardan al presionar el botón correspondiente. 
+              El odontograma se vincula automáticamente con la ficha del paciente.
             </p>
           </div>
         </div>

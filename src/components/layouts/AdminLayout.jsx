@@ -51,10 +51,9 @@ const LayoutAdmin = ({ children }) => {
   const menuItems = [
     { name: "Panel Principal", path: "/admin", icon: FaHome },
     { name: "Agenda (Calendario)", path: "/admin/agenda", icon: FaCalendarAlt },
-    { name: "Directorio Pacientes", path: "/admin/lista-pacientes", icon: FaUserInjured },
+    { name: "Directorio Pacientes", path: "/admin/pacientes", icon: FaUserInjured },
     { name: "Historia Clínica", path: "/admin/historia-clinica", icon: FaFileMedical },
-    { name: "Odontograma", path: "/admin/odontograma-avanzado", icon: FaTeeth },
-    { name: "Analytics & KPIs", path: "/admin/analytics", icon: FaChartPie }, 
+    { name: "Analytics & KPIs", path: "/admin/estadisticas", icon: FaChartPie }, 
     { name: "Ingresos vs Gastos", path: "/admin/finanzas", icon: FaFileInvoiceDollar },
     { name: "Resultados (NPS)", path: "/admin/encuestas", icon: FaSmileBeam },
     { name: "Automatizaciones", path: "/admin/configuracion", icon: FaCogs },

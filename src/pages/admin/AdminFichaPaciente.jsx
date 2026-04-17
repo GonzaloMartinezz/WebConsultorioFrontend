@@ -5,7 +5,7 @@ import NeoOdontograma from '../../components/common/NeoOdontograma.jsx';
 import api from '../../api/axios.js';
 import {
   FaArrowLeft, FaSave, FaTooth, FaUserInjured, FaCalendarCheck,
-  FaSpinner, FaUndo, FaInfoCircle
+  FaSpinner, FaUndo, FaInfoCircle, FaCheckCircle, FaFileMedical
 } from 'react-icons/fa';
 
 // =============================================
@@ -22,6 +22,13 @@ const AdminFichaPaciente = () => {
   const [dientes, setDientes] = useState({});
   const [historial, setHistorial] = useState([]);
 
+  // Toast System
+  const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+  const showToast = (message, type = 'success') => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 4000);
+  };
+
   // Formulario para la visita actual
   const [nuevaConsulta, setNuevaConsulta] = useState({
     nombre: '',
@@ -35,16 +42,20 @@ const AdminFichaPaciente = () => {
   useEffect(() => {
     const cargarFichaCompleta = async () => {
       try {
-        const resUser = await api.get(`/auth/usuarios/${id}`);
-        setPaciente(resUser.data);
-
-        // Pre-llenar nombre y apellido del paciente en el formulario
-        setNuevaConsulta(prev => ({
-          ...prev,
-          nombre: resUser.data.nombre || '',
-          apellido: resUser.data.apellido || '',
-          telefono: resUser.data.telefono || ''
-        }));
+        const resPacientes = await api.get('/pacientes');
+        const lista = resPacientes.data;
+        const encontrado = lista.find(p => p._id === id);
+        
+        if (encontrado) {
+          setPaciente(encontrado);
+          // Pre-llenar nombre y apellido del paciente en el formulario
+          setNuevaConsulta(prev => ({
+            ...prev,
+            nombre: encontrado.nombre || '',
+            apellido: encontrado.apellido || '',
+            telefono: encontrado.telefono || ''
+          }));
+        }
 
         const resFicha = await api.get(`/fichas/${id}`);
         if (resFicha.data) {
@@ -86,10 +97,10 @@ const AdminFichaPaciente = () => {
       };
 
       await api.put(`/fichas/${id}`, payload);
-      alert('¡Ficha y Odontograma guardados con éxito!');
-      window.location.reload();
+      showToast('¡Ficha y Odontograma guardados con éxito!', 'success');
+      setTimeout(() => window.location.reload(), 2000);
     } catch (error) {
-      alert('Hubo un error al guardar');
+      showToast('Hubo un error al guardar', 'error');
     } finally {
       setGuardando(false);
     }
@@ -133,30 +144,30 @@ const AdminFichaPaciente = () => {
           <div>
             <label className="block text-sm font-bold text-text mb-1">Nombre</label>
             <input type="text" placeholder="Nombre del paciente"
-              value={nuevaConsulta.nombre} onChange={e => setNuevaConsulta({...nuevaConsulta, nombre: e.target.value})}
+              value={nuevaConsulta.nombre} onChange={e => setNuevaConsulta({ ...nuevaConsulta, nombre: e.target.value })}
               className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary bg-background/30" />
           </div>
           <div>
             <label className="block text-sm font-bold text-text mb-1">Apellido</label>
             <input type="text" placeholder="Apellido del paciente"
-              value={nuevaConsulta.apellido} onChange={e => setNuevaConsulta({...nuevaConsulta, apellido: e.target.value})}
+              value={nuevaConsulta.apellido} onChange={e => setNuevaConsulta({ ...nuevaConsulta, apellido: e.target.value })}
               className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary bg-background/30" />
           </div>
           <div>
             <label className="block text-sm font-bold text-text mb-1">Teléfono</label>
             <input type="tel" placeholder="Ej: 11-2233-4455"
-              value={nuevaConsulta.telefono} onChange={e => setNuevaConsulta({...nuevaConsulta, telefono: e.target.value})}
+              value={nuevaConsulta.telefono} onChange={e => setNuevaConsulta({ ...nuevaConsulta, telefono: e.target.value })}
               className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary bg-background/30" />
           </div>
           <div>
             <label className="block text-sm font-bold text-text mb-1">Motivo de la Consulta</label>
             <input type="text" placeholder="Ej: Dolor de muela, Control, Limpieza..."
-              value={nuevaConsulta.motivo} onChange={e => setNuevaConsulta({...nuevaConsulta, motivo: e.target.value})}
+              value={nuevaConsulta.motivo} onChange={e => setNuevaConsulta({ ...nuevaConsulta, motivo: e.target.value })}
               className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary" />
           </div>
           <div>
             <label className="block text-sm font-bold text-text mb-1">Atendido por</label>
-            <select value={nuevaConsulta.profesional} onChange={e => setNuevaConsulta({...nuevaConsulta, profesional: e.target.value})}
+            <select value={nuevaConsulta.profesional} onChange={e => setNuevaConsulta({ ...nuevaConsulta, profesional: e.target.value })}
               className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary">
               <option value="Dr. Adolfo">Dr. Adolfo</option>
               <option value="Dra. Erina">Dra. Erina</option>
@@ -165,7 +176,7 @@ const AdminFichaPaciente = () => {
           <div className="md:col-span-2 lg:col-span-1">
             <label className="block text-sm font-bold text-text mb-1">Tratamiento Realizado</label>
             <input type="text" placeholder="Detalles del procedimiento..."
-              value={nuevaConsulta.tratamientoRealizado} onChange={e => setNuevaConsulta({...nuevaConsulta, tratamientoRealizado: e.target.value})}
+              value={nuevaConsulta.tratamientoRealizado} onChange={e => setNuevaConsulta({ ...nuevaConsulta, tratamientoRealizado: e.target.value })}
               className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary" />
           </div>
         </div>
@@ -176,14 +187,18 @@ const AdminFichaPaciente = () => {
         <h2 className="text-xl font-black text-primary mb-5 flex items-center gap-2">
           <FaTooth /> Odontograma Interactivo Avanzado
         </h2>
-        <NeoOdontograma 
-          dientes={dientes || {}} 
-          setDientes={setDientes} 
-          pacienteNombre={`${paciente?.nombre || 'Doc.'} ${paciente?.apellido || 'Ficticio'}`} 
-          patientId={id ? id.substring(Math.max(0, id.length - 6)).toUpperCase() : '0000'}
-          onSave={handleGuardarFicha}
-          isSaving={guardando}
-        />
+        <div className="overflow-hidden">
+          <div className="transform scale-[0.8] md:scale-[0.85] lg:scale-[0.9] origin-top md:origin-top transition-transform">
+            <NeoOdontograma
+              dientes={dientes || {}}
+              setDientes={setDientes}
+              pacienteNombre={`${paciente?.nombre || 'Doc.'} ${paciente?.apellido || 'Ficticio'}`}
+              patientId={id ? id.substring(Math.max(0, id.length - 6)).toUpperCase() : '0000'}
+              onSave={handleGuardarFicha}
+              isSaving={guardando}
+            />
+          </div>
+        </div>
       </div>
 
       {/* ========== 4. HISTORIAL DE CONSULTAS ========== */}
@@ -197,22 +212,49 @@ const AdminFichaPaciente = () => {
         ) : (
           <div className="space-y-4">
             {[...historial].reverse().map((visita, index) => (
-              <div key={index} className="border-l-4 border-primary pl-4 py-3 bg-background/20 rounded-r-xl pr-4">
-                <div className="flex justify-between items-start mb-1">
-                  <p className="font-black text-text">{visita.motivo}</p>
-                  <span className="text-xs font-bold text-text-light bg-white px-2 py-1 rounded shadow-sm shrink-0 ml-4">
-                    {new Date(visita.fecha).toLocaleDateString()}
-                  </span>
+              <div key={index} className="border-l-4 border-primary pl-4 py-4 bg-background/20 rounded-r-2xl pr-4 group hover:bg-white hover:shadow-md transition-all">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-3">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                       <FaCalendarCheck className="text-xs" />
+                    </div>
+                    <div>
+                      <p className="font-black text-primary uppercase tracking-tight">{visita.motivo}</p>
+                      <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">
+                        {new Date(visita.fecha).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
+                      </p>
+                    </div>
+                  </div>
+                  <Link 
+                    to={`/admin/historia-clinica/${id}`}
+                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-primary/90 transition-all shadow-sm active:scale-95"
+                  >
+                    <FaFileMedical /> ver historia clinica - Odontograma del paciente
+                  </Link>
                 </div>
-                <p className="text-sm text-text-light mb-1">Atendido por: <strong className="text-primary">{visita.profesional}</strong></p>
-                {visita.tratamientoRealizado && (
-                  <p className="text-sm text-text italic">"{visita.tratamientoRealizado}"</p>
-                )}
+                
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm text-text-light">Atendido por: <strong className="text-primary font-black uppercase">{visita.profesional}</strong></p>
+                  {visita.tratamientoRealizado && (
+                    <div className="bg-white/50 p-3 rounded-xl border border-secondary/10">
+                       <p className="text-xs text-text font-bold italic leading-relaxed">"{visita.tratamientoRealizado}"</p>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {/* ========== TOAST FLOTANTE ========== */}
+      {toast.show && (
+        <div className={`fixed bottom-10 right-10 z-100 px-8 py-4 rounded-2xl shadow-2xl animate-fade-up border-b-4 font-black text-sm flex items-center gap-3
+          ${toast.type === 'success' ? 'bg-white text-primary border-green-500' : 'bg-red-600 text-white border-red-800'}`}>
+          {toast.type === 'success' ? <FaCheckCircle className="text-green-500 text-xl" /> : <FaInfoCircle className="text-xl" />}
+          {toast.message}
+        </div>
+      )}
     </LayoutAdmin>
   );
 };
