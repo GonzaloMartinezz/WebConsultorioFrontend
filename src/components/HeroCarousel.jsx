@@ -5,12 +5,11 @@ const HeroCarousel = () => {
   const [currentImage, setCurrentImage] = useState(0);
 
   const imagenesConsultorio = [
-    "/sala de espera 2.jpeg",
     "/sala de espera 3.jpeg",
     "/consultorio 1.jpeg",
     "/consultorio 2.jpeg",
-    "/escritorio erina 1.jpeg",
     "/escritorio erina 2.jpeg",
+    "/escritorio erina 1.jpeg",
     "/consultorio erina 1.jpeg",
     "/consultorio erina 2.jpeg",
     "/escritorio adolfo 2.jpg",
@@ -26,7 +25,7 @@ const HeroCarousel = () => {
   useEffect(() => {
     const intervalo = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % imagenesConsultorio.length);
-    }, 4500);
+    }, 4800);
     return () => clearInterval(intervalo);
   }, [imagenesConsultorio.length]);
 

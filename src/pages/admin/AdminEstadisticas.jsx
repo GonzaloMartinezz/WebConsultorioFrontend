@@ -4,26 +4,21 @@ import { FaUsers, FaChartPie, FaStethoscope, FaCalendarCheck, FaCalendarTimes, F
 import api from "../../api/axios.js";
 
 const AdminEstadisticas = () => {
-  const [turnos, setTurnos] = useState([]);
-  const [pacientes, setPacientes] = useState([]);
+  const [stats, setStats] = useState(null);
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchStats = async () => {
       try {
-        const [turnosRes, pacientesRes] = await Promise.all([
-          api.get('/turnos'),
-          api.get('/pacientes').catch(() => ({ data: [] }))
-        ]);
-        setTurnos(turnosRes.data);
-        setPacientes(pacientesRes.data);
+        const res = await api.get('/estadisticas');
+        setStats(res.data);
       } catch (error) {
-        console.error("Error al obtener datos:", error);
+        console.error("Error al obtener estadísticas reales:", error);
       } finally {
         setCargando(false);
       }
     };
-    fetchData();
+    fetchStats();
   }, []);
 
   if (cargando) {
@@ -38,66 +33,50 @@ const AdminEstadisticas = () => {
   }
 
   // ============================================================
-  // CÁLCULOS DINÁMICOS DESDE DATOS REALES
+  // MAPEO DE DATOS DESDE EL BACKEND
   // ============================================================
 
-  const totalTurnos = turnos.length;
-  const turnosSolicitados = turnos.filter(t => t.estado === 'Pendiente').length;
-  const turnosConfirmados = turnos.filter(t => t.estado === 'Confirmado').length;
-  const turnosCancelados = turnos.filter(t => t.estado === 'Cancelado').length;
-  const turnosAtendidos = turnos.filter(t => ['Atendido', 'Completado', 'Finalizado'].includes(t.estado)).length;
-  const turnosNoAsistieron = turnosCancelados; // Pacientes que cancelaron o no fueron
-  const totalPacientes = pacientes.length;
+  if (!stats) return null;
 
-  // Tasa de asistencia
-  const turnosFinalizados = turnosConfirmados + turnosAtendidos;
-  const tasaAsistencia = totalTurnos > 0 ? ((turnosFinalizados / totalTurnos) * 100).toFixed(1) : '0';
+  const {
+    pacientesTotales,
+    turnosTotales,
+    turnosPendientes,
+    turnosConfirmados,
+    turnosCancelados,
+    turnosAtendidos,
+    cargaProfesionales,
+    motivosConsulta,
+    turnosPorMes
+  } = stats;
 
-  // Distribución por profesional
-  const turnosPorProfesional = {};
-  turnos.forEach(t => {
-    const prof = t.profesional || 'Sin asignar';
-    turnosPorProfesional[prof] = (turnosPorProfesional[prof] || 0) + 1;
-  });
+  // Tasa de asistencia (Basada en Atendidos sobre el total finalizado/confirmado)
+  const totalEfectivos = turnosConfirmados + turnosAtendidos;
+  const tasaAsistencia = turnosTotales > 0 ? ((totalEfectivos / turnosTotales) * 100).toFixed(1) : '0';
 
-  // Motivos de consulta completos
+  // Formatear meses para el gráfico (YYYY-MM -> Mes AAAA)
+  const mesesNombres = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+  const dataMeses = Object.entries(turnosPorMes || {}).map(([key, count]) => {
+    const [year, month] = key.split('-');
+    return {
+      label: `${mesesNombres[parseInt(month) - 1]} ${year}`,
+      count
+    };
+  }).sort((a, b) => a.label.localeCompare(b.label));
+
+  // Mapeo selectivo de motivos para la UI
   const motivosCategorias = {
-    'Consulta General': 0,
-    'Limpieza Dental': 0,
-    'Ortodoncia': 0,
-    'Implantología': 0,
-    'Endodoncia': 0,
-    'Cirugía': 0,
-    'Urgencia': 0,
-    'Estética': 0,
-    'Otros': 0
+    'Consulta General': motivosConsulta?.general || 0,
+    'Limpieza Dental': motivosConsulta?.limpieza || 0,
+    'Ortodoncia': motivosConsulta?.ortodoncia || 0,
+    'Implantología': motivosConsulta?.implantologia || 0,
+    'Endodoncia': motivosConsulta?.endodoncia || 0,
+    'Cirugía': motivosConsulta?.cirugia || 0,
+    'Urgencia': motivosConsulta?.urgencia || 0,
+    'Estética': motivosConsulta?.estetica || 0,
+    'Otros': motivosConsulta?.otros || 0
   };
 
-  turnos.forEach(t => {
-    const m = (t.motivo || '').toLowerCase();
-    if (m.includes('general') || m.includes('control')) motivosCategorias['Consulta General']++;
-    else if (m.includes('limpieza')) motivosCategorias['Limpieza Dental']++;
-    else if (m.includes('ortodoncia') || m.includes('bracket')) motivosCategorias['Ortodoncia']++;
-    else if (m.includes('implant')) motivosCategorias['Implantología']++;
-    else if (m.includes('endodoncia') || m.includes('conducto')) motivosCategorias['Endodoncia']++;
-    else if (m.includes('cirug') || m.includes('extracci')) motivosCategorias['Cirugía']++;
-    else if (m.includes('dolor') || m.includes('urgencia')) motivosCategorias['Urgencia']++;
-    else if (m.includes('est') || m.includes('blanquea')) motivosCategorias['Estética']++;
-    else motivosCategorias['Otros']++;
-  });
-
-  // Turnos por mes (últimos 6 meses)
-  const turnosPorMes = {};
-  const mesesNombres = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-  turnos.forEach(t => {
-    if (t.fecha) {
-      const partes = t.fecha.split('-');
-      const mesKey = `${mesesNombres[parseInt(partes[1]) - 1]} ${partes[0]}`;
-      turnosPorMes[mesKey] = (turnosPorMes[mesKey] || 0) + 1;
-    }
-  });
-
-  // Colores para motivos
   const motivosColores = {
     'Consulta General': 'bg-blue-500',
     'Limpieza Dental': 'bg-teal-500',
@@ -126,17 +105,17 @@ const AdminEstadisticas = () => {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-secondary/20 text-center">
           <FaUsers className="text-xl text-blue-500 mx-auto mb-2" />
-          <p className="text-2xl font-black text-primary">{totalPacientes}</p>
+          <p className="text-2xl font-black text-primary">{pacientesTotales}</p>
           <p className="text-[9px] font-bold text-text-light uppercase tracking-widest mt-1">Pacientes Totales</p>
         </div>
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-secondary/20 text-center">
           <FaCalendarCheck className="text-xl text-green-500 mx-auto mb-2" />
-          <p className="text-2xl font-black text-primary">{totalTurnos}</p>
+          <p className="text-2xl font-black text-primary">{turnosTotales}</p>
           <p className="text-[9px] font-bold text-text-light uppercase tracking-widest mt-1">Volumen Gestión</p>
         </div>
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-secondary/20 text-center">
           <FaClock className="text-xl text-amber-500 mx-auto mb-2" />
-          <p className="text-2xl font-black text-amber-600">{turnosSolicitados}</p>
+          <p className="text-2xl font-black text-amber-600">{turnosPendientes}</p>
           <p className="text-[9px] font-bold text-text-light uppercase tracking-widest mt-1">Nuevos/Pendientes</p>
         </div>
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-secondary/20 text-center">
@@ -166,8 +145,8 @@ const AdminEstadisticas = () => {
           </h2>
 
           <div className="space-y-5">
-            {Object.entries(turnosPorProfesional).map(([prof, count], idx) => {
-              const perc = totalTurnos > 0 ? ((count / totalTurnos) * 100).toFixed(0) : 0;
+            {Object.entries(cargaProfesionales || {}).filter(([key]) => key !== 'total').map(([prof, count], idx) => {
+              const perc = turnosTotales > 0 ? ((count / turnosTotales) * 100).toFixed(0) : 0;
               const colors = ['bg-blue-500', 'bg-pink-500', 'bg-purple-500', 'bg-teal-500'];
               return (
                 <div key={prof}>
@@ -184,7 +163,7 @@ const AdminEstadisticas = () => {
                 </div>
               );
             })}
-            {Object.keys(turnosPorProfesional).length === 0 && (
+            {(!cargaProfesionales || Object.keys(cargaProfesionales).length <= 1) && (
               <p className="text-text-light font-medium text-sm text-center py-4">Sin datos de profesionales aún.</p>
             )}
           </div>
@@ -226,24 +205,24 @@ const AdminEstadisticas = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-amber-50 p-4 rounded-xl border border-amber-100 text-center">
-              <p className="text-3xl font-black text-amber-600">{turnosSolicitados}</p>
+              <p className="text-3xl font-black text-amber-600">{turnosPendientes}</p>
               <p className="text-[10px] font-bold text-amber-700 uppercase tracking-widest mt-1">Pendientes</p>
-              <div className="w-full bg-amber-200 h-1.5 rounded-full mt-2"><div className="bg-amber-500 h-1.5 rounded-full" style={{ width: `${totalTurnos > 0 ? (turnosSolicitados / totalTurnos * 100) : 0}%` }}></div></div>
+              <div className="w-full bg-amber-200 h-1.5 rounded-full mt-2"><div className="bg-amber-500 h-1.5 rounded-full" style={{ width: `${turnosTotales > 0 ? (turnosPendientes / turnosTotales * 100) : 0}%` }}></div></div>
             </div>
             <div className="bg-green-50 p-4 rounded-xl border border-green-100 text-center">
               <p className="text-3xl font-black text-green-600">{turnosConfirmados}</p>
               <p className="text-[10px] font-bold text-green-700 uppercase tracking-widest mt-1">Confirmados</p>
-              <div className="w-full bg-green-200 h-1.5 rounded-full mt-2"><div className="bg-green-500 h-1.5 rounded-full" style={{ width: `${totalTurnos > 0 ? (turnosConfirmados / totalTurnos * 100) : 0}%` }}></div></div>
+              <div className="w-full bg-green-200 h-1.5 rounded-full mt-2"><div className="bg-green-500 h-1.5 rounded-full" style={{ width: `${turnosTotales > 0 ? (turnosConfirmados / turnosTotales * 100) : 0}%` }}></div></div>
             </div>
             <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 text-center">
               <p className="text-3xl font-black text-blue-600">{turnosAtendidos}</p>
               <p className="text-[10px] font-bold text-blue-700 uppercase tracking-widest mt-1">Atendidos</p>
-              <div className="w-full bg-blue-200 h-1.5 rounded-full mt-2"><div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${totalTurnos > 0 ? (turnosAtendidos / totalTurnos * 100) : 0}%` }}></div></div>
+              <div className="w-full bg-blue-200 h-1.5 rounded-full mt-2"><div className="bg-blue-500 h-1.5 rounded-full" style={{ width: `${turnosTotales > 0 ? (turnosAtendidos / turnosTotales * 100) : 0}%` }}></div></div>
             </div>
             <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-center">
               <p className="text-3xl font-black text-red-600">{turnosCancelados}</p>
               <p className="text-[10px] font-bold text-red-700 uppercase tracking-widest mt-1">Cancelados</p>
-              <div className="w-full bg-red-200 h-1.5 rounded-full mt-2"><div className="bg-red-500 h-1.5 rounded-full" style={{ width: `${totalTurnos > 0 ? (turnosCancelados / totalTurnos * 100) : 0}%` }}></div></div>
+              <div className="w-full bg-red-200 h-1.5 rounded-full mt-2"><div className="bg-red-500 h-1.5 rounded-full" style={{ width: `${turnosTotales > 0 ? (turnosCancelados / turnosTotales * 100) : 0}%` }}></div></div>
             </div>
           </div>
         </div>
@@ -256,17 +235,17 @@ const AdminEstadisticas = () => {
 
           {Object.keys(turnosPorMes).length > 0 ? (
             <div className="flex items-end gap-3 h-48">
-              {Object.entries(turnosPorMes).slice(-8).map(([mes, count]) => {
-                const maxMes = Math.max(...Object.values(turnosPorMes), 1);
-                const heightPerc = (count / maxMes) * 100;
+              {dataMeses.slice(-8).map((data) => {
+                const maxVal = Math.max(...dataMeses.map(d => d.count), 1);
+                const heightPerc = (data.count / maxVal) * 100;
                 return (
-                  <div key={mes} className="flex-1 flex flex-col items-center justify-end h-full">
-                    <span className="text-xs font-black text-primary mb-1">{count}</span>
+                  <div key={data.label} className="flex-1 flex flex-col items-center justify-end h-full">
+                    <span className="text-xs font-black text-primary mb-1">{data.count}</span>
                     <div
                       className="w-full bg-linear-to-t from-accent-orange to-orange-300 rounded-t-lg transition-all duration-1000 min-h-[4px]"
                       style={{ height: `${heightPerc}%` }}
                     ></div>
-                    <span className="text-[9px] font-bold text-text-light mt-2 uppercase">{mes}</span>
+                    <span className="text-[9px] font-bold text-text-light mt-2 uppercase">{data.label}</span>
                   </div>
                 );
               })}
@@ -325,7 +304,7 @@ const AdminEstadisticas = () => {
               <div className="sm:col-span-2 p-4 bg-background/50 rounded-2xl border border-secondary/20 flex items-center justify-between">
                 <div>
                   <p className="text-xs font-bold text-primary">Margen de Mejora</p>
-                  <p className="text-[10px] text-text-light">Basado en el volumen total de {totalTurnos} gestiones.</p>
+                  <p className="text-[10px] text-text-light">Basado en el volumen total de {turnosTotales} gestiones.</p>
                 </div>
                 <span className="text-xl font-black text-accent-orange">{(100 - tasaAsistencia).toFixed(1)}%</span>
               </div>

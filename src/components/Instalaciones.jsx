@@ -15,22 +15,19 @@ const Instalaciones = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="h-64 rounded-3xl bg-secondary/20 relative overflow-hidden group">
-            <img src="/sala de espera 1.jpeg" alt="Sala de espera" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <img src="/orthodontics.jpg.webp" alt="Sala de espera" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
-              <h3 className="text-white font-bold tracking-widest uppercase text-sm">Ambiente Confortable</h3>
+              <h3 className="text-white font-bold tracking-widest uppercase text-sm">Especialidades</h3>
             </div>
           </div>
           <div className="h-64 rounded-3xl bg-secondary/20 relative overflow-hidden group">
-            <img src="/consultorio 1.jpeg" alt="Consultorio" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+            <img src="/impresora-3b-blog.webp" alt="Consultorio" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
               <h3 className="text-white font-bold tracking-widest uppercase text-sm">Precisión Digital</h3>
             </div>
           </div>
           <div className="h-64 rounded-3xl bg-secondary/20 relative overflow-hidden group">
-            {/* Reemplaza con otra imagen real si tienes */}
-            <div className="w-full h-full bg-[#4A3B32] flex items-center justify-center">
-              <span className="text-accent-orange text-5xl">🦷</span>
-            </div>
+            <img src="/maquinascompletas.webp" alt="Tecnología de Punta" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent flex items-end p-6">
               <h3 className="text-white font-bold tracking-widest uppercase text-sm">Tecnología de Punta</h3>
             </div>

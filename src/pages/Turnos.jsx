@@ -41,6 +41,19 @@ const Turnos = () => {
 
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" });
   const [cargando, setCargando] = useState(false);
+  const [config, setConfig] = useState(null);
+
+  useEffect(() => {
+    const fetchConfig = async () => {
+      try {
+        const res = await api.get('/configuracion');
+        setConfig(res.data);
+      } catch (err) {
+        console.error("No se pudo cargar la configuración:", err);
+      }
+    };
+    fetchConfig();
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -122,18 +135,39 @@ _Enviado desde el Portal Oficial de Turnos._`;
     }
   };
 
-  const consultationTypes = [
-    "Consulta Diagnóstico (Primera vez)",
-    "Urgencia Dental (Dolor agudo)",
-    "Limpieza y Control General",
-    "Ortodoncia (Brackets/Alineadores)",
-    "Implantes Dentales",
-    "Estética: Blanqueamiento / Carillas",
-    "Tratamiento de Conducto (Endodoncia)",
-    "Extracción Dental / Cirugía",
-    "Prótesis y Coronas",
-    "Odontopediatría (Consulta Niños)"
+  const consultationTypes = config?.servicios?.map(s => s.nombre) || [
+    "Consulta General",
+    "Limpieza Dental",
+    "Ortodoncia"
   ];
+
+  // Generar horarios dinámicos basados en la configuración
+  const generarHorarios = () => {
+    if (!config) return ["09:00", "10:00", "11:00"];
+    
+    const { apertura, cierre, intervalo } = config.horarios;
+    const slots = [];
+    let curr = new Date(`2026-01-01T${apertura}:00`);
+    const end = new Date(`2026-01-01T${cierre}:00`);
+    const stepMin = parseInt(intervalo);
+
+    while (curr < end) {
+      const h = String(curr.getHours()).padStart(2, '0');
+      const m = String(curr.getMinutes()).padStart(2, '0');
+      const timeStr = `${h}:${m}`;
+      
+      if (form.turnoFranja === 'Mañana' && curr.getHours() < 13) {
+        slots.push(timeStr);
+      } else if (form.turnoFranja === 'Tarde' && curr.getHours() >= 13) {
+        slots.push(timeStr);
+      }
+      
+      curr.setMinutes(curr.getMinutes() + stepMin);
+    }
+    return slots;
+  };
+
+  const dynamicSlots = generarHorarios();
 
   return (
     <div className="bg-[#FAF9F6] min-h-screen text-[#2D1F16] selection:bg-accent-orange/10 flex flex-col">
@@ -263,7 +297,8 @@ _Enviado desde el Portal Oficial de Turnos._`;
                     </div>
 
                   <select name="horaTentativa" value={form.horaTentativa} onChange={handleChange} className="w-full bg-[#FAF9F6] p-4 rounded-xl font-black text-xs text-center border-none outline-none">
-                    {form.turnoFranja === 'Mañana' ? ["09:00", "10:00", "11:00"].map(h => <option key={h} value={h}>{h} HS</option>) : ["14:00", "15:00", "16:00", "17:00", "18:00"].map(h => <option key={h} value={h}>{h} HS</option>)}
+                    {dynamicSlots.map(h => <option key={h} value={h}>{h} HS</option>)}
+                    {dynamicSlots.length === 0 && <option disabled>No hay turnos disponibles en esta franja</option>}
                   </select>
                 </motion.div>
               )}

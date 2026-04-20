@@ -36,7 +36,7 @@ const Footer = () => {
             <h3 className="text-sm font-black tracking-widest text-primary uppercase">Explorar</h3>
             <ul className="space-y-2 flex flex-col items-center md:items-start">
               <li><Link to="/" className={navLinkClass}>Inicio</Link></li>
-              <li><Link to="/acerca" className={navLinkClass}>Nuestro Centro</Link></li>
+              <li><Link to="/especialistas" className={navLinkClass}>Especialistas</Link></li>
               <li><Link to="/contacto" className={navLinkClass}>Contacto</Link></li>
               <li><Link to="/turnos" className={`${navLinkClass} text-accent-orange! hover:brightness-110`}>Reservar turno online</Link></li>
             </ul>

@@ -13,7 +13,7 @@ const Contacto = () => {
       {/* ======================================================== */}
       {/* SECCIÓN 1: BLOQUE DIVIDIDO (Inspirado en imágenes "RC Gym") */}
       {/* ========================================== */}
-      <section className="bg-primary text-background py-20 lg:py-32 px-4 sm:px-6 lg:px-8 border-b-8 border-accent-orange relative overflow-hidden">
+      <section className="bg-primary text-background pt-44 pb-20 lg:pt-56 lg:pb-32 px-4 sm:px-6 lg:px-8 border-b-8 border-accent-orange relative overflow-hidden">
         {/* Decoración de fondo */}
         <div className="absolute top-0 right-0 w-full h-full opacity-5 pointer-events-none bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
 
@@ -32,7 +32,7 @@ const Contacto = () => {
               <div className="pt-4">
                 <Link
                   to="/turnos"
-                  className="inline-block border border-accent-orange text-accent-orange font-bold uppercase tracking-wider text-sm px-8 py-4 rounded-full transition-all duration-300 hover:bg-accent-orange hover:text-white hover:-translate-y-1 hover:shadow-xl active:scale-95"
+                  className="btn-expand inline-block border border-accent-orange text-accent-orange hover:border-transparent font-bold uppercase tracking-wider text-sm px-8 py-4 rounded-full hover:bg-accent-orange hover:text-white"
                 >
                   Ir a solicitar turno
                 </Link>

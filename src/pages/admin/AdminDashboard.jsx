@@ -14,7 +14,8 @@ const AdminDashboard = () => {
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
   const navigate = useNavigate();
-  const fechaHoy = new Date().toISOString().split('T')[0];
+  const d = new Date();
+  const fechaHoy = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
   const fetchTurnos = async () => {
     try {
@@ -192,7 +193,7 @@ const AdminDashboard = () => {
           <div className="bg-white rounded-2xl p-5 shadow-sm border border-secondary/60 flex items-center justify-between">
             <div>
               <p className="text-[10px] font-black uppercase text-gray-400 mb-1">Turnos Hoy</p>
-              <p className="text-2xl font-black text-primary">{turnos.filter(t => t.fecha === fechaHoy).length}</p>
+              <p className="text-2xl font-black text-primary">{turnos.filter(t => t.fecha && t.fecha.startsWith(fechaHoy) && t.estado !== 'Cancelado').length}</p>
             </div>
             <FaCalendarDay className="text-2xl text-primary opacity-20" />
           </div>
@@ -225,11 +226,11 @@ const AdminDashboard = () => {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {turnos
-                  .filter(t => t.estado !== 'Cancelado' && t.fecha >= fechaHoy)
+                  .filter(t => t.estado !== 'Cancelado' && t.fecha && t.fecha >= fechaHoy)
                   .sort((a, b) => a.fecha.localeCompare(b.fecha))
                   .map(turno => (
                     <tr key={turno._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="py-4 px-2 text-xs font-bold">{turno.fecha?.split('-').reverse().join('/')}</td>
+                      <td className="py-4 px-2 text-xs font-bold">{turno.fecha?.split('T')[0].split('-').reverse().join('/')}</td>
                       <td className="py-4 px-2 text-sm font-black text-primary">{turno.hora}</td>
                       <td className="py-4 px-2 text-sm font-bold text-gray-700">{turno.nombrePaciente} {turno.apellidoPaciente}</td>
                       <td className="py-4 px-2 text-[11px] font-medium text-gray-500">{turno.dni || '-'}</td>

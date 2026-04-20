@@ -15,32 +15,45 @@ const AdminConfiguracion = () => {
     { id: 3, nombre: 'Ortodoncia', duracion: 60 }
   ]);
   const [nuevoServicio, setNuevoServicio] = useState({ nombre: '', duracion: 30 });
-  const [turnosSemana, setTurnosSemana] = useState([]);
+  const [turnosManana, setTurnosManana] = useState([]);
   const [loadingTurnos, setLoadingTurnos] = useState(false);
   const [enviandoMasivo, setEnviandoMasivo] = useState(false);
 
-  // Cargar turnos de la semana al iniciar
+  // Cargar configuración y turnos al iniciar
   useEffect(() => {
-    fetchTurnosSemana();
+    fetchConfiguracion();
+    fetchTurnosManana();
   }, []);
 
-  const fetchTurnosSemana = async () => {
+  const fetchConfiguracion = async () => {
+    try {
+      const res = await api.get('/configuracion');
+      if (res.data) {
+        setHorarios(res.data.horarios);
+        setServicios(res.data.servicios);
+      }
+    } catch (error) {
+      console.error("Error al cargar configuración", error);
+    }
+  };
+
+  const fetchTurnosManana = async () => {
     setLoadingTurnos(true);
     try {
       const respuesta = await api.get('/turnos');
-      // Filtramos solo los pendientes y confirmados de la semana actual
-      const hoy = new Date();
-      const finSemana = new Date();
-      finSemana.setDate(hoy.getDate() + 7);
+      const d = new Date();
+      // Calcular fecha de mañana en el formato local (YYYY-MM-DD)
+      const manana = new Date(d);
+      manana.setDate(manana.getDate() + 1);
+      const mananaStr = `${manana.getFullYear()}-${String(manana.getMonth() + 1).padStart(2, '0')}-${String(manana.getDate()).padStart(2, '0')}`;
 
       const turnosFiltrados = respuesta.data.filter(t => {
-        const fechaT = new Date(t.fecha);
-        return fechaT >= hoy && fechaT <= finSemana && (t.estado === 'Pendiente' || t.estado === 'Confirmado');
+        // En base de datos t.fecha viene como "2026-04-20"
+        return t.fecha.startsWith(mananaStr) && (t.estado === 'Pendiente' || t.estado === 'Confirmado');
       });
 
-      // Ordenar por fecha
-      turnosFiltrados.sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-      setTurnosSemana(turnosFiltrados);
+      turnosFiltrados.sort((a, b) => a.hora.localeCompare(b.hora));
+      setTurnosManana(turnosFiltrados);
     } catch (error) {
       console.error("Error al cargar turnos", error);
     } finally {
@@ -61,32 +74,65 @@ const AdminConfiguracion = () => {
     setServicios(servicios.filter(s => s.id !== id));
   };
 
-  // Guardar Configuración (Simulación)
-  const handleGuardarTodo = () => {
-    alert("¡Configuraciones guardadas con éxito en el sistema!");
+  // Guardar Configuración Real
+  const handleGuardarTodo = async () => {
+    try {
+      await api.put('/configuracion', { horarios, servicios });
+      alert("¡Configuraciones guardadas con éxito en el sistema!");
+    } catch (error) {
+      alert("Error al guardar la configuración.");
+      console.error(error);
+    }
   };
 
-  // Envío masivo para mañana
-  const handleRecordatoriosMañana = async () => {
+  const enviarIndividual = (turno, via) => {
+    const nombre = `${turno.nombrePaciente} ${turno.apellidoPaciente}`;
+    // Usamos el formato local en lugar de toLocaleDateString que causa conflicto con zonas horarias
+    const parts = turno.fecha.split('-');
+    const fechaFormat = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : turno.fecha;
+    const mensaje = `Hola ${nombre}, recordatorio de tu turno en Centro Odontológico C&M el día ${fechaFormat} a las ${turno.hora} hs. Motivo: ${turno.motivo}. ¡Te esperamos!`;
+
+    if (via === 'WhatsApp') {
+      const url = `https://wa.me/${turno.telefono.replace(/\D/g, '')}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
+    } else {
+      const mailUrl = `mailto:${turno.email}?subject=Recordatorio de Turno - Centro Odontológico&body=${encodeURIComponent(mensaje)}`;
+      window.open(mailUrl, '_blank');
+    }
+  };
+
+  // Envío masivo iterativo por frontend
+  const handleRecordatoriosMañana = () => {
+    if (turnosManana.length === 0) {
+      alert("No hay turnos agendados para el día de mañana.");
+      return;
+    }
+
+    if (!window.confirm(`¿Estás seguro de enviar mensajes masivos a ${turnosManana.length} paciente(s)? Tu navegador abrirá automáticamente múltiples pestañas.`)) return;
+
     setEnviandoMasivo(true);
-    try {
-      // Simulación de envío masivo
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      alert("¡Recordatorios para mañana enviados con éxito vía Email y WhatsApp!");
-    } catch (error) {
-      alert("Error al enviar recordatorios masivos.");
-    } finally {
-      setEnviandoMasivo(false);
-    }
-  };
-
-  const enviarIndividual = async (turno, via) => {
-    try {
-      // Simulación de envío individual
-      alert(`Recordatorio enviado a ${turno.pacienteNombre} vía ${via}`);
-    } catch (error) {
-      alert("Error al enviar recordatorio.");
-    }
+    
+    // Para evitar que el navegador bloquee un aluvión de popups (pop-up blocker),
+    // es necesario que el usuario habilite las ventanas emergentes en el sitio.
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index >= turnosManana.length) {
+        clearInterval(interval);
+        setEnviandoMasivo(false);
+        // También procesamos con backend para que quede registro (opcional)
+        api.post('/notificaciones/recordatorios-manana').catch(console.error);
+        alert(`¡Listo! Se han abierto las pestañas para ${turnosManana.length} pacientes.`);
+        return;
+      }
+      const turno = turnosManana[index];
+      // Si tiene teléfono, WhatsApp. Si no, Email
+      if (turno.telefono) {
+        enviarIndividual(turno, 'WhatsApp');
+      } else if (turno.email) {
+        enviarIndividual(turno, 'Mail');
+      }
+      index++;
+    }, 1200); // Retardo de 1.2 seg entre pacientes
   };
 
   return (
@@ -197,22 +243,22 @@ const AdminConfiguracion = () => {
                 <tr>
                   <td colSpan="4" className="p-10 text-center text-text-light font-medium animate-pulse text-lg">Cargando próximos turnos...</td>
                 </tr>
-              ) : turnosSemana.length > 0 ? (
-                turnosSemana.map(turno => (
+              ) : turnosManana.length > 0 ? (
+                turnosManana.map(turno => (
                   <tr key={turno._id} className="hover:bg-secondary/5 transition-colors">
                     <td className="p-4">
-                      <p className="font-black text-primary text-lg">{turno.pacienteNombre}</p>
+                      <p className="font-black text-primary text-lg">{turno.nombrePaciente} {turno.apellidoPaciente}</p>
                       <p className="text-xs font-bold text-text-light">{turno.email || 'Sin email'}</p>
                     </td>
                     <td className="p-4 font-bold text-text">
                       <div className="flex flex-col">
-                        <span className="flex items-center gap-1 text-primary"><FaCalendarCheck className="text-accent-orange" /> {new Date(turno.fecha).toLocaleDateString()}</span>
+                        <span className="flex items-center gap-1 text-primary"><FaCalendarCheck className="text-accent-orange" /> {turno.fecha.split('-').reverse().join('/')}</span>
                         <span className="text-sm text-text-light ml-5">{turno.hora} hs</span>
                       </div>
                     </td>
                     <td className="p-4">
                       <span className="bg-secondary/20 text-primary text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">
-                        {turno.tipoTratamiento}
+                        {turno.motivo}
                       </span>
                     </td>
                     <td className="p-4 text-center">
@@ -237,7 +283,7 @@ const AdminConfiguracion = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="p-10 text-center text-text-light font-medium">No hay turnos agendados para los próximos 7 días.</td>
+                  <td colSpan="4" className="p-10 text-center text-text-light font-medium">No hay turnos agendados para el día de mañana.</td>
                 </tr>
               )}
             </tbody>

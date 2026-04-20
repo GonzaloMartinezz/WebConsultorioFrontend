@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 
 // 1. Importamos el componente que arregla el scroll e IA de seguridad
 import ScrollToTop from "./components/ScrollToTop.jsx";
@@ -13,11 +13,11 @@ import 'aos/dist/aos.css';
 import MainLayout from "./layouts/MainLayout.jsx";
 import Inicio from "./pages/Inicio.jsx";
 import Turnos from "./pages/Turnos.jsx";
-import AcercaDe from "./pages/AcercaDe.jsx";
+import Especialistas from "./pages/Especialistas.jsx";
 import Contacto from "./pages/Contacto.jsx";
 import Login from "./pages/Login.jsx";
 import MiPerfil from "./pages/MiPerfil.jsx";
-import Estructura from "./pages/Estructura.jsx";
+import OdontologiaDigital from "./pages/OdontologiaDigital.jsx";
 
 // =========================================
 // IMPORTACIONES PRIVADAS (Panel Admin)
@@ -30,7 +30,6 @@ import AdminEstadisticas from "./pages/admin/AdminEstadisticas.jsx";
 
 // Extensiones del Panel
 import AdminAgenda from "./pages/admin/AdminAgenda.jsx";
-import AdminAnalytics from "./pages/admin/AdminAnalytics.jsx";
 import AdminConfiguracion from "./pages/admin/AdminConfiguracion.jsx";
 import AdminEncuestas from "./pages/admin/AdminEncuestas.jsx";
 import AdminFinanzas from "./pages/admin/AdminFinanzas.jsx";
@@ -62,14 +61,17 @@ export default function App() {
           <Route index element={<Inicio />} />
           <Route path="inicio" element={<Inicio />} />
           <Route path="turnos" element={<ProtectedRoute><Turnos /></ProtectedRoute>} />
-          <Route path="acerca" element={<AcercaDe />} />
+          <Route path="especialistas" element={<Especialistas />} />
+          <Route path="nosotros" element={<Navigate to="/especialistas" replace />} />
+          <Route path="acerca" element={<Navigate to="/especialistas" replace />} />
           <Route path="contacto" element={<Contacto />} />
         </Route>
 
         {/* Portal de Acceso */}
         <Route path="/login" element={<Login />} />
 
-        <Route path="/estructura" element={<Estructura />} />
+        <Route path="/odontologia-digital" element={<OdontologiaDigital />} />
+        <Route path="/estructura" element={<Navigate to="/odontologia-digital" replace />} />
 
         {/* ========================================= */}
         {/* EL MUNDO PRIVADO DEL PACIENTE               */}

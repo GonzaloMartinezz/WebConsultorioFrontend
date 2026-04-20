@@ -14,10 +14,10 @@ const PortalPaciente = () => {
             <div className="absolute top-0 right-0 w-full h-full opacity-20 bg-center bg-cover" style={{ backgroundImage: 'url("/sala de espera 1.jpeg")' }}></div>
             <div className="relative z-10">
               <span className="bg-white/10 border border-white/20 text-[10px] uppercase tracking-widest px-3 py-1 rounded-full mb-4 inline-block">
-                Digital Health Portal
+                Portal Digital
               </span>
               <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tight">
-                Bienvenido a nuestra App
+                Bienvenido a nuestro Centro Odontológico!
               </h1>
               <p className="text-white/80 max-w-lg mb-8 font-medium">
                 Su viaje hacia una salud dental de excelencia comienza aquí. Gestione su bienestar con precisión clínica y calidez humana.

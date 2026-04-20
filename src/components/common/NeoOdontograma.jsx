@@ -263,21 +263,21 @@ export default function NeoOdontograma({ dientes, setDientes, pacienteNombre = '
       <div className="w-full flex flex-col items-center select-none gap-6 sm:gap-12 mb-10 overflow-x-auto pb-6">
 
         {/* Arcada Superior */}
-        <div className={`flex justify-center xl:justify-between w-full min-w-[900px] transition-all duration-500 ${filtroArcada === 'inferior' ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
+        <div className={`flex justify-center xl:justify-between w-full transition-all duration-500 ${filtroArcada === 'inferior' ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
           {topAdult.map((adultNum, i) => (
             <TopCol key={`top-${i}`} adultNum={adultNum} childNum={topChild[i]} />
           ))}
         </div>
 
         {/* Separación Central */}
-        <div className={`flex items-center justify-center w-full min-w-[900px] gap-4 ${filtroArcada !== 'completa' ? 'hidden' : ''}`}>
+        <div className={`flex items-center justify-center w-full gap-4 ${filtroArcada !== 'completa' ? 'hidden' : ''}`}>
           <div className="h-[2px] flex-1 bg-linear-to-r from-transparent via-secondary/20 to-transparent"></div>
           <span className="text-[10px] font-black text-secondary/30 uppercase tracking-[0.5em]">Línea de Oclusión</span>
           <div className="h-[2px] flex-1 bg-linear-to-r from-secondary/20 via-secondary/20 to-transparent"></div>
         </div>
 
         {/* Arcada Inferior */}
-        <div className={`flex justify-center xl:justify-between w-full min-w-[900px] transition-all duration-500 ${filtroArcada === 'superior' ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
+        <div className={`flex justify-center xl:justify-between w-full transition-all duration-500 ${filtroArcada === 'superior' ? 'opacity-0 h-0 overflow-hidden' : 'opacity-100'}`}>
           {bottomAdult.map((adultNum, i) => (
             <BottomCol key={`bottom-${i}`} adultNum={adultNum} childNum={bottomChild[i]} />
           ))}

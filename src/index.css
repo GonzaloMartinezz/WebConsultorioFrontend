@@ -176,3 +176,30 @@
     padding: 4px 8px !important;
   }
 }
+
+/* Efecto de expansión e interactividad global */
+@layer components {
+  /* Expansión masiva con hover para botones */
+  .btn-expand {
+    @apply relative overflow-hidden transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl hover:shadow-accent-orange/20 active:scale-95;
+  }
+  .btn-expand::before {
+    content: '';
+    @apply absolute -inset-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[30deg] -translate-x-full transition-transform duration-700 ease-out z-[-1];
+  }
+  .btn-expand:hover::before {
+    @apply translate-x-[150%];
+  }
+
+  /* Sweep (subrayado izquierda a derecha) */
+  .hover-sweep {
+    @apply relative overflow-hidden inline-block;
+  }
+  .hover-sweep::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-[3px] bg-accent-orange scale-x-0 origin-left transition-transform duration-300 ease-out;
+  }
+  .hover-sweep:hover::after {
+    @apply scale-x-100;
+  }
+}

@@ -5,7 +5,8 @@ import NeoOdontograma from '../../components/common/NeoOdontograma.jsx';
 import api from '../../api/axios.js';
 import {
   FaArrowLeft, FaSave, FaTooth, FaUserInjured, FaCalendarCheck,
-  FaSpinner, FaUndo, FaInfoCircle, FaCheckCircle, FaFileMedical
+  FaSpinner, FaUndo, FaInfoCircle, FaCheckCircle, FaFileMedical,
+  FaPen, FaTrash, FaTimesCircle
 } from 'react-icons/fa';
 
 // =============================================
@@ -39,13 +40,17 @@ const AdminFichaPaciente = () => {
     tratamientoRealizado: ''
   });
 
+  // Modal para edición del historial
+  const [modalEdicionAbierto, setModalEdicionAbierto] = useState(false);
+  const [consultaEditando, setConsultaEditando] = useState(null);
+
   useEffect(() => {
     const cargarFichaCompleta = async () => {
       try {
         const resPacientes = await api.get('/pacientes');
         const lista = resPacientes.data;
         const encontrado = lista.find(p => p._id === id);
-        
+
         if (encontrado) {
           setPaciente(encontrado);
           // Pre-llenar nombre y apellido del paciente en el formulario
@@ -103,6 +108,64 @@ const AdminFichaPaciente = () => {
       showToast('Hubo un error al guardar', 'error');
     } finally {
       setGuardando(false);
+    }
+  };
+
+  // =============================================
+  // ELIMINAR Y EDITAR CONSULTAS DEL HISTORIAL
+  // =============================================
+  const handleEliminarConsulta = async (consultaId) => {
+    if (!window.confirm('¿Estás seguro de que deseas eliminar este registro del historial? Esta acción no se puede deshacer.')) return;
+    try {
+      await api.delete(`/fichas/${id}/historial/${consultaId}`);
+      showToast('Consulta eliminada del historial', 'success');
+      setHistorial(prev => prev.filter(c => c._id !== consultaId));
+    } catch (error) {
+      showToast('Error al eliminar la consulta', 'error');
+    }
+  };
+
+  const abrirModalEdicion = (consulta) => {
+    setConsultaEditando({
+      _id: consulta._id,
+      motivo: consulta.motivo || '',
+      profesional: consulta.profesional || 'Dr. Adolfo',
+      tratamientoRealizado: consulta.tratamientoRealizado || '',
+      fechaStr: consulta.fecha ? new Date(consulta.fecha).toISOString().split('T')[0] : ''
+    });
+    setModalEdicionAbierto(true);
+  };
+
+  const handleGuardarEdicionConsulta = async () => {
+    if (!consultaEditando.motivo) {
+      showToast('El motivo es obligatorio', 'error');
+      return;
+    }
+    try {
+      const resp = await api.put(`/fichas/${id}/historial/${consultaEditando._id}`, {
+        motivo: consultaEditando.motivo,
+        profesional: consultaEditando.profesional,
+        tratamientoRealizado: consultaEditando.tratamientoRealizado,
+        fecha: consultaEditando.fechaStr ? new Date(consultaEditando.fechaStr).toISOString() : new Date().toISOString()
+      });
+
+      showToast('Consulta actualizada', 'success');
+      setModalEdicionAbierto(false);
+
+      // Actualizar el historial listado en pantalla
+      setHistorial(prev => prev.map(c =>
+        c._id === consultaEditando._id
+          ? {
+            ...c,
+            motivo: consultaEditando.motivo,
+            profesional: consultaEditando.profesional,
+            tratamientoRealizado: consultaEditando.tratamientoRealizado,
+            fecha: consultaEditando.fechaStr
+          }
+          : c
+      ));
+    } catch (error) {
+      showToast('Error al editar la consulta', 'error');
     }
   };
 
@@ -187,17 +250,15 @@ const AdminFichaPaciente = () => {
         <h2 className="text-xl font-black text-primary mb-5 flex items-center gap-2">
           <FaTooth /> Odontograma Interactivo Avanzado
         </h2>
-        <div className="overflow-hidden">
-          <div className="transform scale-[0.8] md:scale-[0.85] lg:scale-[0.9] origin-top md:origin-top transition-transform">
-            <NeoOdontograma
-              dientes={dientes || {}}
-              setDientes={setDientes}
-              pacienteNombre={`${paciente?.nombre || 'Doc.'} ${paciente?.apellido || 'Ficticio'}`}
-              patientId={id ? id.substring(Math.max(0, id.length - 6)).toUpperCase() : '0000'}
-              onSave={handleGuardarFicha}
-              isSaving={guardando}
-            />
-          </div>
+        <div className="overflow-x-auto w-full custom-scrollbar pb-4">
+          <NeoOdontograma
+            dientes={dientes || {}}
+            setDientes={setDientes}
+            pacienteNombre={`${paciente?.nombre || 'Doc.'} ${paciente?.apellido || 'Ficticio'}`}
+            patientId={id ? id.substring(Math.max(0, id.length - 6)).toUpperCase() : '0000'}
+            onSave={handleGuardarFicha}
+            isSaving={guardando}
+          />
         </div>
       </div>
 
@@ -216,7 +277,7 @@ const AdminFichaPaciente = () => {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 mb-3">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                       <FaCalendarCheck className="text-xs" />
+                      <FaCalendarCheck className="text-xs" />
                     </div>
                     <div>
                       <p className="font-black text-primary uppercase tracking-tight">{visita.motivo}</p>
@@ -225,19 +286,29 @@ const AdminFichaPaciente = () => {
                       </p>
                     </div>
                   </div>
-                  <Link 
-                    to={`/admin/historia-clinica/${id}`}
-                    className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-primary/90 transition-all shadow-sm active:scale-95"
-                  >
-                    <FaFileMedical /> ver historia clinica - Odontograma del paciente
-                  </Link>
+                  <div className="flex items-center gap-2 mt-2 md:mt-0">
+                    <button
+                      onClick={() => abrirModalEdicion(visita)}
+                      className="p-2.5 bg-blue-50 text-blue-500 rounded-lg shadow-sm hover:bg-blue-500 hover:text-white transition-all"
+                      title="Editar Consulta"
+                    >
+                      <FaPen size={12} />
+                    </button>
+                    <button
+                      onClick={() => handleEliminarConsulta(visita._id)}
+                      className="p-2.5 bg-red-50 text-red-500 rounded-lg shadow-sm hover:bg-red-500 hover:text-white transition-all"
+                      title="Eliminar Consulta"
+                    >
+                      <FaTrash size={12} />
+                    </button>
+                  </div>
                 </div>
-                
+
                 <div className="flex flex-col gap-2">
                   <p className="text-sm text-text-light">Atendido por: <strong className="text-primary font-black uppercase">{visita.profesional}</strong></p>
                   {visita.tratamientoRealizado && (
                     <div className="bg-white/50 p-3 rounded-xl border border-secondary/10">
-                       <p className="text-xs text-text font-bold italic leading-relaxed">"{visita.tratamientoRealizado}"</p>
+                      <p className="text-xs text-text font-bold italic leading-relaxed">"{visita.tratamientoRealizado}"</p>
                     </div>
                   )}
                 </div>
@@ -253,6 +324,86 @@ const AdminFichaPaciente = () => {
           ${toast.type === 'success' ? 'bg-white text-primary border-green-500' : 'bg-red-600 text-white border-red-800'}`}>
           {toast.type === 'success' ? <FaCheckCircle className="text-green-500 text-xl" /> : <FaInfoCircle className="text-xl" />}
           {toast.message}
+        </div>
+      )}
+
+      {/* ========== MODAL EDICIÓN CONSULTA ========== */}
+      {modalEdicionAbierto && consultaEditando && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-200 p-4">
+          <div className="bg-white rounded-4xl w-full max-w-lg overflow-hidden shadow-2xl border border-secondary/20">
+            <div className="bg-primary p-6 text-white text-center relative">
+              <button
+                onClick={() => setModalEdicionAbierto(false)}
+                className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-xl transition-all"
+              >
+                <FaTimesCircle />
+              </button>
+              <h2 className="font-black uppercase tracking-widest text-lg">Modificar Registro</h2>
+              <p className="text-[10px] text-white/50 font-bold uppercase tracking-[0.2em] mt-1">Historial Clínico</p>
+            </div>
+
+            <div className="p-6 space-y-4 bg-gray-50">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block px-1">Fecha</label>
+                  <input
+                    type="date"
+                    value={consultaEditando.fechaStr}
+                    onChange={e => setConsultaEditando({ ...consultaEditando, fechaStr: e.target.value })}
+                    className="w-full p-3 bg-white rounded-xl font-bold text-xs border border-secondary/20 focus:border-accent-orange outline-none shadow-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block px-1">Atendido por</label>
+                  <select
+                    value={consultaEditando.profesional}
+                    onChange={e => setConsultaEditando({ ...consultaEditando, profesional: e.target.value })}
+                    className="w-full p-3 bg-white rounded-xl font-bold text-xs border border-secondary/20 focus:border-accent-orange outline-none shadow-sm"
+                  >
+                    <option value="Dr. Adolfo">Dr. Adolfo</option>
+                    <option value="Dra. Erina">Dra. Erina</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block px-1">Motivo de Consulta</label>
+                <input
+                  type="text"
+                  value={consultaEditando.motivo}
+                  onChange={e => setConsultaEditando({ ...consultaEditando, motivo: e.target.value })}
+                  className="w-full p-3 bg-white rounded-xl font-bold text-sm border border-secondary/20 focus:border-accent-orange outline-none shadow-sm"
+                  placeholder="Ej: Control general"
+                />
+              </div>
+
+              <div>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block px-1">Tratamiento Realizado</label>
+                <textarea
+                  rows="3"
+                  value={consultaEditando.tratamientoRealizado}
+                  onChange={e => setConsultaEditando({ ...consultaEditando, tratamientoRealizado: e.target.value })}
+                  className="w-full p-3 bg-white rounded-xl font-medium text-xs border border-secondary/20 focus:border-accent-orange outline-none shadow-sm resize-none"
+                  placeholder="Descripción detallada (opcional)..."
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4 border-t border-secondary/10">
+                <button
+                  onClick={() => setModalEdicionAbierto(false)}
+                  className="flex-1 py-3 px-4 bg-white border-2 border-secondary/10 text-text-light font-black uppercase tracking-widest text-[10px] rounded-xl hover:bg-gray-50 transition-all"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleGuardarEdicionConsulta}
+                  className="flex-1 py-3 px-4 bg-primary text-white font-black uppercase tracking-widest text-[10px] rounded-xl shadow-lg hover:bg-primary/90 active:scale-95 transition-all flex items-center justify-center gap-2"
+                >
+                  <FaSave /> Guardar Cambios
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </LayoutAdmin>
