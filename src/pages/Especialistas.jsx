@@ -99,39 +99,111 @@ const AcercaDe = () => {
       <div className="bg-background flex flex-col gap-24 pb-24">
 
         {/* ======================================================== */}
-        {/* SECCIÓN 1: FILOSOFÍA (Bloque Dividido Premium - bg-primary) */}
+        {/* SECCIÓN 1: NUESTRA ESENCIA / HERO PROFESIONAL */}
         {/* ======================================================== */}
-        <section className="bg-primary text-background pt-44 pb-20 lg:pt-56 lg:pb-32 px-4 sm:px-6 lg:px-8 border-b-8 border-accent-orange relative">
-          {/* Fondo decorativo radial oscuro */}
-          <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none bg-[radial-gradient(circle_at_top_left,white,transparent_50%)]"></div>
-
+        <section className="relative bg-primary pt-44 pb-20 lg:pt-52 lg:pb-32 px-4 sm:px-6 lg:px-8 border-b-8 border-accent-orange overflow-hidden">
+          {/* Elementos decorativos de fondo abstractos */}
+          <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[60%] rounded-full blur-[120px] bg-accent-orange/15 pointer-events-none"></div>
+          <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[140px] bg-white/5 pointer-events-none"></div>
+          
           <div className="mx-auto max-w-7xl relative z-10">
-            <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-10 items-center">
 
-              {/* Lado Izquierdo: Título y descripción */}
-              <div className="w-full lg:w-5/12 space-y-6 text-center lg:text-left" data-aos="fade-right">
-                <span className="inline-block px-4 py-1.5 rounded-full border border-accent-orange text-accent-orange font-bold text-xs uppercase tracking-wider">
-                  Nuestra Esencia
-                </span>
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.9]">
-                  La Sonrisa <br />
-                  <span className="text-accent-orange">Comienza Aquí</span>
-                </h1>
-                <p className="text-base md:text-lg text-secondary/90 font-medium leading-relaxed max-w-md mx-auto lg:mx-0">
-                  Somos un equipo apasionado que combina experiencia clínica, tecnología moderna y un enfoque humano para acompañarte en cada etapa de tu tratamiento bucal.
-                </p>
+              {/* Lado Izquierdo: Título y Estadísticas */}
+              <div className="lg:col-span-7 space-y-10" data-aos="fade-right">
+                
+                {/* Etiqueta superior */}
+                <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-lg">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-orange opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-accent-orange"></span>
+                  </span>
+                  <span className="text-xs font-bold text-white uppercase tracking-widest whitespace-nowrap">
+                    Odontología de Excelencia
+                  </span>
+                </div>
+                
+                <div className="space-y-6">
+                  <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black uppercase tracking-tighter leading-[0.85] text-white">
+                    Excelencia <br />
+                    <span className="text-transparent bg-clip-text bg-linear-to-r from-accent-orange to-orange-300">
+                      Clínica &amp; Humana
+                    </span>
+                  </h1>
+                  
+                  <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-xl">
+                    Somos un equipo apasionado que combina experiencia clínica de élite, tecnología digital y un enfoque profundamente humano para acompañarte en cada etapa de tu tratamiento bucal.
+                  </p>
+                </div>
+
+                {/* Estadísticas animadas */}
+                <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-10 border-t border-white/10 w-full max-w-2xl">
+                  <div ref={counter1.ref} className="space-y-2">
+                    <div className="text-4xl sm:text-5xl font-black text-white flex items-baseline">
+                      <span className="text-accent-orange mr-1">+</span>{counter1.count}
+                    </div>
+                    <div className="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest leading-tight">
+                      Años de <br/>Experiencia
+                    </div>
+                  </div>
+                  
+                  <div ref={counter2.ref} className="space-y-2">
+                    <div className="text-4xl sm:text-5xl font-black text-white flex items-baseline">
+                      <span className="text-accent-orange mr-1">+</span>{counter2.count}
+                    </div>
+                    <div className="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest leading-tight">
+                      Pacientes <br/>Atendidos
+                    </div>
+                  </div>
+                  
+                  <div ref={counter3.ref} className="space-y-2">
+                    <div className="text-4xl sm:text-5xl font-black text-white flex items-baseline">
+                      {counter3.count}<span className="text-accent-orange ml-1">%</span>
+                    </div>
+                    <div className="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest leading-tight">
+                      Satisfacción <br/>Clínica
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* Separador vertical sutil en PC */}
-              <div className="hidden lg:block w-px h-64 bg-secondary/20 shrink-0"></div>
+              {/* Lado Derecho: Tarjeta Glassmorphism de Filosofía */}
+              <div className="lg:col-span-5 relative" data-aos="fade-left" data-aos-delay="200">
+                {/* Resplandor detrás de la tarjeta */}
+                <div className="absolute -inset-1 bg-linear-to-br from-accent-orange/40 to-transparent rounded-[2.5rem] blur-xl opacity-70"></div>
+                
+                <div className="relative h-full bg-white/10 backdrop-blur-2xl border border-white/20 p-8 sm:p-10 md:p-12 rounded-[2rem] shadow-2xl overflow-hidden group hover:border-white/30 transition-colors duration-500">
+                  {/* Patrón estético */}
+                  <div className="absolute -top-4 -right-4 text-white/5 transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 pointer-events-none">
+                    <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
+                    </svg>
+                  </div>
 
-              {/* Lado Derecho: Filosofía y Foto de Recepción Flotante */}
-              <div className="w-full lg:w-10/12 relative space-y-8 bg-background/5 p-20 rounded-4xl border border-secondary/10 backdrop-blur-sm" data-aos="fade-left" data-aos-delay="200">
-                <h3 className="text-3xl font-bold tracking-tight text-orange-400">Filosofía de trabajo</h3>
-                <p className="text-secondary/90 font-medium text-base md:text-lg leading-relaxed whitespace-pre-line">
-                  Creemos que una sonrisa sana se construye a partir de la confianza. Por eso dedicamos el tiempo necesario a escuchar tus necesidades, explicar cada paso y ofrecer alternativas claras y personalizadas.
-                </p>
-
+                  <h3 className="text-sm font-black text-accent-orange uppercase tracking-widest mb-6 flex items-center gap-4">
+                    <span className="w-8 h-[2px] bg-accent-orange rounded-full"></span>
+                    Nuestra Filosofía
+                  </h3>
+                  
+                  <blockquote className="text-xl sm:text-2xl text-white font-medium leading-relaxed italic mb-8 relative z-10">
+                    "Creemos que una sonrisa sana se construye a partir de la <span className="text-accent-orange not-italic font-bold">confianza mutua</span>."
+                  </blockquote>
+                  
+                  <p className="text-sm sm:text-base text-white/70 leading-relaxed font-light relative z-10">
+                    Dedicamos el tiempo necesario a escuchar tus necesidades, realizar un diagnóstico exhaustivo e interdisciplinario, y ofrecerte alternativas claras y personalizadas.
+                  </p>
+                  
+                  {/* Firma / Autores */}
+                  <div className="mt-10 flex items-center gap-4 border-t border-white/10 pt-6 relative z-10">
+                    <div className="w-12 h-12 rounded-full bg-linear-to-br from-accent-orange to-orange-500 text-white flex items-center justify-center font-bold text-lg shadow-lg border-2 border-white/20">
+                      CM
+                    </div>
+                    <div>
+                      <div className="text-white font-bold tracking-wide">Carcara &amp; Martínez</div>
+                      <div className="text-white/50 text-[10px] sm:text-xs uppercase tracking-widest font-bold mt-0.5">Dirección Médica</div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -221,28 +293,28 @@ const AcercaDe = () => {
             </p>
           </div>
 
-          {/* Grilla de 3 columnas para máquinas adolfo 1, 2, 3 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Grilla de instalaciones: 1 ancha arriba, 2 abajo */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-            {/* Maquinas Adolfo 1 - Impresora 3D */}
-            <div className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] shadow-lg group" data-aos="fade-up">
-              <img src="/nosotros-impresora3d.png" alt="Impresora 3D Odontológica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            {/* Maquinas Adolfo 1 - Impresora 3D (Ancha) */}
+            <div className="relative rounded-2xl overflow-hidden h-[300px] md:h-[300px] shadow-lg group md:col-span-2" data-aos="fade-up">
+              <img src="/maquinas adolfo 2.jpg" alt="Impresora 3D Odontológica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
                 <h3 className="text-xl font-bold text-white uppercase tracking-tight">Precisión Digital</h3>
               </div>
             </div>
 
             {/* Maquinas Adolfo 2jpg.jpg - CEREC/Fresadora */}
-            <div className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] shadow-lg group" data-aos="fade-up" data-aos-delay="100">
-              <img src="/maquinas adolfo 2.jpg" alt="Laboratorio Digital CEREC" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="relative rounded-2xl overflow-hidden h-[400px] md:h-[500px] shadow-lg group" data-aos="fade-up" data-aos-delay="100">
+              <img src="/sanners1.png" alt="Laboratorio Digital CEREC" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
                 <h3 className="text-xl font-bold text-white uppercase tracking-tight">Diseño CAD/CAM</h3>
               </div>
             </div>
 
             {/* Maquinas Adolfo 3.jpg - Equipamiento laboratorio */}
-            <div className="relative rounded-2xl overflow-hidden h-[250px] md:h-[300px] shadow-lg group" data-aos="fade-up" data-aos-delay="200">
-              <img src="/maquinas adolfo 3.jpeg" alt="Equipamiento de vanguardia" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="relative rounded-2xl overflow-hidden h-[400px] md:h-[500px] shadow-lg group" data-aos="fade-up" data-aos-delay="200">
+              <img src="/imagenIA.jpg" alt="Equipamiento de vanguardia" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
                 <h3 className="text-xl font-bold text-white uppercase tracking-tight">Tecnología Sirona</h3>
               </div>
@@ -264,24 +336,33 @@ const AcercaDe = () => {
             </p>
           </div>
 
-          {/* Grilla de 2 columnas para maquinas adolfo 4, 5 (Radiología y Sillón) */}
+          {/* Grilla estructurada de Tecnología */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-            {/* Maquinas Adolfo 4.jpg - Rayos X */}
-            <div className="relative rounded-3xl overflow-hidden h-[300px] md:h-[400px] shadow-lg border-4 border-white group" data-aos="fade-right">
-              <img src="/maquinas adolfo 4.jpeg" alt="Tecnología Radiológica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            {/* Imagen 1 - Impresora 3D */}
+            <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[450px] shadow-lg border-4 border-white group" data-aos="fade-right">
+              <img src="/nosotros-cirugia.png" alt="Impresión 3D Biocompatible" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
-                <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Radiología Digital</h3>
-                <p className="text-white/90 font-medium mt-1">Diagnóstico por imágenes instantáneo con mínima exposición.</p>
+                <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Impresión 3D</h3>
+                <p className="text-white/90 font-medium mt-1">Impresión de alta precisión para prótesis y guías quirúrgicas.</p>
               </div>
             </div>
 
-            {/* Maquinas Adolfo 5.jpg - Sillón/Consultorio */}
-            <div className="relative rounded-3xl overflow-hidden h-[300px] md:h-[400px] shadow-lg border-4 border-white group" data-aos="fade-left">
-              <img src="/maquinas adolfo 5.jpeg" alt="Consultorio Moderno" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            {/* Imagen 2 - Ortodoncia */}
+            <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[450px] shadow-lg border-4 border-white group" data-aos="fade-left">
+              <img src="/orthodontics.jpg.webp" alt="Ortodoncia y Planificación Digital" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
-                <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Prótesis en el día</h3>
-                <p className="text-white/90 font-medium mt-1">Gracias a nuestra fresadora CEREC, fabricamos tus coronas en una sola cita.</p>
+                <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Ortodoncia Digital</h3>
+                <p className="text-white/90 font-medium mt-1">Tratamientos a medida diseñados a partir de escaneo intraoral.</p>
+              </div>
+            </div>
+
+            {/* Imagen 3 - Cirugía (Ancha) */}
+            <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[500px] shadow-lg border-4 border-white group md:col-span-2" data-aos="fade-up">
+              <img src="/impresora-3b-blog.webp" alt="Cirugía Guiada" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
+                <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Cirugía Guiada</h3>
+                <p className="text-white/90 font-medium mt-1">Intervenciones precisas y mínimamente invasivas asistidas por software.</p>
               </div>
             </div>
 
