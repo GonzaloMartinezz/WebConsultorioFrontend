@@ -8,7 +8,7 @@ import HeroCarousel from "../components/HeroCarousel";
 
 const Inicio = () => {
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full bg-[#050505] min-h-screen">
 
       {/* 1. HERO SECTION (Carrusel automático TOD3D style) */}
       <HeroCarousel />

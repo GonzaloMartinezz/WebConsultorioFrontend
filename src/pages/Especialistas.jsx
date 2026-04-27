@@ -83,9 +83,8 @@ function useCounter(end, duration = 2000) {
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const AcercaDe = () => {
   const counter1 = useCounter(25);
-  const counter2 = useCounter(30000);
+  const counter2 = useCounter(40000);
   const counter3 = useCounter(100);
-  const counter4 = useCounter(100);
 
   return (
     <main className="grow flex flex-col overflow-hidden relative">
@@ -158,15 +157,6 @@ const AcercaDe = () => {
                       Satisfacción <br />Clínica
                     </div>
                   </div>
-
-                  <div ref={counter4.ref} className="space-y-2">
-                    <div className="text-4xl sm:text-5xl font-black text-white flex items-baseline">
-                      {counter4.count}<span className="text-accent-orange ml-1">%</span>
-                    </div>
-                    <div className="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest leading-tight">
-                      Tecnologia<br /> Digital
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -175,7 +165,7 @@ const AcercaDe = () => {
                 {/* Resplandor detrás de la tarjeta */}
                 <div className="absolute -inset-1 bg-linear-to-br from-accent-orange/40 to-transparent rounded-[2.5rem] blur-xl opacity-70"></div>
 
-                <div className="relative bg-white/10 backdrop-blur-2xl border border-white/20 p-6 sm:p-8 md:p-10 rounded-[2rem] shadow-2xl overflow-hidden group hover:border-white/30 transition-colors duration-500">
+                <div className="relative bg-white/10 backdrop-blur-2xl border border-white/20 p-6 sm:p-8 md:p-10 rounded-4xl shadow-2xl overflow-hidden group hover:border-white/30 transition-colors duration-500">
                   {/* Patrón estético */}
                   <div className="absolute -top-4 -right-4 text-white/5 transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 pointer-events-none">
                     <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor">

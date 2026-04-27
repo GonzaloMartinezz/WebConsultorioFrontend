@@ -9,10 +9,10 @@ const doctorsData = {
     image: '/dra-erina.jpg', // Placeholder for doctor image
     bio: 'La Dra. Erina Carcara es especialista en transformar sonrisas con los últimos avances en ortodoncia invisible y estética dental. Su enfoque minucioso garantiza resultados funcionales y armónicos.',
     specialties: [
-      { title: 'Ortodoncia Invisible', desc: 'Tratamientos discretos y efectivos utilizando alineadores transparentes.' },
-      { title: 'Ortodoncia Convencional', desc: 'Corrección de la mordida y alineación dental con brackets de última generación.' },
-      { title: 'Diseño de Sonrisa', desc: 'Planificación digital para lograr la sonrisa perfecta y natural.' },
-      { title: 'Blanqueamiento Dental', desc: 'Técnicas avanzadas para aclarar el tono de tus dientes de forma segura.' }
+      { title: 'ORTODONCIA', desc: 'Tratamientos discretos y efectivos utilizando alineadores transparentes.' },
+      { title: 'ORTOPEDIA FUNCIONAL DE LOS MAXILARES', desc: 'Corrección de la mordida y alineación dental con brackets de última generación.' },
+      { title: 'PERIODONCIA', desc: 'Planificación digital para lograr la sonrisa perfecta y natural.' },
+      { title: 'BLANQUEAMIENTO Y ESTETICA DENTAL', desc: 'Técnicas avanzadas para aclarar el tono de tus dientes de forma segura.' }
     ],
     certifications: [
       'Especialista en Ortodoncia y Ortopedia Maxilar',
@@ -42,10 +42,11 @@ const doctorsData = {
     image: '/dr-adolfo.jpg', // Placeholder
     bio: 'El Dr. Adolfo Martinez cuenta con amplia trayectoria en cirugías complejas e implantes dentales. Su dedicación a la tecnología 3D permite planificaciones precisas y postoperatorios más rápidos.',
     specialties: [
-      { title: 'Implantología Digital', desc: 'Colocación de implantes mediante guías quirúrgicas impresas en 3D.' },
-      { title: 'Cirugía Maxilofacial', desc: 'Extracciones complejas y cirugías reconstructivas óseas.' },
-      { title: 'Regeneración Ósea', desc: 'Técnicas avanzadas para recuperar el volumen óseo perdido.' },
-      { title: 'Rehabilitación Oral', desc: 'Devolución de la función y estética mediante prótesis sobre implantes.' }
+      { title: 'IMPLANTOLOGIA ORAL', desc: 'Colocación de implantes mediante guías quirúrgicas impresas en 3D.' },
+      { title: 'REHABILITACION PROTESICA', desc: 'Extracciones complejas y cirugías reconstructivas óseas.' },
+      { title: 'ENDODONCIA', desc: 'Técnicas avanzadas para recuperar el volumen óseo perdido.' },
+      { title: 'CIRUGIA', desc: 'Devolución de la función y estética mediante prótesis sobre implantes.' },
+      { title: 'ESTETICA IDEAL ', desc: 'Devolución de la función y estética mediante prótesis sobre implantes.' }
     ],
     certifications: [
       'Especialista en Cirugía y Traumatología Bucomaxilofacial',
@@ -92,7 +93,7 @@ const PerfilDoctor = () => {
   return (
     <div className="bg-background min-h-screen pb-20 pt-32 lg:pt-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Botón Volver */}
         <Link to="/especialistas" className="inline-flex items-center gap-2 text-primary font-bold hover:text-accent-orange transition-colors mb-8 bg-white px-6 py-2 rounded-full shadow-sm border border-secondary/20">
           <span>&larr;</span> Volver a Especialistas
@@ -101,7 +102,7 @@ const PerfilDoctor = () => {
         {/* Encabezado del Doctor */}
         <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-secondary/20 flex flex-col md:flex-row gap-10 items-center md:items-start mb-16 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-orange-50 rounded-full blur-3xl opacity-50 -mr-20 -mt-20"></div>
-          
+
           <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-white shadow-2xl shrink-0 bg-secondary/10 flex items-center justify-center relative z-10">
             {/* Si no hay imagen real, mostrar un emoji o inicial por ahora */}
             <span className="text-6xl">{doctor.id === 'erina' ? '👩‍⚕️' : '👨‍⚕️'}</span>
@@ -141,16 +142,16 @@ const PerfilDoctor = () => {
 
         {/* Certificaciones y Casos Clínicos */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          
+
           {/* Certificaciones */}
           <div className="lg:col-span-1">
-            <div className="bg-primary rounded-[2rem] p-8 md:p-10 shadow-xl text-white h-full relative overflow-hidden">
+            <div className="bg-primary rounded-4xl p-8 md:p-10 shadow-xl text-white h-full relative overflow-hidden">
               <div className="absolute top-[-20%] right-[-20%] w-64 h-64 bg-accent-orange/20 rounded-full blur-3xl"></div>
-              
+
               <h2 className="text-2xl font-black uppercase tracking-tight mb-8 flex items-center gap-3 relative z-10">
                 <span className="text-accent-orange">🏆</span> Certificaciones
               </h2>
-              
+
               <ul className="space-y-6 relative z-10">
                 {doctor.certifications.map((cert, index) => (
                   <li key={index} className="flex items-start gap-4">
@@ -168,10 +169,10 @@ const PerfilDoctor = () => {
               <span className="w-8 h-[3px] bg-accent-orange rounded-full"></span>
               Casos Clínicos Destacados
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {doctor.clinicalCases.map((caso) => (
-                <div key={caso.id} className="bg-white rounded-[2rem] overflow-hidden shadow-lg border border-secondary/20 group">
+                <div key={caso.id} className="bg-white rounded-4xl overflow-hidden shadow-lg border border-secondary/20 group">
                   <div className="h-64 bg-secondary/10 relative overflow-hidden flex items-center justify-center">
                     {/* Placeholder de imagen */}
                     <span className="text-4xl opacity-50">📷</span>
