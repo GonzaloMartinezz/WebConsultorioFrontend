@@ -40,8 +40,8 @@ const Navbar = () => {
     <>
       <nav className={`fixed w-full z-50 transition-all duration-500 flex justify-center ${scrolled ? "top-4 px-4" : "top-0 px-0"}`}>
         <div className={`w-full max-w-7xl mx-auto flex items-center justify-between transition-all duration-500 ${scrolled
-          ? "bg-orange-50/90 backdrop-blur-md border border-accent-orange/30 shadow-[0_10px_25px_rgba(249,115,22,0.15)] rounded-full py-2 px-4 sm:px-6"
-          : "bg-transparent py-5 px-4 sm:px-6 lg:px-8"
+          ? "bg-orange-50/90 backdrop-blur-md border border-accent-orange/30 shadow-[0_10px_25px_rgba(249,115,22,0.15)] rounded-full py-4 px-4 sm:px-6"
+          : "bg-transparent py-8 px-4 sm:px-6 lg:px-8"
           }`}
         >
 

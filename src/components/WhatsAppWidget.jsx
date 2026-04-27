@@ -4,8 +4,8 @@ import { FaWhatsapp, FaTimes, FaPaperPlane } from 'react-icons/fa';
 const WhatsAppWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [nombre, setNombre] = useState('');
-  const [apellido, setApellido] = useState(''); 
-  const [mail, setMail] = useState(''); 
+  const [apellido, setApellido] = useState('');
+  const [mail, setMail] = useState('');
   const [motivo, setMotivo] = useState('');
 
   // Número de la clínica
@@ -23,6 +23,8 @@ const WhatsAppWidget = () => {
     setIsOpen(false);
     setNombre('');
     setApellido('');
+    setPhone('');
+    setDocumentNumber('');
     setMail('');
     setMotivo('');
   };
@@ -42,7 +44,7 @@ const WhatsAppWidget = () => {
           </div>
 
           <p className="text-[13px] text-text-light mb-4 font-medium leading-relaxed">
-            Completa los datos para contactarnos y poder consultarnos cualquier información.
+            Completa los datos para contactarnos y poder consultarnos cualquier información.Recorda que para poder solicitar el turno deberas contar con usuario y contraseña. Si no tienes un usuario, deberas iniciar sesion en el enlace de abajo. O si aun no tienes usuario debes crearte uno en el enlace de abajo para poder comenzar.
           </p>
 
           <form onSubmit={handleEnviar} className="space-y-3">
@@ -78,7 +80,29 @@ const WhatsAppWidget = () => {
               />
             </div>
 
-            {/* El widget general se enfoca en consultas y ya no pide seleccionar profesional. El selector de profesional fue eliminado. */}
+            {/* Teléfono */}
+            <div>
+              <input
+                type="text"
+                placeholder="Teléfono"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full text-sm px-4 py-2.5 rounded-xl border border-secondary bg-background/50 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none"
+                required
+              />
+            </div>
+
+            {/* Documento */}
+            <div>
+              <input
+                type="text"
+                placeholder="Documento"
+                value={documentNumber}
+                onChange={(e) => setDocumentNumber(e.target.value)}
+                className="w-full text-sm px-4 py-2.5 rounded-xl border border-secondary bg-background/50 focus:border-green-500 focus:ring-1 focus:ring-green-500 outline-none"
+                required
+              />
+            </div>
 
             {/* Motivo */}
             <div>

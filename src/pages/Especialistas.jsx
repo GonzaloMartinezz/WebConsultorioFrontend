@@ -10,25 +10,21 @@ const techCards = [
     img: '/que-es-y-para-que-se-usa-el-sistema-cerec.jpg',
     icon: '🦷',
     title: 'Diagnóstico Digital',
-    desc: 'Análisis cefalométrico y visualización en alta resolución con integración del sistema CEREC.',
   },
   {
     img: '/sanners1.png',
     icon: '⚙️',
-    title: 'Escaneo Óptico',
-    desc: 'Integración directa con escáneres intraorales para modelos 3D sin latencia de procesamiento.',
+    title: 'Sistemas CAD/CAM,para la confeccion de guias quirurgicas y coronas.Ademas disponemos de radiografias digiital',
   },
   {
     img: '/frezadora1.jpeg',
     icon: '🧬',
-    title: 'Laboratorio On-Site',
-    desc: 'Flujo de trabajo CAD/CAM optimizado con fresadoras de precisión clínica para piezas biocompatibles.',
+    title: 'Fabricacion Aditiva 3D',
   },
   {
     img: '/custom-tray-resin.webp',
     icon: '📐',
-    title: 'Alineadores y Prótesis 3D',
-    desc: 'Impresión en resina de alta precisión para modelos de estudio, guías y alineadores personalizados.',
+    title: 'Scanner Intraoral',
   },
 ];
 
@@ -86,9 +82,10 @@ function useCounter(end, duration = 2000) {
    COMPONENTE PRINCIPAL
    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 const AcercaDe = () => {
-  const counter1 = useCounter(15);
-  const counter2 = useCounter(5000);
-  const counter3 = useCounter(98);
+  const counter1 = useCounter(25);
+  const counter2 = useCounter(30000);
+  const counter3 = useCounter(100);
+  const counter4 = useCounter(100);
 
   return (
     <main className="grow flex flex-col overflow-hidden relative">
@@ -105,13 +102,13 @@ const AcercaDe = () => {
           {/* Elementos decorativos de fondo abstractos */}
           <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[60%] rounded-full blur-[120px] bg-accent-orange/15 pointer-events-none"></div>
           <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full blur-[140px] bg-white/5 pointer-events-none"></div>
-          
+
           <div className="mx-auto max-w-7xl relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-10 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
 
               {/* Lado Izquierdo: Título y Estadísticas */}
               <div className="lg:col-span-7 space-y-10" data-aos="fade-right">
-                
+
                 {/* Etiqueta superior */}
                 <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md shadow-lg">
                   <span className="relative flex h-3 w-3">
@@ -122,61 +119,67 @@ const AcercaDe = () => {
                     Odontología de Excelencia
                   </span>
                 </div>
-                
+
                 <div className="space-y-6">
-                  <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black uppercase tracking-tighter leading-[0.85] text-white">
-                    Excelencia <br />
-                    <span className="text-transparent bg-clip-text bg-linear-to-r from-accent-orange to-orange-300">
-                      Clínica &amp; Humana
-                    </span>
+                  <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5rem] font-black uppercase tracking-tighter leading-[0.9] text-white">
+                    Excelencia <br /> <span className="text-transparent bg-clip-text bg-linear-to-r from-accent-orange to-orange-300">Clínica &amp; Humana</span>
                   </h1>
-                  
+
                   <p className="text-lg md:text-xl text-white/80 font-light leading-relaxed max-w-xl">
-                    Somos un equipo apasionado que combina experiencia clínica de élite, tecnología digital y un enfoque profundamente humano para acompañarte en cada etapa de tu tratamiento bucal.
+                    Somos un equipo de trabajo dispuesto a brindarte nuestra experiencia clínica basada en casuística y resultados  clínicos ,  funcionales y estéticos . Con un enfoque profundamente humano  para acompañarte en cada etapa de tu  tratamiento bucal
                   </p>
                 </div>
 
-                {/* Estadísticas animadas */}
-                <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-10 border-t border-white/10 w-full max-w-2xl">
+                {/* Estadísticas animadas en una sola línea ancha */}
+                <div className="flex flex-row items-start justify-between gap-4 sm:gap-8 pt-10 border-t border-white/10 w-full max-w-4xl">
                   <div ref={counter1.ref} className="space-y-2">
                     <div className="text-4xl sm:text-5xl font-black text-white flex items-baseline">
                       <span className="text-accent-orange mr-1">+</span>{counter1.count}
                     </div>
                     <div className="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest leading-tight">
-                      Años de <br/>Experiencia
+                      Años de <br />Experiencia
                     </div>
                   </div>
-                  
+
                   <div ref={counter2.ref} className="space-y-2">
                     <div className="text-4xl sm:text-5xl font-black text-white flex items-baseline">
                       <span className="text-accent-orange mr-1">+</span>{counter2.count}
                     </div>
                     <div className="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest leading-tight">
-                      Pacientes <br/>Atendidos
+                      Pacientes <br />Atendidos
                     </div>
                   </div>
-                  
+
                   <div ref={counter3.ref} className="space-y-2">
                     <div className="text-4xl sm:text-5xl font-black text-white flex items-baseline">
                       {counter3.count}<span className="text-accent-orange ml-1">%</span>
                     </div>
                     <div className="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest leading-tight">
-                      Satisfacción <br/>Clínica
+                      Satisfacción <br />Clínica
+                    </div>
+                  </div>
+
+                  <div ref={counter4.ref} className="space-y-2">
+                    <div className="text-4xl sm:text-5xl font-black text-white flex items-baseline">
+                      {counter4.count}<span className="text-accent-orange ml-1">%</span>
+                    </div>
+                    <div className="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest leading-tight">
+                      Tecnologia<br /> Digital
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Lado Derecho: Tarjeta Glassmorphism de Filosofía */}
-              <div className="lg:col-span-5 relative" data-aos="fade-left" data-aos-delay="200">
+              <div className="lg:col-span-5 md:col-span-5 lg:pl-10" data-aos="fade-left" data-aos-delay="200">
                 {/* Resplandor detrás de la tarjeta */}
                 <div className="absolute -inset-1 bg-linear-to-br from-accent-orange/40 to-transparent rounded-[2.5rem] blur-xl opacity-70"></div>
-                
-                <div className="relative h-full bg-white/10 backdrop-blur-2xl border border-white/20 p-8 sm:p-10 md:p-12 rounded-[2rem] shadow-2xl overflow-hidden group hover:border-white/30 transition-colors duration-500">
+
+                <div className="relative bg-white/10 backdrop-blur-2xl border border-white/20 p-6 sm:p-8 md:p-10 rounded-[2rem] shadow-2xl overflow-hidden group hover:border-white/30 transition-colors duration-500">
                   {/* Patrón estético */}
                   <div className="absolute -top-4 -right-4 text-white/5 transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-700 pointer-events-none">
                     <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" />
                     </svg>
                   </div>
 
@@ -184,23 +187,18 @@ const AcercaDe = () => {
                     <span className="w-8 h-[2px] bg-accent-orange rounded-full"></span>
                     Nuestra Filosofía
                   </h3>
-                  
+
                   <blockquote className="text-xl sm:text-2xl text-white font-medium leading-relaxed italic mb-8 relative z-10">
-                    "Creemos que una sonrisa sana se construye a partir de la <span className="text-accent-orange not-italic font-bold">confianza mutua</span>."
+                    "Te escuchamos , diagnosticamos de manera integral y te <span className="text-accent-orange not-italic font-bold"> ofrecemos soluciones personalizadas y clara</span>."
                   </blockquote>
-                  
-                  <p className="text-sm sm:text-base text-white/70 leading-relaxed font-light relative z-10">
-                    Dedicamos el tiempo necesario a escuchar tus necesidades, realizar un diagnóstico exhaustivo e interdisciplinario, y ofrecerte alternativas claras y personalizadas.
-                  </p>
-                  
+
                   {/* Firma / Autores */}
                   <div className="mt-10 flex items-center gap-4 border-t border-white/10 pt-6 relative z-10">
-                    <div className="w-12 h-12 rounded-full bg-linear-to-br from-accent-orange to-orange-500 text-white flex items-center justify-center font-bold text-lg shadow-lg border-2 border-white/20">
-                      CM
+                    <div className="w-15 h-15 rounded-full bg-linear-to-br from-accent-orange to-orange-500 text-white flex items-center justify-center font-bold text-lg shadow-lg border-2 border-white/20">
+                      C & M
                     </div>
                     <div>
                       <div className="text-white font-bold tracking-wide">Carcara &amp; Martínez</div>
-                      <div className="text-white/50 text-[10px] sm:text-xs uppercase tracking-widest font-bold mt-0.5">Dirección Médica</div>
                     </div>
                   </div>
                 </div>
@@ -235,7 +233,7 @@ const AcercaDe = () => {
                 {/* LOGO PRINCIPAL: /Logo Principal.png (Pequeño junto al título) */}
                 {/* ======================================================== */}
                 <h2 className="text-3xl md:text-4xl lg:text-4xl font-black text-text uppercase leading-tight tracking-tight">
-                  El Equipo <br /> <span className="text-accent-orange">Carcara &amp; Martínez</span>
+                  Doctores <br /> <span className="text-accent-orange">Carcara &amp; Martínez</span>
                 </h2>
                 <p className="text-base md:text-lg text-text-light font-medium max-w-xl mx-auto lg:mx-0">
                   Profesionales con amplia trayectoria, dedicados a ofrecerte diagnósticos precisos y tratamientos mínimamente invasivos.
@@ -246,22 +244,22 @@ const AcercaDe = () => {
               <div className="flex flex-col sm:flex-row gap-6 pt-8 border-t border-secondary justify-center lg:justify-start">
                 {/* Tarjeta Dr. Adolfo */}
 
-                <div className="bg-white rounded-4xl p-10 shadow-[0_15px_40px_rgba(0,0,0,0.1)] w-full sm:w-[280px]  hover:-translate-y-2 transition-transform duration-300 border-b-5 border-accent-orange border-x border-t border-x-secondary/20 border-t-secondary/20">
+                <Link to="/especialistas/adolfo" className="bg-white rounded-4xl p-10 shadow-[0_15px_40px_rgba(0,0,0,0.1)] w-full sm:w-[280px] hover:-translate-y-2 transition-transform duration-300 border-b-5 border-accent-orange border-x border-t border-x-secondary/20 border-t-secondary/20 block cursor-pointer">
                   <div className="flex flex-col items-center text-center gap-4">
                     <div className="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center text-4xl shadow-inner border border-secondary/20">
                       👨‍⚕️
                     </div>
                     <div>
-                      <h4 className="text-2xl font-black text-text leading-tight">Dr. Adolfo <br /> Martínez</h4>
+                      <h4 className="text-2xl font-black text-text leading-tight">Dr. Adolfo Alejandro <br /> Martínez</h4>
                       <p className="text-[11px] font-black text-accent-orange uppercase tracking-widest mt-3">Odontología General</p>
                       <p className="text-xs font-medium text-text-light mt-1 w-full border-t border-gray-100 pt-2">Area de Implantologia</p>
                     </div>
                   </div>
-                </div>
+                </Link>
 
 
                 {/* Tarjeta Dra. Erina */}
-                <div className="bg-white rounded-4xl p-10 shadow-[0_15px_40px_rgba(0,0,0,0.1)] w-full sm:w-[280px]  hover:-translate-y-2 transition-transform duration-300 border-b-5 border-accent-orange border-x border-t border-x-secondary/20 border-t-secondary/20">
+                <Link to="/especialistas/erina" className="bg-white rounded-4xl p-10 shadow-[0_15px_40px_rgba(0,0,0,0.1)] w-full sm:w-[280px] hover:-translate-y-2 transition-transform duration-300 border-b-5 border-accent-orange border-x border-t border-x-secondary/20 border-t-secondary/20 block cursor-pointer">
                   <div className="flex flex-col items-center text-center gap-4">
                     <div className="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center text-4xl shadow-inner border border-secondary/20">
                       👩‍⚕️
@@ -272,7 +270,7 @@ const AcercaDe = () => {
                       <p className="text-xs font-medium text-text-light mt-1 w-full border-t border-gray-100 pt-2">Ortodoncia y Estética</p>
                     </div>
                   </div>
-                </div>
+                </Link>
               </div>
             </div>
           </div>

@@ -8,7 +8,7 @@ const MainLayout = () => {
   return (
     <>
       <Navbar />
-      <main style={{ minHeight: "70vh" }}>
+      <main style={{ minHeight: "80vh" }}>
         <Outlet />
       </main>
       <WhatsAppButton />

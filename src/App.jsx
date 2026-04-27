@@ -14,6 +14,7 @@ import MainLayout from "./layouts/MainLayout.jsx";
 import Inicio from "./pages/Inicio.jsx";
 import Turnos from "./pages/Turnos.jsx";
 import Especialistas from "./pages/Especialistas.jsx";
+import PerfilDoctor from "./pages/PerfilDoctor.jsx";
 import Contacto from "./pages/Contacto.jsx";
 import Login from "./pages/Login.jsx";
 import MiPerfil from "./pages/MiPerfil.jsx";
@@ -62,6 +63,7 @@ export default function App() {
           <Route path="inicio" element={<Inicio />} />
           <Route path="turnos" element={<ProtectedRoute><Turnos /></ProtectedRoute>} />
           <Route path="especialistas" element={<Especialistas />} />
+          <Route path="especialistas/:id" element={<PerfilDoctor />} />
           <Route path="nosotros" element={<Navigate to="/especialistas" replace />} />
           <Route path="acerca" element={<Navigate to="/especialistas" replace />} />
           <Route path="contacto" element={<Contacto />} />

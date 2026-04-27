@@ -58,9 +58,12 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <FaInstagram className="text-pink-600 shrink-0 text-xl" />
-                <a href="https://www.instagram.com/c.o_carcaramartinez/" target="_blank" rel="noopener noreferrer" className="hover:text-accent-orange transition-colors font-bold">
-                  @c.o_carcaramartinez
+                <a href="https://www.instagram.com/doctorescarcaramartinez/" target="_blank" rel="noopener noreferrer" className="hover:text-accent-orange transition-colors font-bold">
+                  @doctorescarcaramartinez
                 </a>
+              </li>
+              <li className="flex items-center gap-3 text-primary/60 pt-2 border-t border-primary/5 w-full justify-center md:justify-start">
+                <span className="text-[10px] uppercase font-black tracking-widest">Información: Lun a Vie 9-12hs y 16-20:30hs</span>
               </li>
             </ul>
           </div>

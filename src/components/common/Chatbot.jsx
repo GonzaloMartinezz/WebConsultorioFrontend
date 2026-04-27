@@ -8,14 +8,14 @@ import {
 // Base de datos de conocimiento expandida
 const QA_DATABASE = [
   {
-    keywords: ['horario', 'hora', 'atienden', 'abiertos', 'cuando', 'dias'],
+    keywords: ['horario', 'hora', 'atienden', 'abiertos', 'cuando', 'dias', 'lunes', 'sabado', 'viernes', 'domingo', 'jueves', 'miercoles', 'martes', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre', 'enero', 'febrero', 'marzo'],
     answer: (
       <div className="space-y-2">
         <p className="font-bold text-[#FF7800] border-b border-gray-200 pb-1">Horarios de Atención</p>
         <div className="flex items-start gap-3 bg-orange-50 border border-orange-100 p-3 rounded-xl shadow-inner">
           <FaClock className="text-[#FF7800] mt-0.5 shrink-0 text-lg" />
           <p className="text-sm leading-relaxed text-gray-800">
-            <strong className="text-gray-900">Lunes a Viernes:</strong> 09:00 a 21:00 hs<br />
+            <strong className="text-gray-900">Lunes a Viernes:</strong> 09:00 a 20:30 hs<br />
             <strong className="text-gray-900">Sábados:</strong> 09:00 a 13:00 hs
           </p>
         </div>
@@ -23,7 +23,7 @@ const QA_DATABASE = [
     )
   },
   {
-    keywords: ['direccion', 'ubicacion', 'donde', 'lugar', 'llegar', 'calle', 'zona'],
+    keywords: ['direccion', 'ubicacion', 'donde', 'lugar', 'llegar', 'calle', 'zona', 'san miguel de tucuman', 'tucuman', 'jose Rondeau 827', 'jose', 'rondeau', '827'],
     answer: (
       <div className="space-y-2">
         <p className="font-bold text-[#FF7800] border-b border-gray-200 pb-1">Nuestra Ubicación</p>
@@ -182,7 +182,33 @@ const QA_DATABASE = [
         </p>
       </div>
     )
+  },
+  {
+    keywords: ['que es esto', 'que es la clinica', 'que es esto'],
+    answer: (
+      <div className="space-y-2">
+        <p className="font-bold text-[#FF7800] border-b border-gray-200 pb-1">Sobre Nosotros</p>
+        <div className="flex items-start gap-3 bg-orange-50 border border-orange-100 p-3 rounded-xl shadow-inner">
+          <FaClock className="text-[#FF7800] mt-0.5 shrink-0 text-lg" />
+          <p className="text-sm leading-relaxed text-gray-800">
+            <strong className="text-gray-900">Somos una clínica odontológica especializada en tratamientos dentales modernos.</strong>
+            <br />
+            Contamos con tecnologia de vanguardia y un equipo de profesionales altamente capacitados para brindarte la mejor atención.
+            <br /><br />
+            <strong className="text-gray-900">Nuestros servicios incluyen:</strong>
+            <ul className="list-disc ml-5 mt-1 font-medium text-gray-700 text-xs space-y-1">
+              <li>Odontología Digital</li>
+              <li>Implantes Dentales</li>
+              <li>Ortodoncia Invisible</li>
+              <li>Blanqueamiento Dental</li>
+              <li>Prótesis Dentales</li>
+            </ul>
+          </p>
+        </div>
+      </div>
+    )
   }
+
 ];
 
 const findAnswer = (question) => {
@@ -198,9 +224,9 @@ const findAnswer = (question) => {
 
   return (
     <div className="bg-gray-100 p-3 rounded-xl border border-gray-200 text-sm text-gray-700">
-      Disculpa, mi base biométrica no reconoce exactamente esa consulta. 🤔 <br /><br />
+      Disculpa, no entendi tu pregunta.En caso de que quieras una respuesta mas personalizada te recomiendo comunicarte con nuestro personal de atención al paciente. <br /><br />
       <strong className="text-gray-900">Intenta preguntarme sobre:</strong> horarios, turnos, precios, ubicación, o tratamientos (implantes, ortodoncia).<br /><br />
-      O bien, comunícate rápido a nuestro <a href="/contacto" className="text-blue-600 font-bold underline">WhatsApp Directo</a>.
+      En el boton de whatsapp tienes la opciones de comunicarte con nuestro personal .<a href="/contacto" className="text-blue-600 font-bold underline">WhatsApp Directo</a>.
     </div>
   );
 };
@@ -211,7 +237,7 @@ const Chatbot = () => {
     {
       sender: 'bot', text: (
         <div className="space-y-1">
-          <strong className="text-[#FF7800] text-sm block mb-1">¡Bienvenido a Odonto_Core!</strong>
+          <strong className="text-[#FF7800] text-sm block mb-1">¡Bienvenido a Centro Odontológico Carcara & Martínez!</strong>
           <p className="text-[13px] leading-tight text-gray-700">
             Soy la Inteligencia Artificial del consultorio. Pregúntame sobre <strong className="text-gray-900">turnos, horarios, precios, ubicación o tratamientos</strong>.
           </p>
@@ -266,7 +292,7 @@ const Chatbot = () => {
               </div>
               <div>
                 <h3 className="font-black text-[15px] leading-tight tracking-wide text-white">IA Asistente Central</h3>
-                <p className="text-[10px] text-[#FF7800] uppercase tracking-widest font-mono mt-0.5">Online • Odonto_Core</p>
+                <p className="text-[10px] text-[#FF7800] uppercase tracking-widest font-mono mt-0.5">Online • Centro Odontológico C & M</p>
               </div>
             </div>
             <button onClick={toggleOpen} className="text-white/50 hover:text-white transition-colors relative z-10 bg-white/5 p-2 rounded-full hover:bg-white/10">
@@ -285,8 +311,8 @@ const Chatbot = () => {
               >
                 <div
                   className={`p-3.5 shadow-sm inline-block ${msg.sender === 'user'
-                      ? 'bg-linear-to-br from-[#FF7800] to-[#E56A00] text-white rounded-[20px] rounded-br-sm'
-                      : 'bg-white text-gray-800 border border-gray-100 rounded-[24px] rounded-tl-sm drop-shadow-sm'
+                    ? 'bg-linear-to-br from-[#FF7800] to-[#E56A00] text-white rounded-[20px] rounded-br-sm'
+                    : 'bg-white text-gray-800 border border-gray-100 rounded-[24px] rounded-tl-sm drop-shadow-sm'
                     }`}
                   style={{ animation: 'scaleIn 0.3s ease-out forwards' }}
                 >
