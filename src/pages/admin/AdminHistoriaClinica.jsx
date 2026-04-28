@@ -107,40 +107,53 @@ const AdminHistoriaClinica = () => {
       <div className="max-w-[1400px] mx-auto flex flex-col h-[calc(100vh-140px)] gap-5">
         
         {/* ================= BARRA SUPERIOR DE BÚSQUEDA ================= */}
-        <div className="bg-white p-4 rounded-2xl shadow-sm border border-secondary/20 shrink-0 relative z-20 flex flex-col md:flex-row gap-4 items-center">
-          <div className="w-full md:w-1/3 relative">
-            <FaSearch className="absolute left-4 top-3.5 text-text-light opacity-50" />
+        <div className="bg-white p-4 rounded-[2rem] shadow-sm border border-secondary/10 shrink-0 relative z-20 flex flex-col md:flex-row gap-4 items-center">
+          <div className="flex items-center gap-3 w-full md:w-auto">
+            <div className="w-10 h-10 bg-primary/5 rounded-2xl flex items-center justify-center shrink-0">
+              <FaFileMedical className="text-primary text-base" />
+            </div>
+            <div>
+              <h1 className="text-base font-black text-primary">Historia Clínica</h1>
+              <p className="text-[9px] font-black text-text-light uppercase tracking-[0.2em]">Centro Odontológico C&M</p>
+            </div>
+          </div>
+          <div className="w-full md:flex-1 md:max-w-md relative">
+            <FaSearch className="absolute left-4 top-3.5 text-text-light/40 text-sm" />
             <input 
               type="text" 
-              placeholder="Buscar paciente por Nombre, DNI o Email..." 
+              placeholder="Buscar por nombre, DNI o email..." 
               value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-background/50 border border-secondary/40 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 text-sm font-bold tracking-tight"
+              onChange={e => setBusqueda(e.target.value)}
+              className="w-full pl-11 pr-4 py-3 bg-background/50 border border-secondary/10 rounded-2xl focus:outline-none focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 text-sm font-bold tracking-tight transition-all"
             />
-            {/* Dropdown de Resultados */}
             {pacientesFiltrados.length > 0 && (
-              <div className="absolute top-14 left-0 w-full bg-white border border-secondary/20 shadow-2xl rounded-2xl overflow-hidden max-h-60 overflow-y-auto animate-fade-in z-50">
+              <div className="absolute top-14 left-0 w-full bg-white border border-secondary/10 shadow-2xl rounded-2xl overflow-hidden max-h-64 overflow-y-auto z-50">
                 {pacientesFiltrados.map(p => (
                   <button 
                     key={p._id} 
                     onClick={() => seleccionarPaciente(p)} 
-                    className="w-full text-left px-5 py-4 hover:bg-primary/5 border-b border-secondary/10 flex justify-between items-center group transition-colors"
+                    className="w-full text-left px-5 py-3.5 hover:bg-primary/5 border-b border-secondary/5 flex justify-between items-center group transition-colors last:border-0"
                   >
-                    <div className="flex flex-col">
-                        <span className="font-black text-primary text-sm uppercase tracking-tight group-hover:text-accent-orange transition-colors">{p.nombre} {p.apellido}</span>
-                        <span className="text-[10px] font-bold text-text-light uppercase tracking-widest mt-0.5">
-                          DNI: {p.dni || 'Sin registro'} | {p.email || 'Sin email'}
-                        </span>
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-primary/10 rounded-xl flex items-center justify-center text-[9px] font-black text-primary shrink-0">
+                        {p.nombre?.charAt(0)}{p.apellido?.charAt(0)}
+                      </div>
+                      <div>
+                        <p className="font-black text-primary text-sm">{p.nombre} {p.apellido}</p>
+                        <p className="text-[9px] font-bold text-text-light uppercase tracking-widest">DNI: {p.dni || 'S/D'} · {p.email || 'Sin email'}</p>
+                      </div>
                     </div>
-                    <FaUserInjured className="text-secondary/30 group-hover:text-accent-orange transition-colors" />
+                    <FaUserInjured className="text-secondary/30 group-hover:text-accent-orange transition-colors shrink-0" />
                   </button>
                 ))}
               </div>
             )}
           </div>
-          <div className="text-xs font-black text-primary flex items-center gap-2 uppercase tracking-widest ml-auto opacity-70">
-            <FaFileMedical className="text-accent-orange text-lg" /> Historia Clínica Digital
-          </div>
+          {pacienteActivo && (
+            <button onClick={() => setPacienteActivo(null)} className="text-[10px] font-black text-text-light uppercase tracking-widest hover:text-red-500 transition-colors ml-auto shrink-0">
+              Cambiar paciente
+            </button>
+          )}
         </div>
 
         {/* ================= CONTENIDO PRINCIPAL ================= */}
@@ -161,72 +174,73 @@ const AdminHistoriaClinica = () => {
           <div className="flex-1 flex flex-col xl:flex-row gap-5 min-h-0 animate-fade-in">
             
             {/* COLUMNA IZQUIERDA: TARJETA DEL PACIENTE */}
-            <div className="w-full xl:w-1/3 bg-white rounded-2xl shadow-sm border border-secondary/20 p-6 flex flex-col shrink-0 overflow-y-auto custom-scrollbar">
-              <div className="flex items-center gap-4 mb-8 border-b border-secondary/20 pb-6">
-                <div className="w-16 h-16 bg-primary text-white rounded-2xl flex items-center justify-center text-3xl font-black shadow-xl shadow-primary/20">
-                  {(pacienteActivo.nombre || '?').charAt(0)}
-                </div>
-                <div>
-                  <h2 className="text-xl font-black text-primary leading-tight uppercase tracking-tighter">{pacienteActivo.nombre} {pacienteActivo.apellido}</h2>
-                  <p className="text-[10px] font-black text-accent-orange uppercase tracking-[0.3em] mt-1">Paciente Activo</p>
+            <div className="w-full xl:w-[280px] bg-white rounded-[2rem] shadow-sm border border-secondary/10 overflow-hidden shrink-0">
+              <div className="bg-gradient-to-br from-primary to-[#3a2e25] p-5 md:p-6 text-white relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,120,0,0.15),transparent_60%)] pointer-events-none"></div>
+                <div className="relative z-10 flex flex-row xl:flex-col items-center xl:items-start gap-4 xl:gap-0">
+                  <div className="w-12 h-12 xl:w-14 xl:h-14 bg-white/15 rounded-2xl flex items-center justify-center text-white text-xl xl:text-2xl font-black mb-0 xl:mb-3 border border-white/20 shrink-0">
+                    {(pacienteActivo.nombre || '?').charAt(0)}{(pacienteActivo.apellido || '').charAt(0)}
+                  </div>
+                  <div>
+                    <h2 className="text-sm md:text-base font-black text-white leading-tight">{pacienteActivo.nombre} {pacienteActivo.apellido}</h2>
+                    <p className="text-[8px] md:text-[9px] font-black text-accent-orange uppercase tracking-[0.3em] mt-1">Paciente Activo</p>
+                  </div>
                 </div>
               </div>
-
-              <div className="space-y-4 flex-1">
-                <div className="bg-background/50 p-4 rounded-xl border border-secondary/30 transition-all hover:bg-white hover:shadow-md">
-                  <p className="text-[10px] font-black text-text-light mb-1.5 uppercase tracking-widest flex items-center gap-2 opacity-60"><FaIdCard className="text-primary" /> Documento / DNI</p>
-                  <p className="font-black text-text text-lg tracking-tight">{pacienteActivo.dni || 'No registrado'}</p>
-                </div>
-                <div className="bg-background/50 p-4 rounded-xl border border-secondary/30 transition-all hover:bg-white hover:shadow-md">
-                  <p className="text-[10px] font-black text-text-light mb-1.5 uppercase tracking-widest flex items-center gap-2 opacity-60"><FaPhone className="text-green-500" /> Teléfono / WhatsApp</p>
-                  <p className="font-black text-text text-lg tracking-tight">{pacienteActivo.telefono || 'No registrado'}</p>
-                </div>
-                <div className="bg-background/50 p-4 rounded-xl border border-secondary/30 transition-all hover:bg-white hover:shadow-md">
-                  <p className="text-[10px] font-black text-text-light mb-1.5 uppercase tracking-widest flex items-center gap-2 opacity-60"><FaEnvelope className="text-blue-500" /> Correo Electrónico</p>
-                  <p className="font-bold text-text text-sm break-all tracking-tight opacity-80">{pacienteActivo.email || 'No registrado'}</p>
-                </div>
+              <div className="p-4 md:p-5 space-y-3 overflow-y-auto custom-scrollbar max-h-[300px] xl:max-h-none">
+                {[
+                  { icon: FaIdCard, label: 'DNI', value: pacienteActivo.dni || 'No registrado', color: 'text-primary' },
+                  { icon: FaPhone, label: 'Teléfono', value: pacienteActivo.telefono || 'No registrado', color: 'text-green-500' },
+                  { icon: FaEnvelope, label: 'Email', value: pacienteActivo.email || 'No registrado', color: 'text-blue-500', small: true },
+                ].map(({ icon: Icon, label, value, color, small }) => (
+                  <div key={label} className="bg-background/40 p-3.5 rounded-2xl border border-secondary/5 hover:bg-white hover:shadow-sm transition-all">
+                    <p className="text-[8px] font-black text-text-light/50 uppercase tracking-widest flex items-center gap-1.5 mb-1">
+                      <Icon className={color} /> {label}
+                    </p>
+                    <p className={`font-black text-text ${small ? 'text-xs break-all' : 'text-sm'} tracking-tight`}>{value}</p>
+                  </div>
+                ))}
                 {pacienteActivo.estado && (
-                  <div className="bg-background/50 p-4 rounded-xl border border-secondary/30">
-                    <p className="text-[10px] font-black text-text-light mb-1.5 uppercase tracking-widest opacity-60">Estado Clínico</p>
+                  <div className="bg-background/40 p-3.5 rounded-2xl border border-secondary/5">
+                    <p className="text-[8px] font-black text-text-light/50 uppercase tracking-widest mb-1">Estado Clínico</p>
                     <span className={`inline-block px-3 py-1 rounded-lg text-xs font-black uppercase tracking-wider ${
                       pacienteActivo.estado === 'Tratamiento Activo' ? 'bg-blue-100 text-blue-700' :
                       pacienteActivo.estado === 'Alta' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'
                     }`}>{pacienteActivo.estado}</span>
                   </div>
                 )}
-              </div>
-
-              <div className="mt-6 pt-6 border-t border-secondary/20 space-y-2">
+                <div className="space-y-2 pt-2 border-t border-secondary/10">
                   <Link 
                     to={`/admin/odontograma-avanzado/${pacienteActivo._id}`}
-                    className="w-full bg-emerald-500 text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-emerald-600 hover:translate-y-[-2px] transition-all active:scale-95 flex items-center justify-center gap-2"
+                    className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-lg hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2"
                   >
-                      <FaTooth /> Ver Odontograma
+                    <FaTooth /> Ver Odontograma
                   </Link>
                   <Link 
                     to={`/admin/paciente/${pacienteActivo._id}`}
-                    className="w-full bg-primary text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-primary/90 hover:translate-y-[-2px] transition-all active:scale-95 flex items-center justify-center gap-2"
+                    className="w-full bg-primary/5 text-primary border border-primary/10 py-3 rounded-2xl font-black text-[9px] uppercase tracking-widest hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2"
                   >
-                      <FaFileMedical /> Ver Ficha Completa
+                    <FaFileMedical /> Ver Ficha Completa
                   </Link>
+                </div>
               </div>
             </div>
 
             {/* COLUMNA DERECHA: PESTAÑAS MÉDICAS */}
             <div className="w-full xl:w-2/3 bg-white rounded-2xl shadow-sm border border-secondary/20 flex flex-col overflow-hidden">
               {/* Menú de Pestañas */}
-              <div className="flex border-b border-secondary/20 bg-background/30 shrink-0">
+              <div className="flex flex-row border-b border-secondary/20 bg-background/30 shrink-0">
                 <button 
                     onClick={() => setPestañaActiva('evolucion')} 
-                    className={`flex-1 py-4 font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${pestañaActiva === 'evolucion' ? 'bg-white text-primary border-b-4 border-primary' : 'text-text-light hover:bg-white/50 opacity-60'}`}
+                    className={`flex-1 py-3 md:py-4 font-black text-[9px] md:text-[10px] uppercase tracking-[0.1em] md:tracking-[0.2em] flex items-center justify-center gap-2 md:gap-3 transition-all ${pestañaActiva === 'evolucion' ? 'bg-white text-primary border-b-4 border-primary' : 'text-text-light hover:bg-white/50 opacity-60'}`}
                 >
-                  <FaFileMedical className="text-lg" /> Evolución
+                  <FaFileMedical className="text-base md:text-lg" /> <span className="hidden sm:inline">Evolución</span>
                 </button>
                 <button 
                     onClick={() => setPestañaActiva('archivos')} 
-                    className={`flex-1 py-4 font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${pestañaActiva === 'archivos' ? 'bg-white text-primary border-b-4 border-accent-orange' : 'text-text-light hover:bg-white/50 opacity-60'}`}
+                    className={`flex-1 py-3 md:py-4 font-black text-[9px] md:text-[10px] uppercase tracking-[0.1em] md:tracking-[0.2em] flex items-center justify-center gap-2 md:gap-3 transition-all ${pestañaActiva === 'archivos' ? 'bg-white text-primary border-b-4 border-accent-orange' : 'text-text-light hover:bg-white/50 opacity-60'}`}
                 >
-                  <FaUpload className="text-lg" /> Rx y Archivos
+                  <FaUpload className="text-base md:text-lg" /> <span className="hidden sm:inline">Rx y Archivos</span>
                 </button>
               </div>
 
@@ -243,34 +257,32 @@ const AdminHistoriaClinica = () => {
                     )}
 
                     {/* Nueva entrada clínica */}
-                    <div className="bg-white p-5 rounded-2xl border border-secondary/40 shadow-md">
-                      <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-3 flex items-center gap-2">
-                        <FaPlus className="text-accent-orange" /> Nueva Entrada Clínica
+                    <div className="bg-background/30 p-5 rounded-[2rem] border border-secondary/10 shadow-sm">
+                      <p className="text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                        <span className="w-1 h-4 bg-accent-orange rounded-full"></span> Nueva Entrada Clínica
                       </p>
-                      
                       <div className="mb-3">
-                        <label className="text-[10px] font-bold text-text-light uppercase tracking-widest mb-1 block">Profesional</label>
+                        <label className="text-[9px] font-black text-text-light/50 uppercase tracking-[0.15em] mb-1.5 block">Profesional</label>
                         <select 
                           value={nuevaEvolucion.profesional} 
-                          onChange={(e) => setNuevaEvolucion({...nuevaEvolucion, profesional: e.target.value})}
-                          className="w-full px-4 py-2.5 bg-background/50 rounded-xl border border-secondary/30 font-bold text-sm text-primary focus:outline-none focus:border-primary appearance-none cursor-pointer"
+                          onChange={e => setNuevaEvolucion({...nuevaEvolucion, profesional: e.target.value})}
+                          className="w-full px-4 py-2.5 bg-white rounded-2xl border border-secondary/10 font-bold text-sm text-primary focus:outline-none focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 appearance-none cursor-pointer transition-all"
                         >
-                          <option value="Dr. Adolfo Martinez">Dr. Adolfo Martinez</option>
+                          <option value="Dr. Adolfo Martínez">Dr. Adolfo Martínez</option>
                           <option value="Dra. Erina Carcara">Dra. Erina Carcara</option>
                         </select>
                       </div>
-
                       <textarea 
-                        placeholder="Escribe la evolución, tratamiento realizado o notas del día..." 
+                        placeholder="Evolución, tratamiento realizado o notas clínicas..." 
                         value={nuevaEvolucion.tratamiento}
-                        onChange={(e) => setNuevaEvolucion({...nuevaEvolucion, tratamiento: e.target.value})}
-                        className="w-full h-28 bg-background/50 rounded-xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-primary/10 border border-secondary/30 font-bold text-sm text-primary placeholder:text-text-light/40"
+                        onChange={e => setNuevaEvolucion({...nuevaEvolucion, tratamiento: e.target.value})}
+                        className="w-full h-28 bg-white rounded-2xl p-4 resize-none focus:outline-none focus:ring-2 focus:ring-accent-orange/10 focus:border-accent-orange border border-secondary/10 font-medium text-sm text-primary placeholder:text-text-light/40 transition-all"
                       ></textarea>
                       <div className="flex justify-end mt-3">
                         <button 
                           onClick={guardarEvolucion}
                           disabled={guardandoEvolucion || !nuevaEvolucion.tratamiento.trim()}
-                          className="bg-primary text-white px-6 py-2.5 rounded-xl font-black text-[10px] uppercase tracking-widest hover:brightness-110 shadow-lg active:scale-95 transition-all disabled:opacity-50 flex items-center gap-2"
+                          className="w-full md:w-auto flex justify-center items-center gap-2 bg-gradient-to-r from-primary to-[#3a2e25] text-white px-6 py-3 md:py-2.5 rounded-2xl font-black text-[9px] uppercase tracking-widest shadow-lg hover:shadow-xl active:scale-95 transition-all disabled:opacity-40"
                         >
                           <FaSave /> {guardandoEvolucion ? 'Guardando...' : 'Guardar Nota Médica'}
                         </button>

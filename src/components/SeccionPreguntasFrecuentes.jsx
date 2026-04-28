@@ -44,7 +44,7 @@ const SeccionPreguntasFrecuentes = () => {
 
           <div className="w-full md:w-7/12 space-y-6" data-aos="fade-up" data-aos-delay="200">
             {faqs.map((faq, index) => (
-              <div key={index} className="group bg-[#111] backdrop-blur-3xl border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl transition-all hover:bg-white/5 hover:border-[#FF7800]/30">
+              <div key={index} className="group bg-[#111] backdrop-blur-3xl border border-white/10 rounded-4xl overflow-hidden shadow-2xl transition-all hover:bg-white/5 hover:border-[#FF7800]/30">
                 <button
                   onClick={() => toggleFaq(index)}
                   className="w-full px-8 py-8 flex justify-between items-center text-left focus:outline-none transition-colors"
@@ -58,7 +58,7 @@ const SeccionPreguntasFrecuentes = () => {
                 </button>
                 <div className={`px-8 overflow-hidden transition-all duration-500 ease-in-out ${openFaq === index ? 'max-h-[500px] pb-8 opacity-100' : 'max-h-0 opacity-0'}`}>
                   <p className="text-white/60 font-light text-base leading-relaxed border-t border-white/10 pt-6">"{faq.a}"</p>
-                  
+
                   {/* Botones de acción dinámicos */}
                   <div className="mt-8 flex flex-wrap gap-4">
                     {faq.q.includes("turno") && (

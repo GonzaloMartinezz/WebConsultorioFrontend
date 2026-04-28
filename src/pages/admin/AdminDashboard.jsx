@@ -170,88 +170,158 @@ const AdminDashboard = () => {
   return (
     <LayoutAdmin>
       {toast.show && (
-        <div className={`fixed top-10 right-10 z-200 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-bold animate-fade-in text-white border-2 
-          ${toast.type === 'success' ? 'bg-green-500 border-green-400' : 'bg-red-500 border-red-400'}`}
+        <div className={`fixed top-6 right-6 z-[200] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-black text-sm text-white border animate-fade-in backdrop-blur-md
+          ${toast.type === 'success' ? 'bg-green-500/90 border-green-400/50' : 'bg-red-500/90 border-red-400/50'}`}
         >
-          {toast.type === 'success' ? <FaCheckCircle /> : <FaTimesCircle />}
+          {toast.type === 'success' ? <FaCheckCircle className="text-lg" /> : <FaTimesCircle className="text-lg" />}
           {toast.message}
         </div>
       )}
 
-      <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-orange mb-1">Administración</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-orange mb-2 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-accent-orange animate-pulse"></span> Centro Odontológico C&M
+          </p>
           <h1 className="text-3xl lg:text-4xl font-black text-primary tracking-tight">Panel de Control</h1>
+          <p className="text-text-light text-sm font-medium mt-1">
+            {new Date().toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          </p>
         </div>
-        <Link to="/turnos" className="px-8 py-3.5 bg-primary text-white font-bold rounded-xl shadow-lg hover:scale-105 transition-all flex items-center gap-2">
-          <FaPlus /> Nuevo Turno
-        </Link>
+        <div className="flex gap-3">
+          <Link to="/admin/agenda" className="px-6 py-3 bg-white text-primary font-bold rounded-xl shadow-sm border border-secondary/20 hover:border-accent-orange/30 hover:shadow-md transition-all flex items-center gap-2 text-sm">
+            <FaCalendarDay className="text-accent-orange" /> Agenda
+          </Link>
+          <Link to="/turnos" className="px-6 py-3 bg-primary text-white font-black rounded-xl shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all flex items-center gap-2 text-sm">
+            <FaPlus /> Nuevo Turno
+          </Link>
+        </div>
       </header>
 
       <main className="space-y-6">
-        <section className="grid grid-cols-2 gap-4">
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-secondary/60 flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-black uppercase text-gray-400 mb-1">Turnos Hoy</p>
-              <p className="text-2xl font-black text-primary">{turnos.filter(t => t.fecha && t.fecha.startsWith(fechaHoy) && t.estado !== 'Cancelado').length}</p>
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-secondary/10 hover:shadow-lg hover:border-accent-orange/20 transition-all group">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-accent-orange/10 rounded-xl flex items-center justify-center group-hover:bg-accent-orange/20 transition-colors">
+                <FaCalendarDay className="text-accent-orange" />
+              </div>
+              <span className="text-[9px] font-black uppercase tracking-widest text-accent-orange bg-accent-orange/5 px-2 py-1 rounded-full">Hoy</span>
             </div>
-            <FaCalendarDay className="text-2xl text-primary opacity-20" />
+            <p className="text-3xl font-black text-primary">{turnos.filter(t => t.fecha && t.fecha.startsWith(fechaHoy) && t.estado !== 'Cancelado').length}</p>
+            <p className="text-[10px] font-bold text-text-light uppercase tracking-wider mt-1">Turnos Agendados</p>
           </div>
-          <div className="bg-white rounded-2xl p-5 shadow-sm border border-secondary/60 flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-black uppercase text-gray-400 mb-1">Pendientes</p>
-              <p className="text-2xl font-black text-red-500">{turnos.filter(t => t.estado === 'Pendiente').length}</p>
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-secondary/10 hover:shadow-lg hover:border-amber-200 transition-all group">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-amber-50 rounded-xl flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+                <FaUserClock className="text-amber-500" />
+              </div>
+              {turnos.filter(t => t.estado === 'Pendiente').length > 0 && (
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shadow-sm shadow-amber-500/50"></span>
+              )}
             </div>
-            <FaUserClock className="text-2xl text-red-500 opacity-20" />
+            <p className="text-3xl font-black text-amber-600">{turnos.filter(t => t.estado === 'Pendiente').length}</p>
+            <p className="text-[10px] font-bold text-text-light uppercase tracking-wider mt-1">Por Confirmar</p>
+          </div>
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-secondary/10 hover:shadow-lg hover:border-green-200 transition-all group">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center group-hover:bg-green-100 transition-colors">
+                <FaCheckCircle className="text-green-500" />
+              </div>
+            </div>
+            <p className="text-3xl font-black text-green-600">{turnos.filter(t => t.estado === 'Confirmado').length}</p>
+            <p className="text-[10px] font-bold text-text-light uppercase tracking-wider mt-1">Confirmados</p>
+          </div>
+          <div className="bg-white rounded-2xl p-5 shadow-sm border border-secondary/10 hover:shadow-lg hover:border-blue-200 transition-all group">
+            <div className="flex items-center justify-between mb-3">
+              <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                <FaUserAlt className="text-blue-500" />
+              </div>
+            </div>
+            <p className="text-3xl font-black text-blue-600">{new Set(turnos.filter(t => t.estado !== 'Cancelado').map(t => t.dni || t.email || t.nombrePaciente)).size}</p>
+            <p className="text-[10px] font-bold text-text-light uppercase tracking-wider mt-1">Pacientes Únicos</p>
           </div>
         </section>
 
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-secondary/40 overflow-hidden">
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-secondary/10 overflow-hidden">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-primary font-black uppercase tracking-widest text-sm">Agenda de Pacientes</h2>
-            <Link to="/admin/pendientes" className="text-xs font-bold text-accent-orange hover:underline">Solicitudes Web</Link>
+            <div className="flex items-center gap-3">
+              <div className="w-1.5 h-6 bg-accent-orange rounded-full"></div>
+              <h2 className="text-primary font-black uppercase tracking-widest text-sm">Agenda de Pacientes</h2>
+            </div>
+            <Link to="/admin/pendientes" className="text-[10px] font-black text-accent-orange hover:text-primary uppercase tracking-widest bg-accent-orange/5 px-4 py-2 rounded-full hover:bg-accent-orange/10 transition-all">
+              Solicitudes Web →
+            </Link>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b-2 border-primary/5">
-                  <th className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-gray-400">Fecha</th>
-                  <th className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-gray-400">Hora</th>
-                  <th className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-gray-400">Paciente</th>
-                  <th className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-gray-400">DNI</th>
-                  <th className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-gray-400">Motivo</th>
-                  <th className="py-4 px-2 text-[10px] font-black uppercase tracking-widest text-gray-400">Estado</th>
-                  <th className="py-4 px-2 text-right text-[10px] font-black uppercase tracking-widest text-gray-400">Acciones</th>
+                <tr className="border-b border-secondary/10">
+                  <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Fecha</th>
+                  <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Hora</th>
+                  <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Paciente</th>
+                  <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden md:table-cell">DNI</th>
+                  <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden lg:table-cell">Motivo</th>
+                  <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Estado</th>
+                  <th className="py-3 px-3 text-right text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-secondary/5">
                 {turnos
                   .filter(t => t.estado !== 'Cancelado' && t.fecha && t.fecha >= fechaHoy)
-                  .sort((a, b) => a.fecha.localeCompare(b.fecha))
+                  .sort((a, b) => a.fecha.localeCompare(b.fecha) || (a.hora || '').localeCompare(b.hora || ''))
                   .map(turno => (
-                    <tr key={turno._id} className="hover:bg-gray-50 transition-colors">
-                      <td className="py-4 px-2 text-xs font-bold">{turno.fecha?.split('T')[0].split('-').reverse().join('/')}</td>
-                      <td className="py-4 px-2 text-sm font-black text-primary">{turno.hora}</td>
-                      <td className="py-4 px-2 text-sm font-bold text-gray-700">{turno.nombrePaciente} {turno.apellidoPaciente}</td>
-                      <td className="py-4 px-2 text-[11px] font-medium text-gray-500">{turno.dni || '-'}</td>
-                      <td className="py-4 px-2 text-[11px] font-medium text-gray-500">{turno.motivo || 'Consulta'}</td>
-                      <td className="py-4 px-2">
-                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase ${turno.estado === 'Confirmado' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                    <tr key={turno._id} className="hover:bg-background/50 transition-colors group">
+                      <td className="py-4 px-3">
+                        <span className={`text-xs font-bold ${turno.fecha === fechaHoy ? 'text-accent-orange' : 'text-text'}`}>
+                          {turno.fecha?.split('T')[0].split('-').reverse().join('/')}
+                        </span>
+                        {turno.fecha === fechaHoy && <span className="block text-[8px] font-black text-accent-orange uppercase">Hoy</span>}
+                      </td>
+                      <td className="py-4 px-3 text-sm font-black text-primary">{turno.hora}</td>
+                      <td className="py-4 px-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-[10px] font-black text-primary shrink-0">
+                            {turno.nombrePaciente?.charAt(0)}{turno.apellidoPaciente?.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="text-sm font-bold text-primary">{turno.nombrePaciente} {turno.apellidoPaciente}</p>
+                            {turno.telefono && <p className="text-[10px] text-text-light font-medium hidden xl:block">{turno.telefono}</p>}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-3 text-[11px] font-medium text-text-light hidden md:table-cell">{turno.dni || '—'}</td>
+                      <td className="py-4 px-3 hidden lg:table-cell">
+                        <span className="text-[10px] font-bold text-text-light bg-background px-2.5 py-1 rounded-lg">{turno.motivo || 'Consulta'}</span>
+                      </td>
+                      <td className="py-4 px-3">
+                        <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider inline-flex items-center gap-1.5
+                          ${turno.estado === 'Confirmado' ? 'bg-green-50 text-green-700 border border-green-200' : 
+                            turno.estado === 'Pendiente' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                            'bg-blue-50 text-blue-700 border border-blue-200'}`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${turno.estado === 'Confirmado' ? 'bg-green-500' : turno.estado === 'Pendiente' ? 'bg-amber-500 animate-pulse' : 'bg-blue-500'}`}></span>
                           {turno.estado}
                         </span>
                       </td>
-                      <td className="py-4 px-2 text-right">
-                        <div className="flex justify-end gap-2">
+                      <td className="py-4 px-3 text-right">
+                        <div className="flex justify-end gap-1.5 opacity-60 group-hover:opacity-100 transition-opacity">
                           {turno.estado === 'Pendiente' && (
-                            <button onClick={() => handleApprove(turno)} className="p-2 text-green-600 bg-green-50 rounded-lg"><FaCheckCircle /></button>
+                            <button onClick={() => handleApprove(turno)} title="Confirmar" className="p-2 text-green-600 bg-green-50 rounded-xl hover:bg-green-100 hover:shadow-sm transition-all"><FaCheckCircle /></button>
                           )}
-                          <Link to={`/admin/paciente/${turno.pacienteId?._id || turno.pacienteId}`} className="p-2 text-blue-600 bg-blue-50 rounded-lg"><FaFileMedical /></Link>
-                          <button onClick={() => abrirModalEdicion(turno)} className="p-2 text-primary bg-secondary/20 rounded-lg"><FaPen /></button>
-                          <button onClick={() => handleDelete(turno._id)} className="p-2 text-red-400 bg-red-50 rounded-lg"><FaTrash /></button>
+                          <Link to={`/admin/paciente/${turno.pacienteId?._id || turno.pacienteId}`} title="Ficha" className="p-2 text-blue-600 bg-blue-50 rounded-xl hover:bg-blue-100 hover:shadow-sm transition-all"><FaFileMedical /></Link>
+                          <button onClick={() => abrirModalEdicion(turno)} title="Editar" className="p-2 text-primary bg-secondary/10 rounded-xl hover:bg-secondary/20 hover:shadow-sm transition-all"><FaPen /></button>
+                          <button onClick={() => handleDelete(turno._id)} title="Eliminar" className="p-2 text-red-400 bg-red-50 rounded-xl hover:bg-red-100 hover:shadow-sm transition-all"><FaTrash /></button>
                         </div>
                       </td>
                     </tr>
                   ))}
+                {turnos.filter(t => t.estado !== 'Cancelado' && t.fecha && t.fecha >= fechaHoy).length === 0 && (
+                  <tr>
+                    <td colSpan="7" className="py-16 text-center">
+                      <p className="text-text-light/40 font-bold text-sm">No hay turnos próximos</p>
+                      <Link to="/turnos" className="text-accent-orange text-xs font-black uppercase mt-2 inline-block hover:underline">Agendar uno →</Link>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -259,165 +329,129 @@ const AdminDashboard = () => {
       </main>
 
       {notificacionPendiente && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-300 p-4 scale-up">
-          <div className="bg-white rounded-[2.5rem] w-full max-w-sm overflow-hidden shadow-2xl border-4 border-white">
-            <div className="bg-primary p-8 text-center text-white">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-white/30">
-                <FaCheckCircle className="text-3xl text-accent-orange" />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-[300] p-4 animate-fade-in">
+          <div className="bg-white rounded-[2rem] w-full max-w-sm overflow-hidden shadow-2xl">
+            <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-8 text-center text-white relative overflow-hidden">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]"></div>
+              <div className="relative z-10">
+                <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
+                  <FaCheckCircle className="text-3xl text-white" />
+                </div>
+                <h2 className="text-xl font-black uppercase tracking-tight">¡Turno Confirmado!</h2>
+                <p className="text-white/70 text-xs mt-2 font-bold">Notificá al paciente por el medio que prefieras</p>
               </div>
-              <h2 className="text-xl font-black uppercase tracking-tighter">Turno Procesado</h2>
-              <p className="text-white/60 text-xs mt-2 font-bold uppercase tracking-widest">Acciones Administrativas</p>
             </div>
 
-            <div className="p-8 space-y-4">
-              <a href={notificacionPendiente.waUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 w-full py-4 bg-[#25D366] text-white rounded-2xl font-black text-sm shadow-xl hover:scale-105 transition-transform">
-                <FaWhatsapp className="text-xl" /> ENVIAR WHATSAPP
+            <div className="p-6 space-y-3">
+              <a href={notificacionPendiente.waUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 w-full py-4 px-5 bg-[#25D366]/10 text-[#25D366] rounded-2xl font-black text-sm hover:bg-[#25D366] hover:text-white transition-all border border-[#25D366]/20">
+                <FaWhatsapp className="text-xl" /> Enviar WhatsApp
               </a>
-              <a href={notificacionPendiente.mailUrl} className="flex items-center justify-center gap-3 w-full py-4 bg-primary text-white rounded-2xl font-black text-sm shadow-xl hover:scale-105 transition-transform">
-                <FaEnvelope /> REVISAR EMAIL
+              <a href={notificacionPendiente.mailUrl} className="flex items-center gap-3 w-full py-4 px-5 bg-blue-50 text-blue-600 rounded-2xl font-black text-sm hover:bg-blue-500 hover:text-white transition-all border border-blue-200">
+                <FaEnvelope /> Enviar Email
               </a>
-              <div className="h-px bg-gray-100 my-2" />
-              <a href={notificacionPendiente.gcalAdminUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3 w-full py-4 bg-white border-2 border-accent-orange text-primary rounded-2xl font-black text-sm hover:bg-orange-50 transition-colors">
-                📅 MI CALENDARIO ADMIN
+              <a href={notificacionPendiente.gcalAdminUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 w-full py-3 px-5 bg-background text-text-light rounded-2xl font-bold text-sm hover:bg-accent-orange/10 hover:text-accent-orange transition-all border border-secondary/10">
+                📅 Agendar en mi Calendario
               </a>
-              <button onClick={() => setNotificacionPendiente(null)} className="w-full py-4 text-gray-400 font-bold text-xs uppercase tracking-widest mt-4">Cerrar</button>
+              <button onClick={() => setNotificacionPendiente(null)} className="w-full py-3 text-text-light/40 font-bold text-[10px] uppercase tracking-widest mt-2 hover:text-primary transition-colors">Cerrar</button>
             </div>
           </div>
         </div>
       )}
 
       {modalEditOpen && turnoAEditar && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-300 p-4">
-          <div className="bg-white rounded-4xl w-full max-w-sm overflow-hidden shadow-2xl">
-            <div className="bg-primary p-6 text-white text-center relative">
-              <button onClick={() => setModalEditOpen(false)} className="absolute top-4 right-4 text-white/50"><FaTimesCircle /></button>
-              <h2 className="font-black uppercase tracking-widest">Gestionar Cita</h2>
-              <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] mt-1">Edición Administrativa</p>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-[300] p-4 animate-fade-in" onClick={() => setModalEditOpen(false)}>
+          <div className="bg-white rounded-[2rem] w-full max-w-md overflow-hidden shadow-2xl max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="bg-gradient-to-br from-primary to-[#3a2e25] p-6 text-white text-center relative overflow-hidden shrink-0">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,120,0,0.15),transparent_60%)]"></div>
+              <div className="relative z-10">
+                <button onClick={() => setModalEditOpen(false)} className="absolute top-0 right-0 w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/20 transition-all">
+                  <FaTimesCircle className="text-sm" />
+                </button>
+                <h2 className="font-black uppercase tracking-wider text-lg">Gestionar Cita</h2>
+                <p className="text-[10px] text-white/50 font-bold uppercase tracking-[0.2em] mt-1">Edición Administrativa</p>
+              </div>
             </div>
-            <div className="p-6 space-y-4">
-              {/* FICHA PACIENTE EDITABLE (NUEVO) */}
-              <div className="bg-gray-50 p-4 rounded-3xl border border-secondary/20 space-y-4">
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10px] font-black text-gray-400 uppercase mb-1 block px-1">Nombre</label>
-                    <input 
-                      type="text"
-                      value={editForm.nombrePaciente}
-                      onChange={e => setEditForm({...editForm, nombrePaciente: e.target.value})}
-                      className="w-full p-2.5 bg-white rounded-xl font-bold text-xs border-2 border-transparent focus:border-accent-orange outline-none shadow-sm"
-                    />
+            <div className="p-6 space-y-5 overflow-y-auto custom-scrollbar">
+              <div>
+                <p className="text-[9px] font-black text-text-light/40 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                  <span className="w-1 h-3 bg-accent-orange rounded-full"></span> Datos del Paciente
+                </p>
+                <div className="bg-background/50 p-4 rounded-2xl border border-secondary/10 space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Nombre</label>
+                      <input type="text" value={editForm.nombrePaciente} onChange={e => setEditForm({...editForm, nombrePaciente: e.target.value})}
+                        className="w-full p-2.5 bg-white rounded-xl font-bold text-xs border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Apellido</label>
+                      <input type="text" value={editForm.apellidoPaciente} onChange={e => setEditForm({...editForm, apellidoPaciente: e.target.value})}
+                        className="w-full p-2.5 bg-white rounded-xl font-bold text-xs border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
+                    </div>
                   </div>
                   <div>
-                    <label className="text-[10px] font-black text-gray-400 uppercase mb-1 block px-1">Apellido</label>
-                    <input 
-                      type="text"
-                      value={editForm.apellidoPaciente}
-                      onChange={e => setEditForm({...editForm, apellidoPaciente: e.target.value})}
-                      className="w-full p-2.5 bg-white rounded-xl font-bold text-xs border-2 border-transparent focus:border-accent-orange outline-none shadow-sm"
-                    />
+                    <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">DNI</label>
+                    <input type="text" value={editForm.dni} onChange={e => setEditForm({...editForm, dni: e.target.value})} placeholder="Sin puntos ni espacios"
+                      className="w-full p-2.5 bg-white rounded-xl font-bold text-sm border border-accent-orange/20 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
                   </div>
-                </div>
-                
-                <div>
-                  <label className="text-[10px] font-black text-gray-400 uppercase mb-1 block px-1">DNI (Clave para su Perfil)</label>
-                  <input 
-                    type="text"
-                    value={editForm.dni}
-                    onChange={e => setEditForm({...editForm, dni: e.target.value})}
-                    className="w-full p-2.5 bg-white rounded-xl font-bold text-sm border-2 border-accent-orange/30 focus:border-accent-orange outline-none shadow-sm ring-4 ring-orange-500/5"
-                    placeholder="Sin puntos ni espacios"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-[10px] font-black text-gray-400 uppercase mb-1 block px-1">WhatsApp</label>
-                    <input 
-                      type="text"
-                      value={editForm.telefono}
-                      onChange={e => setEditForm({...editForm, telefono: e.target.value})}
-                      className="w-full p-2.5 bg-white rounded-xl font-bold text-xs border-2 border-transparent focus:border-accent-orange outline-none shadow-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-black text-gray-400 uppercase mb-1 block px-1">Email</label>
-                    <input 
-                      type="text"
-                      value={editForm.email}
-                      onChange={e => setEditForm({...editForm, email: e.target.value})}
-                      className="w-full p-2.5 bg-white rounded-xl font-bold text-[10px] border-2 border-transparent focus:border-accent-orange outline-none shadow-sm"
-                    />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">WhatsApp</label>
+                      <input type="text" value={editForm.telefono} onChange={e => setEditForm({...editForm, telefono: e.target.value})}
+                        className="w-full p-2.5 bg-white rounded-xl font-bold text-xs border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Email</label>
+                      <input type="text" value={editForm.email} onChange={e => setEditForm({...editForm, email: e.target.value})}
+                        className="w-full p-2.5 bg-white rounded-xl font-bold text-[10px] border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div className="space-y-4 pt-2 border-t border-gray-100">
-                <div>
-                  <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block px-1">Fecha de la Cita</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    <select 
-                      value={editForm.fechaDia} 
-                      onChange={e => setEditForm({ ...editForm, fechaDia: e.target.value })} 
-                      className="p-2 bg-gray-50 rounded-xl font-bold text-center text-xs border-2 border-transparent focus:border-accent-orange outline-none h-[40px] appearance-none"
-                    >
-                      {Array.from({ length: 31 }, (_, i) => i + 1)
-                        .filter(d => {
-                          const hoy = new Date();
-                          const mSelected = parseInt(editForm.fechaMes);
-                          if (mSelected > hoy.getMonth() + 1) return true;
-                          return d >= hoy.getDate();
-                        })
-                        .map(d => (
-                          <option key={d} value={d}>{d}</option>
-                        ))}
-                    </select>
-                    <select 
-                      value={editForm.fechaMes} 
-                      onChange={e => setEditForm({ ...editForm, fechaMes: e.target.value })} 
-                      className="p-2 bg-gray-50 rounded-xl font-bold text-center text-xs border-2 border-transparent focus:border-accent-orange outline-none h-[40px] appearance-none"
-                    >
-                      {Array.from({ length: 12 }, (_, i) => i + 1)
-                        .filter(m => m >= new Date().getMonth() + 1)
-                        .map(m => (
-                          <option key={m} value={m}>{new Date(2026, m-1).toLocaleString('es', { month: 'long' }).toUpperCase()}</option>
-                        ))}
-                    </select>
-                    <div className="p-2 bg-gray-100/50 rounded-xl font-bold text-center text-xs text-gray-400 flex items-center justify-center border-2 border-transparent h-[40px]">2026</div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
+              <div>
+                <p className="text-[9px] font-black text-text-light/40 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                  <span className="w-1 h-3 bg-primary rounded-full"></span> Datos de la Cita
+                </p>
+                <div className="space-y-3">
                   <div>
-                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block px-1">Horario Disponible</label>
-                    <select 
-                      value={editForm.hora} 
-                      onChange={e => setEditForm({ ...editForm, hora: e.target.value })} 
-                      className="w-full p-2 bg-gray-50 rounded-xl font-bold text-center text-[10px] border-2 border-transparent focus:border-accent-orange outline-none h-[40px] appearance-none"
-                    >
-                      {["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"]
-                        .filter(h => {
-                           const fechaFormat = `${editForm.fechaAno}-${editForm.fechaMes.padStart(2, '0')}-${String(editForm.fechaDia).padStart(2, '0')}`;
-                           return !turnos.some(t => t.fecha === fechaFormat && t.hora === h && t._id !== turnoAEditar?._id);
-                        })
-                        .map(h => (
-                          <option key={h} value={h}>{h} hs</option>
-                        ))}
-                    </select>
+                    <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Fecha</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      <select value={editForm.fechaDia} onChange={e => setEditForm({ ...editForm, fechaDia: e.target.value })} 
+                        className="p-2.5 bg-background rounded-xl font-bold text-center text-xs border border-secondary/10 focus:border-accent-orange outline-none appearance-none">
+                        {Array.from({ length: 31 }, (_, i) => i + 1)
+                          .filter(d => { const hoy = new Date(); const mSelected = parseInt(editForm.fechaMes); if (mSelected > hoy.getMonth() + 1) return true; return d >= hoy.getDate(); })
+                          .map(d => (<option key={d} value={d}>{d}</option>))}
+                      </select>
+                      <select value={editForm.fechaMes} onChange={e => setEditForm({ ...editForm, fechaMes: e.target.value })} 
+                        className="p-2.5 bg-background rounded-xl font-bold text-center text-xs border border-secondary/10 focus:border-accent-orange outline-none appearance-none">
+                        {Array.from({ length: 12 }, (_, i) => i + 1)
+                          .filter(m => m >= new Date().getMonth() + 1)
+                          .map(m => (<option key={m} value={m}>{new Date(2026, m-1).toLocaleString('es', { month: 'long' }).toUpperCase()}</option>))}
+                      </select>
+                      <div className="p-2.5 bg-secondary/5 rounded-xl font-bold text-center text-xs text-text-light/40 flex items-center justify-center border border-secondary/10">2026</div>
+                    </div>
                   </div>
-                  <div>
-                    <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1 block px-1">Profesional</label>
-                    <select 
-                      value={editForm.profesional} 
-                      onChange={e => setEditForm({ ...editForm, profesional: e.target.value })} 
-                      className="w-full p-2 bg-gray-50 rounded-xl font-bold text-[10px] border-2 border-transparent focus:border-accent-orange outline-none h-[40px] appearance-none"
-                    >
-                      <option value="Dra. Erina">Dra. Erina</option>
-                      <option value="Dr. Adolfo">Dr. Adolfo</option>
-                    </select>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Horario</label>
+                      <select value={editForm.hora} onChange={e => setEditForm({ ...editForm, hora: e.target.value })} 
+                        className="w-full p-2.5 bg-background rounded-xl font-bold text-center text-xs border border-secondary/10 focus:border-accent-orange outline-none appearance-none">
+                        {["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"]
+                          .filter(h => { const fechaFormat = `${editForm.fechaAno}-${editForm.fechaMes.padStart(2, '0')}-${String(editForm.fechaDia).padStart(2, '0')}`; return !turnos.some(t => t.fecha === fechaFormat && t.hora === h && t._id !== turnoAEditar?._id); })
+                          .map(h => (<option key={h} value={h}>{h} hs</option>))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Profesional</label>
+                      <select value={editForm.profesional} onChange={e => setEditForm({ ...editForm, profesional: e.target.value })} 
+                        className="w-full p-2.5 bg-background rounded-xl font-bold text-xs border border-secondary/10 focus:border-accent-orange outline-none appearance-none">
+                        <option value="Dra. Erina">Dra. Erina</option>
+                        <option value="Dr. Adolfo">Dr. Adolfo</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
-
               <div className="pt-2 flex flex-col gap-2">
                 <button
                   onClick={() => {
@@ -426,12 +460,12 @@ const AdminDashboard = () => {
                     const urls = generarUrlsNotificacion(turnoAEditar, leg, editForm.hora, iso, editForm.profesional);
                     window.open(urls.gcalAdminUrl, '_blank');
                   }}
-                  className="w-full py-3 border-2 border-primary/20 text-primary rounded-xl font-black uppercase tracking-widest text-[10px] hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 bg-background text-text-light rounded-xl font-bold text-[10px] uppercase tracking-widest hover:bg-secondary/10 transition-colors flex items-center justify-center gap-2 border border-secondary/10"
                 >
                   📅 Agendar en mi Google Calendar
                 </button>
-                <button onClick={handleConfirmEdit} className="w-full py-4 bg-accent-orange text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-xl shadow-orange-500/20 active:scale-95 transition-all">
-                  CONFIRMAR Y NOTIFICAR
+                <button onClick={handleConfirmEdit} className="w-full py-4 bg-gradient-to-r from-accent-orange to-orange-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-orange-500/20 active:scale-[0.98] hover:shadow-xl transition-all">
+                  Confirmar y Notificar
                 </button>
               </div>
             </div>

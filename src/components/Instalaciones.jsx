@@ -19,23 +19,31 @@ const Instalaciones = () => {
           Consultorios amplios, climatizados y equipados con tecnología de vanguardia para que tu experiencia sea lo más cómoda, segura y eficiente posible.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="h-80 rounded-[2.5rem] bg-[#111] relative overflow-hidden group border border-white/10 shadow-2xl">
-            <img src="/orthodontics.jpg.webp" alt="Sala de espera" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-60 group-hover:opacity-100" />
-            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent flex items-end p-8">
-              <h3 className="text-white font-black tracking-[0.2em] uppercase text-sm">Especialidades</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px] md:auto-rows-[350px]">
+          {/* Imagen Principal - Grande */}
+          <div className="md:col-span-2 md:row-span-2 rounded-[3rem] bg-[#111] relative overflow-hidden group border border-white/10 shadow-2xl">
+            <img src="/nosotros-impresora3d.png" alt="Especialidades" className="w-full h-full object-cover transition-all duration-1000 opacity-90 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent flex items-end p-12">
+              <div className="space-y-2">
+                <p className="text-[#FF7800] font-black text-[10px] uppercase tracking-[0.3em]">Vanguardia</p>
+                <h3 className="text-white font-black tracking-widest uppercase text-2xl">Especialidades Digitales</h3>
+              </div>
             </div>
           </div>
-          <div className="h-80 rounded-[2.5rem] bg-[#111] relative overflow-hidden group border border-white/10 shadow-2xl">
-            <img src="/impresora-3b-blog.webp" alt="Consultorio" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-60 group-hover:opacity-100" />
-            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent flex items-end p-8">
-              <h3 className="text-white font-black tracking-[0.2em] uppercase text-sm">Precisión Digital</h3>
+
+          {/* Imagen 2 - Superior Derecha */}
+          <div className="rounded-[3rem] bg-[#111] relative overflow-hidden group border border-white/10 shadow-2xl">
+            <img src="/frezadora1.jpeg" alt="Precisión Digital" className="w-full h-full object-cover transition-all duration-1000 opacity-80 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent flex items-end p-8">
+              <h3 className="text-white font-black tracking-widest uppercase text-sm">Precisión Digital</h3>
             </div>
           </div>
-          <div className="h-80 rounded-[2.5rem] bg-[#111] relative overflow-hidden group border border-white/10 shadow-2xl">
-            <img src="/maquinascompletas.webp" alt="Tecnología de Punta" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 opacity-60 group-hover:opacity-100" />
-            <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/20 to-transparent flex items-end p-8">
-              <h3 className="text-white font-black tracking-[0.2em] uppercase text-sm">Tecnología de Punta</h3>
+
+          {/* Imagen 3 - Inferior Derecha */}
+          <div className="rounded-[3rem] bg-[#111] relative overflow-hidden group border border-white/10 shadow-2xl">
+            <img src="/maquinas adolfo 4.jpeg" alt="Tecnología de Punta" className="w-full h-full object-cover transition-all duration-1000 opacity-80 group-hover:opacity-100" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent flex items-end p-8">
+              <h3 className="text-white font-black tracking-widest uppercase text-sm">Tecnología de Punta</h3>
             </div>
           </div>
         </div>
@@ -44,7 +52,7 @@ const Instalaciones = () => {
       {/* Parte 2: Tarjeta Oscura de Contacto */}
       <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10" data-aos="fade-up">
         <div className="bg-[#0a0a0a] rounded-[3rem] p-10 md:p-16 flex flex-col lg:flex-row items-center gap-16 shadow-[0_40px_100px_-20px_rgba(255,120,0,0.15)] border border-white/10 relative overflow-hidden group">
-          
+
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#FF7800]/5 rounded-full blur-[100px] pointer-events-none"></div>
 
           <div className="flex-1 space-y-10 relative z-10 w-full lg:w-5/12">
@@ -88,7 +96,7 @@ const Instalaciones = () => {
                 </div>
                 <div>
                   <p className="text-[10px] text-pink-400 uppercase tracking-[0.2em] font-black mb-1">Comunidad Activa</p>
-                  <a href="https://instagram.com/c.o_carcaramartinez" target="_blank" rel="noreferrer" className="text-white font-bold text-sm tracking-widest uppercase hover:text-pink-400 transition-colors">@c.o_carcaramartinez</a>
+                  <a href="https://www.instagram.com/doctorescarcaramartinez/" target="_blank" rel="noreferrer" className="text-white font-bold text-sm tracking-widest uppercase hover:text-pink-400 transition-colors">@doctorescarcaramartinez</a>
                 </div>
               </div>
             </div>
@@ -101,7 +109,7 @@ const Instalaciones = () => {
               width="100%" height="100%" style={{ border: 0, filter: 'grayscale(100%) invert(90%) contrast(1.2)' }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
               className="group-hover:filter-none transition-all duration-1000 opacity-60 group-hover:opacity-100"
             ></iframe>
-            
+
             {/* Botón Flotante sobre el mapa */}
             <div className="absolute top-6 right-6">
               <a href="https://maps.google.com/?q=Jose+Rondeau+827+Tucuman" target="_blank" rel="noreferrer" className="bg-black/80 backdrop-blur-md border border-white/20 text-[#FF7800] font-black px-8 py-3 rounded-full shadow-[0_10px_20px_rgba(0,0,0,0.5)] text-[10px] uppercase tracking-[0.2em] hover:bg-[#FF7800] hover:text-white transition-all">

@@ -2,19 +2,17 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
 import api from '../../api/axios.js';
-import { FaSearch, FaUserPlus, FaFileMedical, FaSpinner, FaTooth, FaEllipsisV } from 'react-icons/fa';
+import { FaSearch, FaUserPlus, FaFileMedical, FaSpinner, FaTooth, FaUsers, FaCalendarAlt } from 'react-icons/fa';
 
 const AdminPacientes = () => {
   const [pacientes, setPacientes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [busqueda, setBusqueda] = useState('');
 
-  // TRAER PACIENTES DE LA BASE DE DATOS
   useEffect(() => {
     const fetchPacientes = async () => {
       try {
         const respuesta = await api.get('/auth/usuarios');
-        // Filtramos para que no muestre a los administradores
         const soloPacientes = respuesta.data.filter(user => user.rol !== 'admin');
         setPacientes(soloPacientes);
       } catch (error) {
@@ -26,214 +24,155 @@ const AdminPacientes = () => {
     fetchPacientes();
   }, []);
 
-  // FILTRO EN TIEMPO REAL
   const pacientesFiltrados = pacientes.filter(paciente =>
-    paciente.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+    (paciente.nombre || '').toLowerCase().includes(busqueda.toLowerCase()) ||
     (paciente.apellido && paciente.apellido.toLowerCase().includes(busqueda.toLowerCase())) ||
-    paciente.email.toLowerCase().includes(busqueda.toLowerCase())
+    (paciente.email && paciente.email.toLowerCase().includes(busqueda.toLowerCase()))
   );
 
   return (
     <LayoutAdmin>
-      <div className="bg-[#141414] text-gray-300 min-h-screen rounded-4xl p-8 font-sans border border-zinc-800 shadow-2xl">
+      <header className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-orange mb-2 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-accent-orange animate-pulse"></span> Directorio Médico
+          </p>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-primary tracking-tight">Pacientes Registrados</h1>
+          <p className="text-text-light text-sm font-medium mt-1">{pacientesFiltrados.length} paciente{pacientesFiltrados.length !== 1 ? 's' : ''} en el sistema</p>
+        </div>
+        <Link to="/turnos" className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-white font-black rounded-2xl shadow-lg shadow-primary/20 hover:shadow-xl hover:-translate-y-0.5 transition-all text-sm">
+          <FaUserPlus /> Nuevo Turno
+        </Link>
+      </header>
 
-        {/* HEADER OBSIDIAN */}
-        <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4" data-aos="fade-down">
+      {/* KPIs reales */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
+        <div className="bg-white p-4 md:p-5 rounded-2xl md:rounded-[2rem] shadow-sm border border-secondary/10 flex items-center gap-3 md:gap-4 hover:shadow-lg transition-all">
+          <div className="w-11 h-11 bg-primary/10 rounded-2xl flex items-center justify-center shrink-0">
+            <FaUsers className="text-xl text-primary" />
+          </div>
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-orange-400/80 mb-2">Database <span className="text-gray-600 px-1">&gt;</span> Master Directory</p>
-            <h1 className="text-4xl font-extrabold text-white tracking-tight mb-2">Patient Directory</h1>
-            <p className="text-sm font-medium text-gray-500 flex items-center gap-3">
-              Managing {pacientesFiltrados.length} active patient records
-              <span className="flex -space-x-2">
-                <img src="https://ui-avatars.com/api/?name=A+B&background=252525&color=fff&rounded=true" className="w-6 h-6 border border-[#141414] rounded-full" alt="doc" />
-                <img src="https://ui-avatars.com/api/?name=C+D&background=333&color=fff&rounded=true" className="w-6 h-6 border border-[#141414] rounded-full" alt="doc" />
-                <span className="w-6 h-6 bg-zinc-800 border border-[#141414] rounded-full flex items-center justify-center text-[8px] font-bold text-gray-400">+12</span>
-              </span>
+            <p className="text-2xl font-black text-primary">{pacientes.length}</p>
+            <p className="text-[9px] font-black text-text-light uppercase tracking-widest">Total Pacientes</p>
+          </div>
+        </div>
+        <div className="bg-white p-5 rounded-[2rem] shadow-sm border border-secondary/10 flex items-center gap-4 hover:shadow-lg transition-all">
+          <div className="w-11 h-11 bg-green-500/10 rounded-2xl flex items-center justify-center shrink-0">
+            <FaCalendarAlt className="text-xl text-green-500" />
+          </div>
+          <div>
+            <p className="text-2xl font-black text-green-600">{pacientesFiltrados.length}</p>
+            <p className="text-[9px] font-black text-text-light uppercase tracking-widest">Mostrando</p>
+          </div>
+        </div>
+        <div className="col-span-2 md:col-span-1 bg-white p-5 rounded-[2rem] shadow-sm border border-secondary/10 flex items-center gap-4 hover:shadow-lg transition-all">
+          <div className="w-11 h-11 bg-accent-orange/10 rounded-2xl flex items-center justify-center shrink-0">
+            <FaTooth className="text-xl text-accent-orange" />
+          </div>
+          <div>
+            <p className="text-2xl font-black text-accent-orange">C&M</p>
+            <p className="text-[9px] font-black text-text-light uppercase tracking-widest">Centro Odontológico</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Barra de búsqueda */}
+      <div className="bg-white rounded-[2rem] shadow-sm border border-secondary/10 overflow-hidden">
+        <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 px-4 md:px-6 py-4 border-b border-secondary/10">
+          <div className="relative w-full flex-1 max-w-full md:max-w-md">
+            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-text-light/40 text-sm" />
+            <input
+              type="text"
+              placeholder="Buscar por nombre, apellido o email..."
+              value={busqueda}
+              onChange={e => setBusqueda(e.target.value)}
+              className="w-full pl-11 pr-4 py-2.5 bg-background/50 rounded-xl font-bold text-sm border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all"
+            />
+          </div>
+          {busqueda && (
+            <button onClick={() => setBusqueda('')} className="text-[10px] font-black text-text-light uppercase tracking-widest hover:text-primary transition-colors">
+              Limpiar
+            </button>
+          )}
+        </div>
+
+        {cargando ? (
+          <div className="flex flex-col items-center justify-center py-24 gap-4">
+            <div className="relative">
+              <div className="w-12 h-12 border-4 border-secondary/20 rounded-full"></div>
+              <div className="w-12 h-12 border-4 border-accent-orange border-t-transparent rounded-full animate-spin absolute inset-0"></div>
+            </div>
+            <p className="text-text-light font-bold text-sm animate-pulse">Cargando directorio...</p>
+          </div>
+        ) : pacientesFiltrados.length === 0 ? (
+          <div className="py-20 text-center">
+            <div className="w-16 h-16 bg-secondary/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <FaSearch className="text-2xl text-text-light/20" />
+            </div>
+            <p className="text-text-light font-bold text-sm">
+              {busqueda ? `Sin resultados para "${busqueda}"` : 'No hay pacientes registrados aún.'}
             </p>
           </div>
-          <div className="flex gap-3">
-            <button className="px-5 py-2.5 text-gray-300 font-bold text-sm rounded-xl bg-[#1e1e1e] border border-zinc-700/50 hover:bg-zinc-800 transition-colors flex items-center gap-2">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 21v-7" /><path d="M4 10V3" /><path d="M12 21v-9" /><path d="M12 8V3" /><path d="M20 21v-5" /><path d="M20 12V3" /><path d="M1 14h6" /><path d="M9 8h6" /><path d="M17 16h6" /></svg>
-              Advanced Filters
-            </button>
-            <button className="px-6 py-2.5 text-orange-950 font-bold text-sm rounded-xl bg-orange-300 hover:bg-orange-400 shadow-md transition-colors flex items-center justify-center gap-2">
-              <FaUserPlus /> Register Patient
-            </button>
-          </div>
-        </header>
-
-        {/* 4 CARDS */}
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8" data-aos="fade-up">
-          <div className="bg-[#1a1a1a] border border-zinc-800/60 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-4 right-4 text-zinc-700/50">
-              <FaUserPlus className="text-4xl" />
-            </div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 z-10">New Registrations</p>
-            <div className="flex items-baseline gap-3 z-10 mb-4">
-              <span className="text-3xl font-bold text-white">128</span>
-              <span className="text-xs font-bold text-green-500">+12%</span>
-            </div>
-            <p className="text-[10px] italic text-gray-600 z-10">Last 30 days performance</p>
-          </div>
-
-          <div className="bg-[#1a1a1a] border border-zinc-800/60 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-4 right-4 text-zinc-700/50">
-              <FaCalendarDay className="text-4xl" />
-            </div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 z-10">Follow-ups Due</p>
-            <div className="flex items-baseline gap-3 z-10 mb-4">
-              <span className="text-3xl font-bold text-white">42</span>
-              <span className="text-xs font-bold text-orange-400">Urgent</span>
-            </div>
-            <div className="w-full bg-zinc-800 h-1 rounded-full z-10 flex gap-1"><div className="w-[40%] bg-orange-400 rounded-full h-full"></div><div className="w-[30%] bg-zinc-600 rounded-full h-full"></div></div>
-          </div>
-
-          <div className="bg-[#1a1a1a] border border-zinc-800/60 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-4 right-4 text-zinc-700/50">
-              <FaCheckCircle className="text-4xl" />
-            </div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 z-10">Insurance Verified</p>
-            <div className="flex items-baseline gap-3 z-10 mb-4">
-              <span className="text-3xl font-bold text-white">94.2%</span>
-            </div>
-            <p className="text-[10px] italic text-gray-600 z-10">Electronic verification active</p>
-          </div>
-
-          <div className="bg-[#1a1a1a] border border-zinc-800/60 rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute top-4 right-4 text-zinc-700/50">
-              <FaHistory className="text-4xl" />
-            </div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 z-10">File Accuracy</p>
-            <div className="flex items-baseline gap-3 z-10 mb-4">
-              <span className="text-3xl font-bold text-white">99.1%</span>
-            </div>
-            <p className="text-[10px] italic text-gray-600 z-10">Internal audit score</p>
-          </div>
-        </section>
-
-        <main className="space-y-6 bg-[#1a1a1a] p-1 border border-zinc-800/60 rounded-2xl" data-aos="fade-up">
-
-          {/* TABS & BUSCADOR */}
-          <div className="flex flex-col md:flex-row items-center justify-between border-b border-zinc-800/60 px-4 pt-2">
-            <div className="flex gap-6">
-              <button className="text-orange-400 font-bold text-sm border-b-2 border-orange-400 pb-3">Active Directory</button>
-              <button className="text-gray-500 hover:text-gray-300 font-bold text-sm border-b-2 border-transparent pb-3 transition-colors">Archived</button>
-              <button className="text-gray-500 hover:text-gray-300 font-bold text-sm border-b-2 border-transparent pb-3 transition-colors">Family Units</button>
-            </div>
-
-            <div className="flex items-center gap-4 pb-3">
-              <div className="relative w-64 hidden md:block">
-                <input
-                  type="text"
-                  placeholder="Global search..."
-                  value={busqueda}
-                  onChange={(e) => setBusqueda(e.target.value)}
-                  className="w-full pl-9 pr-3 py-1.5 rounded-lg border border-zinc-700/50 bg-[#141414] text-sm text-gray-300 focus:border-orange-500/50 outline-none transition-colors"
-                />
-                <FaSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500 text-xs" />
-                <div className="absolute top-1/2 right-2 transform -translate-y-1/2 text-[10px] text-gray-600 bg-zinc-800 px-1.5 rounded">⌘K</div>
-              </div>
-              <div className="flex gap-2">
-                <button className="p-1.5 text-gray-400 hover:text-white rounded bg-[#141414] border border-zinc-700/50"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" /></svg></button>
-                <button className="p-1.5 text-gray-600 hover:text-white rounded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg></button>
-                <button className="p-1.5 text-gray-600 hover:text-white rounded"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg></button>
-              </div>
-            </div>
-          </div>
-
-          {/* LISTA DE PACIENTES (Estilo Table) */}
-          {cargando ? (
-            <div className="flex justify-center py-20 bg-[#1a1a1a]">
-              <FaSpinner className="text-5xl text-orange-400 animate-spin" />
-            </div>
-          ) : pacientesFiltrados.length === 0 ? (
-            <div className="bg-[#1a1a1a] rounded-3xl p-16 text-center">
-              <FaSearch className="text-4xl text-zinc-600 mx-auto mb-4" />
-              <h2 className="text-xl font-bold text-gray-300">No records found</h2>
-              <p className="text-gray-500 font-medium mt-2 text-sm">Adjust filters or try a different search term.</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto w-full">
-              <table className="w-full text-left min-w-[900px]">
-                <thead>
-                  <tr className="text-[10px] font-bold text-gray-500 uppercase tracking-widest border-b border-zinc-800/60 bg-[#1a1a1a]">
-                    <th className="px-6 py-4">Patient Information</th>
-                    <th className="px-4 py-4">Status</th>
-                    <th className="px-4 py-4">ID / Insurance</th>
-                    <th className="px-4 py-4">Last Visit</th>
-                    <th className="px-4 py-4">Upcoming</th>
-                    <th className="px-6 py-4 text-right">Quick Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-zinc-800/60 bg-[#171717]">
-                  {pacientesFiltrados.map((paciente) => (
-                    <tr key={paciente._id} className="hover:bg-[#1f1f1f] transition-colors group">
-
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-4">
-                          <img src={`https://ui-avatars.com/api/?name=${paciente.nombre}+${paciente.apellido || ''}&background=1e293b&color=cbd5e1&rounded=true`} className="w-10 h-10 rounded-full border border-zinc-700/50" alt="avatar" />
-                          <div>
-                            <h3 className="text-sm font-bold text-gray-200 group-hover:text-white flex items-center gap-2">
-                              {paciente.nombre} {paciente.apellido || ''}
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" className="text-blue-500"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" /></svg>
-                            </h3>
-                            <p className="text-xs text-gray-500">{paciente.email}</p>
-                          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-secondary/5">
+                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Paciente</th>
+                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden md:table-cell">Email</th>
+                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden lg:table-cell">ID Sistema</th>
+                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 text-right">Acciones</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-secondary/5">
+                {pacientesFiltrados.map(paciente => (
+                  <tr key={paciente._id} className="hover:bg-background/50 transition-colors group">
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center text-[10px] font-black text-primary shrink-0">
+                          {paciente.nombre?.charAt(0)}{(paciente.apellido || '')?.charAt(0)}
                         </div>
-                      </td>
-
-                      <td className="px-4 py-4">
-                        <span className="bg-emerald-950/40 text-emerald-500 border border-emerald-900/50 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 w-max">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> ACTIVE
-                        </span>
-                      </td>
-
-                      <td className="px-4 py-4">
-                        <p className="text-xs font-bold text-gray-300">#DX-{paciente._id.substring(paciente._id.length - 4)}</p>
-                        <p className="text-[10px] font-bold text-gray-600 uppercase">Self-Pay</p>
-                      </td>
-
-                      <td className="px-4 py-4">
-                        <p className="text-xs font-medium text-gray-300">Oct 12, 2023</p>
-                        <p className="text-[10px] text-gray-500">General Cleaning</p>
-                      </td>
-
-                      <td className="px-4 py-4">
-                        <p className="text-xs font-bold text-orange-400/90">Dec 20, 2023</p>
-                        <p className="text-[10px] text-gray-500">Implant Cons.</p>
-                      </td>
-
-                      <td className="px-6 py-4 text-right">
+                        <div>
+                          <p className="font-black text-primary text-sm">{paciente.nombre} {paciente.apellido || ''}</p>
+                          <p className="text-[10px] text-text-light font-medium md:hidden">{paciente.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-4 px-6 hidden md:table-cell">
+                      <p className="text-sm font-medium text-text-light">{paciente.email}</p>
+                    </td>
+                    <td className="py-4 px-6 hidden lg:table-cell">
+                      <span className="text-[9px] font-black text-text-light/40 bg-secondary/5 px-2 py-1 rounded-lg uppercase tracking-widest">
+                        #{paciente._id.slice(-6).toUpperCase()}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-right">
+                      <div className="flex items-center justify-end gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
                         <Link
                           to={`/admin/paciente/${paciente._id}`}
-                          className="inline-flex text-center hover:bg-orange-400/10 text-orange-400 px-4 py-2 rounded-lg font-bold text-xs transition-all shadow-sm items-center justify-center gap-2 border border-transparent hover:border-orange-500/20"
+                          className="flex items-center gap-1.5 px-4 py-2 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-white transition-all text-[10px] font-black uppercase tracking-wider border border-primary/10"
                         >
-                          OPEN FILE
+                          <FaFileMedical className="text-xs" /> Ficha
                         </Link>
-                      </td>
-
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <div className="flex justify-between items-center px-6 py-4 bg-[#141414] border-t border-zinc-800/60 rounded-b-2xl">
-                <div className="flex items-center gap-3">
-                  <span className="bg-zinc-800 text-[10px] font-bold uppercase tracking-widest text-gray-500 px-3 py-1.5 rounded flex items-center gap-2">
-                    Command Palette <span className="flex gap-1"><kbd className="bg-zinc-950 px-1 rounded">⌘</kbd><kbd className="bg-zinc-950 px-1 rounded">P</kbd></span>
-                  </span>
-                  <p className="text-xs text-gray-600">Showing <span className="text-gray-400 font-bold">1 - {pacientesFiltrados.length}</span> of {pacientesFiltrados.length} records</p>
-                </div>
-                <div className="flex gap-1 text-xs">
-                  <button className="w-8 h-8 flex items-center justify-center rounded border border-zinc-800 text-gray-500 hover:text-white">&lt;</button>
-                  <button className="w-8 h-8 flex items-center justify-center rounded bg-orange-300 text-orange-950 font-bold">1</button>
-                  <button className="w-8 h-8 flex items-center justify-center rounded border border-zinc-800 text-gray-500 hover:text-white">2</button>
-                  <button className="w-8 h-8 flex items-center justify-center rounded border border-zinc-800 text-gray-500 hover:text-white">...</button>
-                  <button className="w-8 h-8 flex items-center justify-center rounded border border-zinc-800 text-gray-500 hover:text-white">&gt;</button>
-                </div>
-              </div>
+                        <Link
+                          to={`/admin/odontograma-avanzado/${paciente._id}`}
+                          className="flex items-center gap-1.5 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-500 hover:text-white transition-all text-[10px] font-black uppercase tracking-wider border border-emerald-200/50"
+                        >
+                          <FaTooth className="text-xs" /> Odontograma
+                        </Link>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className="px-6 py-4 border-t border-secondary/10 flex items-center justify-between">
+              <p className="text-[10px] font-bold text-text-light/50 uppercase tracking-wider">
+                Mostrando {pacientesFiltrados.length} de {pacientes.length} registros
+              </p>
             </div>
-          )}
-        </main>
+          </div>
+        )}
       </div>
     </LayoutAdmin>
   );

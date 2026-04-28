@@ -198,12 +198,12 @@ const OdontologiaDigital = () => {
                   data-aos="fade-up"
                   data-aos-delay={i * 100}
                 >
-                  <div className="h-72 overflow-hidden relative">
+                  <div className="h-72 overflow-hidden relative flex items-center justify-center bg-black">
                     <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent z-10"></div>
                     <img
                       src={card.img}
                       alt={card.title}
-                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                      className="w-full h-full object-cover object-center transition-all duration-1000 opacity-90 group-hover:opacity-100"
                     />
                     <div className="absolute bottom-6 left-6 z-20 text-3xl transform group-hover:scale-110 transition-all duration-500">
                       <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">

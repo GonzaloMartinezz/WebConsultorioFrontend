@@ -174,81 +174,94 @@ const AdminFichaPaciente = () => {
   return (
     <LayoutAdmin>
       {/* ========== BOTONERA SUPERIOR ========== */}
-      <div className="mb-6 flex justify-between items-center">
-        <Link to="/admin/lista-pacientes" className="flex items-center gap-2 text-text-light font-bold hover:text-primary transition-colors">
-          <FaArrowLeft /> Volver al Directorio
+      <div className="mb-6 md:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <Link to="/admin/lista-pacientes" className="flex items-center gap-2 text-text-light font-bold hover:text-primary transition-colors text-sm">
+          <FaArrowLeft className="text-xs" /> Directorio de Pacientes
         </Link>
-        <button onClick={handleGuardarFicha} disabled={guardando} className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-xl font-black shadow-lg flex items-center gap-2 transition-all disabled:opacity-50">
-          <FaSave /> {guardando ? 'Guardando...' : 'Guardar Toda la Ficha'}
+        <button onClick={handleGuardarFicha} disabled={guardando} className="w-full sm:w-auto flex justify-center items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-black rounded-2xl shadow-lg shadow-green-500/20 hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 text-sm">
+          <FaSave className={guardando ? 'animate-spin' : ''} /> {guardando ? 'Guardando...' : 'Guardar Ficha'}
         </button>
       </div>
 
-      {/* ========== 1. CARD DEL PACIENTE ========== */}
-      <div className="bg-white rounded-3xl p-6 shadow-sm border-l-8 border-accent-orange mb-8 flex flex-col md:flex-row items-center gap-6">
-        <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center text-primary text-4xl font-black uppercase shrink-0">
+      {/* ========== 1. HERO DEL PACIENTE ========== */}
+      <div className="bg-gradient-to-br from-primary via-[#3a2e25] to-[#2a1f16] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 mb-6 md:mb-8 flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 relative overflow-hidden shadow-2xl">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,120,0,0.15),transparent_60%)] pointer-events-none"></div>
+        <div className="relative z-10 w-24 h-24 bg-white/10 rounded-3xl flex items-center justify-center text-white text-4xl font-black uppercase shrink-0 border-2 border-white/20 backdrop-blur-sm">
           {paciente.nombre?.charAt(0)}{paciente.apellido?.charAt(0)}
         </div>
-        <div className="text-center md:text-left">
-          <h1 className="text-3xl md:text-4xl font-black text-primary mb-1">{paciente.nombre} {paciente.apellido}</h1>
-          <p className="text-text-light font-medium flex flex-wrap items-center justify-center md:justify-start gap-4">
-            <span>📧 {paciente.email}</span>
-            {paciente.telefono && <span>📱 {paciente.telefono}</span>}
-            <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase">Paciente Activo</span>
-          </p>
+        <div className="relative z-10 text-center md:text-left">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-orange mb-1">Legajo del Paciente</p>
+          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2">{paciente.nombre} {paciente.apellido}</h1>
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+            {paciente.email && <span className="text-xs font-bold text-white/60 flex items-center gap-1.5">📧 {paciente.email}</span>}
+            {paciente.telefono && <span className="text-xs font-bold text-white/60 flex items-center gap-1.5">📱 {paciente.telefono}</span>}
+            <span className="bg-green-500/20 text-green-400 border border-green-500/30 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">Activo</span>
+          </div>
+        </div>
+        <div className="relative z-10 ml-auto hidden md:flex gap-3">
+          <Link to={`/admin/odontograma-avanzado/${id}`} className="flex items-center gap-2 px-5 py-3 bg-white/10 border border-white/20 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-white/20 transition-all backdrop-blur-sm">
+            <FaTooth /> Odontograma
+          </Link>
+          <Link to="/admin/historia-clinica" className="flex items-center gap-2 px-5 py-3 bg-accent-orange/20 border border-accent-orange/30 text-accent-orange rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-accent-orange hover:text-white transition-all">
+            <FaFileMedical /> Historia Clínica
+          </Link>
+        </div>
+        <div className="relative z-10 w-full flex flex-col sm:flex-row gap-3 md:hidden mt-4">
+          <Link to={`/admin/odontograma-avanzado/${id}`} className="flex-1 flex justify-center items-center gap-2 px-5 py-3 bg-white/10 border border-white/20 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-white/20 transition-all backdrop-blur-sm">
+            <FaTooth /> Odontograma
+          </Link>
+          <Link to="/admin/historia-clinica" className="flex-1 flex justify-center items-center gap-2 px-5 py-3 bg-accent-orange/20 border border-accent-orange/30 text-accent-orange rounded-xl font-black text-xs uppercase tracking-widest hover:bg-accent-orange hover:text-white transition-all">
+            <FaFileMedical /> Historia Clínica
+          </Link>
         </div>
       </div>
 
       {/* ========== 2. FORMULARIO CONSULTA ACTUAL ========== */}
-      <div className="bg-white rounded-3xl p-6 shadow-sm border border-secondary/40 mb-8">
-        <h2 className="text-xl font-black text-primary mb-5 flex items-center gap-2">
-          <FaUserInjured /> Registrar Consulta de Hoy
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-bold text-text mb-1">Nombre</label>
-            <input type="text" placeholder="Nombre del paciente"
-              value={nuevaConsulta.nombre} onChange={e => setNuevaConsulta({ ...nuevaConsulta, nombre: e.target.value })}
-              className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary bg-background/30" />
+      <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 shadow-sm border border-secondary/10 mb-6 md:mb-8">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="w-11 h-11 bg-accent-orange/10 rounded-2xl flex items-center justify-center">
+            <FaUserInjured className="text-xl text-accent-orange" />
           </div>
           <div>
-            <label className="block text-sm font-bold text-text mb-1">Apellido</label>
-            <input type="text" placeholder="Apellido del paciente"
-              value={nuevaConsulta.apellido} onChange={e => setNuevaConsulta({ ...nuevaConsulta, apellido: e.target.value })}
-              className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary bg-background/30" />
+            <h2 className="text-lg font-black text-primary">Registrar Consulta de Hoy</h2>
+            <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">{new Date().toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
           </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          {[
+            { label: 'Nombre', key: 'nombre', placeholder: 'Nombre del paciente', type: 'text' },
+            { label: 'Apellido', key: 'apellido', placeholder: 'Apellido del paciente', type: 'text' },
+            { label: 'Teléfono', key: 'telefono', placeholder: 'Ej: 11-2233-4455', type: 'tel' },
+            { label: 'Motivo de la Consulta', key: 'motivo', placeholder: 'Ej: Dolor de muela, control...', type: 'text' },
+          ].map(({ label, key, placeholder, type }) => (
+            <div key={key}>
+              <label className="block text-[9px] font-black text-text-light/50 uppercase tracking-[0.2em] mb-1.5">{label}</label>
+              <input type={type} placeholder={placeholder}
+                value={nuevaConsulta[key]} onChange={e => setNuevaConsulta({ ...nuevaConsulta, [key]: e.target.value })}
+                className="w-full p-3 bg-background/50 border border-secondary/10 rounded-2xl font-bold text-sm text-primary focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
+            </div>
+          ))}
           <div>
-            <label className="block text-sm font-bold text-text mb-1">Teléfono</label>
-            <input type="tel" placeholder="Ej: 11-2233-4455"
-              value={nuevaConsulta.telefono} onChange={e => setNuevaConsulta({ ...nuevaConsulta, telefono: e.target.value })}
-              className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary bg-background/30" />
-          </div>
-          <div>
-            <label className="block text-sm font-bold text-text mb-1">Motivo de la Consulta</label>
-            <input type="text" placeholder="Ej: Dolor de muela, Control, Limpieza..."
-              value={nuevaConsulta.motivo} onChange={e => setNuevaConsulta({ ...nuevaConsulta, motivo: e.target.value })}
-              className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary" />
-          </div>
-          <div>
-            <label className="block text-sm font-bold text-text mb-1">Atendido por</label>
+            <label className="block text-[9px] font-black text-text-light/50 uppercase tracking-[0.2em] mb-1.5">Atendido por</label>
             <select value={nuevaConsulta.profesional} onChange={e => setNuevaConsulta({ ...nuevaConsulta, profesional: e.target.value })}
-              className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary">
-              <option value="Dr. Adolfo">Dr. Adolfo</option>
-              <option value="Dra. Erina">Dra. Erina</option>
+              className="w-full p-3 bg-background/50 border border-secondary/10 rounded-2xl font-bold text-sm text-primary focus:border-accent-orange outline-none appearance-none">
+              <option value="Dr. Adolfo Martínez">Dr. Adolfo Martínez</option>
+              <option value="Dra. Erina Carcara">Dra. Erina Carcara</option>
             </select>
           </div>
-          <div className="md:col-span-2 lg:col-span-1">
-            <label className="block text-sm font-bold text-text mb-1">Tratamiento Realizado</label>
+          <div>
+            <label className="block text-[9px] font-black text-text-light/50 uppercase tracking-[0.2em] mb-1.5">Tratamiento Realizado</label>
             <input type="text" placeholder="Detalles del procedimiento..."
               value={nuevaConsulta.tratamientoRealizado} onChange={e => setNuevaConsulta({ ...nuevaConsulta, tratamientoRealizado: e.target.value })}
-              className="w-full p-3 border border-secondary/50 rounded-xl outline-none focus:border-primary" />
+              className="w-full p-3 bg-background/50 border border-secondary/10 rounded-2xl font-bold text-sm text-primary focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
           </div>
         </div>
       </div>
 
       {/* ========== 3. ODONTOGRAMA INTERACTIVO AVANZADO ========== */}
-      <div className="bg-white rounded-3xl p-6 shadow-sm border border-secondary/40 mb-8">
-        <h2 className="text-xl font-black text-primary mb-5 flex items-center gap-2">
-          <FaTooth /> Odontograma Interactivo Avanzado
+      <div className="bg-white rounded-[2rem] md:rounded-3xl p-4 md:p-6 shadow-sm border border-secondary/40 mb-6 md:mb-8">
+        <h2 className="text-lg md:text-xl font-black text-primary mb-4 md:mb-5 flex items-center gap-2 px-2">
+          <FaTooth className="shrink-0" /> Odontograma Interactivo Avanzado
         </h2>
         <div className="overflow-x-auto w-full custom-scrollbar pb-4">
           <NeoOdontograma
@@ -263,8 +276,8 @@ const AdminFichaPaciente = () => {
       </div>
 
       {/* ========== 4. HISTORIAL DE CONSULTAS ========== */}
-      <div className="bg-white rounded-3xl p-6 shadow-sm border border-secondary/40">
-        <h2 className="text-xl font-black text-primary mb-4 flex items-center gap-2">
+      <div className="bg-white rounded-[2rem] md:rounded-3xl p-6 shadow-sm border border-secondary/40">
+        <h2 className="text-lg md:text-xl font-black text-primary mb-4 flex items-center gap-2">
           <FaCalendarCheck /> Historial de Consultas
         </h2>
 
@@ -320,9 +333,9 @@ const AdminFichaPaciente = () => {
 
       {/* ========== TOAST FLOTANTE ========== */}
       {toast.show && (
-        <div className={`fixed bottom-10 right-10 z-100 px-8 py-4 rounded-2xl shadow-2xl animate-fade-up border-b-4 font-black text-sm flex items-center gap-3
-          ${toast.type === 'success' ? 'bg-white text-primary border-green-500' : 'bg-red-600 text-white border-red-800'}`}>
-          {toast.type === 'success' ? <FaCheckCircle className="text-green-500 text-xl" /> : <FaInfoCircle className="text-xl" />}
+        <div className={`fixed top-6 right-6 z-[200] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-black text-sm text-white border animate-fade-in backdrop-blur-md
+          ${toast.type === 'success' ? 'bg-green-500/90 border-green-400/50' : 'bg-red-500/90 border-red-400/50'}`}>
+          {toast.type === 'success' ? <FaCheckCircle className="text-lg shrink-0" /> : <FaInfoCircle className="text-lg shrink-0" />}
           {toast.message}
         </div>
       )}

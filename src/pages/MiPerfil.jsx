@@ -14,26 +14,26 @@ const MiPerfil = () => {
   useEffect(() => {
     const fetchTurnos = async () => {
       try {
-        const res = await api.get('/turnos');
         const fechaHoy = new Date().toISOString().split('T')[0];
 
         if (isAdmin) {
-          // Si es ADMIN: Cargar turnos de HOY
+          // Si es ADMIN: Cargar TODOS los turnos (ruta protegida)
+          const res = await api.get('/turnos');
           const hoy = res.data.filter(t => t.fecha === fechaHoy && t.estado !== 'Cancelado')
             .sort((a, b) => (a.hora || '').localeCompare(b.hora || ''));
           setTurnosHoy(hoy);
           setMisTurnos(res.data.filter(t => t.estado === 'Confirmado' && t.fecha >= fechaHoy));
         } else {
-          // Si es PACIENTE: Cargar sus turnos personales
-          const misTurnosFiltrados = res.data.filter(t => {
-            const matchNombre = t.nombrePaciente?.toLowerCase().includes(usuario?.nombre?.toLowerCase()) || 
-                                usuario?.nombre?.toLowerCase().includes(t.nombrePaciente?.toLowerCase());
-            const matchEmail = t.email?.toLowerCase().trim() === usuario?.email?.toLowerCase().trim();
-            const matchDni = t.dni && usuario?.dni && t.dni === usuario?.dni;
-            const matchId = t.pacienteId?._id === usuario?._id || t.pacienteId === usuario?._id;
-
-            return (matchNombre || matchEmail || matchDni || matchId) && t.estado !== 'Cancelado';
-          }).sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+          // Si es PACIENTE: Cargar sus turnos usando la ruta pública/específica para no recibir 403
+          const nombreAUsar = usuario?.nombre || 'Desconocido';
+          const apellidoAUsar = usuario?.apellido || 'Desconocido';
+          const res = await api.get(`/turnos/paciente/${nombreAUsar}/${apellidoAUsar}`);
+          
+          // Filtramos para asegurar de mostrar solo los no cancelados y ordenados por fecha
+          const misTurnosFiltrados = res.data
+            .filter(t => t.estado !== 'Cancelado')
+            .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+          
           setMisTurnos(misTurnosFiltrados);
         }
       } catch (error) {
@@ -97,54 +97,6 @@ const MiPerfil = () => {
                   Cerrar Sesión
                 </button>
               </div>
-            </div>
-          </div>
-
-          {!isAdmin && !usuario?.dni && (
-            <div className="bg-orange-50 border-2 border-accent-orange/20 p-6 rounded-[2.5rem] flex flex-col md:flex-row items-center gap-6 animate-pulse shadow-lg shadow-orange-500/5">
-              <div className="w-16 h-16 bg-accent-orange text-white rounded-2xl flex items-center justify-center text-3xl shadow-lg">🪪</div>
-              <div className="flex-1 text-center md:text-left">
-                <h4 className="text-primary font-black text-lg leading-tight mb-1">Vinculá tu Historia Clínica</h4>
-                <p className="text-primary/60 text-xs font-bold leading-relaxed max-w-md">
-                  Detectamos que tu cuenta no tiene un DNI asociado. Para ver tus turnos y estudios, pedile al administrador que valide tu DNI en el Panel.
-                </p>
-              </div>
-              <div className="px-6 py-3 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-widest whitespace-nowrap opacity-60">
-                PENDIENTE DE VINCULACIÓN
-              </div>
-            </div>
-          )}
-
-          {/* Gestión Rápida (Citas, Historia, Ayuda) */}
-          <div className="grid grid-cols-3 gap-4 shrink-0">
-            <div className="bg-white p-4 rounded-3xl shadow-sm border border-black/5 flex flex-col items-center text-center group hover:border-accent-orange/30 transition-all">
-              <div className="w-10 h-10 bg-orange-50 text-accent-orange rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                <FaCalendarCheck className="text-xl" />
-              </div>
-              <h3 className="font-black text-primary text-[10px] uppercase tracking-tighter leading-tight">
-                {isAdmin ? 'Agenda Hoy' : 'Mis Citas'}
-              </h3>
-              <Link to={isAdmin ? "/admin/agenda" : "/mi-perfil"} className="text-accent-orange text-[8px] font-black uppercase mt-1 px-3 py-1 bg-accent-orange/5 rounded-full">Ver &rarr;</Link>
-            </div>
-            <div className="bg-white p-4 rounded-3xl shadow-sm border border-black/5 flex flex-col items-center text-center group hover:border-accent-orange/30 transition-all">
-              <div className="w-10 h-10 bg-orange-50 text-accent-orange rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                <FaShieldAlt className="text-xl" />
-              </div>
-              <h3 className="font-black text-primary text-[10px] uppercase tracking-tighter leading-tight">
-                {isAdmin ? 'Pacientes' : 'Historia Clinica'}
-              </h3>
-              <Link to={isAdmin ? "/admin/pacientes" : "#"} className="text-accent-orange text-[8px] font-black uppercase mt-1 px-3 py-1 bg-accent-orange/5 rounded-full">
-                {isAdmin ? 'Ver →' : 'Próximamente'}
-              </Link>
-            </div>
-            <div className="bg-white p-4 rounded-3xl shadow-sm border border-black/5 flex flex-col items-center text-center group hover:border-accent-orange/30 transition-all">
-              <div className="w-10 h-10 bg-orange-50 text-accent-orange rounded-xl flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                <FaLightbulb className="text-xl" />
-              </div>
-              <h3 className="font-black text-primary text-[10px] uppercase tracking-tighter leading-tight">Métricas</h3>
-              <Link to={isAdmin ? "/admin/estadisticas" : "https://wa.me/5493816242482"} className="text-accent-orange text-[8px] font-black uppercase mt-1 px-3 py-1 bg-accent-orange/5 rounded-full">
-                {isAdmin ? 'Ver →' : 'Chat →'}
-              </Link>
             </div>
           </div>
 
@@ -246,21 +198,6 @@ const MiPerfil = () => {
                   </div>
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* Banner Frase Salud */}
-          {misTurnos.length <= 1 && (
-            <div className="mt-auto bg-[#4A3B32] p-6 rounded-4xl text-white flex items-center justify-between shrink-0 mb-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
-                  <FaWallet className="text-accent-orange text-lg" />
-                </div>
-                <p className="text-[11px] font-bold leading-relaxed max-w-xs italic opacity-80">
-                  "Recordá realizar una limpieza profesional cada 6 meses."
-                </p>
-              </div>
-              <div className="h-0.5 w-12 bg-accent-orange/50"></div>
             </div>
           )}
         </div>

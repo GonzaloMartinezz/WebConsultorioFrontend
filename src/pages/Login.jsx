@@ -45,17 +45,13 @@ const Login = () => {
   };
 
   // =============================================
-  // LOGICA LOGIN CON GOOGLE
+  // LOGICA LOGIN/REGISTRO CON GOOGLE (Secure flow)
   // =============================================
   const handleGoogleSuccess = async (tokenResponse) => {
     setCargando(true);
     setError("");
     try {
-      // Nota: tokenResponse.access_token es el token de acceso
-      // Pero nuestro backend espera un idToken si usamos verifyIdToken.
-      // O podemos usar el access_token para pedir info a google desde el backend.
-      // Usaremos un flujo mas directo enviando el token al nuevo endpoint
-
+      // Enviamos el Token Seguro de Google al Backend
       const respuesta = await api.post('/auth/google', {
         idToken: tokenResponse.credential
       });
@@ -65,6 +61,7 @@ const Login = () => {
       if (respuesta.data.token) localStorage.setItem('token', respuesta.data.token);
       localStorage.setItem('perfilUsuario', JSON.stringify(usuarioLogueado));
 
+      // 3. Redirigir segun el rol
       if (usuarioLogueado && usuarioLogueado.rol && usuarioLogueado.rol.toLowerCase() === 'admin') {
         navigate("/admin");
       } else {
@@ -72,25 +69,11 @@ const Login = () => {
       }
     } catch (err) {
       console.error("Error Google Login:", err);
-      setError("Fallo el inicio con Google. Intente nuevamente.");
+      setError("Fallo la vinculación con Google. Verifique el servidor.");
     } finally {
       setCargando(false);
     }
   };
-
-  // Usamos el componente pre-construido de Google por simplicidad y cumplimiento de politicas
-  // Pero si el usuario prefiere su boton, usamos el Custom Hook.
-  // Usaremos el Custom Hook para mantener su diseño premium.
-
-  const loginGoogle = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      // El flow 'implicit' nos da un access_token. 
-      // Para obtener el idToken con useGoogleLogin hay que configurar un poco mas o usar GoogleLogin component.
-      // Usaremos el approach de enviar el access_token y que el backend pida la info.
-      // Pero mejor, usaremos el componente GoogleLogin oficial que es mas robusto para JWT.
-    },
-    onError: () => setError("Error al conectar con Google")
-  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -302,7 +285,7 @@ const Login = () => {
               </form>
 
 
-              {/* GOOGLE AUTH AL FINAL COMO BOTON PREMIUM */}
+              {/* GOOGLE AUTH COMO BOTON PREMIUM */}
               <div className="mt-4 flex flex-col items-center gap-3">
                 <div className="flex items-center w-full gap-4 opacity-10">
                   <div className="h-px bg-white grow"></div>
@@ -313,13 +296,13 @@ const Login = () => {
                 <div className="w-full flex justify-center scale-90">
                   <GoogleLogin
                     onSuccess={handleGoogleSuccess}
-                    onError={() => setError("Error en la autenticación con Google")}
+                    onError={() => setError("Error al conectar con Google")}
                     useOneTap
                     theme="filled_blue"
                     shape="pill"
                     size="large"
                     text="continue_with"
-                    width="320" // Ajustado exacto para no cortar
+                    width="320"
                     locale="es"
                   />
                 </div>

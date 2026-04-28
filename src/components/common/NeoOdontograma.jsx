@@ -289,7 +289,7 @@ export default function NeoOdontograma({ dientes, setDientes, pacienteNombre = '
       <div className="mt-10 flex flex-col sm:flex-row justify-between items-center border-t border-gray-100 pt-8 gap-6">
 
         {/* Middle: Arcada buttons */}
-        <div className="flex gap-2 justify-center w-full sm:w-auto bg-background/50 p-2 rounded-2xl border border-secondary/10">
+        <div className="flex flex-col sm:flex-row gap-2 justify-center w-full sm:w-auto bg-background/50 p-2 rounded-[1.25rem] border border-secondary/10">
           <button
             onClick={() => setFiltroArcada('superior')}
             className={`px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all
@@ -314,10 +314,10 @@ export default function NeoOdontograma({ dientes, setDientes, pacienteNombre = '
         </div>
 
         {/* Right: Acciones / Save */}
-        <div className="w-full sm:w-auto flex flex-wrap justify-center gap-3">
+        <div className="w-full sm:w-auto flex flex-col sm:flex-row justify-center gap-3">
           <button
             onClick={() => setDientes({})}
-            className="px-6 py-4 border-2 border-red-100 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-50 transition-all flex items-center gap-2"
+            className="w-full sm:w-auto justify-center px-6 py-4 border-2 border-red-100 text-red-500 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-red-50 transition-all flex items-center gap-2"
           >
             <FaUndo className="text-xs" /> Reiniciar
           </button>
@@ -326,7 +326,7 @@ export default function NeoOdontograma({ dientes, setDientes, pacienteNombre = '
             <button
               onClick={onSave}
               disabled={isSaving}
-              className="px-10 py-4 bg-primary text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all flex items-center gap-3 shadow-xl shadow-primary/20 disabled:opacity-50 group active:scale-95"
+              className="w-full sm:w-auto justify-center px-10 py-4 bg-primary text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all flex items-center gap-3 shadow-xl shadow-primary/20 disabled:opacity-50 group active:scale-95"
             >
               <FaSave className={`text-lg transition-transform group-hover:scale-125 ${isSaving ? 'animate-pulse' : ''}`} />
               {isSaving ? 'GUARDANDO...' : 'GUARDAR CAMBIOS'}

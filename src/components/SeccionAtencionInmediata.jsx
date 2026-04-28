@@ -3,11 +3,12 @@ import { Hospital, MessageCircle, Bot, Calendar } from 'lucide-react';
 
 const SeccionAtencionInmediata = () => {
   return (
-    <section className="bg-black py-32 px-4 sm:px-6 lg:px-8 w-full relative overflow-hidden border-t border-white/5">
+    <section className="bg-[#050505] py-32 px-4 sm:px-6 lg:px-8 w-full relative overflow-hidden">
       <div className="mx-auto max-w-7xl relative z-10" data-aos="fade-up">
         {/* Contenedor Principal Glassmorphism */}
         <div className="bg-[#111] rounded-[3rem] p-10 md:p-20 shadow-[0_40px_100px_-20px_rgba(0,0,0,1)] border border-white/10 relative overflow-hidden group">
           {/* Glow Effects */}
+          <div className="absolute -top-24 -left-24 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] pointer-events-none"></div>
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#FF7800]/10 rounded-full blur-[120px] -mr-40 -mt-40 pointer-events-none group-hover:bg-[#FF7800]/20 transition-colors duration-1000"></div>
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none"></div>
 

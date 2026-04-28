@@ -22,6 +22,18 @@ const AppointmentForm = () => {
 
   const [mensaje, setMensaje] = useState({ texto: "", tipo: "" });
   const [cargando, setCargando] = useState(false);
+  const [serviciosGlobales, setServiciosGlobales] = useState([
+    { nombre: 'Consulta General / Diagnóstico', duracion: 30 },
+    { nombre: 'Limpieza Dental Profunda', duracion: 45 },
+    { nombre: 'Ortodoncia (Brackets/Alineadores)', duracion: 30 },
+    { nombre: 'Implantología', duracion: 60 },
+    { nombre: 'Cirugía Oral / Extracción', duracion: 60 },
+    { nombre: 'Endodoncia (Tratamiento de Conducto)', duracion: 90 },
+    { nombre: 'Estética / Blanqueamiento', duracion: 60 },
+    { nombre: 'Prótesis Fija / Coronas', duracion: 60 },
+    { nombre: 'Periodoncia', duracion: 45 },
+    { nombre: 'Urgencia / Dolor', duracion: 30 }
+  ]);
 
   useEffect(() => {
     if (user) {
@@ -33,6 +45,33 @@ const AppointmentForm = () => {
         telefono: user.telefono || prev.telefono,
       }));
     }
+    
+    // Traer servicios dinámicos desde backend
+    const fetchConfig = async () => {
+      try {
+        const res = await api.get('/configuracion');
+        if (res.data && res.data.servicios && res.data.servicios.length > 3) {
+          setServiciosGlobales(res.data.servicios);
+        } else {
+          // Si no hay o hay muy pocos (los 3 por defecto antiguos), forzamos los 10 nuevos
+          setServiciosGlobales([
+            { nombre: 'Consulta General / Diagnóstico', duracion: 30 },
+            { nombre: 'Limpieza Dental Profunda', duracion: 45 },
+            { nombre: 'Ortodoncia (Brackets/Alineadores)', duracion: 30 },
+            { nombre: 'Implantología', duracion: 60 },
+            { nombre: 'Cirugía Oral / Extracción', duracion: 60 },
+            { nombre: 'Endodoncia (Tratamiento de Conducto)', duracion: 90 },
+            { nombre: 'Estética / Blanqueamiento', duracion: 60 },
+            { nombre: 'Prótesis Fija / Coronas', duracion: 60 },
+            { nombre: 'Periodoncia', duracion: 45 },
+            { nombre: 'Urgencia / Dolor', duracion: 30 }
+          ]);
+        }
+      } catch (error) {
+        console.error("No se pudo cargar la configuración de servicios", error);
+      }
+    };
+    fetchConfig();
   }, [user]);
 
   const handleChange = (e) => {
@@ -242,18 +281,15 @@ const AppointmentForm = () => {
             <div className="md:col-span-2 space-y-2 pt-2">
                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Motivo de la Consulta</label>
                <select id="motivo" name="motivo" value={form.motivo} onChange={handleChange} required
-                 className="w-full h-24 bg-[#141414] border border-zinc-800 rounded-lg px-4 py-3.5 text-sm font-bold text-gray-300 outline-none focus:border-[#2b88ff]/50 transition-colors appearance-none cursor-pointer whitespace-normal"
-                 style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: `right 1rem top 1rem`, backgroundRepeat: `no-repeat`, backgroundSize: `1.2em 1.2em` }}
+                 className="w-full bg-[#141414] border border-zinc-800 rounded-lg px-4 py-3.5 text-sm font-bold text-gray-300 outline-none focus:border-[#2b88ff]/50 transition-colors appearance-none cursor-pointer"
+                 style={{ backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e")`, backgroundPosition: `right 1rem center`, backgroundRepeat: `no-repeat`, backgroundSize: `1.2em 1.2em` }}
                >
-                 <option value="" disabled className="text-gray-500">Describa brevemente su síntoma o tratamiento deseado...</option>
-                 <option value="Consulta General / Control" className="bg-[#1a1a1a]">Consulta General / Control</option>
-                 <option value="Limpieza Dental" className="bg-[#1a1a1a]">Limpieza Dental</option>
-                 <option value="Ortodoncia" className="bg-[#1a1a1a]">Ortodoncia (Brackets/Alineadores)</option>
-                 <option value="Implantología" className="bg-[#1a1a1a]">Implantología</option>
-                 <option value="Endodoncia" className="bg-[#1a1a1a]">Endodoncia (Tratamiento de conducto)</option>
-                 <option value="Cirugía" className="bg-[#1a1a1a]">Extracción / Cirugía</option>
-                 <option value="Urgencia" className="bg-[#1a1a1a]">Urgencia / Dolor</option>
-                 <option value="Estética" className="bg-[#1a1a1a]">Estética / Blanqueamiento</option>
+                 <option value="" disabled className="text-gray-500">Seleccione el tipo de consulta...</option>
+                 {serviciosGlobales.map((s, idx) => (
+                   <option key={idx} value={s.nombre} className="bg-[#1a1a1a]">
+                     {s.nombre} ({s.duracion} min aprox)
+                   </option>
+                 ))}
                </select>
             </div>
 

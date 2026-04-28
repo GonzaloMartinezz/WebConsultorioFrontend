@@ -1,25 +1,35 @@
 import { useState, useEffect } from 'react';
 import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
-import {
-  FaCog, FaClock, FaListUl, FaPlus, FaTrash, FaSave,
-  FaBell, FaWhatsapp, FaEnvelope, FaPaperPlane, FaCalendarCheck
-} from 'react-icons/fa';
+import { FaCog, FaClock, FaListUl, FaPlus, FaTrash, FaSave, FaBell, FaWhatsapp, FaEnvelope, FaPaperPlane, FaCalendarCheck, FaCheckCircle, FaTimesCircle, FaUsers } from 'react-icons/fa';
 import api from '../../api/axios.js';
 
 const AdminConfiguracion = () => {
-  // Estados para Horarios y Servicios
   const [horarios, setHorarios] = useState({ apertura: '09:00', cierre: '18:00', intervalo: '30' });
   const [servicios, setServicios] = useState([
-    { id: 1, nombre: 'Consulta General', duracion: 30 },
-    { id: 2, nombre: 'Limpieza Dental', duracion: 45 },
-    { id: 3, nombre: 'Ortodoncia', duracion: 60 }
+    { id: 1, nombre: 'Consulta General / Diagnóstico', duracion: 30 },
+    { id: 2, nombre: 'Limpieza Dental Profunda', duracion: 45 },
+    { id: 3, nombre: 'Ortodoncia (Brackets/Alineadores)', duracion: 30 },
+    { id: 4, nombre: 'Implantología', duracion: 60 },
+    { id: 5, nombre: 'Cirugía Oral / Extracción', duracion: 60 },
+    { id: 6, nombre: 'Endodoncia (Tratamiento de Conducto)', duracion: 90 },
+    { id: 7, nombre: 'Estética / Blanqueamiento', duracion: 60 },
+    { id: 8, nombre: 'Prótesis Fija / Coronas', duracion: 60 },
+    { id: 9, nombre: 'Periodoncia', duracion: 45 },
+    { id: 10, nombre: 'Urgencia / Dolor', duracion: 30 }
   ]);
   const [nuevoServicio, setNuevoServicio] = useState({ nombre: '', duracion: 30 });
   const [turnosManana, setTurnosManana] = useState([]);
   const [loadingTurnos, setLoadingTurnos] = useState(false);
   const [enviandoMasivo, setEnviandoMasivo] = useState(false);
+  const [enviandoIdx, setEnviandoIdx] = useState(-1);
+  const [toast, setToast] = useState({ show: false, msg: '', type: 'success' });
+  const [guardando, setGuardando] = useState(false);
 
-  // Cargar configuración y turnos al iniciar
+  const showToast = (msg, type = 'success') => {
+    setToast({ show: true, msg, type });
+    setTimeout(() => setToast({ show: false, msg: '', type: 'success' }), 4000);
+  };
+
   useEffect(() => {
     fetchConfiguracion();
     fetchTurnosManana();
@@ -29,265 +39,376 @@ const AdminConfiguracion = () => {
     try {
       const res = await api.get('/configuracion');
       if (res.data) {
-        setHorarios(res.data.horarios);
-        setServicios(res.data.servicios);
+        setHorarios(res.data.horarios || horarios);
+        
+        // Si la base de datos solo tiene los 3 antiguos, forzamos los 10 nuevos
+        if (!res.data.servicios || res.data.servicios.length <= 3) {
+          const nuevosServicios = [
+            { id: 1, nombre: 'Consulta General / Diagnóstico', duracion: 30 },
+            { id: 2, nombre: 'Limpieza Dental Profunda', duracion: 45 },
+            { id: 3, nombre: 'Ortodoncia (Brackets/Alineadores)', duracion: 30 },
+            { id: 4, nombre: 'Implantología', duracion: 60 },
+            { id: 5, nombre: 'Cirugía Oral / Extracción', duracion: 60 },
+            { id: 6, nombre: 'Endodoncia (Tratamiento de Conducto)', duracion: 90 },
+            { id: 7, nombre: 'Estética / Blanqueamiento', duracion: 60 },
+            { id: 8, nombre: 'Prótesis Fija / Coronas', duracion: 60 },
+            { id: 9, nombre: 'Periodoncia', duracion: 45 },
+            { id: 10, nombre: 'Urgencia / Dolor', duracion: 30 }
+          ];
+          setServicios(nuevosServicios);
+          // Opcional: Autoguardado silencioso para actualizar la DB
+          api.put('/configuracion', { horarios: res.data.horarios || horarios, servicios: nuevosServicios }).catch(()=>{});
+        } else {
+          setServicios(res.data.servicios);
+        }
       }
-    } catch (error) {
-      console.error("Error al cargar configuración", error);
-    }
+    } catch { }
   };
 
   const fetchTurnosManana = async () => {
     setLoadingTurnos(true);
     try {
-      const respuesta = await api.get('/turnos');
-      const d = new Date();
-      // Calcular fecha de mañana en el formato local (YYYY-MM-DD)
-      const manana = new Date(d);
+      const res = await api.get('/turnos');
+      const manana = new Date();
       manana.setDate(manana.getDate() + 1);
       const mananaStr = `${manana.getFullYear()}-${String(manana.getMonth() + 1).padStart(2, '0')}-${String(manana.getDate()).padStart(2, '0')}`;
-
-      const turnosFiltrados = respuesta.data.filter(t => {
-        // En base de datos t.fecha viene como "2026-04-20"
-        return t.fecha.startsWith(mananaStr) && (t.estado === 'Pendiente' || t.estado === 'Confirmado');
-      });
-
-      turnosFiltrados.sort((a, b) => a.hora.localeCompare(b.hora));
-      setTurnosManana(turnosFiltrados);
-    } catch (error) {
-      console.error("Error al cargar turnos", error);
-    } finally {
-      setLoadingTurnos(false);
-    }
+      const filtrados = res.data
+        .filter(t => t.fecha?.startsWith(mananaStr) && ['Pendiente', 'Confirmado'].includes(t.estado))
+        .sort((a, b) => a.hora?.localeCompare(b.hora));
+      setTurnosManana(filtrados);
+    } catch { }
+    finally { setLoadingTurnos(false); }
   };
 
-  // Agregar Servicio
   const handleAddServicio = (e) => {
     e.preventDefault();
-    if (!nuevoServicio.nombre) return;
+    if (!nuevoServicio.nombre.trim()) return;
     setServicios([...servicios, { id: Date.now(), ...nuevoServicio }]);
     setNuevoServicio({ nombre: '', duracion: 30 });
   };
 
-  // Eliminar Servicio
-  const handleDeleteServicio = (id) => {
-    setServicios(servicios.filter(s => s.id !== id));
-  };
-
-  // Guardar Configuración Real
   const handleGuardarTodo = async () => {
+    setGuardando(true);
     try {
       await api.put('/configuracion', { horarios, servicios });
-      alert("¡Configuraciones guardadas con éxito en el sistema!");
-    } catch (error) {
-      alert("Error al guardar la configuración.");
-      console.error(error);
-    }
+      showToast('¡Configuración guardada exitosamente!', 'success');
+    } catch {
+      showToast('Error al guardar la configuración.', 'error');
+    } finally { setGuardando(false); }
   };
 
-  const enviarIndividual = (turno, via) => {
-    const nombre = `${turno.nombrePaciente} ${turno.apellidoPaciente}`;
-    // Usamos el formato local en lugar de toLocaleDateString que causa conflicto con zonas horarias
-    const parts = turno.fecha.split('-');
-    const fechaFormat = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : turno.fecha;
-    const mensaje = `Hola ${nombre}, recordatorio de tu turno en Centro Odontológico C&M el día ${fechaFormat} a las ${turno.hora} hs. Motivo: ${turno.motivo}. ¡Te esperamos!`;
-
-    if (via === 'WhatsApp') {
-      const url = `https://wa.me/${turno.telefono.replace(/\D/g, '')}?text=${encodeURIComponent(mensaje)}`;
-      window.open(url, '_blank');
-    } else {
-      const mailUrl = `mailto:${turno.email}?subject=Recordatorio de Turno - Centro Odontológico&body=${encodeURIComponent(mensaje)}`;
-      window.open(mailUrl, '_blank');
-    }
+  const buildMensaje = (turno) => {
+    const partes = turno.fecha?.split('-') || [];
+    const fechaFmt = partes.length === 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : turno.fecha;
+    return `Hola ${turno.nombrePaciente} ${turno.apellidoPaciente}, te recordamos tu turno en Centro Odontológico C&M para mañana ${fechaFmt} a las ${turno.hora} hs. Motivo: ${turno.motivo}. ¡Te esperamos! 😊🦷`;
   };
 
-  // Envío masivo iterativo por frontend
-  const handleRecordatoriosMañana = () => {
-    if (turnosManana.length === 0) {
-      alert("No hay turnos agendados para el día de mañana.");
-      return;
-    }
+  const enviarWhatsApp = (turno) => {
+    const tel = turno.telefono?.replace(/\D/g, '');
+    if (!tel) return showToast(`${turno.nombrePaciente} no tiene teléfono registrado.`, 'error');
+    window.open(`https://wa.me/${tel}?text=${encodeURIComponent(buildMensaje(turno))}`, '_blank');
+  };
 
-    if (!window.confirm(`¿Estás seguro de enviar mensajes masivos a ${turnosManana.length} paciente(s)? Tu navegador abrirá automáticamente múltiples pestañas.`)) return;
+  const enviarEmail = (turno) => {
+    if (!turno.email) return showToast(`${turno.nombrePaciente} no tiene email registrado.`, 'error');
+    window.open(`mailto:${turno.email}?subject=Recordatorio de Turno - Centro Odontológico C%26M&body=${encodeURIComponent(buildMensaje(turno))}`, '_blank');
+  };
 
+  const handleRecordatoriosMasivos = async () => {
+    if (turnosManana.length === 0) return showToast('No hay turnos para mañana.', 'error');
+    if (!window.confirm(`¿Enviar recordatorio a ${turnosManana.length} paciente(s)? Se abrirán pestañas de WhatsApp/Email secuencialmente.`)) return;
     setEnviandoMasivo(true);
-    
-    // Para evitar que el navegador bloquee un aluvión de popups (pop-up blocker),
-    // es necesario que el usuario habilite las ventanas emergentes en el sitio.
-    let index = 0;
+    let i = 0;
     const interval = setInterval(() => {
-      if (index >= turnosManana.length) {
+      if (i >= turnosManana.length) {
         clearInterval(interval);
         setEnviandoMasivo(false);
-        // También procesamos con backend para que quede registro (opcional)
-        api.post('/notificaciones/recordatorios-manana').catch(console.error);
-        alert(`¡Listo! Se han abierto las pestañas para ${turnosManana.length} pacientes.`);
+        setEnviandoIdx(-1);
+        showToast(`✅ Recordatorios enviados a ${turnosManana.length} pacientes.`, 'success');
+        api.post('/notificaciones/recordatorios-manana').catch(() => { });
         return;
       }
-      const turno = turnosManana[index];
-      // Si tiene teléfono, WhatsApp. Si no, Email
-      if (turno.telefono) {
-        enviarIndividual(turno, 'WhatsApp');
-      } else if (turno.email) {
-        enviarIndividual(turno, 'Mail');
-      }
-      index++;
-    }, 1200); // Retardo de 1.2 seg entre pacientes
+      const t = turnosManana[i];
+      setEnviandoIdx(i);
+      if (t.telefono) enviarWhatsApp(t);
+      else if (t.email) enviarEmail(t);
+      i++;
+    }, 1400);
   };
+
+  const mananaLabel = (() => {
+    const d = new Date(); d.setDate(d.getDate() + 1);
+    return d.toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' });
+  })();
 
   return (
     <LayoutAdmin>
-      <header className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-primary tracking-tight">Configuración del Sistema</h1>
-          <p className="text-text-light font-medium">Ajusta los parámetros operativos y gestiona recordatorios.</p>
+      {toast.show && (
+        <div className={`fixed top-6 right-6 z-200 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-black text-sm text-white border animate-fade-in backdrop-blur-md
+          ${toast.type === 'success' ? 'bg-green-500/90 border-green-400/50' : 'bg-red-500/90 border-red-400/50'}`}>
+          {toast.type === 'success' ? <FaCheckCircle className="text-lg shrink-0" /> : <FaTimesCircle className="text-lg shrink-0" />}
+          {toast.msg}
         </div>
-        <button onClick={handleGuardarTodo} className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-md transition-all">
-          <FaSave /> Guardar Cambios
+      )}
+
+      <header className="mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-6">
+        <div>
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-orange mb-2 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-accent-orange animate-pulse"></span> Panel Administrativo
+          </p>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-primary tracking-tight">Configuración</h1>
+          <p className="text-text-light font-medium text-xs md:text-sm mt-1">Parámetros operativos y notificaciones del centro.</p>
+        </div>
+        <button
+          onClick={handleGuardarTodo}
+          disabled={guardando}
+          className="w-full md:w-auto flex justify-center items-center gap-2 px-6 py-3.5 bg-linear-to-r from-green-500 to-emerald-600 text-white font-black rounded-2xl shadow-lg shadow-green-500/20 hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-60 text-sm"
+        >
+          <FaSave className={guardando ? 'animate-spin' : ''} />
+          {guardando ? 'Guardando...' : 'Guardar Todo'}
         </button>
       </header>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
-
-        {/* PANEL DE HORARIOS */}
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-secondary/30">
-          <h2 className="text-xl font-black text-primary mb-6 flex items-center gap-2"><FaClock /> Horarios de Atención</h2>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-bold text-text mb-1">Hora de Apertura</label>
-              <input type="time" value={horarios.apertura} onChange={e => setHorarios({ ...horarios, apertura: e.target.value })} className="w-full p-3 border rounded-xl outline-none focus:border-primary" />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-text mb-1">Hora de Cierre</label>
-              <input type="time" value={horarios.cierre} onChange={e => setHorarios({ ...horarios, cierre: e.target.value })} className="w-full p-3 border rounded-xl outline-none focus:border-primary" />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-text mb-1">Intervalo de Turnos (Minutos)</label>
-              <select value={horarios.intervalo} onChange={e => setHorarios({ ...horarios, intervalo: e.target.value })} className="w-full p-3 border rounded-xl outline-none focus:border-primary">
-                <option value="15">Cada 15 minutos</option>
-                <option value="30">Cada 30 minutos</option>
-                <option value="60">Cada 1 hora</option>
-              </select>
-            </div>
+      {/* ══════════════════════════════════════════════════
+          SECCIÓN RECORDATORIOS — ARRIBA Y PRINCIPAL
+      ══════════════════════════════════════════════════ */}
+      <section className="mb-8">
+        {/* Hero Card de Acción Masiva */}
+        <div className="bg-linear-to-br from-primary via-[#3a2e25] to-[#2a1f16] rounded-[2.5rem] p-8 md:p-10 text-white relative overflow-hidden mb-5 shadow-2xl">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,120,0,0.2),transparent_60%)] pointer-events-none"></div>
+          <div className="absolute bottom-0 right-0 w-64 h-64 opacity-[0.04]">
+            <FaBell className="w-full h-full" />
           </div>
-        </div>
 
-        {/* PANEL DE SERVICIOS */}
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-secondary/30">
-          <h2 className="text-xl font-black text-primary mb-6 flex items-center gap-2"><FaListUl /> Catálogo de Servicios</h2>
-
-          <form onSubmit={handleAddServicio} className="flex gap-2 mb-6 bg-background/50 p-4 rounded-xl border border-secondary/50">
-            <input type="text" placeholder="Ej: Blanqueamiento" value={nuevoServicio.nombre} onChange={e => setNuevoServicio({ ...nuevoServicio, nombre: e.target.value })} className="flex-1 p-2 border rounded-lg text-sm" />
-            <select value={nuevoServicio.duracion} onChange={e => setNuevoServicio({ ...nuevoServicio, duracion: Number(e.target.value) })} className="w-24 p-2 border rounded-lg text-sm">
-              <option value={15}>15 min</option>
-              <option value={30}>30 min</option>
-              <option value={45}>45 min</option>
-              <option value={60}>60 min</option>
-            </select>
-            <button type="submit" className="bg-primary text-white p-2 rounded-lg hover:brightness-110"><FaPlus /></button>
-          </form>
-
-          <div className="space-y-3 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
-            {servicios.map(servicio => (
-              <div key={servicio.id} className="flex items-center justify-between p-3 border-b border-secondary/20 hover:bg-secondary/10 rounded-lg">
-                <div>
-                  <p className="font-bold text-text">{servicio.nombre}</p>
-                  <p className="text-xs text-text-light">{servicio.duracion} minutos aprox.</p>
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 bg-accent-orange/20 rounded-2xl flex items-center justify-center border border-accent-orange/30">
+                  <FaBell className="text-accent-orange text-xl" />
                 </div>
-                <button onClick={() => handleDeleteServicio(servicio.id)} className="text-red-400 hover:text-red-600 p-2"><FaTrash /></button>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-orange">Centro Odontológico C&M</p>
+                  <h2 className="text-2xl font-black tracking-tight">Recordatorios Automáticos</h2>
+                </div>
               </div>
-            ))}
+              <p className="text-white/60 text-sm font-medium max-w-lg">
+                Con un solo clic, se envían mensajes personalizados de WhatsApp y Email a todos los pacientes agendados para <span className="text-accent-orange font-black capitalize">{mananaLabel}</span>.
+              </p>
+              <div className="flex items-center gap-4 mt-4">
+                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full border border-white/10">
+                  <FaUsers className="text-accent-orange text-sm" />
+                  <span className="text-sm font-black">{loadingTurnos ? '...' : turnosManana.length} pacientes</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/40 text-xs font-bold">
+                  <FaWhatsapp className="text-green-400" /> WhatsApp
+                  <span className="text-white/20">·</span>
+                  <FaEnvelope className="text-blue-400" /> Email
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={handleRecordatoriosMasivos}
+              disabled={enviandoMasivo || loadingTurnos || turnosManana.length === 0}
+              className={`w-full md:w-auto shrink-0 flex flex-row md:flex-col items-center justify-center gap-2 px-6 md:px-10 py-4 md:py-6 rounded-2xl md:rounded-3xl font-black transition-all border-2 shadow-2xl
+                ${turnosManana.length === 0
+                  ? 'bg-white/5 border-white/10 text-white/30 cursor-not-allowed'
+                  : enviandoMasivo
+                    ? 'bg-accent-orange/20 border-accent-orange/50 text-accent-orange cursor-wait'
+                    : 'bg-accent-orange border-accent-orange text-white hover:bg-orange-500 hover:shadow-orange-500/30 hover:-translate-y-1 active:scale-95'
+                }`}
+            >
+              {enviandoMasivo ? (
+                <>
+                  <div className="w-6 h-6 md:w-8 md:h-8 border-3 border-accent-orange border-t-transparent rounded-full animate-spin"></div>
+                  <span className="text-xs uppercase tracking-widest">Enviando {enviandoIdx + 1}/{turnosManana.length}</span>
+                </>
+              ) : (
+                <>
+                  <FaPaperPlane className="text-xl md:text-2xl" />
+                  <span className="text-xs uppercase tracking-widest">Enviar a Todos</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
-      </div>
 
-      {/* PANEL DE RECORDATORIOS AUTOMÁTICOS */}
-      <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-secondary/30">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
-          <div>
-            <h2 className="text-2xl font-black text-primary flex items-center gap-2">
-              <FaBell className="text-accent-orange" /> Recordatorios Automáticos
-            </h2>
-            <p className="text-text-light font-medium text-sm">Gestiona el envío de notificaciones a los pacientes del sistema.</p>
+        {/* Tabla de pacientes de mañana */}
+        <div className="bg-white rounded-4xl shadow-sm border border-secondary/10 overflow-hidden">
+          <div className="flex items-center justify-between px-8 py-5 border-b border-secondary/10">
+            <div className="flex items-center gap-3">
+              <div className="w-1.5 h-6 bg-accent-orange rounded-full"></div>
+              <div>
+                <h3 className="font-black text-primary capitalize">Pacientes de {mananaLabel}</h3>
+                <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">{turnosManana.length} turnos confirmados / pendientes</p>
+              </div>
+            </div>
+            <button onClick={fetchTurnosManana} className="text-[10px] font-black text-accent-orange uppercase tracking-widest bg-accent-orange/5 px-4 py-2 rounded-full hover:bg-accent-orange/10 transition-all">
+              Actualizar
+            </button>
           </div>
-          <button
-            onClick={handleRecordatoriosMañana}
-            disabled={enviandoMasivo}
-            className={`w-full md:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black text-white shadow-lg transition-all transform active:scale-95 ${enviandoMasivo ? 'bg-secondary cursor-not-allowed' : 'bg-primary hover:bg-primary/90 hover:-translate-y-1'}`}
-          >
-            {enviandoMasivo ? (
-              <span className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Enviando...
-              </span>
-            ) : (
-              <>
-                <FaPaperPlane /> Enviar Recordatorios para los pacientes de Mañana
-              </>
-            )}
-          </button>
-        </div>
 
-        <div className="overflow-x-auto rounded-2xl border border-secondary/20">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-secondary/10">
-                <th className="p-4 font-black text-primary text-sm uppercase tracking-wider">Paciente</th>
-                <th className="p-4 font-black text-primary text-sm uppercase tracking-wider">Fecha / Hora</th>
-                <th className="p-4 font-black text-primary text-sm uppercase tracking-wider">Tratamiento</th>
-                <th className="p-4 font-black text-primary text-sm uppercase tracking-wider text-center">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-secondary/10">
-              {loadingTurnos ? (
-                <tr>
-                  <td colSpan="4" className="p-10 text-center text-text-light font-medium animate-pulse text-lg">Cargando próximos turnos...</td>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-secondary/5">
+                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Paciente</th>
+                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden sm:table-cell">Hora</th>
+                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden md:table-cell">Tratamiento</th>
+                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden lg:table-cell">Contacto</th>
+                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 text-center">Acciones</th>
                 </tr>
-              ) : turnosManana.length > 0 ? (
-                turnosManana.map(turno => (
-                  <tr key={turno._id} className="hover:bg-secondary/5 transition-colors">
-                    <td className="p-4">
-                      <p className="font-black text-primary text-lg">{turno.nombrePaciente} {turno.apellidoPaciente}</p>
-                      <p className="text-xs font-bold text-text-light">{turno.email || 'Sin email'}</p>
-                    </td>
-                    <td className="p-4 font-bold text-text">
-                      <div className="flex flex-col">
-                        <span className="flex items-center gap-1 text-primary"><FaCalendarCheck className="text-accent-orange" /> {turno.fecha.split('-').reverse().join('/')}</span>
-                        <span className="text-sm text-text-light ml-5">{turno.hora} hs</span>
+              </thead>
+              <tbody className="divide-y divide-secondary/5">
+                {loadingTurnos ? (
+                  <tr><td colSpan="5" className="py-12 text-center text-text-light font-bold text-sm animate-pulse">Cargando turnos...</td></tr>
+                ) : turnosManana.length > 0 ? turnosManana.map((turno, idx) => (
+                  <tr key={turno._id} className={`hover:bg-background/50 transition-colors group ${enviandoIdx === idx ? 'bg-accent-orange/5' : ''}`}>
+                    <td className="py-4 px-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center text-[10px] font-black text-primary shrink-0">
+                          {turno.nombrePaciente?.charAt(0)}{turno.apellidoPaciente?.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-black text-primary text-sm">{turno.nombrePaciente} {turno.apellidoPaciente}</p>
+                          <p className="text-[10px] text-text-light font-medium">{turno.estado}</p>
+                        </div>
                       </div>
                     </td>
-                    <td className="p-4">
-                      <span className="bg-secondary/20 text-primary text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">
-                        {turno.motivo}
-                      </span>
+                    <td className="py-4 px-6 hidden sm:table-cell">
+                      <span className="font-black text-primary">{turno.hora}</span>
+                      <span className="text-text-light font-bold text-xs"> hs</span>
                     </td>
-                    <td className="p-4 text-center">
+                    <td className="py-4 px-6 hidden md:table-cell">
+                      <span className="text-[10px] font-bold text-text-light bg-secondary/5 border border-secondary/10 px-2.5 py-1 rounded-lg">{turno.motivo}</span>
+                    </td>
+                    <td className="py-4 px-6 hidden lg:table-cell">
+                      <div className="flex flex-col gap-0.5">
+                        {turno.telefono && <span className="text-[10px] font-bold text-green-600 flex items-center gap-1"><FaWhatsapp /> {turno.telefono}</span>}
+                        {turno.email && <span className="text-[10px] font-bold text-blue-500 flex items-center gap-1"><FaEnvelope /> {turno.email}</span>}
+                        {!turno.telefono && !turno.email && <span className="text-[10px] font-bold text-red-400">Sin contacto</span>}
+                      </div>
+                    </td>
+                    <td className="py-4 px-6">
                       <div className="flex items-center justify-center gap-2">
                         <button
-                          onClick={() => enviarIndividual(turno, 'WhatsApp')}
-                          title="Enviar por WhatsApp"
-                          className="bg-green-100 text-green-600 p-2.5 rounded-xl hover:bg-green-600 hover:text-white transition-all shadow-sm"
+                          onClick={() => enviarWhatsApp(turno)}
+                          disabled={!turno.telefono}
+                          title={turno.telefono ? 'Enviar WhatsApp' : 'Sin teléfono'}
+                          className="flex items-center gap-1.5 px-3 py-2 bg-green-50 text-green-600 rounded-xl hover:bg-green-500 hover:text-white transition-all text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed border border-green-200/50"
                         >
-                          <FaWhatsapp className="text-xl" />
+                          <FaWhatsapp className="text-sm" /> WA
                         </button>
                         <button
-                          onClick={() => enviarIndividual(turno, 'Mail')}
-                          title="Enviar por Email"
-                          className="bg-blue-100 text-blue-600 p-2.5 rounded-xl hover:bg-blue-600 hover:text-white transition-all shadow-sm"
+                          onClick={() => enviarEmail(turno)}
+                          disabled={!turno.email}
+                          title={turno.email ? 'Enviar Email' : 'Sin email'}
+                          className="flex items-center gap-1.5 px-3 py-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-500 hover:text-white transition-all text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed border border-blue-200/50"
                         >
-                          <FaEnvelope className="text-xl" />
+                          <FaEnvelope className="text-sm" /> Mail
                         </button>
                       </div>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="4" className="p-10 text-center text-text-light font-medium">No hay turnos agendados para el día de mañana.</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )) : (
+                  <tr>
+                    <td colSpan="5" className="py-16 text-center">
+                      <div className="w-12 h-12 bg-secondary/5 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                        <FaCalendarCheck className="text-xl text-text-light/30" />
+                      </div>
+                      <p className="text-text-light font-bold text-sm">No hay turnos agendados para mañana.</p>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════
+          CONFIGURACIÓN OPERATIVA
+      ══════════════════════════════════════════════════ */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+        {/* Horarios */}
+        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-secondary/10">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-11 h-11 bg-primary/5 rounded-2xl flex items-center justify-center">
+              <FaClock className="text-xl text-primary" />
+            </div>
+            <div>
+              <h2 className="text-lg font-black text-primary">Horarios de Atención</h2>
+              <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">Configuración del calendario</p>
+            </div>
+          </div>
+          <div className="space-y-5">
+            {[
+              { label: 'Apertura del Consultorio', key: 'apertura', type: 'time' },
+              { label: 'Cierre del Consultorio', key: 'cierre', type: 'time' },
+            ].map(({ label, key, type }) => (
+              <div key={key}>
+                <label className="block text-[9px] font-black text-text-light/50 uppercase tracking-[0.2em] mb-2">{label}</label>
+                <input
+                  type={type}
+                  value={horarios[key]}
+                  onChange={e => setHorarios({ ...horarios, [key]: e.target.value })}
+                  className="w-full p-3.5 bg-background rounded-2xl font-bold text-primary border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all"
+                />
+              </div>
+            ))}
+
+          </div>
+        </div>
+
+        {/* Servicios */}
+        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-secondary/10">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-11 h-11 bg-accent-orange/10 rounded-2xl flex items-center justify-center">
+              <FaListUl className="text-xl text-accent-orange" />
+            </div>
+            <div>
+              <h2 className="text-lg font-black text-primary">Catálogo de Servicios</h2>
+              <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">{servicios.length} servicios activos</p>
+            </div>
+          </div>
+
+          <form onSubmit={handleAddServicio} className="flex gap-2 mb-6 bg-background/60 p-3 rounded-2xl border border-secondary/10">
+            <input
+              type="text"
+              placeholder="Ej: Blanqueamiento dental"
+              value={nuevoServicio.nombre}
+              onChange={e => setNuevoServicio({ ...nuevoServicio, nombre: e.target.value })}
+              className="flex-1 p-2.5 bg-white rounded-xl font-bold text-sm border border-secondary/10 focus:border-accent-orange outline-none transition-all"
+            />
+            <select
+              value={nuevoServicio.duracion}
+              onChange={e => setNuevoServicio({ ...nuevoServicio, duracion: Number(e.target.value) })}
+              className="w-24 p-2.5 bg-white rounded-xl font-bold text-sm border border-secondary/10 focus:border-accent-orange outline-none appearance-none text-center"
+            >
+              {[15, 30, 45, 60, 90].map(m => <option key={m} value={m}>{m}min</option>)}
+            </select>
+            <button type="submit" className="w-11 h-11 bg-accent-orange text-white rounded-xl flex items-center justify-center hover:bg-orange-500 transition-all shadow-md shadow-orange-500/20 shrink-0">
+              <FaPlus />
+            </button>
+          </form>
+
+          <div className="space-y-2 max-h-[260px] overflow-y-auto custom-scrollbar pr-1">
+            {servicios.map(s => (
+              <div key={s.id} className="flex items-center justify-between p-4 bg-background/40 rounded-2xl border border-secondary/5 group hover:border-accent-orange/20 transition-all">
+                <div>
+                  <p className="font-bold text-primary text-sm">{s.nombre}</p>
+                  <p className="text-[10px] text-text-light font-bold uppercase tracking-wider">{s.duracion} minutos</p>
+                </div>
+                <button
+                  onClick={() => setServicios(servicios.filter(x => x.id !== s.id))}
+                  className="w-8 h-8 text-red-400 bg-red-50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white transition-all border border-red-100"
+                >
+                  <FaTrash className="text-xs" />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </LayoutAdmin>
