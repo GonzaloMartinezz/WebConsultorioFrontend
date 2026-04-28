@@ -37,7 +37,7 @@ const BannerPlanes = () => {
         <div className="max-w-5xl mx-auto relative z-10 flex flex-col items-center">
           <div className="flex items-center gap-3 px-5 py-2 rounded-full border border-[#FF7800]/20 bg-[#FF7800]/5 mb-10 backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-[#FF7800] animate-pulse shadow-[0_0_8px_#FF7800]"></span>
-            <span className="text-[15px] font-black tracking-[0.3em] text-[#FF7800] uppercase">
+            <span className="text-[8px] font-black tracking-[0.3em] text-[#FF7800] uppercase">
               Excelencia en Odontología Clínica
             </span>
           </div>
