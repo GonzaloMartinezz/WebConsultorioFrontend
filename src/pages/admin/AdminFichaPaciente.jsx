@@ -178,13 +178,13 @@ const AdminFichaPaciente = () => {
         <Link to="/admin/lista-pacientes" className="flex items-center gap-2 text-text-light font-bold hover:text-primary transition-colors text-sm">
           <FaArrowLeft className="text-xs" /> Directorio de Pacientes
         </Link>
-        <button onClick={handleGuardarFicha} disabled={guardando} className="w-full sm:w-auto flex justify-center items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-black rounded-2xl shadow-lg shadow-green-500/20 hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 text-sm">
+        <button onClick={handleGuardarFicha} disabled={guardando} className="w-full sm:w-auto flex justify-center items-center gap-2 px-6 py-3 bg-linear-to-r from-green-500 to-emerald-600 text-white font-black rounded-2xl shadow-lg shadow-green-500/20 hover:shadow-xl hover:-translate-y-0.5 transition-all disabled:opacity-50 text-sm">
           <FaSave className={guardando ? 'animate-spin' : ''} /> {guardando ? 'Guardando...' : 'Guardar Ficha'}
         </button>
       </div>
 
       {/* ========== 1. HERO DEL PACIENTE ========== */}
-      <div className="bg-gradient-to-br from-primary via-[#3a2e25] to-[#2a1f16] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 mb-6 md:mb-8 flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 relative overflow-hidden shadow-2xl">
+      <div className="bg-linear-to-br from-primary via-[#3a2e25] to-[#2a1f16] rounded-4xl md:rounded-[2.5rem] p-6 md:p-8 mb-6 md:mb-8 flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 relative overflow-hidden shadow-2xl">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,120,0,0.15),transparent_60%)] pointer-events-none"></div>
         <div className="relative z-10 w-24 h-24 bg-white/10 rounded-3xl flex items-center justify-center text-white text-4xl font-black uppercase shrink-0 border-2 border-white/20 backdrop-blur-sm">
           {paciente.nombre?.charAt(0)}{paciente.apellido?.charAt(0)}
@@ -217,7 +217,7 @@ const AdminFichaPaciente = () => {
       </div>
 
       {/* ========== 2. FORMULARIO CONSULTA ACTUAL ========== */}
-      <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 shadow-sm border border-secondary/10 mb-6 md:mb-8">
+      <div className="bg-white rounded-4xl md:rounded-[2.5rem] p-6 md:p-8 shadow-sm border border-secondary/10 mb-6 md:mb-8">
         <div className="flex items-center gap-4 mb-6">
           <div className="w-11 h-11 bg-accent-orange/10 rounded-2xl flex items-center justify-center">
             <FaUserInjured className="text-xl text-accent-orange" />
@@ -259,7 +259,7 @@ const AdminFichaPaciente = () => {
       </div>
 
       {/* ========== 3. ODONTOGRAMA INTERACTIVO AVANZADO ========== */}
-      <div className="bg-white rounded-[2rem] md:rounded-3xl p-4 md:p-6 shadow-sm border border-secondary/40 mb-6 md:mb-8">
+      <div className="bg-white rounded-4xl md:rounded-3xl p-4 md:p-6 shadow-sm border border-secondary/40 mb-6 md:mb-8">
         <h2 className="text-lg md:text-xl font-black text-primary mb-4 md:mb-5 flex items-center gap-2 px-2">
           <FaTooth className="shrink-0" /> Odontograma Interactivo Avanzado
         </h2>
@@ -276,7 +276,7 @@ const AdminFichaPaciente = () => {
       </div>
 
       {/* ========== 4. HISTORIAL DE CONSULTAS ========== */}
-      <div className="bg-white rounded-[2rem] md:rounded-3xl p-6 shadow-sm border border-secondary/40">
+      <div className="bg-white rounded-4xl md:rounded-3xl p-6 shadow-sm border border-secondary/40">
         <h2 className="text-lg md:text-xl font-black text-primary mb-4 flex items-center gap-2">
           <FaCalendarCheck /> Historial de Consultas
         </h2>
@@ -333,7 +333,7 @@ const AdminFichaPaciente = () => {
 
       {/* ========== TOAST FLOTANTE ========== */}
       {toast.show && (
-        <div className={`fixed top-6 right-6 z-[200] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-black text-sm text-white border animate-fade-in backdrop-blur-md
+        <div className={`fixed top-6 right-6 z-200 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-black text-sm text-white border animate-fade-in backdrop-blur-md
           ${toast.type === 'success' ? 'bg-green-500/90 border-green-400/50' : 'bg-red-500/90 border-red-400/50'}`}>
           {toast.type === 'success' ? <FaCheckCircle className="text-lg shrink-0" /> : <FaInfoCircle className="text-lg shrink-0" />}
           {toast.message}

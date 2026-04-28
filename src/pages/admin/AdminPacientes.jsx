@@ -47,7 +47,7 @@ const AdminPacientes = () => {
 
       {/* KPIs reales */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
-        <div className="bg-white p-4 md:p-5 rounded-2xl md:rounded-[2rem] shadow-sm border border-secondary/10 flex items-center gap-3 md:gap-4 hover:shadow-lg transition-all">
+        <div className="bg-white p-4 md:p-5 rounded-2xl md:rounded-4xl shadow-sm border border-secondary/10 flex items-center gap-3 md:gap-4 hover:shadow-lg transition-all">
           <div className="w-11 h-11 bg-primary/10 rounded-2xl flex items-center justify-center shrink-0">
             <FaUsers className="text-xl text-primary" />
           </div>
@@ -56,7 +56,7 @@ const AdminPacientes = () => {
             <p className="text-[9px] font-black text-text-light uppercase tracking-widest">Total Pacientes</p>
           </div>
         </div>
-        <div className="bg-white p-5 rounded-[2rem] shadow-sm border border-secondary/10 flex items-center gap-4 hover:shadow-lg transition-all">
+        <div className="bg-white p-5 rounded-4xl shadow-sm border border-secondary/10 flex items-center gap-4 hover:shadow-lg transition-all">
           <div className="w-11 h-11 bg-green-500/10 rounded-2xl flex items-center justify-center shrink-0">
             <FaCalendarAlt className="text-xl text-green-500" />
           </div>
@@ -65,7 +65,7 @@ const AdminPacientes = () => {
             <p className="text-[9px] font-black text-text-light uppercase tracking-widest">Mostrando</p>
           </div>
         </div>
-        <div className="col-span-2 md:col-span-1 bg-white p-5 rounded-[2rem] shadow-sm border border-secondary/10 flex items-center gap-4 hover:shadow-lg transition-all">
+        <div className="col-span-2 md:col-span-1 bg-white p-5 rounded-4xl shadow-sm border border-secondary/10 flex items-center gap-4 hover:shadow-lg transition-all">
           <div className="w-11 h-11 bg-accent-orange/10 rounded-2xl flex items-center justify-center shrink-0">
             <FaTooth className="text-xl text-accent-orange" />
           </div>
@@ -77,7 +77,7 @@ const AdminPacientes = () => {
       </div>
 
       {/* Barra de búsqueda */}
-      <div className="bg-white rounded-[2rem] shadow-sm border border-secondary/10 overflow-hidden">
+      <div className="bg-white rounded-4xl shadow-sm border border-secondary/10 overflow-hidden">
         <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 px-4 md:px-6 py-4 border-b border-secondary/10">
           <div className="relative w-full flex-1 max-w-full md:max-w-md">
             <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-text-light/40 text-sm" />

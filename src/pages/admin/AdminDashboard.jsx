@@ -72,7 +72,7 @@ const AdminDashboard = () => {
     const title = `Turno Dental: ${turnoData.nombrePaciente}`;
     const desc = `C&M Centro Odontológico\nProfesional: ${prof}\nProcedimiento: ${turnoData.motivo || 'Consulta'}`;
     const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${fechaLimpia}T${rango.start}/${fechaLimpia}T${rango.end}&details=${encodeURIComponent(desc)}&location=${encodeURIComponent(loc)}`;
-    
+
     const gcalAdminUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(`Cita: ${turnoData.nombrePaciente} ${turnoData.apellidoPaciente}`)}&dates=${fechaLimpia}T${rango.start}/${fechaLimpia}T${rango.end}&details=${encodeURIComponent(`Motivo: ${turnoData.motivo}\nWhatsApp: ${turnoData.telefono}`)}&location=${encodeURIComponent(loc)}&reminder=120`;
 
     const mensajeWA = `*¡Hola ${turnoData.nombrePaciente}!* 🦷✨\nTe confirmamos tu cita en *C&M Centro Odontológico*.\n\n📅 *Fecha:* ${fechaLegible}\n⏰ *Horario:* ${horarioTexto} hs\n👩‍⚕️ *Profesional:* ${prof}\n🦷 *Motivo:* ${turnoData.motivo || 'Consulta'}\n\n📍 *Ubicación:* ${loc}\n\n👇 *Agendalo en tu calendario:* \n${gcalUrl}\n\n¡Te esperamos!`;
@@ -170,7 +170,7 @@ const AdminDashboard = () => {
   return (
     <LayoutAdmin>
       {toast.show && (
-        <div className={`fixed top-6 right-6 z-[200] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-black text-sm text-white border animate-fade-in backdrop-blur-md
+        <div className={`fixed top-6 right-6 z-200 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-black text-sm text-white border animate-fade-in backdrop-blur-md
           ${toast.type === 'success' ? 'bg-green-500/90 border-green-400/50' : 'bg-red-500/90 border-red-400/50'}`}
         >
           {toast.type === 'success' ? <FaCheckCircle className="text-lg" /> : <FaTimesCircle className="text-lg" />}
@@ -295,9 +295,9 @@ const AdminDashboard = () => {
                       </td>
                       <td className="py-4 px-3">
                         <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider inline-flex items-center gap-1.5
-                          ${turno.estado === 'Confirmado' ? 'bg-green-50 text-green-700 border border-green-200' : 
+                          ${turno.estado === 'Confirmado' ? 'bg-green-50 text-green-700 border border-green-200' :
                             turno.estado === 'Pendiente' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
-                            'bg-blue-50 text-blue-700 border border-blue-200'}`}>
+                              'bg-blue-50 text-blue-700 border border-blue-200'}`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${turno.estado === 'Confirmado' ? 'bg-green-500' : turno.estado === 'Pendiente' ? 'bg-amber-500 animate-pulse' : 'bg-blue-500'}`}></span>
                           {turno.estado}
                         </span>
@@ -329,9 +329,9 @@ const AdminDashboard = () => {
       </main>
 
       {notificacionPendiente && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-[300] p-4 animate-fade-in">
-          <div className="bg-white rounded-[2rem] w-full max-w-sm overflow-hidden shadow-2xl">
-            <div className="bg-gradient-to-br from-green-500 to-emerald-600 p-8 text-center text-white relative overflow-hidden">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-300 p-4 animate-fade-in">
+          <div className="bg-white rounded-4xlfull max-w-sm overflow-hidden shadow-2xl">
+            <div className="bg-linear-to-br from-green-500 to-emerald-600 p-8 text-center text-white relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]"></div>
               <div className="relative z-10">
                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
@@ -359,9 +359,9 @@ const AdminDashboard = () => {
       )}
 
       {modalEditOpen && turnoAEditar && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-[300] p-4 animate-fade-in" onClick={() => setModalEditOpen(false)}>
-          <div className="bg-white rounded-[2rem] w-full max-w-md overflow-hidden shadow-2xl max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
-            <div className="bg-gradient-to-br from-primary to-[#3a2e25] p-6 text-white text-center relative overflow-hidden shrink-0">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-300 p-4 animate-fade-in" onClick={() => setModalEditOpen(false)}>
+          <div className="bg-white rounded-4xl w-full max-w-md overflow-hidden shadow-2xl max-h-[90vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="bg-linear-to-br from-primary to-[#3a2e25] p-6 text-white text-center relative overflow-hidden shrink-0">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(255,120,0,0.15),transparent_60%)]"></div>
               <div className="relative z-10">
                 <button onClick={() => setModalEditOpen(false)} className="absolute top-0 right-0 w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/20 transition-all">
@@ -380,29 +380,29 @@ const AdminDashboard = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Nombre</label>
-                      <input type="text" value={editForm.nombrePaciente} onChange={e => setEditForm({...editForm, nombrePaciente: e.target.value})}
+                      <input type="text" value={editForm.nombrePaciente} onChange={e => setEditForm({ ...editForm, nombrePaciente: e.target.value })}
                         className="w-full p-2.5 bg-white rounded-xl font-bold text-xs border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
                     </div>
                     <div>
                       <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Apellido</label>
-                      <input type="text" value={editForm.apellidoPaciente} onChange={e => setEditForm({...editForm, apellidoPaciente: e.target.value})}
+                      <input type="text" value={editForm.apellidoPaciente} onChange={e => setEditForm({ ...editForm, apellidoPaciente: e.target.value })}
                         className="w-full p-2.5 bg-white rounded-xl font-bold text-xs border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
                     </div>
                   </div>
                   <div>
                     <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">DNI</label>
-                    <input type="text" value={editForm.dni} onChange={e => setEditForm({...editForm, dni: e.target.value})} placeholder="Sin puntos ni espacios"
+                    <input type="text" value={editForm.dni} onChange={e => setEditForm({ ...editForm, dni: e.target.value })} placeholder="Sin puntos ni espacios"
                       className="w-full p-2.5 bg-white rounded-xl font-bold text-sm border border-accent-orange/20 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">WhatsApp</label>
-                      <input type="text" value={editForm.telefono} onChange={e => setEditForm({...editForm, telefono: e.target.value})}
+                      <input type="text" value={editForm.telefono} onChange={e => setEditForm({ ...editForm, telefono: e.target.value })}
                         className="w-full p-2.5 bg-white rounded-xl font-bold text-xs border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
                     </div>
                     <div>
                       <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Email</label>
-                      <input type="text" value={editForm.email} onChange={e => setEditForm({...editForm, email: e.target.value})}
+                      <input type="text" value={editForm.email} onChange={e => setEditForm({ ...editForm, email: e.target.value })}
                         className="w-full p-2.5 bg-white rounded-xl font-bold text-[10px] border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all" />
                     </div>
                   </div>
@@ -416,17 +416,17 @@ const AdminDashboard = () => {
                   <div>
                     <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Fecha</label>
                     <div className="grid grid-cols-3 gap-2">
-                      <select value={editForm.fechaDia} onChange={e => setEditForm({ ...editForm, fechaDia: e.target.value })} 
+                      <select value={editForm.fechaDia} onChange={e => setEditForm({ ...editForm, fechaDia: e.target.value })}
                         className="p-2.5 bg-background rounded-xl font-bold text-center text-xs border border-secondary/10 focus:border-accent-orange outline-none appearance-none">
                         {Array.from({ length: 31 }, (_, i) => i + 1)
                           .filter(d => { const hoy = new Date(); const mSelected = parseInt(editForm.fechaMes); if (mSelected > hoy.getMonth() + 1) return true; return d >= hoy.getDate(); })
                           .map(d => (<option key={d} value={d}>{d}</option>))}
                       </select>
-                      <select value={editForm.fechaMes} onChange={e => setEditForm({ ...editForm, fechaMes: e.target.value })} 
+                      <select value={editForm.fechaMes} onChange={e => setEditForm({ ...editForm, fechaMes: e.target.value })}
                         className="p-2.5 bg-background rounded-xl font-bold text-center text-xs border border-secondary/10 focus:border-accent-orange outline-none appearance-none">
                         {Array.from({ length: 12 }, (_, i) => i + 1)
                           .filter(m => m >= new Date().getMonth() + 1)
-                          .map(m => (<option key={m} value={m}>{new Date(2026, m-1).toLocaleString('es', { month: 'long' }).toUpperCase()}</option>))}
+                          .map(m => (<option key={m} value={m}>{new Date(2026, m - 1).toLocaleString('es', { month: 'long' }).toUpperCase()}</option>))}
                       </select>
                       <div className="p-2.5 bg-secondary/5 rounded-xl font-bold text-center text-xs text-text-light/40 flex items-center justify-center border border-secondary/10">2026</div>
                     </div>
@@ -434,7 +434,7 @@ const AdminDashboard = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Horario</label>
-                      <select value={editForm.hora} onChange={e => setEditForm({ ...editForm, hora: e.target.value })} 
+                      <select value={editForm.hora} onChange={e => setEditForm({ ...editForm, hora: e.target.value })}
                         className="w-full p-2.5 bg-background rounded-xl font-bold text-center text-xs border border-secondary/10 focus:border-accent-orange outline-none appearance-none">
                         {["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"]
                           .filter(h => { const fechaFormat = `${editForm.fechaAno}-${editForm.fechaMes.padStart(2, '0')}-${String(editForm.fechaDia).padStart(2, '0')}`; return !turnos.some(t => t.fecha === fechaFormat && t.hora === h && t._id !== turnoAEditar?._id); })
@@ -443,7 +443,7 @@ const AdminDashboard = () => {
                     </div>
                     <div>
                       <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Profesional</label>
-                      <select value={editForm.profesional} onChange={e => setEditForm({ ...editForm, profesional: e.target.value })} 
+                      <select value={editForm.profesional} onChange={e => setEditForm({ ...editForm, profesional: e.target.value })}
                         className="w-full p-2.5 bg-background rounded-xl font-bold text-xs border border-secondary/10 focus:border-accent-orange outline-none appearance-none">
                         <option value="Dra. Erina">Dra. Erina</option>
                         <option value="Dr. Adolfo">Dr. Adolfo</option>
@@ -464,7 +464,7 @@ const AdminDashboard = () => {
                 >
                   📅 Agendar en mi Google Calendar
                 </button>
-                <button onClick={handleConfirmEdit} className="w-full py-4 bg-gradient-to-r from-accent-orange to-orange-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-orange-500/20 active:scale-[0.98] hover:shadow-xl transition-all">
+                <button onClick={handleConfirmEdit} className="w-full py-4 bg-linear-to-r from-accent-orange to-orange-500 text-white rounded-2xl font-black uppercase tracking-widest text-sm shadow-lg shadow-orange-500/20 active:scale-[0.98] hover:shadow-xl transition-all">
                   Confirmar y Notificar
                 </button>
               </div>

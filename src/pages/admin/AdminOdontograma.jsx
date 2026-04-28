@@ -79,7 +79,7 @@ const AdminOdontograma = () => {
       }
 
       setMensaje({ texto: '¡Odontograma guardado exitosamente!', tipo: 'success' });
-      
+
       setTimeout(() => setMensaje({ texto: '', tipo: '' }), 4000);
     } catch (err) {
       console.error("Error al guardar:", err);
@@ -117,7 +117,7 @@ const AdminOdontograma = () => {
 
         {/* ========== TOAST FLOTANTE ========== */}
         {mensaje.texto && (
-          <div className={`fixed top-6 right-6 z-[200] flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-black text-sm text-white border animate-fade-in backdrop-blur-md
+          <div className={`fixed top-6 right-6 z-200 flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl font-black text-sm text-white border animate-fade-in backdrop-blur-md
             ${mensaje.tipo === 'success' ? 'bg-green-500/90 border-green-400/50' : 'bg-red-500/90 border-red-400/50'}`}>
             <FaInfoCircle className="text-lg shrink-0" />
             {mensaje.texto}
@@ -133,7 +133,7 @@ const AdminOdontograma = () => {
             </Link>
           </div>
         ) : (
-          <NeoOdontograma 
+          <NeoOdontograma
             dientes={dientes}
             setDientes={setDientes}
             pacienteNombre={pacienteNombre}
@@ -143,7 +143,7 @@ const AdminOdontograma = () => {
           />
         )}
 
-        <div className="bg-gradient-to-br from-primary to-[#3a2e25] p-6 md:p-8 text-white relative overflow-hidden rounded-[2rem] md:rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 mt-8 md:mt-12">
+        <div className="bg-linear-to-br from-primary to-[#3a2e25] p-6 md:p-8 text-white relative overflow-hidden rounded-4xl md:rounded-[2.5rem] shadow-2xl flex flex-col md:flex-row items-center md:items-start gap-4 md:gap-6 mt-8 md:mt-12">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,120,0,0.15),transparent_60%)] pointer-events-none"></div>
           <div className="relative z-10 w-14 h-14 md:w-16 md:h-16 bg-white/10 rounded-2xl flex items-center justify-center shrink-0 shadow-lg border border-white/20 backdrop-blur-sm">
             <FaInfoCircle className="text-2xl md:text-3xl text-white" />
@@ -151,7 +151,7 @@ const AdminOdontograma = () => {
           <div className="relative z-10 text-center md:text-left">
             <h4 className="text-base md:text-lg font-black text-white mb-2 tracking-tight">Sistema de Odontograma Interactivo</h4>
             <p className="text-xs md:text-sm text-white/70 font-medium leading-relaxed max-w-2xl">
-              Hacé clic en cada cara del diente para cambiar su estado clínico. Los cambios se guardan al presionar el botón de guardado. 
+              Hacé clic en cada cara del diente para cambiar su estado clínico. Los cambios se guardan al presionar el botón de guardado.
               El odontograma se vinculará automáticamente con el historial médico del paciente seleccionado.
             </p>
           </div>
