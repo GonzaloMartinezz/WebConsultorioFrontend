@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import api from "../../api/axios.js";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 import { FaUser, FaIdCard, FaEnvelope, FaWhatsapp, FaUserMd, FaCalendarAlt, FaClock, FaStethoscope } from "react-icons/fa";
 
 const AppointmentForm = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const fechaHoy = new Date().toISOString().split('T')[0];
 
@@ -135,6 +137,9 @@ const AppointmentForm = () => {
 
       // 4. LA MAGIA PARA QUE NO SE BLOQUEE: Abrimos en pestaña nueva
       window.open(url, '_blank');
+      
+      // 5. REDIRIGIR AL INICIO
+      setTimeout(() => navigate('/'), 1000);
 
     } catch (error) {
       console.error("Error al registrar el turno:", error);

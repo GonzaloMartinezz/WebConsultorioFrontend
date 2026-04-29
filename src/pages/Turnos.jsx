@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,8 +21,10 @@ import {
 
 const Turnos = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const totalSteps = 3;
+  const [mostrarModalExito, setMostrarModalExito] = useState(false);
 
   const hoy = new Date();
   const [form, setForm] = useState({
@@ -123,10 +126,12 @@ const Turnos = () => {
 _Enviado desde el Portal Oficial de Turnos._`;
 
       const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(textoMensaje)}`;
-      setMensaje({ texto: "¡Solicitud procesada con éxito!", tipo: "success" });
+      setMostrarModalExito(true);
+      
       setTimeout(() => {
         window.open(url, '_blank');
-      }, 1200);
+        navigate('/');
+      }, 3000);
 
     } catch (error) {
       setMensaje({ texto: "Error de red. Intente WhatsApp directo.", tipo: "error" });
@@ -481,6 +486,42 @@ _Enviado desde el Portal Oficial de Turnos._`;
           <button onClick={handleSubmit} disabled={cargando} className="bg-linear-to-r from-accent-orange to-orange-500 text-white px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-orange-500/30 flex items-center gap-2">{cargando ? '...' : 'Enviar WA'} <Send size={14} /></button>
         )}
       </footer>
+
+      {/* Modal de Éxito Full Screen */}
+      <AnimatePresence>
+        {mostrarModalExito && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          >
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }} 
+              animate={{ scale: 1, y: 0 }} 
+              className="bg-white rounded-[3rem] p-10 max-w-sm w-full relative z-10 flex flex-col items-center text-center shadow-2xl border border-white/20"
+            >
+              <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mb-6 shadow-inner">
+                <Check className="text-green-500 w-10 h-10" />
+              </div>
+              <h3 className="text-2xl font-black text-primary uppercase tracking-tighter mb-2">¡Turno Solicitado!</h3>
+              <p className="text-text-light/70 text-xs font-bold leading-relaxed mb-8">
+                Tu solicitud ha sido enviada al sistema. Redirigiendo al inicio para continuar...
+              </p>
+              <div className="w-full h-1.5 bg-[#FAF9F6] rounded-full overflow-hidden">
+                <motion.div 
+                  initial={{ width: 0 }} 
+                  animate={{ width: "100%" }} 
+                  transition={{ duration: 3 }} 
+                  className="h-full bg-green-500"
+                ></motion.div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 };

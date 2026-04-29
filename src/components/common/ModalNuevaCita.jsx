@@ -11,7 +11,7 @@ const ModalNuevaCita = ({ onClose, onTurnoCreado, initialDate, initialTime }) =>
     pacienteId: '',
     nombrePaciente: '',
     apellidoPaciente: '',
-    fecha: initialDate || new Date().toISOString().split('T')[0],
+    fecha: initialDate || new Date().toLocaleDateString('en-CA'), // 'en-CA' outputs YYYY-MM-DD
     hora: initialTime || '09:00',
     motivo: '',
     profesional: 'Dr. Adolfo Martínez',

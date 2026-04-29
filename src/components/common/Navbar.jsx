@@ -24,6 +24,13 @@ const Navbar = () => {
     }
   }, []);
 
+  const getInitials = () => {
+    if (!usuario) return "";
+    const n = usuario.nombre ? usuario.nombre.charAt(0).toUpperCase() : "";
+    const a = usuario.apellido ? usuario.apellido.charAt(0).toUpperCase() : "";
+    return n + a || <FaUserCircle />;
+  };
+
   const handleLogout = async () => {
     try {
       await api.post('/auth/logout').catch(() => { });
@@ -83,7 +90,10 @@ const Navbar = () => {
             ) : (
               <div className="flex items-center gap-3">
                 <Link to="/mi-perfil" className={`flex items-center gap-2 font-bold text-base transition-all ${scrolled ? 'text-primary hover:text-accent-orange' : 'text-white hover:text-accent-orange drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>
-                  <FaUserCircle className="text-xl" /> Mi Perfil
+                  <div className="w-8 h-8 rounded-full bg-accent-orange text-white flex items-center justify-center text-[10px] font-black tracking-widest border border-white/20 shadow-md">
+                    {getInitials()}
+                  </div> 
+                  Mi Perfil
                 </Link>
                 <button onClick={handleLogout} className={`p-2.5 rounded-full transition-all ${scrolled ? 'bg-red-50 text-red-500 hover:bg-red-500 hover:text-white' : 'bg-red-500/80 backdrop-blur-sm text-white hover:bg-red-600 border border-white/20 drop-shadow-md'}`} title="Cerrar Sesión">
                   <FaSignOutAlt />
@@ -165,7 +175,9 @@ const Navbar = () => {
               {usuario ? (
                 <>
                   <Link to="/mi-perfil" className="w-full bg-white/10 backdrop-blur-md border border-white/20 text-white p-5 rounded-[2rem] flex items-center justify-center gap-3 font-bold uppercase tracking-widest active:scale-95 transition-transform" onClick={() => setMenuOpen(false)}>
-                    <FaUserCircle className="text-2xl text-[#FF7800]" />
+                    <div className="w-8 h-8 rounded-full bg-accent-orange text-white flex items-center justify-center text-[10px] font-black tracking-widest">
+                      {getInitials()}
+                    </div>
                     Mi Perfil
                   </Link>
                   <button onClick={() => { setMenuOpen(false); handleLogout(); }} className="w-full text-red-400 font-bold p-4 text-center uppercase tracking-widest text-sm hover:text-red-300 transition-colors">

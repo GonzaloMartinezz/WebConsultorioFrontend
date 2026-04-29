@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios.js";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -8,7 +8,14 @@ import LoginGoogle from "../components/LoginGoogle.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { user, login } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      if (user.rol === 'admin') navigate('/admin');
+      else navigate('/');
+    }
+  }, [user, navigate]);
 
   const [isRegistro, setIsRegistro] = useState(false);
   const [modoRecuperar, setModoRecuperar] = useState(false);

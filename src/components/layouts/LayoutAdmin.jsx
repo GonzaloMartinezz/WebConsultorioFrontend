@@ -89,7 +89,7 @@ const LayoutAdmin = ({ children }) => {
       <aside
         className={`bg-primary text-background flex flex-col transition-all duration-300 shadow-2xl md:border-r-4 border-accent-orange/50 
           fixed md:relative inset-y-0 left-0 z-40 md:z-30 transform h-screen md:h-auto
-          ${isMobileOpen ? 'translate-x-0 w-64' : '-translate-x-full md:translate-x-0'} 
+          ${isMobileOpen ? 'translate-x-0 w-[80vw] max-w-[320px]' : '-translate-x-full md:translate-x-0'} 
           ${isExpanded ? 'md:w-1/4 md:min-w-[280px]' : 'md:w-[88px]'}
         `}
       >
@@ -126,7 +126,7 @@ const LayoutAdmin = ({ children }) => {
         </button>
 
         {/* LISTA DE ÍTEMS DEL MENÚ */}
-        <nav className="grow p-3 md:p-4 mt-2 md:mt-4 flex flex-col gap-1 md:gap-2 overflow-y-auto custom-scrollbar">
+        <nav className="grow p-3 md:p-4 mt-2 md:mt-4 flex flex-col gap-3 md:gap-4 overflow-y-auto custom-scrollbar">
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path;
             const Icon = item.icon;

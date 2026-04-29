@@ -16,7 +16,6 @@ const AdminAgenda = () => {
   const [turnoSeleccionado, setTurnoSeleccionado] = useState(null);
   const [confirmarCancelar, setConfirmarCancelar] = useState(false);
   const [procesando, setProcesando] = useState(false);
-  const [notificacionPendiente, setNotificacionPendiente] = useState(null);
 
   const navigate = useNavigate();
 
@@ -134,7 +133,12 @@ const AdminAgenda = () => {
       await api.patch(`/turnos/${turnoSeleccionado._id}/estado`, { estado: 'Confirmado' });
       const urls = generarUrlsNotificacion(turnoSeleccionado);
       setTurnoSeleccionado(null);
-      setNotificacionPendiente(urls);
+      
+      alert('¡Turno confirmado y enviado correctamente!');
+      if (urls.waUrl) {
+        window.open(urls.waUrl, '_blank');
+      }
+      
       await fetchTurnos();
     } catch (error) {
       console.error("Error al confirmar:", error);
@@ -223,86 +227,90 @@ const AdminAgenda = () => {
         </header>
 
         {/* ══════ GRILLA TIPO CALENDARIO ══════ */}
-        <div className="flex-1 bg-white rounded-3xl shadow-xl border border-secondary/10 overflow-hidden flex flex-col">
+        <div className="flex-1 bg-white rounded-3xl shadow-xl border border-secondary/10 overflow-hidden flex flex-col relative">
 
-          {/* Cabecera de días */}
-          <div className="flex border-b border-secondary/10 bg-background/20 shrink-0 ml-[80px]">
-            {diasSemana.map((dia, index) => (
-              <div key={index} className={`flex-1 py-4 text-center border-r border-secondary/5 last:border-0 ${esHoy(dia) ? 'bg-primary/5 relative' : ''}`}>
-                <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${esHoy(dia) ? 'text-accent-orange' : 'text-text-light/60'}`}>{nombresDias[index]}</p>
-                <p className={`text-2xl font-black ${esHoy(dia) ? 'text-primary' : 'text-text'}`}>{dia.getDate()}</p>
-                {esHoy(dia) && <div className="absolute bottom-0 left-0 w-full h-1 bg-accent-orange"></div>}
-              </div>
-            ))}
-          </div>
+          {/* Wrapper con scroll horizontal para móviles */}
+          <div className="flex-1 overflow-x-auto overflow-y-hidden flex flex-col custom-scrollbar">
 
-          {/* Cuerpo con Scroll y Horas a la izquierda */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar relative flex bg-gray-50/30">
-
-            {/* Columna de Horas */}
-            <div className="w-[80px] bg-white border-r border-secondary/10 shadow-sm sticky left-0 z-10">
-              {HORARIOS.map((hora) => (
-                <div key={hora} className="h-[100px] border-b border-secondary/5 flex items-start justify-center pt-3 relative">
-                  <span className="text-[10px] font-black text-primary/40 tracking-tighter bg-white px-2 rounded-full border border-secondary/5 shadow-xs">
-                    {hora}
-                  </span>
-                  {/* Línea horizontal que cruza */}
-                  <div className="absolute top-0 left-[80px] w-[2000px] h-px bg-secondary/5 pointer-events-none"></div>
+            {/* Cabecera de días */}
+            <div className="flex border-b border-secondary/10 bg-background/20 shrink-0 ml-[80px] min-w-[900px]">
+              {diasSemana.map((dia, index) => (
+                <div key={index} className={`flex-1 py-4 text-center border-r border-secondary/5 last:border-0 ${esHoy(dia) ? 'bg-primary/5 relative' : ''}`}>
+                  <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${esHoy(dia) ? 'text-accent-orange' : 'text-text-light/60'}`}>{nombresDias[index]}</p>
+                  <p className={`text-2xl font-black ${esHoy(dia) ? 'text-primary' : 'text-text'}`}>{dia.getDate()}</p>
+                  {esHoy(dia) && <div className="absolute bottom-0 left-0 w-full h-1 bg-accent-orange"></div>}
                 </div>
               ))}
             </div>
 
-            {/* Columnas de los Días */}
-            <div className="flex flex-1 min-w-[900px]">
-              {diasSemana.map((dia) => {
-                const turnosDelDia = turnos.filter(t => t.fecha === formatearFechaDB(dia));
+            {/* Cuerpo con Scroll y Horas a la izquierda */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar relative flex bg-gray-50/30 min-w-[980px]">
 
-                return (
-                  <div key={dia} className={`flex-1 border-r border-secondary/5 last:border-0 relative ${esHoy(dia) ? 'bg-primary/2' : ''}`}>
-                    {HORARIOS.map(hora => {
-                      const turnoEnHora = turnosDelDia.find(t => t.hora === hora);
-
-                      return (
-                        <div key={`${dia}-${hora}`} className="h-[100px] p-1.5 border-b border-secondary/5 relative group">
-                          {turnoEnHora ? (
-                            <div
-                              onClick={() => { setTurnoSeleccionado(turnoEnHora); setConfirmarCancelar(false); }}
-                              className={`h-full w-full rounded-2xl p-3 shadow-md border-l-[6px] transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between hover:scale-[1.03] hover:shadow-xl z-20 group
-                                ${turnoEnHora.profesional?.toLowerCase().includes('erina')
-                                  ? 'bg-emerald-50 border-l-emerald-500 hover:bg-emerald-100/80 shadow-emerald-500/10'
-                                  : 'bg-blue-50 border-l-blue-500 hover:bg-blue-100/80 shadow-blue-500/10'}`}
-                            >
-                              <div className="flex justify-between items-start gap-1">
-                                <div>
-                                  <p className="text-[10px] font-black text-primary/40 uppercase tracking-widest">{turnoEnHora.hora}</p>
-                                  <p className="font-black text-primary text-[11px] leading-tight uppercase mt-1 truncate max-w-[120px]">
-                                    {turnoEnHora.nombrePaciente} {turnoEnHora.apellidoPaciente}
-                                  </p>
-                                </div>
-                                <div className={`p-1 rounded-lg ${turnoEnHora.estado === 'Confirmado' ? 'bg-green-500/20 text-green-600' : 'bg-amber-500/20 text-amber-600'}`}>
-                                  <FaCheckCircle className="text-xs" />
-                                </div>
-                              </div>
-                              <div className="mt-1 flex items-center justify-between">
-                                <p className="text-[9px] font-bold text-primary/60 truncate italic">🦷 {turnoEnHora.motivo || 'Consulta'}</p>
-                                <div className={`text-[8px] font-black px-2 py-0.5 rounded-full text-white ${turnoEnHora.profesional?.toLowerCase().includes('erina') ? 'bg-emerald-500' : 'bg-blue-500'}`}>
-                                  {turnoEnHora.profesional?.includes('Adolfo') ? 'DR. AM' : 'DRA. EC'}
-                                </div>
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                              <span className="text-[9px] font-black text-primary/10 tracking-[0.3em] uppercase">Horario Libre</span>
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
+              {/* Columna de Horas */}
+              <div className="w-[80px] bg-white border-r border-secondary/10 shadow-sm sticky left-0 z-10 shrink-0">
+                {HORARIOS.map((hora) => (
+                  <div key={hora} className="h-[100px] border-b border-secondary/5 flex items-start justify-center pt-3 relative">
+                    <span className="text-[10px] font-black text-primary/40 tracking-tighter bg-white px-2 rounded-full border border-secondary/5 shadow-xs">
+                      {hora}
+                    </span>
+                    {/* Línea horizontal que cruza */}
+                    <div className="absolute top-0 left-[80px] w-[2000px] h-px bg-secondary/5 pointer-events-none"></div>
                   </div>
-                );
-              })}
-            </div>
+                ))}
+              </div>
 
+              {/* Columnas de los Días */}
+              <div className="flex flex-1">
+                {diasSemana.map((dia) => {
+                  const turnosDelDia = turnos.filter(t => t.fecha === formatearFechaDB(dia));
+
+                  return (
+                    <div key={dia} className={`flex-1 border-r border-secondary/5 last:border-0 relative ${esHoy(dia) ? 'bg-primary/2' : ''}`}>
+                      {HORARIOS.map(hora => {
+                        const turnoEnHora = turnosDelDia.find(t => t.hora === hora);
+
+                        return (
+                          <div key={`${dia}-${hora}`} className="h-[100px] p-1.5 border-b border-secondary/5 relative group">
+                            {turnoEnHora ? (
+                              <div
+                                onClick={() => { setTurnoSeleccionado(turnoEnHora); setConfirmarCancelar(false); }}
+                                className={`h-full w-full rounded-2xl p-3 shadow-md border-l-[6px] transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between hover:scale-[1.03] hover:shadow-xl z-20 group
+                                  ${turnoEnHora.profesional?.toLowerCase().includes('erina')
+                                    ? 'bg-emerald-50 border-l-emerald-500 hover:bg-emerald-100/80 shadow-emerald-500/10'
+                                    : 'bg-blue-50 border-l-blue-500 hover:bg-blue-100/80 shadow-blue-500/10'}`}
+                              >
+                                <div className="flex justify-between items-start gap-1">
+                                  <div>
+                                    <p className="text-[10px] font-black text-primary/40 uppercase tracking-widest">{turnoEnHora.hora}</p>
+                                    <p className="font-black text-primary text-[11px] leading-tight uppercase mt-1 truncate max-w-[120px]">
+                                      {turnoEnHora.nombrePaciente} {turnoEnHora.apellidoPaciente}
+                                    </p>
+                                  </div>
+                                  <div className={`p-1 rounded-lg ${turnoEnHora.estado === 'Confirmado' ? 'bg-green-500/20 text-green-600' : 'bg-amber-500/20 text-amber-600'}`}>
+                                    <FaCheckCircle className="text-xs" />
+                                  </div>
+                                </div>
+                                <div className="mt-1 flex items-center justify-between">
+                                  <p className="text-[9px] font-bold text-primary/60 truncate italic">🦷 {turnoEnHora.motivo || 'Consulta'}</p>
+                                  <div className={`text-[8px] font-black px-2 py-0.5 rounded-full text-white ${turnoEnHora.profesional?.toLowerCase().includes('erina') ? 'bg-emerald-500' : 'bg-blue-500'}`}>
+                                    {turnoEnHora.profesional?.includes('Adolfo') ? 'DR. AM' : 'DRA. EC'}
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                                <span className="text-[9px] font-black text-primary/10 tracking-[0.3em] uppercase">Horario Libre</span>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
@@ -447,63 +455,6 @@ const AdminAgenda = () => {
                   No, Volver Atrás
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ════════════════════════════════════════════════════════════
-          MODAL NOTIFICACIONES POST-CONFIRMACIÓN
-          ════════════════════════════════════════════════════════════ */}
-      {notificacionPendiente && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-hidden shadow-2xl relative border border-secondary/30 flex flex-col">
-
-            <div className="bg-green-500 px-6 pt-8 pb-6 text-white relative text-center">
-              <button onClick={() => setNotificacionPendiente(null)} className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors">
-                <FaTimesCircle className="text-2xl" />
-              </button>
-              <FaCheckCircle className="text-6xl mx-auto mb-4 text-white drop-shadow-md" />
-              <h2 className="text-2xl font-black uppercase tracking-tight">¡Turno Confirmado!</h2>
-              <p className="mt-2 text-green-100 text-sm font-medium">
-                El turno de <span className="font-bold">{notificacionPendiente.nombrePaciente}</span> se ha guardado exitosamente.
-              </p>
-            </div>
-
-            <div className="p-6 space-y-4 bg-gray-50 flex-1">
-              <h3 className="text-xs font-black text-primary uppercase tracking-widest text-center mb-2">Notificar al Paciente</h3>
-              <div className="grid grid-cols-1 gap-3">
-                {notificacionPendiente.waUrl ? (
-                  <a href={notificacionPendiente.waUrl} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-3 w-full p-4 bg-white hover:bg-green-50 border-2 border-green-500 rounded-xl text-green-700 font-bold text-base transition-all hover:scale-[1.02] active:scale-95 shadow-sm">
-                    <FaWhatsapp className="text-2xl text-green-500" /> Enviar WhatsApp
-                  </a>
-                ) : (
-                  <div className="flex items-center justify-center gap-3 w-full p-4 bg-gray-100 border-2 border-gray-200 rounded-xl text-gray-400 font-bold text-base cursor-not-allowed">
-                    <FaWhatsapp className="text-2xl" /> Sin WhatsApp registrado
-                  </div>
-                )}
-                {notificacionPendiente.mailUrl ? (
-                  <a href={notificacionPendiente.mailUrl}
-                    className="flex items-center justify-center gap-3 w-full p-4 bg-white hover:bg-blue-50 border-2 border-blue-500 rounded-xl text-blue-700 font-bold text-base transition-all hover:scale-[1.02] active:scale-95 shadow-sm">
-                    <FaEnvelope className="text-2xl text-blue-500" /> Enviar Email
-                  </a>
-                ) : (
-                  <div className="flex items-center justify-center gap-3 w-full p-4 bg-gray-100 border-2 border-gray-200 rounded-xl text-gray-400 font-bold text-base cursor-not-allowed">
-                    <FaEnvelope className="text-2xl" /> Sin Email registrado
-                  </div>
-                )}
-              </div>
-              <p className="text-[10px] text-text-light font-bold mt-3 text-center uppercase tracking-widest">
-                📧 El email de confirmación se envió automáticamente al paciente.
-              </p>
-            </div>
-
-            <div className="p-4 bg-white border-t border-gray-100">
-              <button onClick={() => setNotificacionPendiente(null)}
-                className="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl transition-colors uppercase text-sm tracking-wider">
-                Cerrar y volver al calendario
-              </button>
             </div>
           </div>
         </div>

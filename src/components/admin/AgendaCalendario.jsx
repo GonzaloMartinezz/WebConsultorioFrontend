@@ -36,7 +36,6 @@ const AgendaCalendario = () => {
   const [turnoSeleccionado, setTurnoSeleccionado] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [procesando, setProcesando] = useState(false);
-  const [notificacionPendiente, setNotificacionPendiente] = useState(null);
 
   // ─── Cargar turnos y adaptarlos al formato de react-big-calendar ─
   const cargarTurnos = async () => {
@@ -116,8 +115,11 @@ const AgendaCalendario = () => {
     const startDate = new Date(year, month - 1, day, hour, minute);
     const endDate = new Date(startDate.getTime() + 30 * 60000);
 
-    // Formato Google Calendar: YYYYMMDDTHHmmssZ
-    const formatGCal = (date) => date.toISOString().replace(/-|:|\.\d\d\d/g, '');
+    // Formato Google Calendar local: YYYYMMDDTHHmmss
+    const formatGCal = (date) => {
+      const pad = n => String(n).padStart(2, '0');
+      return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}T${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}`;
+    };
 
     return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(`Turno Odontológico - ${turnoData.profesional}`)}&dates=${formatGCal(startDate)}/${formatGCal(endDate)}&details=${encodeURIComponent(`Motivo: ${turnoData.motivo || 'Consulta general'}\nPaciente: ${turnoData.nombrePaciente} ${turnoData.apellidoPaciente}`)}&location=${encodeURIComponent('Jose Rondeau 827, San Miguel de Tucumán')}`;
   };
@@ -165,9 +167,14 @@ const AgendaCalendario = () => {
       // 3. PREPARAR URLS DE NOTIFICACIÓN (WhatsApp + Email + Calendar)
       const urls = generarUrlsNotificacion(turno, googleCalUrl);
 
-      // 4. CERRAR MODAL Y MOSTRAR PANEL DE NOTIFICACIONES
+      // 4. CERRAR MODAL Y MOSTRAR ALERTA
       setTurnoSeleccionado(null);
-      setNotificacionPendiente(urls);
+      alert('¡Turno confirmado y enviado correctamente!');
+      
+      if (urls.waUrl) {
+        window.open(urls.waUrl, '_blank');
+      }
+      
       await cargarTurnos();
 
     } catch (error) {
@@ -215,44 +222,48 @@ const AgendaCalendario = () => {
         </div>
 
         {/* ════ CALENDARIO EXPANDIDO ════ */}
-        <div className="bg-white p-2 sm:p-4 rounded-2xl shadow-xl border border-secondary/20 flex-1 min-h-[80vh] flex flex-col calendar-container">
+        <div className="bg-white p-2 sm:p-4 rounded-2xl shadow-xl border border-secondary/20 flex-1 min-h-[80vh] flex flex-col calendar-container overflow-hidden">
           {cargando ? (
             <div className="flex-1 flex flex-col items-center justify-center gap-3">
               <div className="w-10 h-10 border-3 border-accent-orange border-t-transparent rounded-full animate-spin" />
               <p className="font-bold text-primary/50 text-sm uppercase tracking-widest">Cargando agenda...</p>
             </div>
           ) : (
-            <Calendar
-              localizer={localizer}
-              events={eventos}
-              startAccessor="start"
-              endAccessor="end"
-              culture="es"
-              defaultView="week"
-              views={['month', 'week', 'day', 'agenda']}
-              min={new Date(2020, 1, 1, 8, 0)}
-              max={new Date(2020, 1, 1, 21, 0)}
-              step={15}
-              timeslots={4}
-              messages={{
-                next: "Sig",
-                previous: "Ant",
-                today: "Hoy",
-                month: "Mes",
-                week: "Semana",
-                day: "Día",
-                agenda: "Lista",
-                date: "Fecha",
-                time: "Hora",
-                event: "Turno",
-                noEventsInRange: "No hay turnos en este rango.",
-                showMore: (total) => `+${total} más`,
-              }}
-              onSelectEvent={(event) => setTurnoSeleccionado(event)}
-              eventPropGetter={eventStyleGetter}
-              components={{ event: CustomEvent }}
-              className="font-sans text-sm text-primary flex-1"
-            />
+            <div className="flex-1 overflow-x-auto overflow-y-hidden custom-scrollbar">
+              <div className="min-w-[800px] h-full">
+                <Calendar
+                  localizer={localizer}
+                  events={eventos}
+                  startAccessor="start"
+                  endAccessor="end"
+                  culture="es"
+                  defaultView="week"
+                  views={['month', 'week', 'day', 'agenda']}
+                  min={new Date(2020, 1, 1, 8, 0)}
+                  max={new Date(2020, 1, 1, 21, 0)}
+                  step={15}
+                  timeslots={4}
+                  messages={{
+                    next: "Sig",
+                    previous: "Ant",
+                    today: "Hoy",
+                    month: "Mes",
+                    week: "Semana",
+                    day: "Día",
+                    agenda: "Lista",
+                    date: "Fecha",
+                    time: "Hora",
+                    event: "Turno",
+                    noEventsInRange: "No hay turnos en este rango.",
+                    showMore: (total) => `+${total} más`,
+                  }}
+                  onSelectEvent={(event) => setTurnoSeleccionado(event)}
+                  eventPropGetter={eventStyleGetter}
+                  components={{ event: CustomEvent }}
+                  className="font-sans text-sm text-primary h-full"
+                />
+              </div>
+            </div>
           )}
         </div>
       </div>
@@ -335,68 +346,6 @@ const AgendaCalendario = () => {
         </div>
       )}
 
-      {/* ══════════════════════════════════════════════════════
-          MODAL DE NOTIFICACIONES POST-CONFIRMACIÓN
-          ══════════════════════════════════════════════════════ */}
-      {notificacionPendiente && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fade-in">
-          <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-hidden shadow-2xl relative border border-secondary/30 flex flex-col">
-
-            <div className="bg-green-500 px-6 pt-8 pb-6 text-white relative text-center">
-              <button onClick={() => setNotificacionPendiente(null)} className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors">
-                <FaTimesCircle className="text-2xl" />
-              </button>
-              <FaCheckCircle className="text-6xl mx-auto mb-4 text-white drop-shadow-md" />
-              <h2 className="text-2xl font-black uppercase tracking-tight">¡Turno Confirmado!</h2>
-              <p className="mt-2 text-green-100 text-sm font-medium">
-                El turno de <span className="font-bold">{notificacionPendiente.nombrePaciente}</span> se ha guardado exitosamente.
-              </p>
-            </div>
-
-            <div className="p-6 space-y-4 bg-gray-50 flex-1">
-              <h3 className="text-xs font-black text-primary uppercase tracking-widest text-center mb-2">Notificar al Paciente</h3>
-              <div className="grid grid-cols-1 gap-3">
-                {notificacionPendiente.waUrl ? (
-                  <a href={notificacionPendiente.waUrl} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-3 w-full p-4 bg-white hover:bg-green-50 border-2 border-green-500 rounded-xl text-green-700 font-bold text-base transition-all hover:scale-[1.02] active:scale-95 shadow-sm">
-                    <FaWhatsapp className="text-2xl text-green-500" /> Enviar WhatsApp
-                  </a>
-                ) : (
-                  <div className="flex items-center justify-center gap-3 w-full p-4 bg-gray-100 border-2 border-gray-200 rounded-xl text-gray-400 font-bold text-base cursor-not-allowed">
-                    <FaWhatsapp className="text-2xl" /> Sin WhatsApp registrado
-                  </div>
-                )}
-                {notificacionPendiente.mailUrl ? (
-                  <a href={notificacionPendiente.mailUrl}
-                    className="flex items-center justify-center gap-3 w-full p-4 bg-white hover:bg-blue-50 border-2 border-blue-500 rounded-xl text-blue-700 font-bold text-base transition-all hover:scale-[1.02] active:scale-95 shadow-sm">
-                    <FaEnvelope className="text-2xl text-blue-500" /> Enviar Email
-                  </a>
-                ) : (
-                  <div className="flex items-center justify-center gap-3 w-full p-4 bg-gray-100 border-2 border-gray-200 rounded-xl text-gray-400 font-bold text-base cursor-not-allowed">
-                    <FaEnvelope className="text-2xl" /> Sin Email registrado
-                  </div>
-                )}
-                {notificacionPendiente.googleCalUrl && (
-                  <a href={notificacionPendiente.googleCalUrl} target="_blank" rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-3 w-full p-4 bg-white hover:bg-orange-50 border-2 border-accent-orange rounded-xl text-primary font-bold text-base transition-all hover:scale-[1.02] active:scale-95 shadow-sm">
-                    📅 Ver en Google Calendar
-                  </a>
-                )}
-              </div>
-              <p className="text-[10px] text-text-light font-bold mt-4 text-center uppercase tracking-widest">
-                El enlace de Google Calendar se incluye en el WhatsApp y Email.
-              </p>
-            </div>
-
-            <div className="p-4 bg-white border-t border-gray-100">
-              <button onClick={() => setNotificacionPendiente(null)}
-                className="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold rounded-xl transition-colors uppercase text-sm tracking-wider">
-                Cerrar y volver al calendario
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
