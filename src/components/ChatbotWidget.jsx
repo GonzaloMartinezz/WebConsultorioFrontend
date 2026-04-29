@@ -120,7 +120,7 @@ const ChatbotWidget = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-primary/90 hover:scale-110 active:scale-95 transition-all duration-300 relative"
       >
-        <FaRobot className="text-2xl" />
+        {isOpen ? <FaTimes className="text-3xl" /> : <FaRobot className="text-3xl" />}
         {!isOpen && <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 border-2 border-white rounded-full animate-pulse"></span>}
       </button>
 

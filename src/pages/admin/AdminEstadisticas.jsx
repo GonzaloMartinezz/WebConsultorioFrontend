@@ -2,13 +2,30 @@ import { useState, useEffect } from "react";
 import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
 import {
   FaUsers, FaCalendarCheck, FaClock, FaUserCheck, FaUserTimes,
-  FaChartBar, FaStethoscope, FaChartPie, FaChartLine
+  FaChartBar, FaStethoscope, FaChartPie, FaChartLine, FaTrash
 } from 'react-icons/fa';
 import api from "../../api/axios.js";
 
 const AdminEstadisticas = () => {
   const [stats, setStats] = useState(null);
   const [cargando, setCargando] = useState(true);
+  const [busquedaPacientes, setBusquedaPacientes] = useState("");
+
+  const handleEliminarPaciente = async (id, nombre) => {
+    if (window.confirm(`¿Estás seguro de eliminar permanentemente al paciente ${nombre}?`)) {
+      try {
+        await api.delete(`/usuarios/${id}`);
+        setStats(prev => ({
+          ...prev,
+          listaUsuarios: prev.listaUsuarios.filter(u => u._id !== id),
+          pacientesTotales: prev.pacientesTotales - 1
+        }));
+      } catch (error) {
+        console.error("Error al eliminar paciente:", error);
+        alert("Hubo un error al eliminar el paciente. Verifica los permisos de administrador.");
+      }
+    }
+  };
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -115,6 +132,19 @@ const AdminEstadisticas = () => {
 
   // Motivos no clasificados (string real)
   const detalleList = Object.entries(motivosDetalle || {}).sort((a, b) => b[1] - a[1]).slice(0, 8);
+
+  // Filtro y orden A-Z de usuarios
+  const usuariosFiltrados = (listaUsuarios || [])
+    .filter(u => {
+      const termino = busquedaPacientes.toLowerCase();
+      const nombreCompleto = `${u.nombre} ${u.apellido}`.toLowerCase();
+      return nombreCompleto.includes(termino) || (u.email && u.email.toLowerCase().includes(termino));
+    })
+    .sort((a, b) => {
+      const nombreA = `${a.nombre || ''} ${a.apellido || ''}`.trim().toLowerCase();
+      const nombreB = `${b.nombre || ''} ${b.apellido || ''}`.trim().toLowerCase();
+      return nombreA.localeCompare(nombreB);
+    });
 
   return (
     <LayoutAdmin>
@@ -343,37 +373,54 @@ const AdminEstadisticas = () => {
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Pacientes Registrados */}
-        <div className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-secondary/10">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-sm border border-secondary/10 flex flex-col">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-11 h-11 bg-blue-500/10 rounded-2xl flex items-center justify-center">
+              <div className="w-11 h-11 bg-blue-500/10 rounded-2xl flex items-center justify-center shrink-0">
                 <FaUsers className="text-xl text-blue-500" />
               </div>
               <div>
                 <h2 className="text-lg font-black text-primary">Directorio de Pacientes</h2>
-                <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">{listaUsuarios.length} usuarios registrados en la app</p>
+                <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">{listaUsuarios.length} usuarios registrados</p>
               </div>
             </div>
-            <span className="text-xs font-black text-text-light bg-secondary/10 px-3 py-1 rounded-lg">A - Z</span>
+            <div className="w-full sm:w-auto">
+              <input
+                type="text"
+                placeholder="Buscar paciente (A-Z)..."
+                value={busquedaPacientes}
+                onChange={(e) => setBusquedaPacientes(e.target.value)}
+                className="w-full sm:w-64 bg-background border border-secondary/10 px-4 py-2.5 rounded-xl text-sm font-bold text-primary focus:border-accent-orange outline-none transition-all shadow-inner"
+              />
+            </div>
           </div>
           
-          <div className="max-h-[500px] overflow-y-auto custom-scrollbar pr-2 space-y-3">
-            {listaUsuarios.length > 0 ? listaUsuarios.map(u => (
-              <div key={u._id} className="p-4 rounded-2xl bg-background border border-secondary/10 flex items-center gap-4 hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-[10px] font-black text-primary shrink-0 uppercase">
-                  {u.nombre?.charAt(0)}{u.apellido?.charAt(0)}
+          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3 max-h-[500px]">
+            {usuariosFiltrados.length > 0 ? usuariosFiltrados.map(u => (
+              <div key={u._id} className="p-4 rounded-2xl bg-background border border-secondary/10 flex items-center justify-between hover:shadow-md transition-shadow group">
+                <div className="flex items-center gap-4 min-w-0">
+                  <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-[10px] font-black text-primary shrink-0 uppercase">
+                    {u.nombre?.charAt(0)}{u.apellido?.charAt(0)}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-black text-primary truncate">{u.nombre} {u.apellido}</p>
+                    <p className="text-[10px] text-text-light font-bold truncate">
+                      {u.email} {u.telefono ? `· ${u.telefono}` : ''}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-black text-primary truncate">{u.nombre} {u.apellido}</p>
-                  <p className="text-[10px] text-text-light font-bold truncate">
-                    {u.email} {u.telefono ? `· ${u.telefono}` : ''}
-                  </p>
-                </div>
+                <button
+                  onClick={() => handleEliminarPaciente(u._id, `${u.nombre} ${u.apellido}`)}
+                  className="w-8 h-8 flex items-center justify-center rounded-xl bg-red-50 text-red-500 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 hover:text-white shrink-0 shadow-sm border border-red-100"
+                  title="Eliminar paciente permanentemente"
+                >
+                  <FaTrash className="text-xs" />
+                </button>
               </div>
             )) : (
                <div className="flex flex-col items-center justify-center py-12 text-text-light/50">
-                 <FaUsers className="text-4xl mb-3" />
-                 <p className="font-bold text-sm">No hay usuarios registrados</p>
+                 <FaUserTimes className="text-4xl mb-3" />
+                 <p className="font-bold text-sm">No se encontraron pacientes</p>
                </div>
             )}
           </div>

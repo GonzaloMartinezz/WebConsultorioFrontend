@@ -28,12 +28,12 @@ const MiPerfil = () => {
           const nombreAUsar = usuario?.nombre || 'Desconocido';
           const apellidoAUsar = usuario?.apellido || 'Desconocido';
           const res = await api.get(`/turnos/paciente/${nombreAUsar}/${apellidoAUsar}`);
-          
+
           // Filtramos para asegurar de mostrar solo los no cancelados y ordenados por fecha
           const misTurnosFiltrados = res.data
             .filter(t => t.estado !== 'Cancelado')
             .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
-          
+
           setMisTurnos(misTurnosFiltrados);
         }
       } catch (error) {
@@ -58,154 +58,226 @@ const MiPerfil = () => {
   const proximoTurno = !isAdmin && misTurnos.length > 0 ? misTurnos[0] : null;
 
   return (
-    <div className="min-h-screen bg-[#FFFBF7] font-sans flex flex-col overflow-hidden">
-      <main className="max-w-6xl mx-auto pt-20 pb-4 px-4 sm:px-6 lg:px-8 flex-1 flex flex-col gap-4 overflow-hidden w-full">
+    <div className="min-h-screen bg-[#FAF9F6] font-sans flex flex-col relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute -top-[10%] -left-[10%] w-[600px] h-[600px] bg-accent-orange/5 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-[-10%] -right-[10%] w-[600px] h-[600px] bg-[#4A3B32]/5 rounded-full blur-[120px]"></div>
+      </div>
 
-        {/* Lado Izquierdo: Bienvenida y Accesos */}
-        <div className="flex-1 flex flex-col gap-6 overflow-hidden">
+      <main className="max-w-[1200px] mx-auto pt-32 pb-16 px-4 md:px-8 w-full relative z-10 flex-1">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
-          {/* Hero - Más compacto */}
-          <div className="bg-[#4A3B32] rounded-4xl p-6 md:p-8 relative overflow-hidden text-white shadow-xl border-b-4 border-accent-orange shrink-0">
-            <div className="absolute top-0 right-0 w-full h-full opacity-10 bg-[url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2070&auto=format&fit=crop')] bg-center bg-cover pointer-events-none"></div>
-            <div className="relative z-10">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-accent-orange rounded-xl flex items-center justify-center text-white text-lg font-black shadow-lg">
-                  {usuario?.nombre?.charAt(0)}
+          {/* COLUMNA IZQUIERDA: PERFIL Y ESTADÍSTICAS (4 cols) */}
+          <div className="lg:col-span-5 space-y-8">
+            <div className="bg-white/80 backdrop-blur-2xl rounded-[3rem] p-10 border border-white shadow-[0_20px_50px_-15px_rgba(0,0,0,0.03)] relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-accent-orange/5 rounded-full blur-3xl group-hover:bg-accent-orange/10 transition-all duration-700"></div>
+
+              <div className="relative z-10 flex flex-col items-center text-center">
+                <div className="relative mb-6">
+                  <div className="w-24 h-24 rounded-full bg-linear-to-brrom-accent-orange to-orange-500 flex items-center justify-center text-white text-3xl font-black shadow-[0_15px_35px_-5px_rgba(255,120,0,0.4)]">
+                    {usuario?.nombre?.charAt(0)}
+                  </div>
+                  <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border border-[#EADDCA]/30">
+                    <FaShieldAlt className="text-accent-orange text-xs" />
+                  </div>
                 </div>
-                <div>
-                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-accent-orange/80">
-                    {isAdmin ? 'Módulo de Administración' : 'Portal del Paciente'}
+
+                <div className="space-y-1 mb-8">
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-orange/80">
+                    {isAdmin ? 'Panel de Control' : 'Bienvenido de nuevo'}
                   </span>
+                  <h1 className="text-3xl font-black text-primary uppercase tracking-tighter">
+                    {usuario?.nombre} {usuario?.apellido}
+                  </h1>
+                  <p className="text-text-light/60 text-[11px] font-bold uppercase tracking-widest">{usuario?.email}</p>
                 </div>
-              </div>
-              <h1 className="text-3xl md:text-4xl font-black mb-2 tracking-tight">
-                {isAdmin ? 'Bienvenido, Admin' : 'Hola'}, {usuario?.nombre}
-              </h1>
-              <p className="text-white/70 max-w-md mb-6 text-sm font-medium leading-relaxed">
-                {isAdmin ? 'Gestioná la agenda y los pacientes de forma eficiente.' : 'Tu bienestar dental en un solo lugar.'}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                {isAdmin && (
-                  <Link to="/admin" className="bg-white text-primary px-6 py-3 rounded-xl font-black text-sm shadow-lg hover:scale-105 transition-all flex items-center gap-2">
-                    <FaShieldAlt className="text-accent-orange" /> Ir al Panel Admin
+
+                <div className="w-full h-px bg-linear-to-r from-transparent via-[#EADDCA]/30 to-transparent mb-8"></div>
+
+                <div className="grid grid-cols-2 gap-4 w-full mb-8">
+                  <div className="bg-[#FAF9F6] p-4 rounded-3xl border border-[#EADDCA]/20">
+                    <p className="text-[9px] font-black text-text-light/40 uppercase tracking-widest mb-1">Citas Activas</p>
+                    <p className="text-xl font-black text-primary">{misTurnos.length}</p>
+                  </div>
+                  <div className="bg-[#FAF9F6] p-4 rounded-3xl border border-[#EADDCA]/20">
+                    <p className="text-[9px] font-black text-text-light/40 uppercase tracking-widest mb-1">Última Visita</p>
+                    <p className="text-xl font-black text-primary">Abr '26</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-3 w-full">
+                  <Link to="/turnos" className="w-full bg-primary text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl hover:bg-black transition-all flex items-center justify-center gap-3">
+                    <FaCalendarAlt size={14} className="text-accent-orange" /> {isAdmin ? 'Agendar Paciente' : 'Solicitar Turno'}
                   </Link>
-                )}
-                <Link to="/turnos" className="bg-accent-orange text-white px-6 py-3 rounded-xl font-black text-sm shadow-lg hover:scale-105 transition-all flex items-center gap-2">
-                  <FaCalendarAlt /> {isAdmin ? 'Agregar Turno' : 'Solicitar Turno'}
-                </Link>
-                <button onClick={handleLogout} className="bg-white/5 border border-white/10 text-white/80 px-6 py-3 rounded-xl font-bold text-sm hover:bg-white/10 hover:text-white transition-all">
-                  Cerrar Sesión
-                </button>
+                  <button onClick={handleLogout} className="w-full bg-white border border-[#EADDCA]/50 text-text-light py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#FAF9F6] transition-all flex items-center justify-center gap-3">
+                    <FaSignOutAlt size={14} /> Cerrar Sesión
+                  </button>
+                </div>
               </div>
             </div>
+
+            {isAdmin && (
+              <div className="grid grid-cols-2 gap-4">
+                <Link to="/admin/pacientes" className="bg-white/80 backdrop-blur-xl p-6 rounded-4xl border border-white shadow-sm hover:shadow-md transition-all group">
+                  <div className="w-10 h-10 bg-accent-orange/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <FaShieldAlt className="text-accent-orange" />
+                  </div>
+                  <h3 className="font-black text-primary text-[10px] uppercase tracking-widest mb-1">Pacientes</h3>
+                  <p className="text-[8px] font-bold text-text-light/50 uppercase tracking-widest">Base de datos</p>
+                </Link>
+                <Link to="/admin/estadisticas" className="bg-white/80 backdrop-blur-xl p-6 rounded-4xl border border-white shadow-sm hover:shadow-md transition-all group">
+                  <div className="w-10 h-10 bg-accent-orange/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <FaLightbulb className="text-accent-orange" />
+                  </div>
+                  <h3 className="font-black text-primary text-[10px] uppercase tracking-widest mb-1">Estadísticas</h3>
+                  <p className="text-[8px] font-bold text-text-light/50 uppercase tracking-widest">Rendimiento</p>
+                </Link>
+              </div>
+            )}
+
+            {!isAdmin && (
+              <div className="bg-linear-to-br from-primary to-[#1a120d] p-8 rounded-[3rem] text-white relative overflow-hidden shadow-2xl">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-accent-orange/10 rounded-full blur-2xl"></div>
+                <div className="relative z-10 flex items-center gap-6">
+                  <div className="w-14 h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10">
+                    <FaWallet className="text-accent-orange text-xl" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black text-accent-orange uppercase tracking-[0.2em] mb-1">Consejo Clínico</p>
+                    <p className="text-xs font-bold leading-relaxed opacity-80 italic">"Una sonrisa sana es reflejo de bienestar. Recordá tu limpieza semestral."</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Tu Próxima Visita / Agenda Admin */}
-          <div className="shrink-0">
-            <div className="bg-white p-6 rounded-[2.5rem] border border-black/5 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 group hover:shadow-2xl transition-all">
-              <div className={`absolute top-0 left-0 w-full h-1.5 ${isAdmin ? 'bg-primary' : 'bg-accent-orange'}`}></div>
+          {/* COLUMNA DERECHA: AGENDA Y TURNOS (8 cols) */}
+          <div className="lg:col-span-7 space-y-8">
 
-              <div className="flex flex-col items-center md:items-start">
-                <span className="text-[9px] font-black tracking-[0.2em] uppercase text-text-light/40 mb-2">
-                  {isAdmin ? 'Visitas para hoy' : 'Tu Próxima Visita'}
+            {/* PRÓXIMA CITA CARD HIGHLIGHT */}
+            <div className="bg-white rounded-[3rem] border border-white shadow-[0_20px_50px_-15px_rgba(0,0,0,0.03)] overflow-hidden">
+              <div className="bg-primary px-8 py-4 flex justify-between items-center">
+                <span className="text-[10px] font-black text-white/50 uppercase tracking-[0.3em]">
+                  {isAdmin ? 'Agenda Prioritaria' : 'Tu Próximo Turno'}
                 </span>
-                {cargando ? (
-                  <div className="animate-pulse h-8 bg-gray-100 w-32 rounded-lg"></div>
-                ) : (isAdmin ? turnosHoy.length > 0 : proximoTurno) ? (
-                  <h3 className="text-2xl md:text-3xl font-black text-primary leading-none">
-                    {isAdmin 
-                      ? `${turnosHoy.length} Pacientes hoy`
-                      : new Date(proximoTurno.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })
-                    }
-                    {!isAdmin && <span className="text-accent-orange ml-3">{proximoTurno.hora} hs</span>}
-                  </h3>
-                ) : (
-                  <p className="text-xs font-bold text-text-light uppercase tracking-widest">
-                    {isAdmin ? 'Agenda libre para hoy' : 'Sin turnos agendados'}
-                  </p>
-                )}
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-accent-orange animate-pulse"></span>
+                  <span className="text-[8px] font-black text-accent-orange uppercase tracking-widest">Activo 2026</span>
+                </div>
               </div>
 
-              {(isAdmin ? turnosHoy.slice(0, 1) : [proximoTurno]).filter(Boolean).map((t, i) => (
-                <div key={i} className="flex-1 flex flex-col md:flex-row items-center gap-6 justify-center">
-                  <div className="bg-[#F8F5F2] px-6 py-4 rounded-2xl flex items-center gap-4 border border-secondary/10">
-                    <div className="w-10 h-10 bg-white rounded-xl shadow-sm flex items-center justify-center text-xl">🦷</div>
-                    <div className="text-left leading-tight">
-                      <p className="text-[11px] font-black text-primary uppercase">{isAdmin ? `${t.nombrePaciente} ${t.apellidoPaciente}` : t.profesional}</p>
-                      <p className="text-[9px] text-text-light font-bold">{isAdmin ? `${t.hora} hs • ${t.motivo}` : t.motivo}</p>
+              <div className="p-10">
+                {cargando ? (
+                  <div className="space-y-4 animate-pulse">
+                    <div className="h-12 bg-[#FAF9F6] rounded-2xl w-3/4"></div>
+                    <div className="h-20 bg-[#FAF9F6] rounded-2xl"></div>
+                  </div>
+                ) : (isAdmin ? turnosHoy.length > 0 : proximoTurno) ? (
+                  <div className="space-y-8">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                      <div>
+                        <h2 className="text-4xl font-black text-primary uppercase tracking-tighter leading-none mb-3">
+                          {isAdmin
+                            ? `${turnosHoy.length} Pacientes`
+                            : new Date(proximoTurno.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })
+                          }
+                        </h2>
+                        {!isAdmin && (
+                          <div className="flex items-center gap-3">
+                            <FaClock className="text-accent-orange" size={14} />
+                            <span className="text-lg font-black text-primary/60">{proximoTurno.hora} hs</span>
+                          </div>
+                        )}
+                        {isAdmin && (
+                          <div className="flex items-center gap-3">
+                            <span className="text-[11px] font-black text-accent-orange uppercase tracking-widest">Agenda para el día de hoy</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border flex items-center gap-3 shadow-sm
+                        ${(isAdmin ? turnosHoy[0]?.estado : proximoTurno.estado) === 'Confirmado' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-orange-50 text-accent-orange border-orange-100'}`}>
+                        <div className={`w-2 h-2 rounded-full ${(isAdmin ? turnosHoy[0]?.estado : proximoTurno.estado) === 'Confirmado' ? 'bg-green-500' : 'bg-accent-orange'}`}></div>
+                        {(isAdmin ? 'Panel Activo' : proximoTurno.estado || 'En Revisión')}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {(isAdmin ? turnosHoy.slice(0, 2) : [proximoTurno]).map((t, idx) => (
+                        <div key={idx} className="bg-[#FAF9F6] p-6 rounded-3xl border border-[#EADDCA]/20 flex items-center gap-5 group hover:border-accent-orange/30 transition-all">
+                          <div className="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">🦷</div>
+                          <div>
+                            <p className="text-[11px] font-black text-primary uppercase tracking-tight">{isAdmin ? `${t.nombrePaciente} ${t.apellidoPaciente}` : t.profesional}</p>
+                            <p className="text-[9px] text-text-light/60 font-bold uppercase tracking-widest">{t.motivo}</p>
+                            {isAdmin && <p className="text-[10px] font-black text-accent-orange mt-1">{t.hora} HS</p>}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
-
-                  {!isAdmin && (
-                    <div className={`px-6 py-3 rounded-full text-[10px] font-black uppercase tracking-widest border flex items-center gap-2 shadow-sm
-                      ${t.estado === 'Confirmado' ? 'bg-green-50 text-green-600 border-green-200' : 'bg-orange-50 text-orange-600 border-orange-200 animate-pulse'}`}>
-                      <span className={`w-2 h-2 rounded-full ${t.estado === 'Confirmado' ? 'bg-green-500' : 'bg-orange-500'}`}></span>
-                      {t.estado || 'Analizando'}
+                ) : (
+                  <div className="text-center py-10 space-y-6">
+                    <div className="w-20 h-20 bg-[#FAF9F6] rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaCalendarAlt className="text-text-light/20" size={30} />
                     </div>
-                  )}
-                </div>
-              ))}
-
-              {isAdmin && (
-                <Link to="/admin" className="bg-primary text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all">
-                  Gestionar Todo
-                </Link>
-              )}
-
-              {!isAdmin && !proximoTurno && !cargando && (
-                <Link to="/turnos" className="bg-primary text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all">
-                  Agendar Cita Ahora
-                </Link>
-              )}
-            </div>
-          </div>
-
-          {/* OTRAS CITAS O AGENDA COMPLETA ADMIN */}
-          {(isAdmin ? turnosHoy.length > 0 : misTurnos.length > 1) && (
-            <div className="grow overflow-hidden flex flex-col min-h-0">
-              <h3 className="text-[10px] font-black text-primary mb-3 uppercase tracking-widest flex items-center gap-2 px-1">
-                <span className="w-1.5 h-3 bg-accent-orange/40 rounded-full"></span> 
-                {isAdmin ? 'Agenda Detallada de Hoy' : 'Historial de Otras Citas'}
-              </h3>
-              <div className="overflow-y-auto custom-scrollbar pr-3 space-y-3 pb-6 grow">
-                {(isAdmin ? turnosHoy : misTurnos.slice(1)).map(turno => (
-                  <div key={turno._id} className="bg-white p-4 rounded-2xl border border-black/5 shadow-sm hover:shadow-md transition-all flex items-center justify-between group">
-                    <div className="flex items-center gap-4">
-                      <div className="w-11 h-11 bg-[#F8F5F2] rounded-xl flex flex-col items-center justify-center border border-secondary/10 group-hover:bg-white transition-colors">
-                        <span className="text-[8px] font-black uppercase text-accent-orange">
-                          {isAdmin ? turno.hora.split(':')[0] : new Date(turno.fecha).toLocaleDateString('es-ES', { month: 'short' }).replace('.', '')}
-                        </span>
-                        <span className="text-sm font-black text-primary leading-none">
-                          {isAdmin ? turno.hora.split(':')[1] : new Date(turno.fecha).getDate()}
-                        </span>
-                      </div>
-                      <div>
-                        <p className="text-[11px] font-black text-primary uppercase">
-                          {isAdmin ? `${turno.nombrePaciente} ${turno.apellidoPaciente}` : turno.profesional}
-                        </p>
-                        <p className="text-[9px] text-text-light font-bold tracking-wider">
-                          {isAdmin ? `${turno.profesional}` : `${turno.hora} hs • ${turno.motivo}`}
-                        </p>
-                      </div>
-                    </div>
-                    {isAdmin ? (
-                       <Link to="/admin" className="p-2 bg-secondary/10 rounded-lg text-primary hover:bg-primary hover:text-white transition-all">
-                          <FaCalendarAlt className="text-xs" />
-                       </Link>
-                    ) : (
-                      <div className={`w-2 h-2 rounded-full ${turno.estado === 'Confirmado' ? 'bg-green-500' : 'bg-orange-500'}`}></div>
+                    <p className="text-xs font-black text-text-light/40 uppercase tracking-[0.2em]">No hay citas programadas para hoy</p>
+                    {!isAdmin && (
+                      <Link to="/turnos" className="inline-block bg-accent-orange text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-orange-500/20">Agendar primera visita</Link>
                     )}
                   </div>
-                ))}
+                )}
               </div>
             </div>
-          )}
-        </div>
 
+            {/* AGENDA COMPLETA / HISTORIAL */}
+            {(isAdmin ? turnosHoy.length > 2 : misTurnos.length > 1) && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between px-2">
+                  <h3 className="text-[11px] font-black text-primary uppercase tracking-[0.3em] flex items-center gap-3">
+                    <span className="w-1.5 h-4 bg-accent-orange rounded-full"></span>
+                    {isAdmin ? 'Resto de la Agenda' : 'Historial de Visitas'}
+                  </h3>
+                  <span className="text-[9px] font-bold text-text-light/40 uppercase tracking-widest">
+                    {isAdmin ? `${turnosHoy.length - 2} pendientes` : `${misTurnos.length - 1} registros`}
+                  </span>
+                </div>
+
+                <div className="space-y-3">
+                  {(isAdmin ? turnosHoy.slice(2) : misTurnos.slice(1)).map((turno, idx) => (
+                    <div key={idx} className="bg-white/60 hover:bg-white p-5 rounded-4xl border border-[#EADDCA]/10 shadow-sm hover:shadow-md transition-all flex items-center justify-between group">
+                      <div className="flex items-center gap-5">
+                        <div className="w-12 h-12 bg-[#FAF9F6] rounded-2xl flex flex-col items-center justify-center border border-[#EADDCA]/20 group-hover:border-accent-orange/30 transition-colors">
+                          <span className="text-[8px] font-black text-accent-orange uppercase leading-none mb-0.5">
+                            {isAdmin ? turno.hora.split(':')[0] : new Date(turno.fecha).toLocaleDateString('es-ES', { month: 'short' }).replace('.', '').toUpperCase()}
+                          </span>
+                          <span className="text-base font-black text-primary leading-none">
+                            {isAdmin ? turno.hora.split(':')[1] : new Date(turno.fecha).getDate()}
+                          </span>
+                        </div>
+                        <div>
+                          <p className="text-[11px] font-black text-primary uppercase tracking-tight">
+                            {isAdmin ? `${turno.nombrePaciente} ${turno.apellidoPaciente}` : turno.profesional}
+                          </p>
+                          <p className="text-[9px] text-text-light/50 font-bold uppercase tracking-widest">
+                            {isAdmin ? turno.profesional : `${turno.hora} hs • ${turno.motivo}`}
+                          </p>
+                        </div>
+                      </div>
+                      <div className={`w-2 h-2 rounded-full ${turno.estado === 'Confirmado' ? 'bg-green-500' : 'bg-accent-orange'}`}></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </main>
 
-      <footer className="py-3 text-center text-text-light/20 text-[7px] font-black uppercase tracking-[0.4em] border-t border-black/2">
-        Carcara & Martínez • Centro Odontológico • 2026
+      <footer className="py-8 text-center bg-white border-t border-[#EADDCA]/30">
+        <p className="text-[8px] font-black text-text-light/30 uppercase tracking-[0.6em]">
+          Carcara & Martínez • Centro Odontológico Boutique • 2026
+        </p>
       </footer>
     </div>
   );

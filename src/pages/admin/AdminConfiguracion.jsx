@@ -103,9 +103,21 @@ const AdminConfiguracion = () => {
     return `Hola ${turno.nombrePaciente} ${turno.apellidoPaciente}, te recordamos tu turno en Centro Odontológico C&M para mañana ${fechaFmt} a las ${turno.hora} hs. Motivo: ${turno.motivo}. ¡Te esperamos! 😊🦷`;
   };
 
+  const limpiarTelefono = (telefono) => {
+    let tel = telefono ? telefono.replace(/\D/g, '') : '';
+    if (!tel) return '';
+    // Lógica de formateo para Argentina / Tucumán
+    if (tel.startsWith('0')) tel = '549' + tel.substring(1);
+    if (tel.startsWith('15')) tel = '549381' + tel.substring(2);
+    if (tel.length > 0 && tel.length <= 10 && !tel.startsWith('54')) {
+      tel = '549' + tel;
+    }
+    return tel;
+  };
+
   const enviarWhatsApp = (turno) => {
-    const tel = turno.telefono?.replace(/\D/g, '');
-    if (!tel) return showToast(`${turno.nombrePaciente} no tiene teléfono registrado.`, 'error');
+    const tel = limpiarTelefono(turno.telefono);
+    if (!tel) return showToast(`${turno.nombrePaciente} no tiene teléfono válido.`, 'error');
     window.open(`https://wa.me/${tel}?text=${encodeURIComponent(buildMensaje(turno))}`, '_blank');
   };
 
@@ -116,24 +128,30 @@ const AdminConfiguracion = () => {
 
   const handleRecordatoriosMasivos = async () => {
     if (turnosManana.length === 0) return showToast('No hay turnos para mañana.', 'error');
-    if (!window.confirm(`¿Enviar recordatorio a ${turnosManana.length} paciente(s)? Se abrirán pestañas de WhatsApp/Email secuencialmente.`)) return;
+    if (!window.confirm(`¿Enviar recordatorio a ${turnosManana.length} paciente(s)? Se abrirán pestañas de WhatsApp y Email secuencialmente.`)) return;
+    
     setEnviandoMasivo(true);
     let i = 0;
+    
     const interval = setInterval(() => {
       if (i >= turnosManana.length) {
         clearInterval(interval);
         setEnviandoMasivo(false);
         setEnviandoIdx(-1);
-        showToast(`✅ Recordatorios enviados a ${turnosManana.length} pacientes.`, 'success');
+        showToast(`✅ Proceso de recordatorios finalizado.`, 'success');
         api.post('/notificaciones/recordatorios-manana').catch(() => { });
         return;
       }
+
       const t = turnosManana[i];
       setEnviandoIdx(i);
+      
+      // Enviamos por ambos canales si están disponibles
       if (t.telefono) enviarWhatsApp(t);
-      else if (t.email) enviarEmail(t);
+      if (t.email) setTimeout(() => enviarEmail(t), 400); // Pequeño delay para no saturar al abrir pestañas
+
       i++;
-    }, 1400);
+    }, 2000); // Aumentamos a 2s para dar tiempo al navegador
   };
 
   const mananaLabel = (() => {

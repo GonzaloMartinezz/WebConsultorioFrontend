@@ -135,7 +135,7 @@ const WhatsAppWidget = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600 hover:scale-110 active:scale-95 transition-all duration-300"
       >
-        <FaWhatsapp className="text-3xl" />
+        {isOpen ? <FaTimes className="text-3xl" /> : <FaWhatsapp className="text-3xl" />}
       </button>
 
     </div>

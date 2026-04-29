@@ -151,7 +151,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
   // Generar horarios dinámicos basados en la configuración
   const generarHorarios = () => {
     if (!config) return ["09:00", "10:00", "11:00"];
-    
+
     const { apertura, cierre, intervalo } = config.horarios;
     const slots = [];
     let curr = new Date(`2026-01-01T${apertura}:00`);
@@ -162,13 +162,13 @@ _Enviado desde el Portal Oficial de Turnos._`;
       const h = String(curr.getHours()).padStart(2, '0');
       const m = String(curr.getMinutes()).padStart(2, '0');
       const timeStr = `${h}:${m}`;
-      
+
       if (form.turnoFranja === 'Mañana' && curr.getHours() < 13) {
         slots.push(timeStr);
       } else if (form.turnoFranja === 'Tarde' && curr.getHours() >= 13) {
         slots.push(timeStr);
       }
-      
+
       curr.setMinutes(curr.getMinutes() + stepMin);
     }
     return slots;
@@ -178,11 +178,11 @@ _Enviado desde el Portal Oficial de Turnos._`;
 
   return (
     <div className="bg-[#FAF9F6] min-h-screen text-[#2D1F16] selection:bg-accent-orange/20 flex flex-col relative overflow-hidden font-sans">
-      
+
       {/* Glow Effects - Fondo difuminado orgánico premium más vibrante */}
       <div className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
-        <div className="absolute -top-[20%] -left-[10%] w-[800px] h-[800px] bg-gradient-to-br from-white to-transparent rounded-full blur-[140px] opacity-90"></div>
-        <div className="absolute bottom-[-10%] -right-[10%] w-[800px] h-[800px] bg-gradient-to-tl from-accent-orange/60 via-orange-400/30 to-transparent rounded-full blur-[160px]"></div>
+        <div className="absolute -top-[20%] -left-[10%] w-[800px] h-[800px] bg-linear-to-br from-white to-transparent rounded-full blur-[140px] opacity-90"></div>
+        <div className="absolute bottom-[-10%] -right-[10%] w-[800px] h-[800px] bg-linear-to-tl from-accent-orange/60 via-orange-400/30 to-transparent rounded-full blur-[160px]"></div>
         <div className="absolute top-[20%] left-[30%] w-[600px] h-[600px] bg-accent-orange/15 rounded-full blur-[180px]"></div>
       </div>
 
@@ -197,7 +197,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
                 <span className="text-[9px] font-black uppercase tracking-[0.4em] text-accent-orange">Gestión de Citas 2026</span>
               </div>
               <h1 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-tight text-primary pb-2">
-                Nueva <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-orange to-orange-500 italic pr-2">Solicitud</span>
+                Nueva <span className="text-transparent bg-clip-text bg-linear-to-r from-accent-orange to-orange-500 italic pr-2">Solicitud</span>
               </h1>
             </div>
 
@@ -205,11 +205,11 @@ _Enviado desde el Portal Oficial de Turnos._`;
             <div className="flex items-center gap-3 max-w-xs mb-10">
               {[1, 2, 3].map(i => (
                 <div key={i} className="flex-1 h-2 relative rounded-full overflow-hidden bg-[#EADDCA]/40">
-                  <motion.div 
+                  <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: step >= i ? '100%' : '0%' }}
                     transition={{ duration: 0.6, ease: "easeInOut" }}
-                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-accent-orange to-orange-400 shadow-[0_0_12px_rgba(255,120,0,0.6)]"
+                    className="absolute top-0 left-0 h-full bg-linear-to-r from-accent-orange to-orange-400 shadow-[0_0_12px_rgba(255,120,0,0.6)]"
                   />
                 </div>
               ))}
@@ -218,10 +218,10 @@ _Enviado desde el Portal Oficial de Turnos._`;
             <AnimatePresence mode="wait">
               {step === 1 && (
                 <motion.div key="s1" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4, ease: "easeOut" }} className="bg-white/80 backdrop-blur-2xl p-8 md:p-12 rounded-[3rem] border border-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] space-y-8 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-accent-orange/5 to-transparent rounded-full blur-2xl pointer-events-none"></div>
-                  
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-bl from-accent-orange/5 to-transparent rounded-full blur-2xl pointer-events-none"></div>
+
                   <div className="flex items-center gap-4 relative z-10">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent-orange/20 to-accent-orange/5 flex items-center justify-center border border-accent-orange/10 shadow-inner">
+                    <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-accent-orange/20 to-accent-orange/5 flex items-center justify-center border border-accent-orange/10 shadow-inner">
                       <User className="text-accent-orange" size={20} strokeWidth={1.5} />
                     </div>
                     <div>
@@ -229,7 +229,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
                       <p className="text-[10px] font-bold text-text-light/60 tracking-wider mt-0.5">Datos del paciente</p>
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
                     {[
                       { name: 'nombre', label: 'Nombre' },
@@ -245,8 +245,8 @@ _Enviado desde el Portal Oficial de Turnos._`;
                       </div>
                     ))}
                     <div className="relative group md:col-span-2">
-                       <label className="absolute -top-2 left-4 bg-white px-2 text-[8px] font-black uppercase tracking-widest text-text-light/70 z-10 group-focus-within:text-accent-orange shadow-sm rounded-full">Correo Electrónico</label>
-                       <input name="email" value={form.email} onChange={handleChange} className="w-full bg-white/50 p-4 pt-5 rounded-2xl outline-none font-bold text-sm text-primary border border-[#EADDCA]/50 focus:border-accent-orange focus:bg-white transition-all shadow-inner focus:shadow-[0_0_0_4px_rgba(255,120,0,0.1)]" placeholder="..." />
+                      <label className="absolute -top-2 left-4 bg-white px-2 text-[8px] font-black uppercase tracking-widest text-text-light/70 z-10 group-focus-within:text-accent-orange shadow-sm rounded-full">Correo Electrónico</label>
+                      <input name="email" value={form.email} onChange={handleChange} className="w-full bg-white/50 p-4 pt-5 rounded-2xl outline-none font-bold text-sm text-primary border border-[#EADDCA]/50 focus:border-accent-orange focus:bg-white transition-all shadow-inner focus:shadow-[0_0_0_4px_rgba(255,120,0,0.1)]" placeholder="..." />
                     </div>
                   </div>
                 </motion.div>
@@ -254,10 +254,10 @@ _Enviado desde el Portal Oficial de Turnos._`;
 
               {step === 2 && (
                 <motion.div key="s2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="bg-white/80 backdrop-blur-2xl p-8 md:p-12 rounded-[3rem] border border-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] space-y-8 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-accent-orange/5 to-transparent rounded-full blur-2xl pointer-events-none"></div>
-                  
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-bl from-accent-orange/5 to-transparent rounded-full blur-2xl pointer-events-none"></div>
+
                   <div className="flex items-center gap-4 relative z-10">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent-orange/20 to-accent-orange/5 flex items-center justify-center border border-accent-orange/10 shadow-inner">
+                    <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-accent-orange/20 to-accent-orange/5 flex items-center justify-center border border-accent-orange/10 shadow-inner">
                       <ClipboardList className="text-accent-orange" size={20} strokeWidth={1.5} />
                     </div>
                     <div>
@@ -265,10 +265,10 @@ _Enviado desde el Portal Oficial de Turnos._`;
                       <p className="text-[10px] font-bold text-text-light/60 tracking-wider mt-0.5">Selección de especialista</p>
                     </div>
                   </div>
-                  
+
                   <div className="grid grid-cols-1 gap-5 relative z-10">
                     {['Dr. Adolfo Martinez', 'Dra. Erina Carcara'].map(name => (
-                      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} key={name} onClick={() => setForm({ ...form, doctor: name })} className={`cursor-pointer p-6 rounded-3xl border-2 transition-all duration-300 flex items-center justify-between group ${form.doctor === name ? 'bg-gradient-to-r from-accent-orange to-orange-500 text-white border-transparent shadow-[0_15px_30px_-10px_rgba(255,120,0,0.4)]' : 'bg-white/50 border-[#EADDCA]/50 hover:bg-white hover:border-accent-orange/30 hover:shadow-xl'}`}>
+                      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} key={name} onClick={() => setForm({ ...form, doctor: name })} className={`cursor-pointer p-6 rounded-3xl border-2 transition-all duration-300 flex items-center justify-between group ${form.doctor === name ? 'bg-linear-to-r from-accent-orange to-orange-500 text-white border-transparent shadow-[0_15px_30px_-10px_rgba(255,120,0,0.4)]' : 'bg-white/50 border-[#EADDCA]/50 hover:bg-white hover:border-accent-orange/30 hover:shadow-xl'}`}>
                         <div className="flex items-center gap-5">
                           <div className={`w-14 h-14 rounded-full flex items-center justify-center font-black text-sm shadow-inner transition-colors ${form.doctor === name ? 'bg-white/20 text-white' : 'bg-primary/5 text-primary group-hover:bg-accent-orange/10 group-hover:text-accent-orange'}`}>
                             {name.split(' ')[1][0]}{name.split(' ')[2][0]}
@@ -286,10 +286,10 @@ _Enviado desde el Portal Oficial de Turnos._`;
 
               {step === 3 && (
                 <motion.div key="s3" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }} className="bg-white/80 backdrop-blur-2xl p-8 md:p-12 rounded-[3rem] border border-white shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] space-y-8 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-accent-orange/5 to-transparent rounded-full blur-2xl pointer-events-none"></div>
-                  
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-bl from-accent-orange/5 to-transparent rounded-full blur-2xl pointer-events-none"></div>
+
                   <div className="flex items-center gap-4 relative z-10">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-accent-orange/20 to-accent-orange/5 flex items-center justify-center border border-accent-orange/10 shadow-inner">
+                    <div className="w-12 h-12 rounded-2xl bg-linear-to-br from-accent-orange/20 to-accent-orange/5 flex items-center justify-center border border-accent-orange/10 shadow-inner">
                       <CalendarDays className="text-accent-orange" size={20} strokeWidth={1.5} />
                     </div>
                     <div>
@@ -314,14 +314,14 @@ _Enviado desde el Portal Oficial de Turnos._`;
                           {new Date(2026, parseInt(form.fechaMes) - 1).toLocaleString('es-ES', { month: 'long' })}
                         </span>
                       </div>
-                      
+
                       <div className="relative group">
-                         <label className="absolute -top-2 left-4 bg-white px-2 text-[8px] font-black uppercase tracking-widest text-text-light/70 z-10 group-focus-within:text-accent-orange shadow-sm rounded-full">Día</label>
-                         <select name="fechaDia" value={form.fechaDia} onChange={(e) => {
-                            const offset = e.target.selectedIndex;
-                            const d = new Date(); d.setDate(d.getDate() + offset);
-                            setForm({ ...form, fechaDia: e.target.value, fechaMes: String(d.getMonth() + 1).padStart(2, '0') });
-                         }} className="w-full h-full bg-white/50 p-4 pt-5 rounded-2xl font-black text-sm text-primary border border-[#EADDCA]/50 focus:border-accent-orange outline-none transition-all shadow-inner cursor-pointer focus:bg-white text-center focus:shadow-[0_0_0_4px_rgba(255,120,0,0.1)]">
+                        <label className="absolute -top-2 left-4 bg-white px-2 text-[8px] font-black uppercase tracking-widest text-text-light/70 z-10 group-focus-within:text-accent-orange shadow-sm rounded-full">Día</label>
+                        <select name="fechaDia" value={form.fechaDia} onChange={(e) => {
+                          const offset = e.target.selectedIndex;
+                          const d = new Date(); d.setDate(d.getDate() + offset);
+                          setForm({ ...form, fechaDia: e.target.value, fechaMes: String(d.getMonth() + 1).padStart(2, '0') });
+                        }} className="w-full h-full bg-white/50 p-4 pt-5 rounded-2xl font-black text-sm text-primary border border-[#EADDCA]/50 focus:border-accent-orange outline-none transition-all shadow-inner cursor-pointer focus:bg-white text-center focus:shadow-[0_0_0_4px_rgba(255,120,0,0.1)]">
                           {Array.from({ length: 14 }, (_, i) => {
                             const d = new Date(); d.setDate(d.getDate() + i);
                             return <option key={i} value={String(d.getDate()).padStart(2, '0')}>
@@ -363,7 +363,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
                 <motion.button
                   whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                   onClick={handleNext}
-                  className="flex-1 h-16 rounded-[1.2rem] bg-gradient-to-r from-accent-orange to-orange-500 text-white font-black uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(255,120,0,0.25)] hover:shadow-[0_15px_40px_rgba(255,120,0,0.4)] transition-all"
+                  className="flex-1 h-16 rounded-[1.2rem] bg-linear-to-r from-accent-orange to-orange-500 text-white font-black uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(255,120,0,0.25)] hover:shadow-[0_15px_40px_rgba(255,120,0,0.4)] transition-all"
                 >
                   Continuar <ChevronRight size={18} strokeWidth={2.5} />
                 </motion.button>
@@ -372,7 +372,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
                   whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                   onClick={handleSubmit}
                   disabled={cargando}
-                  className="flex-1 h-16 rounded-[1.2rem] bg-gradient-to-r from-accent-orange to-orange-500 text-white font-black uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(255,120,0,0.25)] hover:shadow-[0_15px_40px_rgba(255,120,0,0.4)] transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="flex-1 h-16 rounded-[1.2rem] bg-linear-to-r from-accent-orange to-orange-500 text-white font-black uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-3 shadow-[0_10px_30px_rgba(255,120,0,0.25)] hover:shadow-[0_15px_40px_rgba(255,120,0,0.4)] transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {cargando ? 'Procesando...' : 'Confirmar Orden'} <Send size={18} strokeWidth={2.5} />
                 </motion.button>
@@ -382,7 +382,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
 
           {/* COLUMNA DERECHA: RESUMEN LUXURY */}
           <div className="sticky top-32">
-            <div className="bg-gradient-to-br from-[#2D1F16] to-[#160d09] p-10 md:p-12 rounded-[3rem] text-white shadow-[0_30px_60px_-15px_rgba(45,31,22,0.6)] relative overflow-hidden border border-white/5 space-y-10 group">
+            <div className="bg-linear-to-br from-[#2D1F16] to-[#160d09] p-10 md:p-12 rounded-[3rem] text-white shadow-[0_30px_60px_-15px_rgba(45,31,22,0.6)] relative overflow-hidden border border-white/5 space-y-10 group">
               {/* Luxury Textures & Glows */}
               <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none mix-blend-overlay"></div>
               <div className="absolute -top-32 -right-32 w-80 h-80 bg-accent-orange/10 rounded-full blur-[70px] group-hover:bg-accent-orange/20 transition-all duration-1000 pointer-events-none"></div>
@@ -390,7 +390,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
 
               <div className="flex items-start justify-between border-b border-white/10 pb-8 relative z-10">
                 <div>
-                  <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tighter mb-2 text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60">Orden Clínica</h3>
+                  <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tighter mb-2 text-transparent bg-clip-text bg-linear-to-r from-white to-white/60">Orden Clínica</h3>
                   <div className="flex items-center gap-2">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-orange opacity-75"></span>
@@ -418,7 +418,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
                     <p className="text-[9px] font-black uppercase text-white/30 tracking-[0.3em] group-hover/item:text-white/50 transition-colors">Contacto</p>
                     <p className="font-bold text-xs lowercase tracking-wider text-white/70">{form.email || form.telefono || '---'}</p>
                   </div>
-                  
+
                   {/* Doctor Highlight */}
                   <div className="flex justify-between items-center bg-white/5 p-5 rounded-2xl border border-white/5 mt-4 backdrop-blur-sm">
                     <p className="text-[9px] font-black uppercase text-white/40 tracking-[0.3em]">Dr / Dra</p>
@@ -427,7 +427,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
                 </div>
 
                 {/* Planificación Highlight */}
-                <div className="bg-gradient-to-br from-white/10 to-white/5 p-6 md:p-7 rounded-3xl border border-white/10 space-y-6 backdrop-blur-md shadow-inner">
+                <div className="bg-linear-to-br from-white/10 to-white/5 p-6 md:p-7 rounded-3xl border border-white/10 space-y-6 backdrop-blur-md shadow-inner">
                   <div className="flex items-center gap-5">
                     <div className="w-10 h-10 rounded-full bg-accent-orange/20 flex items-center justify-center border border-accent-orange/10">
                       <Clock className="text-accent-orange" size={16} />
@@ -437,7 +437,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
                       <p className="font-black text-xs md:text-sm tracking-widest">{form.fechaDia}/{form.fechaMes}/26 <span className="text-accent-orange mx-1.5">•</span> {form.horaTentativa} HS</p>
                     </div>
                   </div>
-                  <div className="h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+                  <div className="h-px w-full bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
                   <div className="flex items-center gap-5">
                     <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/5">
                       <Activity className="text-white/70" size={16} />
@@ -452,7 +452,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
 
               <div className="pt-6 border-t border-white/5 text-center relative z-10">
                 <p className="text-[8px] font-bold text-white/30 uppercase tracking-[0.3em] leading-relaxed">
-                  Cita sujeta a confirmación médica<br/>Centro Odontológico Boutique
+                  Cita sujeta a confirmación médica<br />Centro Odontológico Boutique
                 </p>
               </div>
             </div>
@@ -476,9 +476,9 @@ _Enviado desde el Portal Oficial de Turnos._`;
           <span className="text-xs font-black uppercase text-accent-orange">Paso {step} de 3</span>
         </div>
         {step < totalSteps ? (
-           <button onClick={handleNext} className="bg-gradient-to-r from-accent-orange to-orange-500 text-white px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-orange-500/30 flex items-center gap-2">Siguiente <ChevronRight size={14}/></button>
+          <button onClick={handleNext} className="bg-linear-to-r from-accent-orange to-orange-500 text-white px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-orange-500/30 flex items-center gap-2">Siguiente <ChevronRight size={14} /></button>
         ) : (
-           <button onClick={handleSubmit} disabled={cargando} className="bg-gradient-to-r from-accent-orange to-orange-500 text-white px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-orange-500/30 flex items-center gap-2">{cargando ? '...' : 'Enviar WA'} <Send size={14}/></button>
+          <button onClick={handleSubmit} disabled={cargando} className="bg-linear-to-r from-accent-orange to-orange-500 text-white px-6 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-orange-500/30 flex items-center gap-2">{cargando ? '...' : 'Enviar WA'} <Send size={14} /></button>
         )}
       </footer>
     </div>

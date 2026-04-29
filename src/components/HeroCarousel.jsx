@@ -52,7 +52,7 @@ const HeroCarousel = () => {
 
       {/* Indicador animado para invitar a hacer scroll */}
       <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center animate-bounce cursor-pointer group" onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}>
-        <span className="text-accent-orange text-[8px] md:text-xs font-black tracking-[0.4em] uppercase mb-3 shadow-black drop-shadow-lg opacity-80 group-hover:opacity-100 transition-opacity">Deslizar para ver el centro</span>
+        <span className="text-accent-orange text-[7px] md:text-[9px] font-black tracking-[0.4em] uppercase mb-3 shadow-black drop-shadow-lg opacity-80 group-hover:opacity-100 transition-opacity">Deslizar para ver el centro</span>
         <div className="bg-white/10 backdrop-blur-md p-3 rounded-full border border-white/20 shadow-xl group-hover:bg-white/20 transition-all">
           <FaChevronDown className="text-white text-lg md:text-xl drop-shadow-md" />
         </div>
