@@ -84,18 +84,18 @@ const Login = () => {
           password: form.password,
           rol: "paciente"
         });
-        
+
         // Auto-login inmediatamente después de registrar
         const respuestaLogin = await api.post('/auth/login', {
           email: form.email.toLowerCase(),
           password: form.password
         });
-        
+
         const usuarioLogueado = respuestaLogin.data.usuario || respuestaLogin.data.user || respuestaLogin.data;
         login(respuestaLogin.data);
         if (respuestaLogin.data.token) localStorage.setItem('token', respuestaLogin.data.token);
         localStorage.setItem('perfilUsuario', JSON.stringify(usuarioLogueado));
-        
+
         setMensajeExito("¡Cuenta creada con éxito! Ingresando...");
         setTimeout(() => navigate("/"), 1500);
       } else {
@@ -104,9 +104,13 @@ const Login = () => {
           password: form.password
         });
         const usuarioLogueado = respuesta.data.usuario || respuesta.data.user || respuesta.data;
-        login(respuesta.data);
+        
+        // Guardamos el token por separado
         if (respuesta.data.token) localStorage.setItem('token', respuesta.data.token);
-        localStorage.setItem('perfilUsuario', JSON.stringify(usuarioLogueado));
+        
+        // Pasamos solo los datos del usuario al contexto
+        login(usuarioLogueado);
+
         if (usuarioLogueado && usuarioLogueado.rol && usuarioLogueado.rol.toLowerCase() === 'admin') {
           navigate("/admin");
         } else {
@@ -174,19 +178,19 @@ const Login = () => {
             <div className="relative z-10">
               <div className="flex bg-black/40 p-1 rounded-[1.25rem] mb-8 border border-white/10 shadow-inner relative">
                 {/* Indicador animado de fondo para el tab activo (opcional, pero mejora el UX) */}
-                <div 
-                  className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-gradient-to-r from-accent-orange to-orange-500 rounded-xl transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${isRegistro && !modoRecuperar ? 'left-[calc(50%+2px)]' : 'left-1'}`}
+                <div
+                  className={`absolute top-1 bottom-1 w-[calc(50%-4px)] bg-linear-to-r from-accent-orange to-orange-500 rounded-xl transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] ${isRegistro && !modoRecuperar ? 'left-[calc(50%+2px)]' : 'left-1'}`}
                 ></div>
-                
-                <button 
+
+                <button
                   onClick={() => toggleModo('login')}
-                  className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-500 relative z-10 ${!isRegistro && !modoRecuperar ? 'text-white' : 'text-white/40 hover:text-white/60'}`}
+                  className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 relative z-10 ${!isRegistro && !modoRecuperar ? 'text-white' : 'text-white/40 hover:text-white/60'}`}
                 >
                   Inicia sesión al Centro
                 </button>
-                <button 
+                <button
                   onClick={() => toggleModo('registro')}
-                  className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.1em] transition-all duration-500 relative z-10 ${isRegistro && !modoRecuperar ? 'text-white' : 'text-white/40 hover:text-white/60'}`}
+                  className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-500 relative z-10 ${isRegistro && !modoRecuperar ? 'text-white' : 'text-white/40 hover:text-white/60'}`}
                 >
                   Registrarse
                 </button>
@@ -283,15 +287,15 @@ const Login = () => {
                   <span className="text-[9px] text-white font-black uppercase tracking-widest">o</span>
                   <div className="h-px bg-white grow"></div>
                 </div>
-                
+
                 <div className="w-full flex justify-center">
                   <LoginGoogle />
                 </div>
               </div>
 
               <div className="mt-8 pt-6 border-t border-white/5 text-center flex flex-col gap-4">
-                <button 
-                  onClick={() => toggleModo(isRegistro ? 'login' : 'registro')} 
+                <button
+                  onClick={() => toggleModo(isRegistro ? 'login' : 'registro')}
                   className="group flex items-center justify-center gap-2 text-[11px] font-black text-white/40 hover:text-accent-orange transition-all uppercase tracking-widest"
                 >
                   {isRegistro ? '¿YA TENÉS CUENTA? INICIA SESIÓN AL CENTRO' : '¿NO TENÉS CUENTA? REGISTRARSE AHORA'}
@@ -299,7 +303,7 @@ const Login = () => {
                     <FaArrowLeft className={`text-[8px] transition-transform ${isRegistro ? '' : 'rotate-180'}`} />
                   </div>
                 </button>
-                
+
                 {!isRegistro && (
                   <button onClick={() => setModoRecuperar(true)} className="text-[9px] font-black text-white/20 hover:text-white transition-all uppercase tracking-widest">
                     ¿Olvidaste tu contraseña?

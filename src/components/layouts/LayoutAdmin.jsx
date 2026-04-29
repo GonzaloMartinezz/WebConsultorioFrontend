@@ -4,7 +4,7 @@ import api from '../../api/axios.js';
 import {
   FaHome, FaBell, FaCalendarAlt, FaUserInjured, FaFileMedical,
   FaTeeth, FaChartLine, FaSmileBeam, FaCogs, FaSignOutAlt,
-  FaChevronLeft, FaChevronRight, FaBars, FaTimes
+  FaChevronLeft, FaChevronRight, FaBars, FaTimes, FaGlobe
 } from 'react-icons/fa';
 
 const LayoutAdmin = ({ children }) => {
@@ -61,6 +61,7 @@ const LayoutAdmin = ({ children }) => {
     { name: "Historia Clinica Pacientes", path: "/admin/historia-clinica", icon: FaFileMedical },
     { name: "Estadisticas", path: "/admin/estadisticas", icon: FaChartLine },
     { name: "Configuracion", path: "/admin/configuracion", icon: FaCogs },
+    { name: "IR AL CENTRO", path: "/", icon: FaGlobe },
   ];
 
   return (

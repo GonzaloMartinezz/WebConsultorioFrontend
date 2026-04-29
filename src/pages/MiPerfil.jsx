@@ -75,7 +75,7 @@ const MiPerfil = () => {
 
               <div className="relative z-10 flex flex-col items-center text-center">
                 <div className="relative mb-6">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-accent-orange to-orange-500 flex items-center justify-center text-white text-3xl font-black shadow-[0_15px_35px_-5px_rgba(255,120,0,0.4)]">
+                  <div className="w-24 h-24 rounded-full bg-linear-to-br from-accent-orange to-orange-500 flex items-center justify-center text-white text-3xl font-black shadow-[0_15px_35px_-5px_rgba(255,120,0,0.4)]">
                     {usuario?.nombre?.charAt(0)}{usuario?.apellido?.charAt(0)}
                   </div>
                   <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border border-[#EADDCA]/30">
@@ -107,6 +107,11 @@ const MiPerfil = () => {
                 </div>
 
                 <div className="flex flex-col gap-3 w-full">
+                  {isAdmin && (
+                    <Link to="/admin" className="w-full bg-accent-orange text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl hover:brightness-110 transition-all flex items-center justify-center gap-3">
+                      <FaShieldAlt size={14} /> Volver al Panel Admin
+                    </Link>
+                  )}
                   <Link to="/turnos" className="w-full bg-primary text-white py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl hover:bg-black transition-all flex items-center justify-center gap-3">
                     <FaCalendarAlt size={14} className="text-accent-orange" /> {isAdmin ? 'Agendar Paciente' : 'Solicitar Turno'}
                   </Link>
