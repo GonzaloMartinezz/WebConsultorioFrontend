@@ -9,15 +9,16 @@ const doctorsData = {
     image: '/dra-erina.jpg', // Placeholder for doctor image
     bio: 'La Dra. Erina Carcara es especialista en transformar sonrisas con los últimos avances en ortodoncia invisible y estética dental. Su enfoque minucioso garantiza resultados funcionales y armónicos.',
     specialties: [
-      { title: 'ORTODONCIA', desc: 'Tratamientos discretos y efectivos utilizando alineadores transparentes.' },
-      { title: 'ORTOPEDIA FUNCIONAL DE LOS MAXILARES', desc: 'Corrección de la mordida y alineación dental con brackets de última generación.' },
-      { title: 'PERIODONCIA', desc: 'Planificación digital para lograr la sonrisa perfecta y natural.' },
-      { title: 'BLANQUEAMIENTO Y ESTETICA DENTAL', desc: 'Técnicas avanzadas para aclarar el tono de tus dientes de forma segura.' }
+      { title: 'ORTODONCIA', desc: 'Corrección de la mordida y alineación dental con brackets de última generación.' },
+      { title: 'ORTOPEDIA FUNCIONAL DE LOS MAXILARES', desc: 'Tratamiento para guiar y estimular el crecimiento y desarrollo de los maxilares y musculatura facial en niños.' },
+      { title: 'PERIODONCIA', desc: 'Tratamiento de enfermedades periodontales y cuidados de los tejidos que sostienen los dientes.' },
+      { title: 'BLANQUEAMIENTO Y ESTETICA DENTAL', desc: 'Técnicas avanzadas para aclarar el tono de tus dientes de forma segura y eficaz' }
     ],
     certifications: [
-      'Especialista en Ortodoncia y Ortopedia Maxilar',
-      'Certificación Internacional en Invisalign',
-      'Miembro de la Sociedad Argentina de Ortodoncia',
+      'Posgrado en Odontopediatria',
+      'Posgrado en Ortopedia funcional de los maxilares',
+      'Posgrado en Ortodoncia',
+      'Posgrado en Ortodoncia digital con alineadores',
       'Posgrado en Estética Dental Avanzada'
     ],
     clinicalCases: [
@@ -42,17 +43,16 @@ const doctorsData = {
     image: '/dr-adolfo.jpg', // Placeholder
     bio: 'El Dr. Adolfo Martinez cuenta con amplia trayectoria en cirugías complejas e implantes dentales. Su dedicación a la tecnología 3D permite planificaciones precisas y postoperatorios más rápidos.',
     specialties: [
-      { title: 'IMPLANTOLOGIA ORAL', desc: 'Colocación de implantes mediante guías quirúrgicas impresas en 3D.' },
-      { title: 'REHABILITACION PROTESICA', desc: 'Extracciones complejas y cirugías reconstructivas óseas.' },
-      { title: 'ENDODONCIA', desc: 'Técnicas avanzadas para recuperar el volumen óseo perdido.' },
-      { title: 'CIRUGIA', desc: 'Devolución de la función y estética mediante prótesis sobre implantes.' },
-      { title: 'ESTETICA IDEAL ', desc: 'Devolución de la función y estética mediante prótesis sobre implantes.' }
+      { title: 'IMPLANTOLOGIA ORAL', desc: 'Colocación de implantes dentales, a traves de cirugias guiadas.' },
+      { title: 'REHABILITACION PROTESICA', desc: 'Diseño digital de sonrisas , confeccion digital de coronas en un sesion  ' },
+      { title: 'CIRUGIA', desc: 'Procedimientos quirurgicos de alta complejidad.' },
+      { title: 'ESTETICA IDEAL ', desc: 'Devolución de la función y estética dental.Carillas y coronas esteticas.Blanqueamiento dental.' }
     ],
     certifications: [
-      'Especialista en Cirugía y Traumatología Bucomaxilofacial',
+      'Postgrado en cirugia y implantologia oral',
       'Especialista en Implantología Oral',
       'Certificación en Flujos Digitales y CAD/CAM',
-      'Dictante de cursos de posgrado en Cirugía Guiada'
+      'Dictante de cursos de posgrado en Cirugía implantologica.'
     ],
     clinicalCases: [
       {

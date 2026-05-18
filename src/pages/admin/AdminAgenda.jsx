@@ -226,91 +226,87 @@ const AdminAgenda = () => {
           </div>
         </header>
 
-        {/* ══════ GRILLA TIPO CALENDARIO ══════ */}
-        <div className="flex-1 bg-white rounded-3xl shadow-xl border border-secondary/10 overflow-hidden flex flex-col relative">
+        {/* ══════ KANBAN AGENDA (POR DÍA) ══════ */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-1 pb-6">
+          {/* Grilla responsiva: 1 col en móviles, 2 en tablets, 3 en desktop, 6 en pantallas extra grandes */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-5 min-h-full">
+            {diasSemana.map((dia, index) => {
+              // Filtrar y ordenar turnos de este día
+              const turnosDelDia = turnos
+                .filter(t => t.fecha === formatearFechaDB(dia))
+                .sort((a, b) => {
+                  const getVal = (h) => {
+                    if (!h) return '23:59';
+                    if (h.toLowerCase().includes('mañana')) return '00:00';
+                    if (h.toLowerCase().includes('tarde')) return '13:00';
+                    return h;
+                  };
+                  return getVal(a.hora).localeCompare(getVal(b.hora));
+                });
 
-          {/* Wrapper con scroll horizontal para móviles */}
-          <div className="flex-1 overflow-x-auto overflow-y-hidden flex flex-col custom-scrollbar">
-
-            {/* Cabecera de días */}
-            <div className="flex border-b border-secondary/10 bg-background/20 shrink-0 ml-[80px] min-w-[900px]">
-              {diasSemana.map((dia, index) => (
-                <div key={index} className={`flex-1 py-4 text-center border-r border-secondary/5 last:border-0 ${esHoy(dia) ? 'bg-primary/5 relative' : ''}`}>
-                  <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${esHoy(dia) ? 'text-accent-orange' : 'text-text-light/60'}`}>{nombresDias[index]}</p>
-                  <p className={`text-2xl font-black ${esHoy(dia) ? 'text-primary' : 'text-text'}`}>{dia.getDate()}</p>
-                  {esHoy(dia) && <div className="absolute bottom-0 left-0 w-full h-1 bg-accent-orange"></div>}
-                </div>
-              ))}
-            </div>
-
-            {/* Cuerpo con Scroll y Horas a la izquierda */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar relative flex bg-gray-50/30 min-w-[980px]">
-
-              {/* Columna de Horas */}
-              <div className="w-[80px] bg-white border-r border-secondary/10 shadow-sm sticky left-0 z-10 shrink-0">
-                {HORARIOS.map((hora) => (
-                  <div key={hora} className="h-[100px] border-b border-secondary/5 flex items-start justify-center pt-3 relative">
-                    <span className="text-[10px] font-black text-primary/40 tracking-tighter bg-white px-2 rounded-full border border-secondary/5 shadow-xs">
-                      {hora}
-                    </span>
-                    {/* Línea horizontal que cruza */}
-                    <div className="absolute top-0 left-[80px] w-[2000px] h-px bg-secondary/5 pointer-events-none"></div>
+              return (
+                <div key={index} className={`flex flex-col bg-white rounded-[2rem] border-2 shadow-sm overflow-hidden transition-all hover:shadow-lg ${esHoy(dia) ? 'border-accent-orange/50 shadow-orange-500/10' : 'border-secondary/15'}`}>
+                  
+                  {/* Cabecera del Recuadro (Día) */}
+                  <div className={`p-5 text-center border-b-2 ${esHoy(dia) ? 'bg-orange-50/80 border-accent-orange/20' : 'bg-background/50 border-secondary/10'}`}>
+                    <p className={`text-[11px] font-black uppercase tracking-[0.2em] ${esHoy(dia) ? 'text-accent-orange' : 'text-text-light/70'}`}>
+                      {nombresDias[index]}
+                    </p>
+                    <p className={`text-4xl font-black mt-1 ${esHoy(dia) ? 'text-primary' : 'text-text'}`}>
+                      {dia.getDate()}
+                    </p>
+                    {esHoy(dia) && <span className="inline-block px-3 py-1 bg-accent-orange text-white text-[9px] font-black uppercase tracking-widest rounded-full mt-2 shadow-sm shadow-orange-500/40">Hoy</span>}
                   </div>
-                ))}
-              </div>
-
-              {/* Columnas de los Días */}
-              <div className="flex flex-1">
-                {diasSemana.map((dia) => {
-                  const turnosDelDia = turnos.filter(t => t.fecha === formatearFechaDB(dia));
-
-                  return (
-                    <div key={dia} className={`flex-1 border-r border-secondary/5 last:border-0 relative ${esHoy(dia) ? 'bg-primary/2' : ''}`}>
-                      {HORARIOS.map(hora => {
-                        const turnoEnHora = turnosDelDia.find(t => t.hora === hora);
-
-                        return (
-                          <div key={`${dia}-${hora}`} className="h-[100px] p-1.5 border-b border-secondary/5 relative group">
-                            {turnoEnHora ? (
-                              <div
-                                onClick={() => { setTurnoSeleccionado(turnoEnHora); setConfirmarCancelar(false); }}
-                                className={`h-full w-full rounded-2xl p-3 shadow-md border-l-[6px] transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between hover:scale-[1.03] hover:shadow-xl z-20 group
-                                  ${turnoEnHora.profesional?.toLowerCase().includes('erina')
-                                    ? 'bg-emerald-50 border-l-emerald-500 hover:bg-emerald-100/80 shadow-emerald-500/10'
-                                    : 'bg-blue-50 border-l-blue-500 hover:bg-blue-100/80 shadow-blue-500/10'}`}
-                              >
-                                <div className="flex justify-between items-start gap-1">
-                                  <div>
-                                    <p className="text-[10px] font-black text-primary/40 uppercase tracking-widest">{turnoEnHora.hora}</p>
-                                    <p className="font-black text-primary text-[11px] leading-tight uppercase mt-1 truncate max-w-[120px]">
-                                      {turnoEnHora.nombrePaciente} {turnoEnHora.apellidoPaciente}
-                                    </p>
-                                  </div>
-                                  <div className={`p-1 rounded-lg ${turnoEnHora.estado === 'Confirmado' ? 'bg-green-500/20 text-green-600' : 'bg-amber-500/20 text-amber-600'}`}>
-                                    <FaCheckCircle className="text-xs" />
-                                  </div>
-                                </div>
-                                <div className="mt-1 flex items-center justify-between">
-                                  <p className="text-[9px] font-bold text-primary/60 truncate italic">🦷 {turnoEnHora.motivo || 'Consulta'}</p>
-                                  <div className={`text-[8px] font-black px-2 py-0.5 rounded-full text-white ${turnoEnHora.profesional?.toLowerCase().includes('erina') ? 'bg-emerald-500' : 'bg-blue-500'}`}>
-                                    {turnoEnHora.profesional?.includes('Adolfo') ? 'DR. AM' : 'DRA. EC'}
-                                  </div>
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                                <span className="text-[9px] font-black text-primary/10 tracking-[0.3em] uppercase">Horario Libre</span>
-                              </div>
-                            )}
+                  
+                  {/* Lista de Turnos (Cuerpo del Recuadro) */}
+                  <div className="flex-1 p-3.5 bg-gray-50/40 flex flex-col gap-3.5">
+                    {turnosDelDia.length > 0 ? turnosDelDia.map(turno => (
+                      <div
+                        key={turno._id}
+                        onClick={() => { setTurnoSeleccionado(turno); setConfirmarCancelar(false); }}
+                        className={`rounded-2xl p-4 shadow-sm border-l-[6px] transition-all cursor-pointer relative overflow-hidden group hover:-translate-y-1 hover:shadow-md
+                          ${turno.profesional?.toLowerCase().includes('erina')
+                            ? 'bg-emerald-50 border-l-emerald-500 hover:bg-emerald-100/90 border-t border-r border-b border-emerald-100'
+                            : 'bg-blue-50 border-l-blue-500 hover:bg-blue-100/90 border-t border-r border-b border-blue-100'}`}
+                      >
+                        <div className="flex justify-between items-start mb-2.5">
+                          <span className={`text-[11px] font-black text-white px-2.5 py-1 rounded-md tracking-wider shadow-sm
+                            ${turno.hora?.toLowerCase().includes('mañana') || turno.hora?.toLowerCase().includes('tarde') ? 'bg-primary/60' : 'bg-primary/90'}`}>
+                            {turno.hora || 'Sin hora'}
+                          </span>
+                          {turno.estado === 'Confirmado' ? (
+                            <FaCheckCircle className="text-green-600 text-lg drop-shadow-sm" title="Confirmado" />
+                          ) : (
+                            <div className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 text-[9px] font-black uppercase tracking-widest flex items-center gap-1 border border-amber-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Pendiente
+                            </div>
+                          )}
+                        </div>
+                        
+                        <p className="font-black text-primary text-sm leading-tight uppercase mb-1 drop-shadow-xs">
+                          {turno.nombrePaciente} {turno.apellidoPaciente}
+                        </p>
+                        
+                        <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-black/5">
+                          <p className="text-[10px] font-bold text-primary/70 flex items-center gap-1.5 leading-tight">
+                            <span className="shrink-0 text-[9px]">🦷</span> <span className="truncate">{turno.motivo || 'Consulta General'}</span>
+                          </p>
+                          <div className={`text-[9px] font-black px-2.5 py-1 rounded-md text-white self-start shadow-sm mt-1
+                            ${turno.profesional?.toLowerCase().includes('erina') ? 'bg-emerald-500 shadow-emerald-500/30' : 'bg-blue-500 shadow-blue-500/30'}`}>
+                            {turno.profesional?.includes('Adolfo') ? 'Dr. Adolfo M.' : 'Dra. Erina C.'}
                           </div>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
-              </div>
-
-            </div>
+                        </div>
+                      </div>
+                    )) : (
+                      <div className="flex-1 flex flex-col items-center justify-center opacity-40 text-center py-10">
+                        <FaCalendarDay className="text-3xl mb-3 text-text-light/50" />
+                        <p className="text-[10px] font-black text-text-light uppercase tracking-[0.2em]">Agenda Libre</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

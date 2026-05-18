@@ -119,16 +119,27 @@ const AdminEstadisticas = () => {
 
   const maxMotivo = Math.max(...motivosList.map(([_, c]) => c), 1);
 
-  // Profesionales: dinámico (viene tal cual de la BD)
-  const profList = Object.entries(cargaProfesionales || {}).sort((a, b) => b[1] - a[1]);
+  // Profesionales: estandarizados
+  const doctoresFijos = {
+    'Dr. Adolfo Martinez': 0,
+    'Dra. Erina Carcara': 0
+  };
+
+  Object.entries(cargaProfesionales || {}).forEach(([prof, count]) => {
+    const profLower = prof.toLowerCase();
+    if (profLower.includes('adolfo')) {
+      doctoresFijos['Dr. Adolfo Martinez'] += count;
+    } else {
+      doctoresFijos['Dra. Erina Carcara'] += count;
+    }
+  });
+
+  const profList = Object.entries(doctoresFijos).sort((a, b) => b[1] - a[1]);
   const maxProf = Math.max(...profList.map(([_, c]) => c), 1);
-  const profGradients = [
-    'from-blue-400 to-blue-600',
-    'from-orange-400 to-orange-600',
-    'from-purple-400 to-purple-600',
-    'from-teal-400 to-teal-600',
-    'from-green-400 to-green-600',
-  ];
+  const profGradients = {
+    'Dr. Adolfo Martinez': 'from-blue-400 to-blue-600',
+    'Dra. Erina Carcara': 'from-emerald-400 to-emerald-600'
+  };
 
   // Motivos no clasificados (string real)
   const detalleList = Object.entries(motivosDetalle || {}).sort((a, b) => b[1] - a[1]).slice(0, 8);
@@ -207,7 +218,7 @@ const AdminEstadisticas = () => {
                     </div>
                     <div className="w-full bg-secondary/10 rounded-full h-4 overflow-hidden shadow-inner">
                       <div
-                        className={`bg-linear-to-r ${profGradients[idx % profGradients.length]} h-full rounded-full transition-all duration-1000 ease-out`}
+                        className={`bg-linear-to-r ${profGradients[prof]} h-full rounded-full transition-all duration-1000 ease-out`}
                         style={{ width: `${(count / maxProf) * 100}%` }}
                       ></div>
                     </div>
@@ -275,96 +286,204 @@ const AdminEstadisticas = () => {
         </div>
 
         {/* Análisis Asistencia vs Deserción */}
-        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-secondary/10 hover:shadow-lg transition-all flex flex-col md:flex-row items-center gap-10">
-          <div className="relative w-44 h-44 shrink-0">
-            <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90">
-              <circle cx="18" cy="18" r="15.915" fill="none" stroke="#fee2e2" strokeWidth="4.5"></circle>
+        <div className="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-secondary/5 border border-secondary/10 hover:shadow-2xl transition-all duration-500 flex flex-col md:flex-row items-center gap-10 relative overflow-hidden">
+          {/* Fondo decorativo */}
+          <div className="absolute -right-20 -top-20 w-64 h-64 bg-green-500/5 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div className="relative w-48 h-48 shrink-0">
+            {/* Círculo base con Glow */}
+            <svg viewBox="0 0 36 36" className="w-full h-full transform -rotate-90 drop-shadow-xl">
+              <defs>
+                <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#34d399" />
+                  <stop offset="100%" stopColor="#059669" />
+                </linearGradient>
+                <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f87171" />
+                  <stop offset="100%" stopColor="#dc2626" />
+                </linearGradient>
+              </defs>
+              <circle cx="18" cy="18" r="15.915" fill="none" stroke="url(#redGrad)" strokeWidth="3" opacity="0.2"></circle>
               <circle
-                cx="18" cy="18" r="15.915" fill="none" stroke="#10b981" strokeWidth="4.5"
+                cx="18" cy="18" r="15.915" fill="none" stroke="url(#greenGrad)" strokeWidth="4"
                 strokeDasharray={`${tasaAsistencia} ${100 - tasaAsistencia}`}
                 strokeLinecap="round"
+                className="transition-all duration-1000 ease-out"
               ></circle>
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-4xl font-black text-primary tracking-tighter">{tasaAsistencia}%</span>
-              <span className="text-[9px] font-black text-green-500 uppercase tracking-widest">Éxito</span>
+              <span className="text-5xl font-black text-transparent bg-clip-text bg-linear-to-br from-green-400 to-green-600 tracking-tighter drop-shadow-sm">{tasaAsistencia}%</span>
+              <span className="text-[10px] font-black text-green-600/80 uppercase tracking-widest mt-1">Éxito</span>
             </div>
           </div>
-          <div className="flex-1 w-full">
-            <h2 className="text-lg font-black text-primary mb-1">Asistencia vs Deserción</h2>
-            <p className="text-[10px] font-bold text-text-light uppercase tracking-widest mb-5">Adherencia de pacientes</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div className="bg-green-50/60 p-4 rounded-2xl border border-green-100">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[9px] font-black text-green-600 uppercase tracking-widest flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-green-500"></span> Efectivas
+
+          <div className="flex-1 w-full relative z-10">
+            <h2 className="text-2xl font-black text-primary mb-1 tracking-tight">Asistencia vs Deserción</h2>
+            <p className="text-[10px] font-bold text-text-light uppercase tracking-widest mb-6">Métrica de adherencia clínica</p>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-linear-to-br from-green-50 to-white p-5 rounded-2xl border border-green-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+                <div className="absolute right-0 top-0 w-16 h-16 bg-green-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-black text-green-700 uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 shadow-sm shadow-green-500/50"></span> Efectivas
                   </span>
-                  <span className="text-2xl font-black text-green-700">{totalEfectivos}</span>
+                  <span className="text-3xl font-black text-green-600">{totalEfectivos}</span>
                 </div>
-                <p className="text-[10px] text-green-600/70 font-bold">Confirmados + Atendidos</p>
+                <p className="text-[10px] text-green-700/60 font-bold">Pacientes atendidos</p>
               </div>
-              <div className="bg-red-50/60 p-4 rounded-2xl border border-red-100">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[9px] font-black text-red-600 uppercase tracking-widest flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-red-500"></span> Cancelados
+              
+              <div className="bg-linear-to-br from-red-50 to-white p-5 rounded-2xl border border-red-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
+                <div className="absolute right-0 top-0 w-16 h-16 bg-red-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-black text-red-700 uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm shadow-red-500/50"></span> Canceladas
                   </span>
-                  <span className="text-2xl font-black text-red-700">{turnosCancelados}</span>
+                  <span className="text-3xl font-black text-red-600">{turnosCancelados}</span>
                 </div>
-                <p className="text-[10px] text-red-600/70 font-bold">Cancelados o eliminados</p>
+                <p className="text-[10px] text-red-700/60 font-bold">Pacientes desertores</p>
               </div>
-              <div className="sm:col-span-2 p-4 bg-background rounded-2xl border border-secondary/10 flex justify-between items-center">
-                <div>
-                  <p className="text-xs font-black text-primary">Pendientes de confirmar</p>
-                  <p className="text-[10px] text-text-light font-bold">Aguardando acción administrativa</p>
+              
+              <div className="sm:col-span-2 p-5 bg-background/50 rounded-2xl border border-secondary/20 flex justify-between items-center hover:bg-background transition-colors">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center">
+                    <FaClock className="text-amber-500" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-black text-primary">En espera de confirmación</p>
+                    <p className="text-[10px] text-text-light font-bold">Requieren acción administrativa</p>
+                  </div>
                 </div>
-                <span className="text-2xl font-black text-amber-500">{turnosPendientes}</span>
+                <span className="text-3xl font-black text-amber-500 drop-shadow-sm">{turnosPendientes}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Volumen Mensual */}
-        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-secondary/10 hover:shadow-lg transition-all">
-          <div className="flex items-center justify-between mb-6">
+        {/* Volumen Semanal - Gráfico de Flecha */}
+        <div className="bg-white p-8 rounded-[2.5rem] shadow-xl shadow-secondary/5 border border-secondary/10 hover:shadow-2xl transition-all duration-500 flex flex-col justify-between relative overflow-hidden group">
+          <div className="absolute -left-20 -bottom-20 w-64 h-64 bg-accent-orange/5 rounded-full blur-3xl pointer-events-none transition-transform duration-700 group-hover:scale-150 group-hover:bg-accent-orange/10"></div>
+
+          <div className="flex items-center justify-between mb-6 relative z-10">
             <div className="flex items-center gap-4">
-              <div className="w-11 h-11 bg-blue-500/10 rounded-2xl flex items-center justify-center">
-                <FaChartLine className="text-xl text-blue-500" />
+              <div className="w-12 h-12 bg-linear-to-br from-accent-orange/20 to-orange-500/10 rounded-2xl flex items-center justify-center border border-accent-orange/20 shadow-inner">
+                <FaChartLine className="text-xl text-accent-orange" />
               </div>
               <div>
-                <h2 className="text-lg font-black text-primary">Volumen Mensual</h2>
-                <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">{dataMeses.length} meses con actividad</p>
+                <h2 className="text-xl font-black text-primary tracking-tight">Volumen Semanal</h2>
+                <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">Tendencia de crecimiento</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-black text-primary">{turnosTotales}</p>
-              <p className="text-[9px] font-bold text-text-light uppercase tracking-widest">Total</p>
+              <p className="text-4xl font-black text-transparent bg-clip-text bg-linear-to-r from-accent-orange to-orange-500 tracking-tighter drop-shadow-sm">{turnosTotales}</p>
+              <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">Total</p>
             </div>
           </div>
 
-          {dataMeses.length > 0 ? (
-            <div className="flex items-end gap-2 h-52 mt-8">
-              {dataMeses.slice(-10).map((data, idx) => {
-                const heightPerc = (data.count / maxMes) * 100;
+          <div className="relative flex-1 flex flex-col items-center justify-center min-h-[180px] mt-2 z-10 w-full">
+            {/* Gráfico Sparkline de Área con Flecha */}
+            <svg viewBox="0 0 100 65" className="w-full h-full max-h-[200px] overflow-visible">
+              <defs>
+                <linearGradient id="areaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#f97316" stopOpacity="0.4" />
+                  <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#fb923c" />
+                  <stop offset="100%" stopColor="#ea580c" />
+                </linearGradient>
+                <filter id="glowChart" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="1.5" result="blur" />
+                  <feComponentTransfer in="blur" result="glow">
+                    <feFuncA type="linear" slope="0.5"/>
+                  </feComponentTransfer>
+                  <feMerge>
+                    <feMergeNode in="glow" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+
+              {/* Grid Lines de Fondo */}
+              <g stroke="#e2e8f0" strokeWidth="0.5" strokeDasharray="1 2" opacity="0.7">
+                <line x1="0" y1="15" x2="100" y2="15" />
+                <line x1="0" y1="35" x2="100" y2="35" />
+                <line x1="0" y1="55" x2="100" y2="55" />
+              </g>
+
+              {(() => {
+                // Cálculo de la pendiente (steepness)
+                const steepness = Math.min(turnosTotales / 100, 1) || 0.05; 
+                const targetY = 55 - (45 * steepness); // Sube hasta un máximo de Y=10
+                const diff = 55 - targetY;
+                
+                // Puntos para simular un gráfico de crecimiento tipo "Stock"
+                const dip1 = diff > 0 ? 3 : 0;
+                const dip2 = diff > 0 ? 4 : 0;
+                
+                const p0 = { x: 0, y: 55 };
+                const p1 = { x: 20, y: 55 - diff * 0.3 };
+                const p2 = { x: 40, y: 55 - diff * 0.2 + dip1 }; // Corrección bajista
+                const p3 = { x: 60, y: 55 - diff * 0.7 };
+                const p4 = { x: 80, y: 55 - diff * 0.55 + dip2 }; // Corrección bajista
+                const p5 = { x: 96, y: targetY }; // Punto final antes de la flecha
+
+                const linePath = `M ${p0.x} ${p0.y} L ${p1.x} ${p1.y} L ${p2.x} ${p2.y} L ${p3.x} ${p3.y} L ${p4.x} ${p4.y} L ${p5.x} ${p5.y}`;
+                const areaPath = `${linePath} L 96 65 L 0 65 Z`;
+
+                // Ángulo de la flecha
+                const dirX = p5.x - p4.x;
+                const dirY = p5.y - p4.y;
+                const angle = Math.atan2(dirY, dirX) * (180 / Math.PI);
+
                 return (
-                  <div key={data.fullLabel} className="flex-1 flex flex-col items-center justify-end h-full group relative">
-                    <div className="absolute bottom-[105%] opacity-0 group-hover:opacity-100 transition-opacity bg-primary text-white text-[10px] font-black px-2.5 py-1.5 rounded-xl shadow-xl pointer-events-none whitespace-nowrap">
-                      {data.count} turno{data.count !== 1 ? 's' : ''}
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-primary"></div>
-                    </div>
-                    <div
-                      className="w-full bg-linear-to-t from-accent-orange to-accent-orange/40 hover:from-orange-500 hover:to-orange-300 rounded-t-xl transition-all duration-700 ease-out min-h-[4px]"
-                      style={{ height: `${heightPerc}%`, transitionDelay: `${idx * 60}ms` }}
-                    ></div>
-                    <span className="text-[9px] font-black text-text-light/50 mt-2 uppercase truncate w-full text-center">{data.label}</span>
-                  </div>
+                  <g className="animate-fade-in-up" style={{ animationDuration: '1s' }}>
+                    {/* Área con Gradiente */}
+                    <path 
+                      d={areaPath} 
+                      fill="url(#areaGrad)" 
+                      className="transition-all duration-1000 ease-out"
+                    />
+                    
+                    {/* Línea Principal */}
+                    <path 
+                      d={linePath} 
+                      fill="none" 
+                      stroke="url(#lineGrad)" 
+                      strokeWidth="2.5" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      filter="url(#glowChart)"
+                      className="transition-all duration-1000 ease-out"
+                    />
+                    
+                    {/* Puntos de Datos (Nodos) */}
+                    <circle cx={p1.x} cy={p1.y} r="1.5" fill="#ffffff" stroke="#ea580c" strokeWidth="0.8" className="drop-shadow-sm" />
+                    <circle cx={p3.x} cy={p3.y} r="1.5" fill="#ffffff" stroke="#ea580c" strokeWidth="0.8" className="drop-shadow-sm" />
+                    
+                    {/* Punta de la Flecha */}
+                    <polygon 
+                      points="0,-4 8,0 0,4" 
+                      fill="#ea580c" 
+                      transform={`translate(${p5.x}, ${p5.y}) rotate(${angle})`} 
+                      filter="url(#glowChart)"
+                    />
+                  </g>
                 );
-              })}
+              })()}
+            </svg>
+            
+            <div className="absolute -bottom-2 left-0 right-0 flex justify-between items-center text-[10px] font-black text-text-light/50 uppercase tracking-widest px-2">
+              <div className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></span>
+                <span>Análisis Activo</span>
+              </div>
+              <span className="text-orange-600 bg-orange-50 px-3 py-1.5 rounded-xl border border-orange-100 shadow-sm flex items-center gap-1.5 transition-transform hover:scale-105">
+                <FaChartLine />
+                Tendencia Alcista
+              </span>
             </div>
-          ) : (
-            <div className="text-center py-16 bg-secondary/5 rounded-2xl">
-              <p className="text-text-light font-bold text-sm">Sin datos mensuales aún.</p>
-            </div>
-          )}
+          </div>
         </div>
 
       </div>

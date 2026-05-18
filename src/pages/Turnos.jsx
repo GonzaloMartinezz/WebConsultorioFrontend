@@ -494,7 +494,7 @@ _Enviado desde el Portal Oficial de Turnos._`;
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            className="fixed inset-0 z-100 flex items-center justify-center p-4"
           >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-md"></div>
             <motion.div 

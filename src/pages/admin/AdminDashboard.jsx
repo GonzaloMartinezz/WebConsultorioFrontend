@@ -9,7 +9,7 @@ const AdminDashboard = () => {
   const [cargando, setCargando] = useState(true);
   const [modalEditOpen, setModalEditOpen] = useState(false);
   const [turnoAEditar, setTurnoAEditar] = useState(null);
-  const [editForm, setEditForm] = useState({ fechaDia: '', fechaMes: '', fechaAno: '', hora: '09:00', profesional: 'Dra. Erina' });
+  const [editForm, setEditForm] = useState({ fechaDia: '', fechaMes: '', fechaAno: '', hora: '09:00', profesional: 'Dra. Erina Carcara' });
   const [notificacionPendiente, setNotificacionPendiente] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
 
@@ -157,7 +157,7 @@ const AdminDashboard = () => {
       fechaMes: partes[1] || '',
       fechaDia: partes[2] ? parseInt(partes[2]).toString() : '',
       hora: turno.hora || '09:00',
-      profesional: turno.profesional || 'Dra. Erina',
+      profesional: turno.profesional || 'Dra. Erina Carcara',
       nombrePaciente: turno.nombrePaciente || '',
       apellidoPaciente: turno.apellidoPaciente || '',
       dni: turno.dni || '',
@@ -259,6 +259,7 @@ const AdminDashboard = () => {
                   <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Fecha</th>
                   <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Hora</th>
                   <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Paciente</th>
+                  <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden md:table-cell">Profesional</th>
                   <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden md:table-cell">DNI</th>
                   <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden lg:table-cell">Motivo</th>
                   <th className="py-3 px-3 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Estado</th>
@@ -288,6 +289,12 @@ const AdminDashboard = () => {
                             {turno.telefono && <p className="text-[10px] text-text-light font-medium hidden xl:block">{turno.telefono}</p>}
                           </div>
                         </div>
+                      </td>
+                      <td className="py-4 px-3 hidden md:table-cell">
+                        <span className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider inline-block
+                          ${turno.profesional?.toLowerCase().includes('erina') ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-blue-50 text-blue-600 border border-blue-100'}`}>
+                          {turno.profesional?.includes('Adolfo') ? 'Dr. Adolfo M.' : 'Dra. Erina C.'}
+                        </span>
                       </td>
                       <td className="py-4 px-3 text-[11px] font-medium text-text-light hidden md:table-cell">{turno.dni || '—'}</td>
                       <td className="py-4 px-3 hidden lg:table-cell">
@@ -330,14 +337,14 @@ const AdminDashboard = () => {
 
       {notificacionPendiente && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-300 p-4 animate-fade-in">
-          <div className="bg-white rounded-4xlfull max-w-sm overflow-hidden shadow-2xl">
+          <div className="bg-white rounded-[2rem] w-full max-w-sm overflow-hidden shadow-2xl">
             <div className="bg-linear-to-br from-green-500 to-emerald-600 p-8 text-center text-white relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]"></div>
               <div className="relative z-10">
                 <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4 backdrop-blur-sm border border-white/20">
                   <FaCheckCircle className="text-3xl text-white" />
                 </div>
-                <h2 className="text-xl font-black uppercase tracking-tight">¡Turno Confirmado!</h2>
+                <h2 className="text-xl font-black uppercase tracking-tight">Turno Confirmado<br/>por Admin</h2>
                 <p className="text-white/70 text-xs mt-2 font-bold">Notificá al paciente por el medio que prefieras</p>
               </div>
             </div>
@@ -346,7 +353,7 @@ const AdminDashboard = () => {
               <a href={notificacionPendiente.waUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 w-full py-4 px-5 bg-[#25D366]/10 text-[#25D366] rounded-2xl font-black text-sm hover:bg-[#25D366] hover:text-white transition-all border border-[#25D366]/20">
                 <FaWhatsapp className="text-xl" /> Enviar WhatsApp
               </a>
-              <a href={notificacionPendiente.mailUrl} className="flex items-center gap-3 w-full py-4 px-5 bg-blue-50 text-blue-600 rounded-2xl font-black text-sm hover:bg-blue-500 hover:text-white transition-all border border-blue-200">
+              <a href={notificacionPendiente.mailUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 w-full py-4 px-5 bg-blue-50 text-blue-600 rounded-2xl font-black text-sm hover:bg-blue-500 hover:text-white transition-all border border-blue-200">
                 <FaEnvelope /> Enviar Email
               </a>
               <a href={notificacionPendiente.gcalAdminUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 w-full py-3 px-5 bg-background text-text-light rounded-2xl font-bold text-sm hover:bg-accent-orange/10 hover:text-accent-orange transition-all border border-secondary/10">
@@ -445,8 +452,8 @@ const AdminDashboard = () => {
                       <label className="text-[9px] font-black text-text-light/50 uppercase mb-1 block">Profesional</label>
                       <select value={editForm.profesional} onChange={e => setEditForm({ ...editForm, profesional: e.target.value })}
                         className="w-full p-2.5 bg-background rounded-xl font-bold text-xs border border-secondary/10 focus:border-accent-orange outline-none appearance-none">
-                        <option value="Dra. Erina">Dra. Erina</option>
-                        <option value="Dr. Adolfo">Dr. Adolfo</option>
+                        <option value="Dra. Erina Carcara">Dra. Erina Carcara</option>
+                        <option value="Dr. Adolfo Martinez">Dr. Adolfo Martinez</option>
                       </select>
                     </div>
                   </div>
