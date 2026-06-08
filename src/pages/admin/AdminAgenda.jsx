@@ -133,12 +133,12 @@ const AdminAgenda = () => {
       await api.patch(`/turnos/${turnoSeleccionado._id}/estado`, { estado: 'Confirmado' });
       const urls = generarUrlsNotificacion(turnoSeleccionado);
       setTurnoSeleccionado(null);
-      
+
       alert('¡Turno confirmado y enviado correctamente!');
       if (urls.waUrl) {
         window.open(urls.waUrl, '_blank');
       }
-      
+
       await fetchTurnos();
     } catch (error) {
       console.error("Error al confirmar:", error);
@@ -245,8 +245,8 @@ const AdminAgenda = () => {
                 });
 
               return (
-                <div key={index} className={`flex flex-col bg-white rounded-[2rem] border-2 shadow-sm overflow-hidden transition-all hover:shadow-lg ${esHoy(dia) ? 'border-accent-orange/50 shadow-orange-500/10' : 'border-secondary/15'}`}>
-                  
+                <div key={index} className={`flex flex-col bg-white rounded-4xl border-2 shadow-sm overflow-hidden transition-all hover:shadow-lg ${esHoy(dia) ? 'border-accent-orange/50 shadow-orange-500/10' : 'border-secondary/15'}`}>
+
                   {/* Cabecera del Recuadro (Día) */}
                   <div className={`p-5 text-center border-b-2 ${esHoy(dia) ? 'bg-orange-50/80 border-accent-orange/20' : 'bg-background/50 border-secondary/10'}`}>
                     <p className={`text-[11px] font-black uppercase tracking-[0.2em] ${esHoy(dia) ? 'text-accent-orange' : 'text-text-light/70'}`}>
@@ -257,41 +257,41 @@ const AdminAgenda = () => {
                     </p>
                     {esHoy(dia) && <span className="inline-block px-3 py-1 bg-accent-orange text-white text-[9px] font-black uppercase tracking-widest rounded-full mt-2 shadow-sm shadow-orange-500/40">Hoy</span>}
                   </div>
-                  
+
                   {/* Lista de Turnos (Cuerpo del Recuadro) */}
                   <div className="flex-1 p-3.5 bg-gray-50/40 flex flex-col gap-3.5">
                     {turnosDelDia.length > 0 ? turnosDelDia.map(turno => (
                       <div
                         key={turno._id}
                         onClick={() => { setTurnoSeleccionado(turno); setConfirmarCancelar(false); }}
-                        className={`rounded-2xl p-4 shadow-sm border-l-[6px] transition-all cursor-pointer relative overflow-hidden group hover:-translate-y-1 hover:shadow-md
+                        className={`rounded-xl md:rounded-2xl p-3 md:p-4 shadow-sm border-l-[6px] transition-all cursor-pointer relative overflow-hidden group hover:-translate-y-1 hover:shadow-md
                           ${turno.profesional?.toLowerCase().includes('erina')
                             ? 'bg-emerald-50 border-l-emerald-500 hover:bg-emerald-100/90 border-t border-r border-b border-emerald-100'
                             : 'bg-blue-50 border-l-blue-500 hover:bg-blue-100/90 border-t border-r border-b border-blue-100'}`}
                       >
-                        <div className="flex justify-between items-start mb-2.5">
-                          <span className={`text-[11px] font-black text-white px-2.5 py-1 rounded-md tracking-wider shadow-sm
+                        <div className="flex flex-wrap gap-1 justify-between items-start mb-2">
+                          <span className={`text-[10px] md:text-[11px] font-black text-white px-2 py-1 rounded-md tracking-wider shadow-sm shrink-0
                             ${turno.hora?.toLowerCase().includes('mañana') || turno.hora?.toLowerCase().includes('tarde') ? 'bg-primary/60' : 'bg-primary/90'}`}>
                             {turno.hora || 'Sin hora'}
                           </span>
                           {turno.estado === 'Confirmado' ? (
-                            <FaCheckCircle className="text-green-600 text-lg drop-shadow-sm" title="Confirmado" />
+                            <FaCheckCircle className="text-green-600 text-lg drop-shadow-sm shrink-0" title="Confirmado" />
                           ) : (
-                            <div className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-600 text-[9px] font-black uppercase tracking-widest flex items-center gap-1 border border-amber-200">
+                            <div className="px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-600 text-[8px] md:text-[9px] font-black uppercase tracking-widest flex items-center gap-1 border border-amber-200 shrink-0">
                               <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span> Pendiente
                             </div>
                           )}
                         </div>
-                        
-                        <p className="font-black text-primary text-sm leading-tight uppercase mb-1 drop-shadow-xs">
+
+                        <p className="font-black text-primary text-xs md:text-sm leading-tight uppercase mb-1 drop-shadow-xs wrap-break-word">
                           {turno.nombrePaciente} {turno.apellidoPaciente}
                         </p>
-                        
-                        <div className="flex flex-col gap-2 mt-3 pt-3 border-t border-black/5">
-                          <p className="text-[10px] font-bold text-primary/70 flex items-center gap-1.5 leading-tight">
-                            <span className="shrink-0 text-[9px]">🦷</span> <span className="truncate">{turno.motivo || 'Consulta General'}</span>
+
+                        <div className="flex flex-col gap-1.5 mt-2 pt-2 border-t border-black/5">
+                          <p className="text-[9px] md:text-[10px] font-bold text-primary/70 flex items-start gap-1.5 leading-tight">
+                            <span className="shrink-0 text-[9px] mt-0.5">🦷</span> <span className="line-clamp-2">{turno.motivo || 'Consulta General'}</span>
                           </p>
-                          <div className={`text-[9px] font-black px-2.5 py-1 rounded-md text-white self-start shadow-sm mt-1
+                          <div className={`text-[8px] md:text-[9px] font-black px-2 py-1 rounded-md text-white self-start shadow-sm mt-1 shrink-0
                             ${turno.profesional?.toLowerCase().includes('erina') ? 'bg-emerald-500 shadow-emerald-500/30' : 'bg-blue-500 shadow-blue-500/30'}`}>
                             {turno.profesional?.includes('Adolfo') ? 'Dr. Adolfo M.' : 'Dra. Erina C.'}
                           </div>

@@ -8,12 +8,13 @@ const MiPerfil = () => {
   const [turnosHoy, setTurnosHoy] = useState([]);
   const [cargando, setCargando] = useState(true);
   const navigate = useNavigate();
-  const usuario = JSON.parse(localStorage.getItem('perfilUsuario'));
-  const isAdmin = usuario?.rol?.toLowerCase() === 'admin' || usuario?.role?.toLowerCase() === 'admin';
-
+  const usuarioStr = localStorage.getItem('perfilUsuario');
+  
   useEffect(() => {
     const fetchTurnos = async () => {
       try {
+        const usuario = JSON.parse(usuarioStr || '{}');
+        const isAdmin = usuario?.rol?.toLowerCase() === 'admin' || usuario?.role?.toLowerCase() === 'admin';
         const fechaHoy = new Date().toISOString().split('T')[0];
 
         if (isAdmin) {
@@ -43,10 +44,14 @@ const MiPerfil = () => {
       }
     };
 
-    if (usuario) {
+    if (usuarioStr) {
       fetchTurnos();
     }
-  }, [usuario, isAdmin]);
+  }, [usuarioStr]);
+
+  const usuario = JSON.parse(usuarioStr || '{}');
+  const isAdmin = usuario?.rol?.toLowerCase() === 'admin' || usuario?.role?.toLowerCase() === 'admin';
+
 
   const handleLogout = () => {
     localStorage.removeItem('token');

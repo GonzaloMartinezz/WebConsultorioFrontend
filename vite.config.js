@@ -5,8 +5,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 5173,        // Obliga a usar siempre este puerto
-    strictPort: true,  // Si está ocupado, tira error en vez de saltar al 5174
+    port: 5173
   },
   build: {
     // 1. Aumentamos el límite de advertencia para que Vercel no se queje

@@ -24,15 +24,37 @@ const AdminConfiguracion = () => {
   const [enviandoIdx, setEnviandoIdx] = useState(-1);
   const [toast, setToast] = useState({ show: false, msg: '', type: 'success' });
   const [guardando, setGuardando] = useState(false);
+  
+  // WhatsApp Bot State
+  const [waStatus, setWaStatus] = useState('DESCONECTADO');
+  const [waQr, setWaQr] = useState(null);
 
   const showToast = (msg, type = 'success') => {
     setToast({ show: true, msg, type });
     setTimeout(() => setToast({ show: false, msg: '', type: 'success' }), 4000);
   };
 
+  const fetchWaStatus = async () => {
+    try {
+      const res = await api.get('/whatsapp/status');
+      if (res.data) {
+        setWaStatus(res.data.status);
+        setWaQr(res.data.qr);
+      }
+    } catch (e) {
+      // Ignorar errores si el backend aún no se reinició
+    }
+  };
+
   useEffect(() => {
     fetchConfiguracion();
     fetchTurnosManana();
+    
+    // Poll inicial y recurrente para el estado del Bot WA
+    fetchWaStatus();
+    const waInterval = setInterval(fetchWaStatus, 3000);
+    
+    return () => clearInterval(waInterval);
   }, []);
 
   const fetchConfiguracion = async () => {
@@ -128,30 +150,21 @@ const AdminConfiguracion = () => {
 
   const handleRecordatoriosMasivos = async () => {
     if (turnosManana.length === 0) return showToast('No hay turnos para mañana.', 'error');
-    if (!window.confirm(`¿Enviar recordatorio a ${turnosManana.length} paciente(s)? Se abrirán pestañas de WhatsApp y Email secuencialmente.`)) return;
+    if (!window.confirm(`¿Enviar recordatorio a ${turnosManana.length} paciente(s)?\n\nEl sistema enviará Emails y mensajes de WhatsApp (Bot) automáticamente en segundo plano.`)) return;
     
     setEnviandoMasivo(true);
-    let i = 0;
-    
-    const interval = setInterval(() => {
-      if (i >= turnosManana.length) {
-        clearInterval(interval);
-        setEnviandoMasivo(false);
-        setEnviandoIdx(-1);
-        showToast(`✅ Proceso de recordatorios finalizado.`, 'success');
-        api.post('/notificaciones/recordatorios-manana').catch(() => { });
-        return;
-      }
+    setEnviandoIdx(0); // Para mostrar spinner
 
-      const t = turnosManana[i];
-      setEnviandoIdx(i);
-      
-      // Enviamos por ambos canales si están disponibles
-      if (t.telefono) enviarWhatsApp(t);
-      if (t.email) setTimeout(() => enviarEmail(t), 400); // Pequeño delay para no saturar al abrir pestañas
-
-      i++;
-    }, 2000); // Aumentamos a 2s para dar tiempo al navegador
+    try {
+      const res = await api.post('/notificaciones/recordatorios-manana');
+      showToast(res.data.message || `✅ Recordatorios enviados automáticamente.`, 'success');
+    } catch (error) {
+      console.error("Error enviando recordatorios desde el servidor:", error);
+      showToast('Hubo un error al enviar algunos recordatorios.', 'error');
+    } finally {
+      setEnviandoMasivo(false);
+      setEnviandoIdx(-1);
+    }
   };
 
   const mananaLabel = (() => {
@@ -345,9 +358,50 @@ const AdminConfiguracion = () => {
       </section>
 
       {/* ══════════════════════════════════════════════════
-          CONFIGURACIÓN OPERATIVA
+          CONFIGURACIÓN OPERATIVA Y BOT
       ══════════════════════════════════════════════════ */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+
+        {/* WA Bot Panel */}
+        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-secondary/10 flex flex-col">
+          <div className="flex items-center gap-4 mb-6">
+            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${waStatus === 'CONECTADO' ? 'bg-green-100' : waStatus === 'ESPERANDO_QR' ? 'bg-amber-100' : 'bg-red-100'}`}>
+              <FaWhatsapp className={`text-xl ${waStatus === 'CONECTADO' ? 'text-green-500' : waStatus === 'ESPERANDO_QR' ? 'text-amber-500' : 'text-red-500'}`} />
+            </div>
+            <div>
+              <h2 className="text-lg font-black text-primary">Bot Automático</h2>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-text-light">
+                {waStatus === 'CONECTADO' ? 'En línea' : waStatus === 'ESPERANDO_QR' ? 'Escaneo Requerido' : 'Desconectado'}
+              </p>
+            </div>
+          </div>
+          
+          <div className="flex-1 flex flex-col items-center justify-center text-center bg-gray-50/50 rounded-2xl p-4 border border-gray-100">
+            {waStatus === 'ESPERANDO_QR' && waQr ? (
+              <>
+                <img src={waQr} alt="QR WhatsApp" className="w-40 h-40 border-4 border-white rounded-xl mb-4 shadow-sm" />
+                <p className="text-xs font-black text-primary mb-1">Escanea este código</p>
+                <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest leading-tight">WhatsApp &gt; Dispositivos Vinculados</p>
+              </>
+            ) : waStatus === 'CONECTADO' ? (
+              <>
+                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4 border-4 border-white shadow-sm">
+                  <FaCheckCircle className="text-3xl text-green-500" />
+                </div>
+                <p className="text-xs font-black text-green-700 mb-4">El bot enviará los mensajes automáticamente en 2do plano.</p>
+                <button onClick={async () => { await api.post('/whatsapp/logout'); fetchWaStatus(); }} className="px-4 py-2 bg-red-50 text-red-600 rounded-xl text-xs font-black hover:bg-red-500 hover:text-white transition-all uppercase tracking-wider border border-red-100">Cerrar Sesión Bot</button>
+              </>
+            ) : (
+              <>
+                <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-4 border-4 border-white shadow-sm">
+                  <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <p className="text-xs font-black text-red-700 mb-2">Iniciando motor de WhatsApp...</p>
+                <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Espera un momento</p>
+              </>
+            )}
+          </div>
+        </div>
 
         {/* Horarios */}
         <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-secondary/10">
@@ -356,7 +410,7 @@ const AdminConfiguracion = () => {
               <FaClock className="text-xl text-primary" />
             </div>
             <div>
-              <h2 className="text-lg font-black text-primary">Horarios de Atención</h2>
+              <h2 className="text-lg font-black text-primary">Horarios</h2>
               <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">Configuración del calendario</p>
             </div>
           </div>
@@ -386,7 +440,7 @@ const AdminConfiguracion = () => {
               <FaListUl className="text-xl text-accent-orange" />
             </div>
             <div>
-              <h2 className="text-lg font-black text-primary">Catálogo de Servicios</h2>
+              <h2 className="text-lg font-black text-primary">Servicios</h2>
               <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">{servicios.length} servicios activos</p>
             </div>
           </div>
@@ -394,7 +448,7 @@ const AdminConfiguracion = () => {
           <form onSubmit={handleAddServicio} className="flex gap-2 mb-6 bg-background/60 p-3 rounded-2xl border border-secondary/10">
             <input
               type="text"
-              placeholder="Ej: Blanqueamiento dental"
+              placeholder="Ej: Blanqueamiento"
               value={nuevoServicio.nombre}
               onChange={e => setNuevoServicio({ ...nuevoServicio, nombre: e.target.value })}
               className="flex-1 p-2.5 bg-white rounded-xl font-bold text-sm border border-secondary/10 focus:border-accent-orange outline-none transition-all"
@@ -402,9 +456,9 @@ const AdminConfiguracion = () => {
             <select
               value={nuevoServicio.duracion}
               onChange={e => setNuevoServicio({ ...nuevoServicio, duracion: Number(e.target.value) })}
-              className="w-24 p-2.5 bg-white rounded-xl font-bold text-sm border border-secondary/10 focus:border-accent-orange outline-none appearance-none text-center"
+              className="w-20 p-2.5 bg-white rounded-xl font-bold text-sm border border-secondary/10 focus:border-accent-orange outline-none appearance-none text-center"
             >
-              {[15, 30, 45, 60, 90].map(m => <option key={m} value={m}>{m}min</option>)}
+              {[15, 30, 45, 60, 90].map(m => <option key={m} value={m}>{m}m</option>)}
             </select>
             <button type="submit" className="w-11 h-11 bg-accent-orange text-white rounded-xl flex items-center justify-center hover:bg-orange-500 transition-all shadow-md shadow-orange-500/20 shrink-0">
               <FaPlus />
@@ -414,13 +468,13 @@ const AdminConfiguracion = () => {
           <div className="space-y-2 max-h-[260px] overflow-y-auto custom-scrollbar pr-1">
             {servicios.map(s => (
               <div key={s.id} className="flex items-center justify-between p-4 bg-background/40 rounded-2xl border border-secondary/5 group hover:border-accent-orange/20 transition-all">
-                <div>
-                  <p className="font-bold text-primary text-sm">{s.nombre}</p>
+                <div className="truncate pr-2">
+                  <p className="font-bold text-primary text-sm truncate">{s.nombre}</p>
                   <p className="text-[10px] text-text-light font-bold uppercase tracking-wider">{s.duracion} minutos</p>
                 </div>
                 <button
                   onClick={() => setServicios(servicios.filter(x => x.id !== s.id))}
-                  className="w-8 h-8 text-red-400 bg-red-50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white transition-all border border-red-100"
+                  className="w-8 h-8 shrink-0 text-red-400 bg-red-50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white transition-all border border-red-100"
                 >
                   <FaTrash className="text-xs" />
                 </button>
