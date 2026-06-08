@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import LayoutAdmin from "../../components/layouts/LayoutAdmin.jsx";
-import { FaCog, FaClock, FaListUl, FaPlus, FaTrash, FaSave, FaBell, FaWhatsapp, FaEnvelope, FaPaperPlane, FaCalendarCheck, FaCheckCircle, FaTimesCircle, FaUsers } from 'react-icons/fa';
+import { FaCog, FaClock, FaListUl, FaPlus, FaTrash, FaSave, FaBell, FaWhatsapp, FaEnvelope, FaPaperPlane, FaCalendarCheck, FaCheckCircle, FaTimesCircle, FaUsers, FaRobot } from 'react-icons/fa';
 import api from '../../api/axios.js';
 
 const AdminConfiguracion = () => {
@@ -28,6 +28,7 @@ const AdminConfiguracion = () => {
   // WhatsApp Bot State
   const [waStatus, setWaStatus] = useState('DESCONECTADO');
   const [waQr, setWaQr] = useState(null);
+  const [activeTab, setActiveTab] = useState('recordatorios');
 
   const showToast = (msg, type = 'success') => {
     setToast({ show: true, msg, type });
@@ -200,289 +201,360 @@ const AdminConfiguracion = () => {
         </button>
       </header>
 
-      {/* ══════════════════════════════════════════════════
-          SECCIÓN RECORDATORIOS — ARRIBA Y PRINCIPAL
-      ══════════════════════════════════════════════════ */}
-      <section className="mb-8">
-        {/* Hero Card de Acción Masiva */}
-        <div className="bg-linear-to-br from-primary via-[#3a2e25] to-[#2a1f16] rounded-[2.5rem] p-8 md:p-10 text-white relative overflow-hidden mb-5 shadow-2xl">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,120,0,0.2),transparent_60%)] pointer-events-none"></div>
-          <div className="absolute bottom-0 right-0 w-64 h-64 opacity-[0.04]">
-            <FaBell className="w-full h-full" />
-          </div>
+      {/* Navegación por Pestañas */}
+      <div className="flex overflow-x-auto custom-scrollbar gap-2 mb-8 bg-white/50 p-2 rounded-2xl border border-secondary/10 shadow-sm backdrop-blur-sm">
+        <button
+          onClick={() => setActiveTab('recordatorios')}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl font-black text-sm whitespace-nowrap transition-all ${
+            activeTab === 'recordatorios' 
+              ? 'bg-accent-orange text-white shadow-md shadow-accent-orange/20' 
+              : 'text-text-light hover:bg-secondary/10 hover:text-primary'
+          }`}
+        >
+          <FaBell /> Recordatorios
+        </button>
+        <button
+          onClick={() => setActiveTab('bot')}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl font-black text-sm whitespace-nowrap transition-all ${
+            activeTab === 'bot' 
+              ? 'bg-primary text-white shadow-md shadow-primary/20' 
+              : 'text-text-light hover:bg-secondary/10 hover:text-primary'
+          }`}
+        >
+          <FaRobot /> Bot de WhatsApp
+        </button>
+        <button
+          onClick={() => setActiveTab('operativa')}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl font-black text-sm whitespace-nowrap transition-all ${
+            activeTab === 'operativa' 
+              ? 'bg-blue-500 text-white shadow-md shadow-blue-500/20' 
+              : 'text-text-light hover:bg-secondary/10 hover:text-primary'
+          }`}
+        >
+          <FaCog /> Operativa (Horarios & Servicios)
+        </button>
+      </div>
 
-          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 bg-accent-orange/20 rounded-2xl flex items-center justify-center border border-accent-orange/30">
-                  <FaBell className="text-accent-orange text-xl" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-orange">Centro Odontológico C&M</p>
-                  <h2 className="text-2xl font-black tracking-tight">Recordatorios Automáticos</h2>
-                </div>
-              </div>
-              <p className="text-white/60 text-sm font-medium max-w-lg">
-                Con un solo clic, se envían mensajes personalizados de WhatsApp y Email a todos los pacientes agendados para <span className="text-accent-orange font-black capitalize">{mananaLabel}</span>.
-              </p>
-              <div className="flex items-center gap-4 mt-4">
-                <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full border border-white/10">
-                  <FaUsers className="text-accent-orange text-sm" />
-                  <span className="text-sm font-black">{loadingTurnos ? '...' : turnosManana.length} pacientes</span>
-                </div>
-                <div className="flex items-center gap-2 text-white/40 text-xs font-bold">
-                  <FaWhatsapp className="text-green-400" /> WhatsApp
-                  <span className="text-white/20">·</span>
-                  <FaEnvelope className="text-blue-400" /> Email
-                </div>
-              </div>
+      {/* ══════════════════════════════════════════════════
+          CONTENIDO PESTAÑA: RECORDATORIOS
+      ══════════════════════════════════════════════════ */}
+      {activeTab === 'recordatorios' && (
+        <section className="animate-fade-in">
+          {/* Hero Card de Acción Masiva */}
+          <div className="bg-linear-to-br from-primary via-[#3a2e25] to-[#2a1f16] rounded-[2.5rem] p-8 md:p-10 text-white relative overflow-hidden mb-8 shadow-2xl">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,120,0,0.2),transparent_60%)] pointer-events-none"></div>
+            <div className="absolute bottom-0 right-0 w-64 h-64 opacity-[0.04]">
+              <FaBell className="w-full h-full" />
             </div>
 
-            <button
-              onClick={handleRecordatoriosMasivos}
-              disabled={enviandoMasivo || loadingTurnos || turnosManana.length === 0}
-              className={`w-full md:w-auto shrink-0 flex flex-row md:flex-col items-center justify-center gap-2 px-6 md:px-10 py-4 md:py-6 rounded-2xl md:rounded-3xl font-black transition-all border-2 shadow-2xl
-                ${turnosManana.length === 0
-                  ? 'bg-white/5 border-white/10 text-white/30 cursor-not-allowed'
-                  : enviandoMasivo
-                    ? 'bg-accent-orange/20 border-accent-orange/50 text-accent-orange cursor-wait'
-                    : 'bg-accent-orange border-accent-orange text-white hover:bg-orange-500 hover:shadow-orange-500/30 hover:-translate-y-1 active:scale-95'
-                }`}
-            >
-              {enviandoMasivo ? (
+            <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 bg-accent-orange/20 rounded-2xl flex items-center justify-center border border-accent-orange/30">
+                    <FaBell className="text-accent-orange text-xl" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-orange">Centro Odontológico C&M</p>
+                    <h2 className="text-2xl font-black tracking-tight">Recordatorios Automáticos</h2>
+                  </div>
+                </div>
+                <p className="text-white/60 text-sm font-medium max-w-lg">
+                  Con un solo clic, se envían mensajes personalizados de WhatsApp y Email a todos los pacientes agendados para <span className="text-accent-orange font-black capitalize">{mananaLabel}</span>.
+                </p>
+                <div className="flex items-center gap-4 mt-4">
+                  <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full border border-white/10">
+                    <FaUsers className="text-accent-orange text-sm" />
+                    <span className="text-sm font-black">{loadingTurnos ? '...' : turnosManana.length} pacientes</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-white/40 text-xs font-bold">
+                    <FaWhatsapp className="text-green-400" /> WhatsApp
+                    <span className="text-white/20">·</span>
+                    <FaEnvelope className="text-blue-400" /> Email
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={handleRecordatoriosMasivos}
+                disabled={enviandoMasivo || loadingTurnos || turnosManana.length === 0}
+                className={`w-full md:w-auto shrink-0 flex flex-row md:flex-col items-center justify-center gap-2 px-6 md:px-10 py-4 md:py-6 rounded-2xl md:rounded-3xl font-black transition-all border-2 shadow-2xl
+                  ${turnosManana.length === 0
+                    ? 'bg-white/5 border-white/10 text-white/30 cursor-not-allowed'
+                    : enviandoMasivo
+                      ? 'bg-accent-orange/20 border-accent-orange/50 text-accent-orange cursor-wait'
+                      : 'bg-accent-orange border-accent-orange text-white hover:bg-orange-500 hover:shadow-orange-500/30 hover:-translate-y-1 active:scale-95'
+                  }`}
+              >
+                {enviandoMasivo ? (
+                  <>
+                    <div className="w-6 h-6 md:w-8 md:h-8 border-3 border-accent-orange border-t-transparent rounded-full animate-spin"></div>
+                    <span className="text-xs uppercase tracking-widest">Enviando {enviandoIdx + 1}/{turnosManana.length}</span>
+                  </>
+                ) : (
+                  <>
+                    <FaPaperPlane className="text-xl md:text-2xl" />
+                    <span className="text-xs uppercase tracking-widest">Enviar a Todos</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Tabla de pacientes de mañana */}
+          <div className="bg-white rounded-4xl shadow-sm border border-secondary/10 overflow-hidden">
+            <div className="flex items-center justify-between px-8 py-5 border-b border-secondary/10">
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-6 bg-accent-orange rounded-full"></div>
+                <div>
+                  <h3 className="font-black text-primary capitalize">Pacientes de {mananaLabel}</h3>
+                  <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">{turnosManana.length} turnos confirmados / pendientes</p>
+                </div>
+              </div>
+              <button onClick={fetchTurnosManana} className="text-[10px] font-black text-accent-orange uppercase tracking-widest bg-accent-orange/5 px-4 py-2 rounded-full hover:bg-accent-orange/10 transition-all">
+                Actualizar
+              </button>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="bg-secondary/5">
+                    <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Paciente</th>
+                    <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden sm:table-cell">Hora</th>
+                    <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden md:table-cell">Tratamiento</th>
+                    <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden lg:table-cell">Contacto</th>
+                    <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-secondary/5">
+                  {loadingTurnos ? (
+                    <tr><td colSpan="5" className="py-12 text-center text-text-light font-bold text-sm animate-pulse">Cargando turnos...</td></tr>
+                  ) : turnosManana.length > 0 ? turnosManana.map((turno, idx) => (
+                    <tr key={turno._id || turno.id || idx} className={`hover:bg-background/50 transition-colors group ${enviandoIdx === idx ? 'bg-accent-orange/5' : ''}`}>
+                      <td className="py-4 px-6">
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center text-[10px] font-black text-primary shrink-0">
+                            {turno.nombrePaciente?.charAt(0)}{turno.apellidoPaciente?.charAt(0)}
+                          </div>
+                          <div>
+                            <p className="font-black text-primary text-sm">{turno.nombrePaciente} {turno.apellidoPaciente}</p>
+                            <p className="text-[10px] text-text-light font-medium">{turno.estado}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6 hidden sm:table-cell">
+                        <span className="font-black text-primary">{turno.hora}</span>
+                        <span className="text-text-light font-bold text-xs"> hs</span>
+                      </td>
+                      <td className="py-4 px-6 hidden md:table-cell">
+                        <span className="text-[10px] font-bold text-text-light bg-secondary/5 border border-secondary/10 px-2.5 py-1 rounded-lg">{turno.motivo}</span>
+                      </td>
+                      <td className="py-4 px-6 hidden lg:table-cell">
+                        <div className="flex flex-col gap-0.5">
+                          {turno.telefono && <span className="text-[10px] font-bold text-green-600 flex items-center gap-1"><FaWhatsapp /> {turno.telefono}</span>}
+                          {turno.email && <span className="text-[10px] font-bold text-blue-500 flex items-center gap-1"><FaEnvelope /> {turno.email}</span>}
+                          {!turno.telefono && !turno.email && <span className="text-[10px] font-bold text-red-400">Sin contacto</span>}
+                        </div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => enviarWhatsApp(turno)}
+                            disabled={!turno.telefono}
+                            title={turno.telefono ? 'Enviar WhatsApp' : 'Sin teléfono'}
+                            className="flex items-center gap-1.5 px-3 py-2 bg-green-50 text-green-600 rounded-xl hover:bg-green-500 hover:text-white transition-all text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed border border-green-200/50"
+                          >
+                            <FaWhatsapp className="text-sm" /> WA
+                          </button>
+                          <button
+                            onClick={() => enviarEmail(turno)}
+                            disabled={!turno.email}
+                            title={turno.email ? 'Enviar Email' : 'Sin email'}
+                            className="flex items-center gap-1.5 px-3 py-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-500 hover:text-white transition-all text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed border border-blue-200/50"
+                          >
+                            <FaEnvelope className="text-sm" /> Mail
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )) : (
+                    <tr>
+                      <td colSpan="5" className="py-16 text-center">
+                        <div className="w-12 h-12 bg-secondary/5 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                          <FaCalendarCheck className="text-xl text-text-light/30" />
+                        </div>
+                        <p className="text-text-light font-bold text-sm">No hay turnos agendados para mañana.</p>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ══════════════════════════════════════════════════
+          CONTENIDO PESTAÑA: BOT WHATSAPP
+      ══════════════════════════════════════════════════ */}
+      {activeTab === 'bot' && (
+        <section className="animate-fade-in max-w-2xl mx-auto">
+          <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-secondary/10 flex flex-col">
+            <div className="flex items-center gap-4 mb-8">
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${waStatus === 'CONECTADO' ? 'bg-green-100' : waStatus === 'ESPERANDO_QR' ? 'bg-amber-100' : 'bg-red-100'}`}>
+                <FaRobot className={`text-2xl ${waStatus === 'CONECTADO' ? 'text-green-500' : waStatus === 'ESPERANDO_QR' ? 'text-amber-500' : 'text-red-500'}`} />
+              </div>
+              <div>
+                <h2 className="text-xl font-black text-primary">Bot Automático de WhatsApp</h2>
+                <p className="text-xs font-bold uppercase tracking-widest text-text-light mt-1">
+                  Estado: <span className={waStatus === 'CONECTADO' ? 'text-green-600' : waStatus === 'ESPERANDO_QR' ? 'text-amber-600' : 'text-red-600'}>
+                    {waStatus === 'CONECTADO' ? 'En línea' : waStatus === 'ESPERANDO_QR' ? 'Escaneo Requerido' : 'Desconectado'}
+                  </span>
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex-1 flex flex-col items-center justify-center text-center bg-gray-50/50 rounded-3xl p-8 md:p-12 border border-gray-100 shadow-inner">
+              {waStatus === 'ESPERANDO_QR' && waQr ? (
                 <>
-                  <div className="w-6 h-6 md:w-8 md:h-8 border-3 border-accent-orange border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-xs uppercase tracking-widest">Enviando {enviandoIdx + 1}/{turnosManana.length}</span>
+                  <div className="bg-white p-4 rounded-2xl shadow-md mb-6 inline-block border border-gray-100">
+                    <img src={waQr} alt="QR WhatsApp" className="w-56 h-56 md:w-64 md:h-64 object-contain" style={{ imageRendering: 'pixelated' }} />
+                  </div>
+                  <h3 className="text-lg font-black text-primary mb-2">Escanea este código</h3>
+                  <p className="text-sm font-medium text-text-light max-w-sm mb-4">Abre WhatsApp en tu teléfono, ve a "Dispositivos Vinculados" y enfoca la cámara a este código QR.</p>
+                </>
+              ) : waStatus === 'CONECTADO' ? (
+                <>
+                  <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-6 border-4 border-white shadow-md">
+                    <FaCheckCircle className="text-4xl text-green-500" />
+                  </div>
+                  <h3 className="text-xl font-black text-green-700 mb-2">¡Todo listo!</h3>
+                  <p className="text-sm font-medium text-text-light max-w-sm mb-8">El bot está conectado correctamente y enviará los mensajes automáticamente en segundo plano.</p>
+                  <button onClick={async () => { await api.post('/whatsapp/logout'); fetchWaStatus(); }} className="px-6 py-3 bg-red-50 text-red-600 rounded-xl text-sm font-black hover:bg-red-500 hover:text-white transition-all uppercase tracking-wider border border-red-100 shadow-sm hover:shadow-md hover:-translate-y-0.5">
+                    Cerrar Sesión Bot
+                  </button>
                 </>
               ) : (
                 <>
-                  <FaPaperPlane className="text-xl md:text-2xl" />
-                  <span className="text-xs uppercase tracking-widest">Enviar a Todos</span>
+                  <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-6 border-4 border-white shadow-md">
+                    <div className="w-10 h-10 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                  <h3 className="text-lg font-black text-red-700 mb-2">Iniciando motor de WhatsApp...</h3>
+                  <p className="text-sm font-medium text-text-light">Por favor, espera unos segundos mientras el servidor arranca el navegador en segundo plano.</p>
                 </>
               )}
-            </button>
-          </div>
-        </div>
-
-        {/* Tabla de pacientes de mañana */}
-        <div className="bg-white rounded-4xl shadow-sm border border-secondary/10 overflow-hidden">
-          <div className="flex items-center justify-between px-8 py-5 border-b border-secondary/10">
-            <div className="flex items-center gap-3">
-              <div className="w-1.5 h-6 bg-accent-orange rounded-full"></div>
-              <div>
-                <h3 className="font-black text-primary capitalize">Pacientes de {mananaLabel}</h3>
-                <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">{turnosManana.length} turnos confirmados / pendientes</p>
-              </div>
             </div>
-            <button onClick={fetchTurnosManana} className="text-[10px] font-black text-accent-orange uppercase tracking-widest bg-accent-orange/5 px-4 py-2 rounded-full hover:bg-accent-orange/10 transition-all">
-              Actualizar
-            </button>
           </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="bg-secondary/5">
-                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50">Paciente</th>
-                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden sm:table-cell">Hora</th>
-                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden md:table-cell">Tratamiento</th>
-                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 hidden lg:table-cell">Contacto</th>
-                  <th className="py-3 px-6 text-[9px] font-black uppercase tracking-[0.15em] text-text-light/50 text-center">Acciones</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-secondary/5">
-                {loadingTurnos ? (
-                  <tr><td colSpan="5" className="py-12 text-center text-text-light font-bold text-sm animate-pulse">Cargando turnos...</td></tr>
-                ) : turnosManana.length > 0 ? turnosManana.map((turno, idx) => (
-                  <tr key={turno._id} className={`hover:bg-background/50 transition-colors group ${enviandoIdx === idx ? 'bg-accent-orange/5' : ''}`}>
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 bg-primary/10 rounded-xl flex items-center justify-center text-[10px] font-black text-primary shrink-0">
-                          {turno.nombrePaciente?.charAt(0)}{turno.apellidoPaciente?.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="font-black text-primary text-sm">{turno.nombrePaciente} {turno.apellidoPaciente}</p>
-                          <p className="text-[10px] text-text-light font-medium">{turno.estado}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6 hidden sm:table-cell">
-                      <span className="font-black text-primary">{turno.hora}</span>
-                      <span className="text-text-light font-bold text-xs"> hs</span>
-                    </td>
-                    <td className="py-4 px-6 hidden md:table-cell">
-                      <span className="text-[10px] font-bold text-text-light bg-secondary/5 border border-secondary/10 px-2.5 py-1 rounded-lg">{turno.motivo}</span>
-                    </td>
-                    <td className="py-4 px-6 hidden lg:table-cell">
-                      <div className="flex flex-col gap-0.5">
-                        {turno.telefono && <span className="text-[10px] font-bold text-green-600 flex items-center gap-1"><FaWhatsapp /> {turno.telefono}</span>}
-                        {turno.email && <span className="text-[10px] font-bold text-blue-500 flex items-center gap-1"><FaEnvelope /> {turno.email}</span>}
-                        {!turno.telefono && !turno.email && <span className="text-[10px] font-bold text-red-400">Sin contacto</span>}
-                      </div>
-                    </td>
-                    <td className="py-4 px-6">
-                      <div className="flex items-center justify-center gap-2">
-                        <button
-                          onClick={() => enviarWhatsApp(turno)}
-                          disabled={!turno.telefono}
-                          title={turno.telefono ? 'Enviar WhatsApp' : 'Sin teléfono'}
-                          className="flex items-center gap-1.5 px-3 py-2 bg-green-50 text-green-600 rounded-xl hover:bg-green-500 hover:text-white transition-all text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed border border-green-200/50"
-                        >
-                          <FaWhatsapp className="text-sm" /> WA
-                        </button>
-                        <button
-                          onClick={() => enviarEmail(turno)}
-                          disabled={!turno.email}
-                          title={turno.email ? 'Enviar Email' : 'Sin email'}
-                          className="flex items-center gap-1.5 px-3 py-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-500 hover:text-white transition-all text-xs font-black disabled:opacity-30 disabled:cursor-not-allowed border border-blue-200/50"
-                        >
-                          <FaEnvelope className="text-sm" /> Mail
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                )) : (
-                  <tr>
-                    <td colSpan="5" className="py-16 text-center">
-                      <div className="w-12 h-12 bg-secondary/5 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                        <FaCalendarCheck className="text-xl text-text-light/30" />
-                      </div>
-                      <p className="text-text-light font-bold text-sm">No hay turnos agendados para mañana.</p>
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ══════════════════════════════════════════════════
-          CONFIGURACIÓN OPERATIVA Y BOT
+          CONTENIDO PESTAÑA: OPERATIVA (HORARIOS Y SERVICIOS)
       ══════════════════════════════════════════════════ */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-
-        {/* WA Bot Panel */}
-        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-secondary/10 flex flex-col">
-          <div className="flex items-center gap-4 mb-6">
-            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center ${waStatus === 'CONECTADO' ? 'bg-green-100' : waStatus === 'ESPERANDO_QR' ? 'bg-amber-100' : 'bg-red-100'}`}>
-              <FaWhatsapp className={`text-xl ${waStatus === 'CONECTADO' ? 'text-green-500' : waStatus === 'ESPERANDO_QR' ? 'text-amber-500' : 'text-red-500'}`} />
-            </div>
-            <div>
-              <h2 className="text-lg font-black text-primary">Bot Automático</h2>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-text-light">
-                {waStatus === 'CONECTADO' ? 'En línea' : waStatus === 'ESPERANDO_QR' ? 'Escaneo Requerido' : 'Desconectado'}
-              </p>
-            </div>
-          </div>
+      {activeTab === 'operativa' && (
+        <section className="animate-fade-in grid grid-cols-1 xl:grid-cols-12 gap-8">
           
-          <div className="flex-1 flex flex-col items-center justify-center text-center bg-gray-50/50 rounded-2xl p-4 border border-gray-100">
-            {waStatus === 'ESPERANDO_QR' && waQr ? (
-              <>
-                <img src={waQr} alt="QR WhatsApp" className="w-40 h-40 border-4 border-white rounded-xl mb-4 shadow-sm" />
-                <p className="text-xs font-black text-primary mb-1">Escanea este código</p>
-                <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest leading-tight">WhatsApp &gt; Dispositivos Vinculados</p>
-              </>
-            ) : waStatus === 'CONECTADO' ? (
-              <>
-                <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-4 border-4 border-white shadow-sm">
-                  <FaCheckCircle className="text-3xl text-green-500" />
+          {/* Horarios - Toma 4 columnas */}
+          <div className="xl:col-span-4 bg-white p-8 md:p-10 rounded-[2.5rem] shadow-lg shadow-secondary/5 border border-secondary/10 h-fit relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -z-0"></div>
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center shadow-md">
+                  <FaClock className="text-xl" />
                 </div>
-                <p className="text-xs font-black text-green-700 mb-4">El bot enviará los mensajes automáticamente en 2do plano.</p>
-                <button onClick={async () => { await api.post('/whatsapp/logout'); fetchWaStatus(); }} className="px-4 py-2 bg-red-50 text-red-600 rounded-xl text-xs font-black hover:bg-red-500 hover:text-white transition-all uppercase tracking-wider border border-red-100">Cerrar Sesión Bot</button>
-              </>
-            ) : (
-              <>
-                <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mb-4 border-4 border-white shadow-sm">
-                  <div className="w-8 h-8 border-4 border-red-500 border-t-transparent rounded-full animate-spin"></div>
+                <div>
+                  <h2 className="text-xl font-black text-primary tracking-tight">Horarios</h2>
+                  <p className="text-[10px] font-bold text-text-light uppercase tracking-[0.2em]">Atención al Público</p>
                 </div>
-                <p className="text-xs font-black text-red-700 mb-2">Iniciando motor de WhatsApp...</p>
-                <p className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Espera un momento</p>
-              </>
-            )}
+              </div>
+              
+              <div className="space-y-6">
+                {[
+                  { label: 'Apertura', key: 'apertura', type: 'time' },
+                  { label: 'Cierre', key: 'cierre', type: 'time' },
+                ].map(({ label, key, type }) => (
+                  <div key={key} className="bg-background/50 p-5 rounded-2xl border border-secondary/10">
+                    <label className="block text-[10px] font-black text-primary uppercase tracking-[0.15em] mb-2">{label}</label>
+                    <input
+                      type={type}
+                      value={horarios[key]}
+                      onChange={e => setHorarios({ ...horarios, [key]: e.target.value })}
+                      className="w-full bg-transparent font-black text-primary text-2xl outline-none"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* Horarios */}
-        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-secondary/10">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-11 h-11 bg-primary/5 rounded-2xl flex items-center justify-center">
-              <FaClock className="text-xl text-primary" />
+          {/* Servicios - Toma 8 columnas */}
+          <div className="xl:col-span-8 bg-white p-8 md:p-10 rounded-[2.5rem] shadow-lg shadow-secondary/5 border border-secondary/10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-accent-orange text-white rounded-2xl flex items-center justify-center shadow-md shadow-accent-orange/20">
+                  <FaListUl className="text-xl" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-black text-primary tracking-tight">Catálogo de Servicios</h2>
+                  <p className="text-[10px] font-bold text-text-light uppercase tracking-[0.2em]">{servicios.length} tratamientos disponibles</p>
+                </div>
+              </div>
             </div>
-            <div>
-              <h2 className="text-lg font-black text-primary">Horarios</h2>
-              <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">Configuración del calendario</p>
-            </div>
-          </div>
-          <div className="space-y-5">
-            {[
-              { label: 'Apertura del Consultorio', key: 'apertura', type: 'time' },
-              { label: 'Cierre del Consultorio', key: 'cierre', type: 'time' },
-            ].map(({ label, key, type }) => (
-              <div key={key}>
-                <label className="block text-[9px] font-black text-text-light/50 uppercase tracking-[0.2em] mb-2">{label}</label>
+
+            {/* Formulario de Agregar */}
+            <form onSubmit={handleAddServicio} className="flex flex-col sm:flex-row gap-4 mb-10">
+              <div className="flex-1 relative">
                 <input
-                  type={type}
-                  value={horarios[key]}
-                  onChange={e => setHorarios({ ...horarios, [key]: e.target.value })}
-                  className="w-full p-3.5 bg-background rounded-2xl font-bold text-primary border border-secondary/10 focus:border-accent-orange focus:ring-2 focus:ring-accent-orange/10 outline-none transition-all"
+                  type="text"
+                  placeholder="Nombre del nuevo tratamiento..."
+                  value={nuevoServicio.nombre}
+                  onChange={e => setNuevoServicio({ ...nuevoServicio, nombre: e.target.value })}
+                  className="w-full p-4 pl-5 bg-background rounded-2xl font-bold text-primary text-sm border border-secondary/20 focus:border-accent-orange focus:ring-4 focus:ring-accent-orange/10 outline-none transition-all placeholder:text-text-light/40"
                 />
               </div>
-            ))}
-
-          </div>
-        </div>
-
-        {/* Servicios */}
-        <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-secondary/10">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="w-11 h-11 bg-accent-orange/10 rounded-2xl flex items-center justify-center">
-              <FaListUl className="text-xl text-accent-orange" />
-            </div>
-            <div>
-              <h2 className="text-lg font-black text-primary">Servicios</h2>
-              <p className="text-[10px] font-bold text-text-light uppercase tracking-widest">{servicios.length} servicios activos</p>
-            </div>
-          </div>
-
-          <form onSubmit={handleAddServicio} className="flex gap-2 mb-6 bg-background/60 p-3 rounded-2xl border border-secondary/10">
-            <input
-              type="text"
-              placeholder="Ej: Blanqueamiento"
-              value={nuevoServicio.nombre}
-              onChange={e => setNuevoServicio({ ...nuevoServicio, nombre: e.target.value })}
-              className="flex-1 p-2.5 bg-white rounded-xl font-bold text-sm border border-secondary/10 focus:border-accent-orange outline-none transition-all"
-            />
-            <select
-              value={nuevoServicio.duracion}
-              onChange={e => setNuevoServicio({ ...nuevoServicio, duracion: Number(e.target.value) })}
-              className="w-20 p-2.5 bg-white rounded-xl font-bold text-sm border border-secondary/10 focus:border-accent-orange outline-none appearance-none text-center"
-            >
-              {[15, 30, 45, 60, 90].map(m => <option key={m} value={m}>{m}m</option>)}
-            </select>
-            <button type="submit" className="w-11 h-11 bg-accent-orange text-white rounded-xl flex items-center justify-center hover:bg-orange-500 transition-all shadow-md shadow-orange-500/20 shrink-0">
-              <FaPlus />
-            </button>
-          </form>
-
-          <div className="space-y-2 max-h-[260px] overflow-y-auto custom-scrollbar pr-1">
-            {servicios.map(s => (
-              <div key={s.id} className="flex items-center justify-between p-4 bg-background/40 rounded-2xl border border-secondary/5 group hover:border-accent-orange/20 transition-all">
-                <div className="truncate pr-2">
-                  <p className="font-bold text-primary text-sm truncate">{s.nombre}</p>
-                  <p className="text-[10px] text-text-light font-bold uppercase tracking-wider">{s.duracion} minutos</p>
+              <div className="flex gap-4">
+                <div className="relative">
+                  <select
+                    value={nuevoServicio.duracion}
+                    onChange={e => setNuevoServicio({ ...nuevoServicio, duracion: Number(e.target.value) })}
+                    className="w-32 p-4 bg-background rounded-2xl font-black text-primary text-sm border border-secondary/20 focus:border-accent-orange focus:ring-4 focus:ring-accent-orange/10 outline-none appearance-none cursor-pointer transition-all"
+                  >
+                    {[15, 30, 45, 60, 90, 120].map(m => <option key={m} value={m}>{m} min</option>)}
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-light/50 text-xs">▼</div>
                 </div>
-                <button
-                  onClick={() => setServicios(servicios.filter(x => x.id !== s.id))}
-                  className="w-8 h-8 shrink-0 text-red-400 bg-red-50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white transition-all border border-red-100"
-                >
-                  <FaTrash className="text-xs" />
+                <button type="submit" className="px-6 bg-primary text-white rounded-2xl flex items-center justify-center gap-2 hover:bg-primary/90 transition-all shadow-md font-black shrink-0">
+                  <FaPlus /> <span className="hidden sm:inline">Agregar</span>
                 </button>
               </div>
-            ))}
+            </form>
+
+            {/* Lista de Servicios en Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto custom-scrollbar pr-2">
+              {servicios.map(s => (
+                <div key={s.id} className="flex items-center justify-between p-5 bg-background/40 rounded-2xl border border-secondary/10 hover:border-accent-orange/40 hover:bg-white transition-all group shadow-sm hover:shadow-md">
+                  <div className="truncate pr-4 flex-1">
+                    <p className="font-black text-primary text-sm truncate mb-1.5">{s.nombre}</p>
+                    <div className="flex items-center gap-1.5">
+                      <FaClock className="text-[10px] text-accent-orange" />
+                      <p className="text-[10px] text-text-light font-bold uppercase tracking-[0.1em]">{s.duracion} minutos</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setServicios(servicios.filter(x => x.id !== s.id))}
+                    className="w-10 h-10 shrink-0 text-red-400 bg-red-50/50 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500 hover:text-white transition-all border border-red-100"
+                    title="Eliminar servicio"
+                  >
+                    <FaTrash className="text-sm" />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
+      )}
+
     </LayoutAdmin>
   );
 };

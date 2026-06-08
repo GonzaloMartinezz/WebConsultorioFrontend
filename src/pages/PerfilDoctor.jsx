@@ -103,11 +103,9 @@ const doctorsData = {
         difficulty: 'Baja',
         technique: 'Peróxido de Hidrógeno al 35% + Luz LED Clínica',
         image: '/casoclinico2.jpeg',
-        layout: 'vertical-3',
+        layout: 'simple',
         steps: [
-          { key: 'stage-1', name: 'Fase 1: Inicial', desc: 'Tono inicial con pigmentación moderada amarillenta, con muestra en guía de color de partida.' },
-          { key: 'stage-2', name: 'Fase 2: 1 Semana', desc: 'Avance significativo tras la primera sesión clínica de blanqueamiento y soporte domiciliario.' },
-          { key: 'stage-3', name: 'Fase 3: 2da Sesión', desc: 'Resultado final óptimo con dientes altamente luminosos, blancos y esmalte natural brillante.' }
+          { key: 'complete', name: 'Resultado', desc: 'Tratamiento de blanqueamiento profesional combinado en consultorio y hogar. Se muestran las 3 etapas del tratamiento.' }
         ]
       },
       {
@@ -588,29 +586,7 @@ const PerfilDoctor = () => {
                     </h3>
                   </div>
 
-                  {/* Grid de Métricas de Tratamiento */}
-                  <div className="grid grid-cols-3 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                    <div className="text-center flex flex-col items-center">
-                      <span className="text-lg">⏱️</span>
-                      <span className="text-[10px] font-bold text-text-light uppercase tracking-wider mt-1 block">Duración</span>
-                      <span className="text-xs font-black text-primary mt-0.5">{activeCase.duration}</span>
-                    </div>
-                    <div className="text-center flex flex-col items-center border-x border-slate-200">
-                      <span className="text-lg">⭐</span>
-                      <span className="text-[10px] font-bold text-text-light uppercase tracking-wider mt-1 block">Dificultad</span>
-                      <span className={`text-xs font-black mt-0.5 ${
-                        activeCase.difficulty === 'Alta' ? 'text-red-500' :
-                        activeCase.difficulty === 'Media' ? 'text-amber-500' : 'text-emerald-500'
-                      }`}>{activeCase.difficulty}</span>
-                    </div>
-                    <div className="text-center flex flex-col items-center">
-                      <span className="text-lg">🛠️</span>
-                      <span className="text-[10px] font-bold text-text-light uppercase tracking-wider mt-1 block">Técnica</span>
-                      <span className="text-xs font-black text-primary mt-0.5 truncate max-w-full px-1" title={activeCase.technique}>
-                        {activeCase.technique.split(' ')[0]}
-                      </span>
-                    </div>
-                  </div>
+
 
                   {/* Diagnóstico */}
                   <div className="flex flex-col gap-2">

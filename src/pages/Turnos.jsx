@@ -85,13 +85,28 @@ const Turnos = () => {
   };
 
   const handleSubmit = async () => {
-    if (!form.motivo || !form.doctor) {
-      setMensaje({ texto: "Por favor complete todos los campos requeridos.", tipo: "error" });
+    if (!form.motivo || !form.doctor || !form.nombre || !form.apellido || !form.telefono) {
+      setMensaje({ texto: "Por favor complete todos los campos requeridos (Nombre, Apellido, WhatsApp, Doctor, Motivo).", tipo: "error" });
+      return;
+    }
+
+    // Validación estricta del teléfono
+    let numLimpio = form.telefono.replace(/\D/g, '');
+    if (numLimpio.startsWith('0')) numLimpio = numLimpio.substring(1);
+    if (numLimpio.startsWith('15')) numLimpio = '381' + numLimpio.substring(2);
+    
+    if (numLimpio.length < 10 && !numLimpio.startsWith('549')) {
+      setMensaje({ texto: "El número de WhatsApp ingresado parece inválido. Debe tener código de área sin 0 ni 15.", tipo: "error" });
       return;
     }
 
     setCargando(true);
-    const telefonoCompleto = `+549${form.telefono.replace(/\s+/g, '').replace(/^\+?549?/, '')}`;
+    // Asegurar formato +549...
+    let telFinal = numLimpio;
+    if (!telFinal.startsWith('549')) {
+      telFinal = telFinal.startsWith('54') ? '549' + telFinal.substring(2) : '549' + telFinal;
+    }
+    const telefonoCompleto = `+${telFinal}`;
     const fechaCompleta = `${form.fechaAno}-${form.fechaMes.padStart(2, '0')}-${String(form.fechaDia).padStart(2, '0')}`;
 
     const formDataBackend = {

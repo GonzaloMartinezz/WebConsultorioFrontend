@@ -322,26 +322,24 @@ const AdminEstadisticas = () => {
             <p className="text-[10px] font-bold text-text-light uppercase tracking-widest mb-6">Métrica de adherencia clínica</p>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-linear-to-br from-green-50 to-white p-5 rounded-2xl border border-green-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
-                <div className="absolute right-0 top-0 w-16 h-16 bg-green-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-black text-green-700 uppercase tracking-widest flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 shadow-sm shadow-green-500/50"></span> Efectivas
-                  </span>
-                  <span className="text-3xl font-black text-green-600">{totalEfectivos}</span>
+              <div className="bg-linear-to-br from-green-50 to-white p-4 lg:p-5 rounded-2xl border border-green-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group flex flex-col">
+                <div className="absolute right-0 top-0 w-16 h-16 bg-green-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110 pointer-events-none"></div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-green-500 shadow-sm shadow-green-500/50 shrink-0"></span>
+                  <span className="text-[10px] sm:text-[9px] md:text-[10px] font-black text-green-700 uppercase tracking-widest truncate">Efectivas</span>
                 </div>
-                <p className="text-[10px] text-green-700/60 font-bold">Pacientes atendidos</p>
+                <span className="text-3xl font-black text-green-600 mb-1">{totalEfectivos}</span>
+                <p className="text-[10px] text-green-700/60 font-bold leading-tight">Pacientes atendidos</p>
               </div>
               
-              <div className="bg-linear-to-br from-red-50 to-white p-5 rounded-2xl border border-red-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group">
-                <div className="absolute right-0 top-0 w-16 h-16 bg-red-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] font-black text-red-700 uppercase tracking-widest flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm shadow-red-500/50"></span> Canceladas
-                  </span>
-                  <span className="text-3xl font-black text-red-600">{turnosCancelados}</span>
+              <div className="bg-linear-to-br from-red-50 to-white p-4 lg:p-5 rounded-2xl border border-red-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group flex flex-col">
+                <div className="absolute right-0 top-0 w-16 h-16 bg-red-500/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110 pointer-events-none"></div>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="w-2 h-2 rounded-full bg-red-500 shadow-sm shadow-red-500/50 shrink-0"></span>
+                  <span className="text-[10px] sm:text-[9px] md:text-[10px] font-black text-red-700 uppercase tracking-widest truncate">Canceladas</span>
                 </div>
-                <p className="text-[10px] text-red-700/60 font-bold">Pacientes desertores</p>
+                <span className="text-3xl font-black text-red-600 mb-1">{turnosCancelados}</span>
+                <p className="text-[10px] text-red-700/60 font-bold leading-tight">Pacientes desertores</p>
               </div>
               
               <div className="sm:col-span-2 p-5 bg-background/50 rounded-2xl border border-secondary/20 flex justify-between items-center hover:bg-background transition-colors">
