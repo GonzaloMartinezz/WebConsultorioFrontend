@@ -140,30 +140,26 @@ const Login = () => {
         <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-accent-orange/15 rounded-full blur-[200px]"></div>
       </div>
 
-      {/* Botón Volver al Inicio Premium - REMOVED AS REQUESTED */}
-
+      {/* Botón Volver al Inicio */}
+      <Link 
+        to="/" 
+        className="absolute top-6 left-6 md:top-10 md:left-10 z-50 flex items-center gap-3 text-white/80 hover:text-white bg-black/40 hover:bg-black/60 backdrop-blur-md px-5 py-2.5 rounded-full border border-white/10 transition-all duration-300 font-bold text-sm tracking-widest uppercase shadow-xl group"
+      >
+        <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Inicio
+      </Link>
       {/* =========================================
           CONTENIDO PRINCIPAL: LOGO IZQ + FORM CENTRO
           ========================================= */}
       <div className="relative z-10 w-full max-w-7xl px-6 flex flex-col lg:flex-row items-center justify-between gap-12">
 
-        {/* LADO IZQUIERDO: LOGO CIRCULAR GIGANTE Y ESTETICO */}
-        <div className="hidden lg:flex flex-col items-center animate-fade-in-left group lg:mt-12 lg:translate-y-8">
-          <div className="w-56 h-56 md:w-72 md:h-72 rounded-full p-2 bg-linear-to-br from-white/10 to-transparent backdrop-blur-3xl border border-white/10 shadow-[0_0_80px_rgba(255,120,0,0.1)] relative overflow-hidden flex items-center justify-center">
-            <div className="absolute inset-0 bg-accent-orange/5 group-hover:bg-accent-orange/15 transition-all duration-700"></div>
-            {/* Imagen del logo que cubre los bordes del circulo */}
-            <img
-              src="/Logo Principal marron 2.png"
-              alt="Logo Oficial"
-              className="w-full h-full object-cover scale-110"
-            />
-          </div>
-          <div className="mt-8 text-center">
-            <h2 className="text-4xl font-black text-white leading-tight uppercase tracking-[0.3em] drop-shadow-lg">
-              C<span className="text-accent-orange">ARCARA</span> • M<span className="text-accent-orange">ARTÍNEZ</span>
-            </h2>
-            <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.8em] mt-2">Centro Odontológico</p>
-          </div>
+        {/* LADO IZQUIERDO: LOGO ORIGINAL */}
+        <div className="hidden lg:flex flex-col items-center animate-fade-in-left lg:mt-12 lg:translate-y-8">
+          <img
+            src="/NEWLOGO.png"
+            alt="Logo Oficial"
+            className="w-full max-w-md object-contain transition-all duration-300"
+            style={{ filter: 'invert(1) hue-rotate(180deg)' }}
+          />
         </div>
 
         {/* CENTRO: FORMULARIO GLASSMORPHISM INTEGRADO (SI MODAL) */}
@@ -198,7 +194,7 @@ const Login = () => {
 
               <div className="mb-4 text-center">
                 <h1 className="text-2xl font-black text-white mb-1 tracking-tighter leading-none">
-                  {modoRecuperar ? 'Recuperar Clave' : isRegistro ? 'Bienvenido' : 'Hola de Nuevo'}
+                  {modoRecuperar ? 'Recuperar Clave' : isRegistro ? 'Bienvenido' : 'Bienvenidos'}
                 </h1>
                 <p className="text-white/40 font-bold text-[9px] uppercase tracking-widest opacity-80">
                   {modoRecuperar ? 'Ingresa tus nuevos datos' : isRegistro ? 'Crea tu perfil clínico digital' : 'Accede a tu cuenta de paciente'}

@@ -291,8 +291,8 @@ const Chatbot = () => {
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-black rounded-full animate-pulse"></span>
               </div>
               <div>
-                <h3 className="font-black text-[15px] leading-tight tracking-wide text-white">IA Asistente Central</h3>
-                <p className="text-[10px] text-[#FF7800] uppercase tracking-widest font-mono mt-0.5">Online • Centro Odontológico C & M</p>
+                <h3 className="font-black text-[13px] leading-tight tracking-wide text-white uppercase">Tu Asistente del Studio Dental</h3>
+                <p className="text-[9px] text-[#FF7800] uppercase tracking-widest font-mono mt-1">Carcara Martínez • Online</p>
               </div>
             </div>
             <button onClick={toggleOpen} className="text-white/50 hover:text-white transition-colors relative z-10 bg-white/5 p-2 rounded-full hover:bg-white/10">

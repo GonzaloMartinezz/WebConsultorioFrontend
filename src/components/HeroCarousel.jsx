@@ -5,21 +5,22 @@ const HeroCarousel = () => {
   const [currentImage, setCurrentImage] = useState(0);
 
   const imagenesConsultorio = [
-    "/sala de espera 3.jpeg",
-    "/consultorio 1.jpeg",
-    "/consultorio 2.jpeg",
-    "/escritorio erina 2.jpeg",
-    "/escritorio erina 1.jpeg",
-    "/consultorio erina 1.jpeg",
-    "/consultorio erina 2.jpeg",
-    "/escritorio adolfo 2.jpg",
+    "/saladeespera0.1.jpg",
+    "/sala de espera 1.jpg",
+    "/consultorio erina 1.jpg",
+    "/escritorio adolfo 1.jpg",
+
     "/pasillo consultorio adolfo 1.jpeg",
     "/pasillo consultorio adolfo 2.jpeg",
     "/pasillo consultorio adolfo 3.jpeg",
+    "/maquinas adolfo 2.jpg",
+    "/maquinas adolfo 3.jpeg",
+    "/maquinas adolfo 4.jpeg",
+    "/maquinas adolfo 5.jpeg",
     "/consultorio adolfo 1.jpeg",
     "/consultorio adolfo 2.jpeg",
     "/consultorio adolfo 3.jpeg",
-    "/consultorio adolfo 4.jpeg",
+    "/consultorio adolfo 4.jpg",
   ];
 
   useEffect(() => {
@@ -42,8 +43,8 @@ const HeroCarousel = () => {
           key={index}
           src={img}
           alt={`Consultorio ${index + 1}`}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1500 ease-in-out ${index === currentImage ? "opacity-100 scale-105" : "opacity-0 scale-100"}`}
-          style={{ transition: 'opacity 1.5s ease-in-out, transform 6s linear' }}
+          className={`absolute inset-0 w-full h-full transition-opacity duration-1500 ease-in-out ${img === "/FRENTECENTROODONTO.jpg" ? "object-contain" : "object-cover"} ${index === currentImage ? "opacity-100" : "opacity-0"}`}
+          style={{ transition: 'opacity 1.5s ease-in-out' }}
         />
       ))}
 

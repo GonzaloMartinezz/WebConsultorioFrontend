@@ -43,8 +43,7 @@ const SeccionProfesionales = () => {
             <Link to="/especialistas/adolfo" className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-secondary/20 hover:-translate-y-2 hover:shadow-[0_30px_60px_rgba(255,120,0,0.1)] transition-all duration-300 group flex flex-col sm:flex-row items-center sm:items-start gap-8 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-full blur-2xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
 
-              <div className="w-24 h-24 rounded-full bg-secondary/10 flex items-center justify-center text-5xl shrink-0 border-4 border-white shadow-xl relative z-10 group-hover:scale-110 transition-transform duration-500">
-                👨‍⚕️
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#4a3b32] to-[#1a1410] shrink-0 border-4 border-white shadow-xl relative z-10 group-hover:scale-110 transition-transform duration-500 overflow-hidden">
               </div>
 
               <div className="text-center sm:text-left relative z-10 flex-1">
@@ -61,8 +60,7 @@ const SeccionProfesionales = () => {
             <Link to="/especialistas/erina" className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-secondary/20 hover:-translate-y-2 hover:shadow-[0_30px_60px_rgba(255,120,0,0.1)] transition-all duration-300 group flex flex-col sm:flex-row items-center sm:items-start gap-8 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-full blur-2xl opacity-50 group-hover:opacity-100 transition-opacity"></div>
 
-              <div className="w-24 h-24 rounded-full bg-secondary/10 flex items-center justify-center text-5xl shrink-0 border-4 border-white shadow-xl relative z-10 group-hover:scale-110 transition-transform duration-500">
-                👩‍⚕️
+              <div className="w-24 h-24 rounded-full bg-gradient-to-br from-[#4a3b32] to-[#1a1410] shrink-0 border-4 border-white shadow-xl relative z-10 group-hover:scale-110 transition-transform duration-500 overflow-hidden">
               </div>
 
               <div className="text-center sm:text-left relative z-10 flex-1">

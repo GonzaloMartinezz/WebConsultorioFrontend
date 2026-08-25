@@ -5,6 +5,7 @@ import SeccionProfesionales from "../components/SeccionProfesionales";
 import SeccionPreguntasFrecuentes from "../components/SeccionPreguntasFrecuentes";
 import BannerPlanes from "../components/BannerPlanes";
 import HeroCarousel from "../components/HeroCarousel";
+import TomografoSection from "../components/TomografoSection";
 
 const Inicio = () => {
   return (
@@ -12,6 +13,9 @@ const Inicio = () => {
 
       {/* 1. HERO SECTION (Carrusel automático TOD3D style) */}
       <HeroCarousel />
+
+      {/* 1.5. SECCIÓN TOMÓGRAFO Y ODONTOLOGÍA DIGITAL */}
+      <TomografoSection />
 
       {/* 2. SECCIÓN COMPROMISO (Tarjetas de Servicios) */}
       <BannerPlanes />

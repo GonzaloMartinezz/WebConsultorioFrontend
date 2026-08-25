@@ -48,7 +48,7 @@ const Navbar = () => {
     <>
       <nav className={`fixed w-full z-50 transition-all duration-500 flex justify-center ${scrolled ? "top-4 px-4" : "top-0 px-0"}`}>
         <div className={`w-full max-w-[95%] mx-auto flex items-center justify-between transition-all duration-500 ${scrolled
-          ? "bg-orange-50/90 backdrop-blur-md border border-accent-orange/30 shadow-[0_10px_25px_rgba(249,115,22,0.15)] rounded-full py-4 px-4 sm:px-8"
+          ? "py-2 px-2 sm:px-4"
           : "bg-transparent py-6 px-4 sm:px-8 lg:px-12"
           }`}
         >
@@ -58,7 +58,10 @@ const Navbar = () => {
             <BrandLogo scrolled={scrolled} />
           </Link>
 
-          <div className="hidden lg:flex items-center gap-8 font-bold text-base">
+          {/* CONTENEDOR DERECHO: Links y Botones (Aquí va el redondeado) */}
+          <div className={`flex items-center gap-6 transition-all duration-500 ${scrolled ? "bg-orange-50/90 backdrop-blur-md border border-accent-orange/30 shadow-[0_10px_25px_rgba(249,115,22,0.15)] rounded-full px-6 py-3" : ""}`}>
+            
+            <div className="hidden lg:flex items-center gap-8 font-bold text-base">
             <Link to="/" className={`hover-sweep relative py-1 transition-all duration-300 font-bold ${scrolled ? 'text-primary hover:text-primary-hover' : 'text-white hover:text-white/80 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]'}`}>
               Inicio
             </Link>
@@ -102,12 +105,13 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Botón Hamburguesa (MÓVIL) */}
-          <button onClick={() => setMenuOpen(!menuOpen)} className={`lg:hidden flex h-11 w-11 items-center justify-center rounded-2xl transition-all duration-300 ${scrolled ? 'bg-accent-orange text-white shadow-lg' : 'bg-white/20 text-white backdrop-blur-md border border-white/20 shadow-md drop-shadow-md'}`}>
-            {menuOpen ? <FaTimes className="text-2xl" /> : (
-              <HiMenuAlt3 className="text-3xl" />
-            )}
-          </button>
+            {/* Botón Hamburguesa (MÓVIL) */}
+            <button onClick={() => setMenuOpen(!menuOpen)} className={`lg:hidden flex h-11 w-11 items-center justify-center rounded-2xl transition-all duration-300 ${scrolled ? 'bg-accent-orange text-white shadow-lg' : 'bg-white/20 text-white backdrop-blur-md border border-white/20 shadow-md drop-shadow-md'}`}>
+              {menuOpen ? <FaTimes className="text-2xl" /> : (
+                <HiMenuAlt3 className="text-3xl" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* MENÚ MÓVIL DESPLEGABLE FULL SCREEN PREMIUM */}
