@@ -153,7 +153,7 @@ const Login = () => {
       <div className="relative z-10 w-full max-w-7xl px-6 flex flex-col lg:flex-row items-center justify-between gap-12">
 
         {/* LADO IZQUIERDO: LOGO ORIGINAL */}
-        <div className="hidden lg:flex flex-col items-center animate-fade-in-left lg:mt-12 lg:translate-y-8">
+        <div className="hidden lg:flex flex-col items-center animate-fade-in-left lg:-translate-y-12">
           <img
             src="/NEWLOGO.png"
             alt="Logo Oficial"

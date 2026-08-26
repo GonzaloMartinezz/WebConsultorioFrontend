@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import Navbar from '../components/common/Navbar';
 import Footer from '../components/common/Footer';
+import WhatsAppButton from '../components/common/WhatsAppButton';
+import Chatbot from '../components/ChatbotWidget';
 import odontogramaMock from '../assets/odontograma-mock.png';
 import { motion } from 'framer-motion';
 import {
@@ -326,6 +328,11 @@ const OdontologiaDigital = () => {
         </section>
 
       </main>
+      
+      {/* Botones flotantes globales (porque esta ruta está fuera de MainLayout) */}
+      <WhatsAppButton />
+      <Chatbot />
+      
       <div className="bg-background">
         <Footer />
       </div>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Route, Routes, Navigate } from "react-router-dom";
 
 // 1. Importamos el componente que arregla el scroll e IA de seguridad
@@ -38,8 +38,11 @@ import AdminHistoriaClinica from "./pages/admin/AdminHistoriaClinica.jsx";
 import AdminPacientes from "./pages/admin/AdminPacientes.jsx";
 import AdminOdontograma from "./pages/admin/AdminOdontograma.jsx";
 import AdminTurnosPendientes from "./pages/admin/AdminTurnosPendientes.jsx";
+import Preloader from "./components/common/Preloader.jsx";
 
 export default function App() {
+  const [appLoaded, setAppLoaded] = useState(false);
+
   // Encendemos el motor de animaciones
   useEffect(() => {
     AOS.init({
@@ -52,6 +55,7 @@ export default function App() {
 
   return (
     <>
+      {!appLoaded && <Preloader onLoaded={() => setAppLoaded(true)} />}
       <ScrollToTop />
 
       <Routes>

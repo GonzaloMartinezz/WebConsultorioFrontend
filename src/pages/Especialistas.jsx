@@ -182,14 +182,14 @@ const AcercaDe = () => {
                     "Te escuchamos , diagnosticamos de manera integral y te <span className="text-accent-orange not-italic font-bold"> ofrecemos soluciones personalizadas y clara</span>."
                   </blockquote>
 
-                  {/* Firma / Autores */}
-                  <div className="mt-10 flex items-center gap-4 border-t border-white/10 pt-6 relative z-10">
-                    <div className="w-15 h-15 rounded-full bg-linear-to-br from-accent-orange to-orange-500 text-white flex items-center justify-center font-bold text-lg shadow-lg border-2 border-white/20">
-                      C & M
-                    </div>
-                    <div>
-                      <div className="text-white font-bold tracking-wide">Carcara &amp; Martínez</div>
-                    </div>
+                  {/* Firma / Autores (Logo Oficial) */}
+                  <div className="mt-10 flex items-center justify-center border-t border-white/10 pt-6 relative z-10">
+                    <img
+                      src="/NEWLOGO.png"
+                      alt="Carcara & Martínez"
+                      className="h-12 md:h-14 object-contain opacity-90"
+                      style={{ filter: 'invert(1) hue-rotate(180deg)' }}
+                    />
                   </div>
                 </div>
               </div>

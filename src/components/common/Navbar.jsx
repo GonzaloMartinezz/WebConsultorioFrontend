@@ -54,7 +54,7 @@ const Navbar = () => {
         >
 
           {/* LADO IZQUIERDO: LOGO */}
-          <Link to="/" className="shrink-0 outline-none">
+          <Link to="/" className="shrink-0 outline-none" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <BrandLogo scrolled={scrolled} />
           </Link>
 
@@ -116,26 +116,34 @@ const Navbar = () => {
 
         {/* MENÚ MÓVIL DESPLEGABLE FULL SCREEN PREMIUM */}
         <div
-          className={`lg:hidden fixed inset-0 z-60 flex flex-col justify-center p-8 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${menuOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"
+          className={`lg:hidden fixed inset-0 z-[100] flex flex-col justify-center p-8 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${menuOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"
             }`}
         >
-          {/* Fondo Glassmorphism Extremo */}
-          <div className="absolute inset-0 bg-[#050505]/80 backdrop-blur-[50px]"></div>
+          {/* Fondo Glassmorphism Oscuro */}
+          <div className="absolute inset-0 bg-[#000000]/90 backdrop-blur-2xl"></div>
 
-          {/* Círculos de luz elegantes */}
-          <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#FF7800]/15 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
-          <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px] pointer-events-none mix-blend-screen"></div>
+          {/* Patrón de puntos o textura sutil */}
+          <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
 
-          {/* Botón Cerrar Flotante */}
-          <button
-            onClick={() => setMenuOpen(false)}
-            className="absolute top-8 right-8 h-12 w-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white backdrop-blur-md hover:bg-white/10 transition-colors active:scale-90 z-10"
-          >
-            <FaTimes className="text-xl" />
-          </button>
+          {/* Destellos de luz */}
+          <div className="absolute top-[-20%] right-[-20%] w-[60%] h-[60%] bg-[#FF7800]/20 rounded-full blur-[120px] pointer-events-none"></div>
+          <div className="absolute bottom-[-10%] left-[-20%] w-[50%] h-[50%] bg-orange-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-          {/* Contenedor de Enlaces */}
-          <div className="relative z-10 flex flex-col items-center w-full max-w-sm mx-auto space-y-2">
+          {/* ENCABEZADO DEL MENÚ: Logo + Botón Cerrar */}
+          <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-20">
+            <Link to="/" onClick={() => setMenuOpen(false)} className="outline-none w-32 filter drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]">
+              <BrandLogo />
+            </Link>
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="h-12 w-12 flex items-center justify-center rounded-full bg-white/10 border border-white/20 text-white backdrop-blur-lg hover:bg-white/20 transition-all active:scale-90 shadow-xl"
+            >
+              <FaTimes className="text-xl" />
+            </button>
+          </div>
+
+          {/* CONTENEDOR DE ENLACES PRINCIPALES */}
+          <div className="relative z-10 flex flex-col items-start w-full max-w-sm mx-auto space-y-4 mt-12">
             {[
               { to: "/", icon: <FaHome />, label: "Inicio" },
               { to: "/especialistas", icon: <FaUserMd />, label: "Especialistas" },
@@ -145,15 +153,15 @@ const Navbar = () => {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`flex items-center gap-6 w-full p-4 rounded-3xl transition-all duration-700 ease-out group ${menuOpen ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+                className={`flex items-center gap-5 w-full p-2 group transition-all duration-700 ease-out ${menuOpen ? "translate-x-0 opacity-100" : "-translate-x-12 opacity-0"
                   }`}
                 style={{ transitionDelay: `${idx * 100}ms` }}
                 onClick={() => setMenuOpen(false)}
               >
-                <div className="w-14 h-14 shrink-0 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-[#FF7800] text-2xl group-hover:bg-[#FF7800] group-hover:text-white group-hover:shadow-[0_0_20px_rgba(255,120,0,0.4)] transition-all duration-500">
+                <div className="w-14 h-14 shrink-0 rounded-full bg-[#151515] border border-white/5 flex items-center justify-center text-[#FF7800] text-2xl group-hover:bg-[#FF7800] group-hover:text-white group-hover:scale-110 group-hover:border-[#FF7800] shadow-[0_4px_15px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_30px_rgba(255,120,0,0.4)] transition-all duration-500">
                   {item.icon}
                 </div>
-                <span className="text-[1.35rem] sm:text-2xl font-black text-white uppercase tracking-[0.15em] group-hover:translate-x-3 transition-transform duration-500 leading-tight">
+                <span className="text-xl sm:text-2xl font-black text-white/90 uppercase tracking-widest group-hover:text-white group-hover:translate-x-2 transition-transform duration-500">
                   {item.label}
                 </span>
               </Link>
@@ -161,46 +169,40 @@ const Navbar = () => {
 
             {/* Separador */}
             <div
-              className={`h-px w-3/4 bg-linear-to-r from-transparent via-white/20 to-transparent my-8 transition-all duration-1000 ${menuOpen ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+              className={`h-[1px] w-full bg-gradient-to-r from-transparent via-white/20 to-transparent my-6 transition-all duration-1000 ${menuOpen ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
                 }`}
               style={{ transitionDelay: '400ms' }}
             ></div>
 
-            {/* Botones de Acción */}
+            {/* BOTONES DE ACCIÓN SECUNDARIOS */}
             <div
-              className={`w-full flex flex-col gap-4 mt-2 transition-all duration-700 ease-out ${menuOpen ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+              className={`w-full flex flex-col gap-5 mt-2 transition-all duration-700 ease-out ${menuOpen ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
                 }`}
               style={{ transitionDelay: '500ms' }}
             >
               {usuario ? (
                 <>
-                  <Link to="/mi-perfil" className="w-full bg-white/10 backdrop-blur-md border border-white/20 text-white p-5 rounded-4xl flex items-center justify-center gap-3 font-bold uppercase tracking-widest active:scale-95 transition-transform" onClick={() => setMenuOpen(false)}>
-                    <div className="w-8 h-8 rounded-full bg-accent-orange text-white flex items-center justify-center text-[10px] font-black tracking-widest">
+                  <Link to="/mi-perfil" className="w-full bg-[#1a1a1a] border border-white/10 text-white p-4 rounded-full flex items-center justify-center gap-4 font-bold uppercase tracking-widest active:scale-95 transition-transform shadow-lg" onClick={() => setMenuOpen(false)}>
+                    <div className="w-8 h-8 rounded-full bg-accent-orange text-white flex items-center justify-center text-[10px] font-black tracking-widest shadow-md">
                       {getInitials()}
                     </div>
                     Mi Perfil
                   </Link>
-                  <button onClick={() => { setMenuOpen(false); handleLogout(); }} className="w-full text-red-400 font-bold p-4 text-center uppercase tracking-widest text-sm hover:text-red-300 transition-colors">
+                  <button onClick={() => { setMenuOpen(false); handleLogout(); }} className="w-full text-red-500 font-bold p-2 text-center uppercase tracking-widest text-sm hover:text-red-400 transition-colors">
                     Cerrar Sesión
                   </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="w-full bg-linear-to-r from-[#FF7800] to-[#E66A00] text-white font-black p-5 rounded-4xl text-center uppercase tracking-widest shadow-[0_10px_30px_rgba(255,120,0,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-3" onClick={() => setMenuOpen(false)}>
+                  <Link to="/login" className="w-full bg-gradient-to-r from-[#FF7800] to-orange-500 text-white font-black py-4 px-6 rounded-full text-center uppercase tracking-widest shadow-[0_10px_30px_rgba(255,120,0,0.4)] active:scale-95 hover:scale-105 transition-all flex items-center justify-center gap-3" onClick={() => setMenuOpen(false)}>
                     <FaSignInAlt className="text-xl" /> Iniciar Sesión
                   </Link>
-                  <Link to="/turnos" className="w-full bg-white/5 backdrop-blur-md border border-white/10 text-white font-bold p-5 rounded-4xl text-center uppercase tracking-widest hover:bg-white/10 active:scale-95 transition-all flex items-center justify-center gap-3" onClick={() => setMenuOpen(false)}>
+                  <Link to="/turnos" className="w-full bg-[#151515] border border-white/10 text-white font-bold py-4 px-6 rounded-full text-center uppercase tracking-widest hover:bg-white/5 active:scale-95 hover:scale-105 transition-all flex items-center justify-center gap-3 shadow-xl" onClick={() => setMenuOpen(false)}>
                     <FaCalendarPlus className="text-xl text-[#FF7800]" /> Solicitar Turno
                   </Link>
                 </>
               )}
             </div>
-          </div>
-
-          {/* Logo al pie */}
-          <div className={`absolute bottom-8 left-1/2 -translate-x-1/2 opacity-20 scale-75 grayscale invert transition-all duration-1000 ${menuOpen ? "opacity-30 translate-y-0" : "opacity-0 translate-y-10"
-            }`} style={{ transitionDelay: '600ms' }}>
-            <BrandLogo />
           </div>
         </div>
       </nav>
