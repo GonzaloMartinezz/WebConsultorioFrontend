@@ -104,11 +104,11 @@ const MiPerfil = () => {
     <div className="min-h-screen bg-[#FAF9F6] font-sans flex flex-col relative overflow-hidden">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <div className="absolute -top-[10%] -left-[10%] w-[600px] h-[600px] bg-accent-orange/5 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] -right-[10%] w-[600px] h-[600px] bg-[#4A3B32]/5 rounded-full blur-[120px]"></div>
+        <div className="absolute -top-[10%] -left-[10%] w-150 h-150 bg-accent-orange/5 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-[-10%] -right-[10%] w-150 h-150 bg-[#4A3B32]/5 rounded-full blur-[120px]"></div>
       </div>
 
-      <main className="max-w-[1200px] mx-auto pt-32 pb-16 px-4 md:px-8 w-full relative z-10 flex-1">
+      <main className="max-w-300 mx-auto pt-32 pb-16 px-4 md:px-8 w-full relative z-10 flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
           {/* COLUMNA IZQUIERDA: PERFIL Y ESTADÍSTICAS (4 cols) */}

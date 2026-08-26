@@ -174,7 +174,7 @@ const AcercaDe = () => {
                   </div>
 
                   <h3 className="text-sm font-black text-accent-orange uppercase tracking-widest mb-6 flex items-center gap-4">
-                    <span className="w-8 h-[2px] bg-accent-orange rounded-full"></span>
+                    <span className="w-8 h-0.5 bg-accent-orange rounded-full"></span>
                     Nuestra Filosofía
                   </h3>
 
@@ -221,7 +221,7 @@ const AcercaDe = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             {/* Maquinas Adolfo 1 - Impresora 3D (Ancha) */}
-            <div className="relative rounded-2xl overflow-hidden h-[300px] md:h-[300px] shadow-lg group md:col-span-2" data-aos="fade-up">
+            <div className="relative rounded-2xl overflow-hidden h-75 md:h-75 shadow-lg group md:col-span-2" data-aos="fade-up">
               <img loading="lazy" src="/maquinas adolfo 2.jpg" alt="Impresora 3D Odontológica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
                 <h3 className="text-xl font-bold text-white uppercase tracking-tight">Precisión Digital</h3>
@@ -229,7 +229,7 @@ const AcercaDe = () => {
             </div>
 
             {/* Maquinas Adolfo 2jpg.jpg - CEREC/Fresadora */}
-            <div className="relative rounded-2xl overflow-hidden h-[400px] md:h-125 shadow-lg group" data-aos="fade-up" data-aos-delay="100">
+            <div className="relative rounded-2xl overflow-hidden h-100 md:h-125 shadow-lg group" data-aos="fade-up" data-aos-delay="100">
               <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775651/sanners1.png" alt="Laboratorio Digital CEREC" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
                 <h3 className="text-xl font-bold text-white uppercase tracking-tight">Diseño CAD/CAM</h3>
@@ -237,7 +237,7 @@ const AcercaDe = () => {
             </div>
 
             {/* Maquinas Adolfo 3.jpg - Equipamiento laboratorio */}
-            <div className="relative rounded-2xl overflow-hidden h-[400px] md:h-125 shadow-lg group" data-aos="fade-up" data-aos-delay="200">
+            <div className="relative rounded-2xl overflow-hidden h-100 md:h-125 shadow-lg group" data-aos="fade-up" data-aos-delay="200">
               <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775655/imagenIA.jpg" alt="Equipamiento de vanguardia" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
                 <h3 className="text-xl font-bold text-white uppercase tracking-tight">Tecnología Sirona</h3>
@@ -264,7 +264,7 @@ const AcercaDe = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             {/* Imagen 1 - Impresora 3D */}
-            <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[450px] shadow-lg border-4 border-white group" data-aos="fade-right">
+            <div className="relative rounded-3xl overflow-hidden h-100 md:h-112.5 shadow-lg border-4 border-white group" data-aos="fade-right">
               <img loading="lazy" src="/nosotros-cirugia.png" alt="Impresión 3D Biocompatible" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
                 <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Impresión 3D</h3>
@@ -273,7 +273,7 @@ const AcercaDe = () => {
             </div>
 
             {/* Imagen 2 - Ortodoncia */}
-            <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[450px] shadow-lg border-4 border-white group" data-aos="fade-left">
+            <div className="relative rounded-3xl overflow-hidden h-100 md:h-112.5 shadow-lg border-4 border-white group" data-aos="fade-left">
               <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775650/orthodontics.jpg.webp" alt="Ortodoncia y Planificación Digital" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
                 <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Ortodoncia Digital</h3>
@@ -282,7 +282,7 @@ const AcercaDe = () => {
             </div>
 
             {/* Imagen 3 - Cirugía (Ancha) */}
-            <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-125 shadow-lg border-4 border-white group md:col-span-2" data-aos="fade-up">
+            <div className="relative rounded-3xl overflow-hidden h-100 md:h-125 shadow-lg border-4 border-white group md:col-span-2" data-aos="fade-up">
               <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775653/impresora-3b-blog.webp" alt="Cirugía Guiada" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
                 <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Cirugía Guiada</h3>

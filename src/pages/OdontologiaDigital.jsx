@@ -99,8 +99,8 @@ const OdontologiaDigital = () => {
           ══════════════════════════════════════════════════════════ */}
         <section className="relative bg-[#050505] text-white overflow-hidden min-h-screen flex flex-col justify-center">
           {/* Luces y Glows Elegantes (Fondo Premium) */}
-          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#FF7800]/10 rounded-full blur-[180px] pointer-events-none mix-blend-screen animate-pulse duration-[10s]"></div>
-          <div className="absolute top-[20%] left-[-10%] w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[150px] pointer-events-none mix-blend-screen"></div>
+          <div className="absolute top-0 right-0 w-200 h-200 bg-[#FF7800]/10 rounded-full blur-[180px] pointer-events-none mix-blend-screen animate-pulse duration-[10s]"></div>
+          <div className="absolute top-[20%] left-[-10%] w-150 h-150 bg-blue-500/10 rounded-full blur-[150px] pointer-events-none mix-blend-screen"></div>
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-15 pointer-events-none"></div>
 
           {/* Contenedor principal */}
@@ -257,7 +257,7 @@ const OdontologiaDigital = () => {
                 <img loading="lazy"
                   src="/maquinas adolfo 2.jpg"
                   alt="Infraestructura Tecnológica Core"
-                  className="w-full h-[400px] md:h-[600px] lg:h-[700px] object-cover object-center transition-transform duration-[3s] group-hover:scale-105"
+                  className="w-full h-100 md:h-150 lg:h-175 object-cover object-center transition-transform duration-[3s] group-hover:scale-105"
                 />
 
                 {/* Badge Flotante Boutique */}

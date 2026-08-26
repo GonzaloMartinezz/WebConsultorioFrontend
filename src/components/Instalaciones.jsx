@@ -52,7 +52,7 @@ const Instalaciones = () => {
       </section>
 
       {/* Parte 2: Mapa y Contacto (Diseño Overlap según Image 1) */}
-      <section className="w-full relative flex items-center justify-center min-h-150 lg:min-h-[750px] bg-white">
+      <section className="w-full relative flex items-center justify-center min-h-150 lg:min-h-187.5 bg-white">
         {/* Mapa de fondo */}
         <div className="absolute inset-0 w-full h-full z-0">
           <iframe
@@ -64,13 +64,13 @@ const Instalaciones = () => {
 
         {/* Cajas flotantes superpuestas */}
         <div className="relative z-10 w-[90%] sm:w-[90%] max-w-6xl mx-auto flex flex-col lg:flex-row items-center py-10 lg:py-20" data-aos="fade-up">
-          
+
           {/* Caja Izquierda: Información de Contacto (Marrón) */}
           <div className="bg-[#4a3b32] w-full lg:w-[55%] rounded-3xl md:rounded-4xl p-5 sm:p-8 md:p-14 z-20 shadow-[20px_0_40px_-10px_rgba(0,0,0,0.3)] border border-white/10 relative">
             <h2 className="text-lg md:text-3xl font-black text-white tracking-wider uppercase mb-6 md:mb-12 text-center md:text-left">
               Información de Contacto
             </h2>
-            
+
             <div className="space-y-6 md:space-y-10">
               <div className="flex items-start gap-4 md:gap-5">
                 <div className="mt-1 w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 shrink-0">
@@ -78,11 +78,11 @@ const Instalaciones = () => {
                 </div>
                 <div>
                   <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-white/50 mb-1">Dirección Central</p>
-                  <p className="text-white font-medium text-sm md:text-base leading-relaxed mb-2 md:mb-3">José Rondeau 827<br/>San Miguel de Tucumán</p>
-                  <a 
-                    href="https://maps.google.com/?q=Jose+Rondeau+827+Tucuman" 
-                    target="_blank" 
-                    rel="noreferrer" 
+                  <p className="text-white font-medium text-sm md:text-base leading-relaxed mb-2 md:mb-3">José Rondeau 827<br />San Miguel de Tucumán</p>
+                  <a
+                    href="https://maps.google.com/?q=Jose+Rondeau+827+Tucuman"
+                    target="_blank"
+                    rel="noreferrer"
                     className="inline-block text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white border border-white/30 hover:bg-white hover:text-[#4a3b32] px-4 py-1.5 md:px-5 md:py-2 rounded-full transition-all"
                   >
                     Ver cómo llegar
@@ -117,12 +117,12 @@ const Instalaciones = () => {
           </div>
 
           {/* Caja Derecha: Logo (Azul Oscuro) */}
-          <div className="bg-[#3b5d72] w-full lg:w-[45%] rounded-3xl md:rounded-4xl p-6 md:p-14 z-10 lg:-ml-10 mt-3 lg:mt-0 shadow-2xl relative flex items-center justify-center min-h-[150px] md:min-h-[400px]">
-            <img loading="lazy" 
-              src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775657/NEWLOGO.png" 
-              alt="Studio Dental C&M" 
-              className="w-full max-w-[140px] md:max-w-[280px] object-contain drop-shadow-2xl transition-all duration-500 hover:scale-105" 
-              style={{ filter: 'invert(1) hue-rotate(180deg)' }} 
+          <div className="bg-[#3b5d72] w-full lg:w-[45%] rounded-3xl md:rounded-4xl p-6 md:p-14 z-10 lg:-ml-10 mt-3 lg:mt-0 shadow-2xl relative flex items-center justify-center min-h-37.5 md:min-h-100">
+            <img loading="lazy"
+              src="/NEWLOGO.png"
+              alt="Studio Dental C&M"
+              className="w-full max-w-35 md:max-w-70 object-contain drop-shadow-2xl transition-all duration-500 hover:scale-105"
+              style={{ filter: 'invert(1) hue-rotate(180deg)' }}
             />
           </div>
 

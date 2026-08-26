@@ -23,11 +23,11 @@ const TomografoSection = () => {
   }, [images.length]);
 
   return (
-    <section className="w-full bg-[#4a3b32] text-white pt-16 md:pt-28 pb-12 md:pb-20 px-4 md:px-12 relative z-10 -mt-[1px]">
+    <section className="w-full bg-[#4a3b32] text-white pt-16 md:pt-28 pb-12 md:pb-20 px-4 md:px-12 relative z-10 -mt-px">
       {/* Efecto de difuminado (fade) sangrando hacia arriba para fusionar suavemente con la foto */}
       <div className="absolute -top-24 h-24 md:-top-48 md:h-48 left-0 w-full bg-linear-to- from-[#4a3b32] to-transparent pointer-events-none z-20"></div>
 
-      <div className="max-w-[85rem] mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 xl:gap-20 items-center">
+      <div className="max-w-340 mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 xl:gap-20 items-center">
 
         {/* Lado Izquierdo: Galería de Imágenes (Mayor Prioridad) */}
         <div className="w-full lg:w-7/12 xl:w-[55%] flex flex-col gap-4">
@@ -81,7 +81,7 @@ const TomografoSection = () => {
 
           <div className="space-y-5">
             <div className="group bg-white/10 hover:bg-white/20 transition-all duration-300 px-6 py-4 rounded-full border border-white/10 shadow-lg flex items-center gap-5 cursor-default">
-              <div className="w-12 h-12 bg-linear-to-br from-accent-orange to-orange-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(255,107,0,0.4)] group-hover:scale-110 transition-transform">
+              <div className="w-12 h-12 bg-linear-to-br from-accent-orange to-orange-600 rounded-full flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,107,0,0.4)] group-hover:scale-110 transition-transform">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               </div>
               <div className="flex flex-col">
@@ -91,7 +91,7 @@ const TomografoSection = () => {
             </div>
 
             <div className="group bg-white/5 hover:bg-white/15 transition-all duration-300 px-6 py-4 rounded-full border border-white/5 shadow-lg flex items-center gap-5 cursor-default">
-              <div className="w-12 h-12 bg-black/30 rounded-full flex items-center justify-center flex-shrink-0 border border-white/10 group-hover:border-accent-orange/50 transition-colors">
+              <div className="w-12 h-12 bg-black/30 rounded-full flex items-center justify-center shrink-0 border border-white/10 group-hover:border-accent-orange/50 transition-colors">
                 <svg className="w-6 h-6 text-accent-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
               </div>
               <div className="flex flex-col">
@@ -101,7 +101,7 @@ const TomografoSection = () => {
             </div>
 
             <div className="group bg-white/5 hover:bg-white/15 transition-all duration-300 px-6 py-4 rounded-full border border-white/5 shadow-lg flex items-center gap-5 cursor-default">
-              <div className="w-12 h-12 bg-black/30 rounded-full flex items-center justify-center flex-shrink-0 border border-white/10 group-hover:border-accent-orange/50 transition-colors">
+              <div className="w-12 h-12 bg-black/30 rounded-full flex items-center justify-center shrink-0 border border-white/10 group-hover:border-accent-orange/50 transition-colors">
                 <svg className="w-6 h-6 text-accent-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               </div>
               <div className="flex flex-col">
@@ -115,8 +115,8 @@ const TomografoSection = () => {
       </div>
 
       {/* Ola SVG (Wave) decorativa inferior para transición curva estilo portfolio */}
-      <div className="absolute left-0 right-0 top-full -mt-[2px] w-full z-20 pointer-events-none overflow-hidden">
-        <svg viewBox="0 0 1440 120" className="w-[102%] -ml-[1%] h-[40px] sm:h-[70px] md:h-[100px] lg:h-[120px] block" preserveAspectRatio="none">
+      <div className="absolute left-0 right-0 top-full -mt-0.5 w-full z-20 pointer-events-none overflow-hidden">
+        <svg viewBox="0 0 1440 120" className="w-[102%] -ml-[1%] h-10 sm:h-17.5 md:h-25 lg:h-30 block" preserveAspectRatio="none">
           <path fill="#4a3b32" d="M0,0 C500,180 1100,30 1440,0 L1440,0 L0,0 Z"></path>
         </svg>
       </div>
