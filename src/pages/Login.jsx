@@ -172,6 +172,16 @@ const Login = () => {
             <div className="absolute top-0 right-0 w-32 h-32 bg-accent-orange/10 rounded-full blur-[60px] -mr-16 -mt-16"></div>
 
             <div className="relative z-10">
+              {/* LOGO EN MÓVIL (Arriba de todo el formulario) */}
+              <div className="flex justify-center mb-8 lg:hidden">
+                <img
+                  src="/NEWLOGO.png"
+                  alt="Logo Oficial"
+                  className="w-40 md:w-48 object-contain"
+                  style={{ filter: 'invert(1) hue-rotate(180deg)' }}
+                />
+              </div>
+
               <div className="flex bg-black/40 p-1 rounded-[1.25rem] mb-8 border border-white/10 shadow-inner relative">
                 {/* Indicador animado de fondo para el tab activo (opcional, pero mejora el UX) */}
                 <div

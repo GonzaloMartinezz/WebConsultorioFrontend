@@ -71,10 +71,22 @@ const Footer = () => {
         </div>
 
         {/* COPYRIGHT */}
-        <div className="mt-12 pt-6 border-t border-primary/10 flex flex-col items-center space-y-2">
-          <p className="text-xs text-primary/50 tracking-wide text-center font-bold">
-            &copy; {new Date().getFullYear()} Gonzalo Martinez. Todos los derechos reservados.
-          </p>
+        <div className="mt-12 pt-6 border-t border-primary/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          
+          <div className="text-xs text-primary/60 tracking-wide text-center font-bold">
+            &copy; {new Date().getFullYear()} C&M Dental.
+          </div>
+
+          {/* DESARROLLADOR */}
+          <a href="https://mi-portafolioblogg.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 opacity-70 hover:opacity-100 transition-opacity group">
+            <span className="text-[10px] font-black tracking-widest uppercase text-primary">Desarrollado por Gonzalo Martinez</span>
+            <img 
+              src="/logo-gm.png" 
+              alt="GM Logo" 
+              className="w-6 h-6 rounded-full object-cover shadow-sm group-hover:scale-110 transition-transform"
+            />
+          </a>
+
           <Link to="/login" className="text-primary/30 text-[10px] hover:text-accent-orange transition-colors font-bold uppercase tracking-widest">
             Acceso Administrativo
           </Link>

@@ -63,52 +63,52 @@ const Instalaciones = () => {
         </div>
 
         {/* Cajas flotantes superpuestas */}
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 flex flex-col lg:flex-row items-center py-12 lg:py-20" data-aos="fade-up">
+        <div className="relative z-10 w-[90%] sm:w-[90%] max-w-6xl mx-auto flex flex-col lg:flex-row items-center py-10 lg:py-20" data-aos="fade-up">
           
           {/* Caja Izquierda: Información de Contacto (Marrón) */}
-          <div className="bg-[#4a3b32] w-full lg:w-[55%] rounded-[2rem] p-6 sm:p-8 md:p-14 z-20 shadow-[20px_0_40px_-10px_rgba(0,0,0,0.3)] border border-white/10 relative">
-            <h2 className="text-2xl md:text-3xl font-black text-white tracking-wider uppercase mb-12">
+          <div className="bg-[#4a3b32] w-full lg:w-[55%] rounded-[1.5rem] md:rounded-[2rem] p-5 sm:p-8 md:p-14 z-20 shadow-[20px_0_40px_-10px_rgba(0,0,0,0.3)] border border-white/10 relative">
+            <h2 className="text-lg md:text-3xl font-black text-white tracking-wider uppercase mb-6 md:mb-12 text-center md:text-left">
               Información de Contacto
             </h2>
             
-            <div className="space-y-10">
-              <div className="flex items-start gap-5">
-                <div className="mt-1 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 shrink-0">
-                  <FaMapMarkerAlt className="text-white/80 text-xl" />
+            <div className="space-y-6 md:space-y-10">
+              <div className="flex items-start gap-4 md:gap-5">
+                <div className="mt-1 w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 shrink-0">
+                  <FaMapMarkerAlt className="text-white/80 text-lg md:text-xl" />
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.2em] text-white/50 mb-1">Dirección Central</p>
-                  <p className="text-white font-medium text-base leading-relaxed mb-3">José Rondeau 827<br/>San Miguel de Tucumán, Argentina</p>
+                  <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-white/50 mb-1">Dirección Central</p>
+                  <p className="text-white font-medium text-sm md:text-base leading-relaxed mb-2 md:mb-3">José Rondeau 827<br/>San Miguel de Tucumán</p>
                   <a 
                     href="https://maps.google.com/?q=Jose+Rondeau+827+Tucuman" 
                     target="_blank" 
                     rel="noreferrer" 
-                    className="inline-block text-[10px] font-black uppercase tracking-[0.2em] text-white border border-white/30 hover:bg-white hover:text-[#4a3b32] px-5 py-2 rounded-full transition-all"
+                    className="inline-block text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] text-white border border-white/30 hover:bg-white hover:text-[#4a3b32] px-4 py-1.5 md:px-5 md:py-2 rounded-full transition-all"
                   >
                     Ver cómo llegar
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-5">
-                <div className="mt-1 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 shrink-0 hover:bg-green-500/20 hover:border-green-500/50 transition-colors cursor-pointer">
-                  <FaWhatsapp className="text-white/80 text-xl hover:text-green-400 transition-colors" />
+              <div className="flex items-center gap-4 md:gap-5">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 shrink-0 hover:bg-green-500/20 hover:border-green-500/50 transition-colors cursor-pointer">
+                  <FaWhatsapp className="text-white/80 text-lg md:text-xl hover:text-green-400 transition-colors" />
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.2em] text-white/50 mb-1">Atención Directa</p>
-                  <a href="https://wa.me/5493816242482" target="_blank" rel="noreferrer" className="text-white font-medium text-base hover:text-green-400 transition-colors">
+                  <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-white/50 mb-1">Atención Directa</p>
+                  <a href="https://wa.me/5493816242482" target="_blank" rel="noreferrer" className="text-white font-medium text-sm md:text-base hover:text-green-400 transition-colors">
                     +54 9 381 624-2482
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-5">
-                <div className="mt-1 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 shrink-0 hover:bg-pink-500/20 hover:border-pink-500/50 transition-colors cursor-pointer">
-                  <FaInstagram className="text-white/80 text-xl hover:text-pink-400 transition-colors" />
+              <div className="flex items-center gap-4 md:gap-5">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 flex items-center justify-center bg-white/5 shrink-0 hover:bg-pink-500/20 hover:border-pink-500/50 transition-colors cursor-pointer">
+                  <FaInstagram className="text-white/80 text-lg md:text-xl hover:text-pink-400 transition-colors" />
                 </div>
                 <div>
-                  <p className="text-xs font-black uppercase tracking-[0.2em] text-white/50 mb-1">Comunidad Activa</p>
-                  <a href="https://www.instagram.com/doctorescarcaramartinez/" target="_blank" rel="noreferrer" className="text-white font-medium text-base hover:text-pink-400 transition-colors">
+                  <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-white/50 mb-1">Comunidad Activa</p>
+                  <a href="https://www.instagram.com/doctorescarcaramartinez/" target="_blank" rel="noreferrer" className="text-white font-medium text-sm md:text-base hover:text-pink-400 transition-colors">
                     @doctorescarcaramartinez
                   </a>
                 </div>
@@ -117,11 +117,11 @@ const Instalaciones = () => {
           </div>
 
           {/* Caja Derecha: Logo (Azul Oscuro) */}
-          <div className="bg-[#3b5d72] w-full lg:w-[45%] rounded-[2rem] p-8 md:p-14 z-10 lg:-ml-10 mt-6 lg:mt-0 shadow-2xl relative flex items-center justify-center min-h-[250px] md:min-h-[400px]">
+          <div className="bg-[#3b5d72] w-full lg:w-[45%] rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-14 z-10 lg:-ml-10 mt-3 lg:mt-0 shadow-2xl relative flex items-center justify-center min-h-[150px] md:min-h-[400px]">
             <img 
               src="/NEWLOGO.png" 
               alt="Studio Dental C&M" 
-              className="w-full max-w-[200px] md:max-w-[280px] object-contain drop-shadow-2xl transition-all duration-500 hover:scale-105" 
+              className="w-full max-w-[140px] md:max-w-[280px] object-contain drop-shadow-2xl transition-all duration-500 hover:scale-105" 
               style={{ filter: 'invert(1) hue-rotate(180deg)' }} 
             />
           </div>
