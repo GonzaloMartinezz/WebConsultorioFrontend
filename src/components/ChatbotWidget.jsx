@@ -133,10 +133,10 @@ const ChatbotWidget = () => {
         <div className="bg-[#fcfcfc] rounded-[24px] shadow-[0_30px_80px_-15px_rgba(0,0,0,0.6)] border border-gray-200/60 w-[340px] sm:w-[420px] h-[550px] mb-4 flex flex-col overflow-hidden transform transition-all duration-400 origin-bottom-right">
 
           {/* HEADER ULTRA PREMIUM */}
-          <div className="bg-gradient-to-r from-[#111111] via-[#1a1a1a] to-[#241b14] text-white px-6 py-5 flex justify-between items-center shrink-0 border-b border-white/5 shadow-md z-20">
+          <div className="bg-linear-to- from-[#111111] via-[#1a1a1a] to-[#241b14] text-white px-6 py-5 flex justify-between items-center shrink-0 border-b border-white/5 shadow-md z-20">
             <div className="flex items-center gap-4">
               {/* Icono Asistente con brillo */}
-              <div className="relative bg-gradient-to-br from-gray-800 to-black w-12 h-12 rounded-full flex items-center justify-center border border-gray-600/50 shadow-[0_0_15px_rgba(255,120,0,0.2)]">
+              <div className="relative bg-linear-to-r from-gray-800 to-black w-12 h-12 rounded-full flex items-center justify-center border border-gray-600/50 shadow-[0_0_15px_rgba(255,120,0,0.2)]">
                 <FaHeadset className="text-[22px] text-accent-orange drop-shadow-md" />
                 <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-[#1a1a1a] rounded-full shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
               </div>
@@ -163,13 +163,13 @@ const ChatbotWidget = () => {
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex w-full relative z-10 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.sender === 'user' ? (
-                  <div className="max-w-[85%] rounded-[20px] rounded-br-[4px] px-5 py-3.5 text-[13.5px] bg-gradient-to-r from-[#FF7800] to-orange-500 text-white shadow-[0_8px_20px_rgba(255,120,0,0.25)] font-medium tracking-wide">
+                  <div className="max-w-[85%] rounded-[20px] rounded-br-[4px] px-5 py-3.5 text-[13.5px] bg-linear-to- from-[#FF7800] to-orange-500 text-white shadow-[0_8px_20px_rgba(255,120,0,0.25)] font-medium tracking-wide">
                     {msg.text}
                   </div>
                 ) : (
                   <div className="max-w-[92%] rounded-[20px] rounded-tl-[4px] px-5 py-4 text-[13.5px] bg-white text-gray-700 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.08)] border border-gray-100/80 relative overflow-hidden group">
                     {/* Borde lateral sutil para el bot */}
-                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-gray-200 to-transparent"></div>
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-linear-to- from-gray-200 to-transparent"></div>
                     
                     {msg.text === 'intro' ? (
                       <div className="pl-1">
@@ -199,7 +199,7 @@ const ChatbotWidget = () => {
             </div>
             <button 
               type="submit" 
-              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 shadow-lg ${inputText.trim() ? 'bg-gradient-to-r from-[#FF7800] to-orange-500 text-white hover:scale-105 hover:shadow-orange-500/30' : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'}`}
+              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 shrink-0 shadow-lg ${inputText.trim() ? 'bg-linear-to- from-[#FF7800] to-orange-500 text-white hover:scale-105 hover:shadow-orange-500/30' : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'}`}
               disabled={!inputText.trim()}
             >
               <FaPaperPlane className="text-[15px] -ml-0.5" />
@@ -212,7 +212,7 @@ const ChatbotWidget = () => {
       {/* BOTÓN FLOTANTE PRINCIPAL */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-16 h-16 bg-gradient-to-tr from-[#1A1A1A] to-[#333333] text-white rounded-full flex items-center justify-center shadow-[0_15px_40px_rgba(0,0,0,0.4)] hover:scale-110 active:scale-95 transition-all duration-400 relative group border border-white/10"
+        className="w-16 h-16 bg-linear-to-r from-[#1A1A1A] to-[#333333] text-white rounded-full flex items-center justify-center shadow-[0_15px_40px_rgba(0,0,0,0.4)] hover:scale-110 active:scale-95 transition-all duration-400 relative group border border-white/10"
       >
         {isOpen ? (
           <FaTimes className="text-3xl text-red-400 group-hover:rotate-90 transition-transform duration-300" />

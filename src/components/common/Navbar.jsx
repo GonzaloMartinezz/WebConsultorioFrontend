@@ -119,24 +119,24 @@ const Navbar = () => {
           className={`lg:hidden fixed inset-0 z-[100] flex flex-col justify-center p-8 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${menuOpen ? "opacity-100 visible pointer-events-auto" : "opacity-0 invisible pointer-events-none"
             }`}
         >
-          {/* Fondo Glassmorphism Oscuro */}
-          <div className="absolute inset-0 bg-[#000000]/90 backdrop-blur-2xl"></div>
+          {/* Fondo Claro/Crema Minimalista */}
+          <div className="absolute inset-0 bg-[#FAF9F6] md:bg-white/95 md:backdrop-blur-xl"></div>
 
-          {/* Patrón de puntos o textura sutil */}
-          <div className="absolute inset-0 opacity-[0.15] pointer-events-none mix-blend-overlay" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
+          {/* Patrón de puntos sutil oscuro */}
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(#000000 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
 
-          {/* Destellos de luz */}
-          <div className="absolute top-[-20%] right-[-20%] w-[60%] h-[60%] bg-[#FF7800]/20 rounded-full blur-[120px] pointer-events-none"></div>
-          <div className="absolute bottom-[-10%] left-[-20%] w-[50%] h-[50%] bg-orange-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+          {/* Destellos de luz (difuminado anaranjado en el fondo) */}
+          <div className="absolute top-[-10%] right-[-10%] w-[60%] h-[60%] bg-linear-to-bl from-[#FF7800]/25 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute bottom-[-20%] left-[-20%] w-[70%] h-[70%] bg-linear-to-tr from-[#FF7800]/15 to-transparent rounded-full blur-3xl pointer-events-none"></div>
 
           {/* ENCABEZADO DEL MENÚ: Logo + Botón Cerrar */}
           <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-20">
-            <Link to="/" onClick={() => setMenuOpen(false)} className="outline-none w-32 filter drop-shadow-[0_2px_10px_rgba(255,255,255,0.1)]">
-              <BrandLogo />
+            <Link to="/" onClick={() => setMenuOpen(false)} className="outline-none w-32 filter drop-shadow-sm">
+              <BrandLogo forceDark={true} />
             </Link>
             <button
               onClick={() => setMenuOpen(false)}
-              className="h-12 w-12 flex items-center justify-center rounded-full bg-white/10 border border-white/20 text-white backdrop-blur-lg hover:bg-white/20 transition-all active:scale-90 shadow-xl"
+              className="h-12 w-12 flex items-center justify-center rounded-full bg-black/5 border border-black/10 text-primary backdrop-blur-lg hover:bg-black/10 transition-all active:scale-90 shadow-sm"
             >
               <FaTimes className="text-xl" />
             </button>
@@ -158,10 +158,10 @@ const Navbar = () => {
                 style={{ transitionDelay: `${idx * 100}ms` }}
                 onClick={() => setMenuOpen(false)}
               >
-                <div className="w-14 h-14 shrink-0 rounded-full bg-[#151515] border border-white/5 flex items-center justify-center text-[#FF7800] text-2xl group-hover:bg-[#FF7800] group-hover:text-white group-hover:scale-110 group-hover:border-[#FF7800] shadow-[0_4px_15px_rgba(0,0,0,0.5)] group-hover:shadow-[0_0_30px_rgba(255,120,0,0.4)] transition-all duration-500">
+                <div className="w-14 h-14 shrink-0 rounded-full bg-white border border-primary/10 flex items-center justify-center text-primary text-2xl group-hover:bg-primary group-hover:text-white group-hover:scale-110 group-hover:border-primary shadow-sm group-hover:shadow-[0_10px_20px_rgba(74,59,50,0.2)] transition-all duration-500">
                   {item.icon}
                 </div>
-                <span className="text-xl sm:text-2xl font-black text-white/90 uppercase tracking-widest group-hover:text-white group-hover:translate-x-2 transition-transform duration-500">
+                <span className="text-xl sm:text-2xl font-black text-primary uppercase tracking-widest group-hover:text-accent-orange group-hover:translate-x-2 transition-transform duration-500">
                   {item.label}
                 </span>
               </Link>
@@ -169,7 +169,7 @@ const Navbar = () => {
 
             {/* Separador */}
             <div
-              className={`h-[1px] w-full bg-gradient-to-r from-transparent via-white/20 to-transparent my-6 transition-all duration-1000 ${menuOpen ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+              className={`h-px w-full bg-linear-to-r from-transparent via-primary/20 to-transparent my-6 transition-all duration-1000 ${menuOpen ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
                 }`}
               style={{ transitionDelay: '400ms' }}
             ></div>
@@ -182,23 +182,23 @@ const Navbar = () => {
             >
               {usuario ? (
                 <>
-                  <Link to="/mi-perfil" className="w-full bg-[#1a1a1a] border border-white/10 text-white p-4 rounded-full flex items-center justify-center gap-4 font-bold uppercase tracking-widest active:scale-95 transition-transform shadow-lg" onClick={() => setMenuOpen(false)}>
+                  <Link to="/mi-perfil" className="w-full bg-white border border-primary/10 text-primary p-4 rounded-full flex items-center justify-center gap-4 font-bold uppercase tracking-widest active:scale-95 transition-transform shadow-md hover:bg-gray-50" onClick={() => setMenuOpen(false)}>
                     <div className="w-8 h-8 rounded-full bg-accent-orange text-white flex items-center justify-center text-[10px] font-black tracking-widest shadow-md">
                       {getInitials()}
                     </div>
                     Mi Perfil
                   </Link>
-                  <button onClick={() => { setMenuOpen(false); handleLogout(); }} className="w-full text-red-500 font-bold p-2 text-center uppercase tracking-widest text-sm hover:text-red-400 transition-colors">
+                  <button onClick={() => { setMenuOpen(false); handleLogout(); }} className="w-full text-red-500 font-bold p-2 text-center uppercase tracking-widest text-sm hover:text-red-600 transition-colors">
                     Cerrar Sesión
                   </button>
                 </>
               ) : (
                 <>
-                  <Link to="/login" className="w-full bg-gradient-to-r from-[#FF7800] to-orange-500 text-white font-black py-4 px-6 rounded-full text-center uppercase tracking-widest shadow-[0_10px_30px_rgba(255,120,0,0.4)] active:scale-95 hover:scale-105 transition-all flex items-center justify-center gap-3" onClick={() => setMenuOpen(false)}>
+                  <Link to="/login" className="w-full bg-linear-to-r from-[#FF7800] to-orange-500 text-white font-black py-4 px-6 rounded-full text-center uppercase tracking-widest shadow-[0_10px_30px_rgba(255,120,0,0.3)] active:scale-95 hover:scale-105 transition-all flex items-center justify-center gap-3" onClick={() => setMenuOpen(false)}>
                     <FaSignInAlt className="text-xl" /> Iniciar Sesión
                   </Link>
-                  <Link to="/turnos" className="w-full bg-[#151515] border border-white/10 text-white font-bold py-4 px-6 rounded-full text-center uppercase tracking-widest hover:bg-white/5 active:scale-95 hover:scale-105 transition-all flex items-center justify-center gap-3 shadow-xl" onClick={() => setMenuOpen(false)}>
-                    <FaCalendarPlus className="text-xl text-[#FF7800]" /> Solicitar Turno
+                  <Link to="/turnos" className="w-full bg-white border border-primary/10 text-primary font-bold py-4 px-6 rounded-full text-center uppercase tracking-widest hover:bg-gray-50 active:scale-95 hover:scale-105 transition-all flex items-center justify-center gap-3 shadow-md" onClick={() => setMenuOpen(false)}>
+                    <FaCalendarPlus className="text-xl text-primary" /> Solicitar Turno
                   </Link>
                 </>
               )}

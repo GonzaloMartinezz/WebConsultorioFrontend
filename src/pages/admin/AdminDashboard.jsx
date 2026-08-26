@@ -337,7 +337,7 @@ const AdminDashboard = () => {
 
       {notificacionPendiente && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xl flex items-center justify-center z-300 p-4 animate-fade-in">
-          <div className="bg-white rounded-[2rem] w-full max-w-sm overflow-hidden shadow-2xl">
+          <div className="bg-white rounded-4xl w-full max-w-sm overflow-hidden shadow-2xl">
             <div className="bg-linear-to-br from-green-500 to-emerald-600 p-8 text-center text-white relative overflow-hidden">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.15),transparent_60%)]"></div>
               <div className="relative z-10">

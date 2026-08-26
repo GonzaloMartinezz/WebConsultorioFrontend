@@ -70,7 +70,7 @@ const BannerPlanes = () => {
       <section className="bg-primary pt-12 pb-24 md:pt-20 md:pb-32 px-0 overflow-hidden relative">
 
         {/* Gradiente de transición para ocultar la textura/glows justo en la costura con la ola sólida */}
-        <div className="absolute top-0 left-0 w-full h-32 md:h-48 bg-gradient-to-b from-primary via-primary/90 to-transparent z-10 pointer-events-none"></div>
+        <div className="absolute top-0 left-0 w-full h-32 md:h-48 bg-linear-to- from-primary via-primary/90 to-transparent z-10 pointer-events-none"></div>
 
         {/* Glow Effects - Similares a Especialistas.jsx */}
         <div className="absolute top-[10%] left-[-10%] w-[50%] h-full rounded-full blur-[120px] bg-accent-orange/15 pointer-events-none"></div>

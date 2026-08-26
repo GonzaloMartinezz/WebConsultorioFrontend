@@ -512,7 +512,7 @@ const AdminEstadisticas = () => {
             </div>
           </div>
           
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3 max-h-[500px]">
+          <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3 max-h-125">
             {usuariosFiltrados.length > 0 ? usuariosFiltrados.map(u => (
               <div key={u._id} className="p-4 rounded-2xl bg-background border border-secondary/10 flex items-center justify-between hover:shadow-md transition-shadow group">
                 <div className="flex items-center gap-4 min-w-0">

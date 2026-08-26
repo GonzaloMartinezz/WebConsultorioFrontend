@@ -17,17 +17,17 @@ import {
    ───────────────────────────────────────────────────────────── */
 const techCards = [
   {
-    img: '/nosotros-ortopanto.png',
+    img: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775668/nosotros-ortopanto.png',
     icon: '🖨️',
     title: 'Diagnóstico Digital',
   },
   {
-    img: '/que-es-y-para-que-se-usa-el-sistema-cerec.jpg',
+    img: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775652/que-es-y-para-que-se-usa-el-sistema-cerec.jpg',
     icon: '⚙️',
     title: 'Sistema CADCAM de ultima generacion',
   },
   {
-    img: '/orthodontics.jpg.webp',
+    img: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775650/orthodontics.jpg.webp',
     icon: '🧬',
     title: 'Fabricacion aditiva 3D ',
   },
@@ -165,8 +165,8 @@ const OdontologiaDigital = () => {
 
                   {/* Imagen del Monitor */}
                   <div className="relative overflow-hidden">
-                    <img
-                      src="/maquinascompletas.webp"
+                    <img loading="lazy"
+                      src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775645/maquinascompletas.webp"
                       alt="Planificación de implantes 3D — ODONTO_CORE"
                       className="w-full h-auto object-cover opacity-90 group-hover:scale-105 transition-transform duration-1000"
                       style={{ maxHeight: 520 }}
@@ -202,7 +202,7 @@ const OdontologiaDigital = () => {
                 >
                   <div className="h-72 overflow-hidden relative flex items-center justify-center bg-black">
                     <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent z-10"></div>
-                    <img
+                    <img loading="lazy"
                       src={card.img}
                       alt={card.title}
                       className="w-full h-full object-cover object-center transition-all duration-1000 opacity-90 group-hover:opacity-100"
@@ -254,7 +254,7 @@ const OdontologiaDigital = () => {
             <div className="w-full" data-aos="fade-up">
               <div className="relative rounded-[3rem] overflow-hidden border border-white/10 shadow-[0_50px_100px_-20px_rgba(0,0,0,1)] group">
                 <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/10 to-transparent z-10 opacity-80 pointer-events-none"></div>
-                <img
+                <img loading="lazy"
                   src="/maquinas adolfo 2.jpg"
                   alt="Infraestructura Tecnológica Core"
                   className="w-full h-[400px] md:h-[600px] lg:h-[700px] object-cover object-center transition-transform duration-[3s] group-hover:scale-105"

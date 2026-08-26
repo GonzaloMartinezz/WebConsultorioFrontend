@@ -5,7 +5,7 @@ const Instalaciones = () => {
     <>
       <section className="pt-32 pb-16 bg-[#050505] flex flex-col items-center border-t border-white/5 relative overflow-hidden">
         {/* Glow Background */}
-        <div className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-cyan-900/10 rounded-full blur-[150px] pointer-events-none"></div>
+        <div className="absolute top-1/4 left-0 w-125 h-125 bg-cyan-900/10 rounded-full blur-[150px] pointer-events-none"></div>
 
         {/* Parte 1: Galería de Instalaciones */}
         <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 text-center relative z-10" data-aos="fade-up">
@@ -23,7 +23,7 @@ const Instalaciones = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px] md:auto-rows-[350px]">
             {/* Imagen Principal - Grande */}
             <div className="md:col-span-2 md:row-span-2 rounded-[3rem] bg-[#111] relative overflow-hidden group border border-white/10 shadow-2xl">
-              <img src="/nosotros-impresora3d.png" alt="Especialidades" className="w-full h-full object-cover transition-all duration-1000 opacity-90 group-hover:opacity-100" />
+              <img loading="lazy" src="/nosotros-impresora3d.png" alt="Especialidades" className="w-full h-full object-cover transition-all duration-1000 opacity-90 group-hover:opacity-100" />
               <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent flex items-end p-12">
                 <div className="space-y-2">
                   <p className="text-cyan-400 font-black text-[10px] uppercase tracking-[0.3em]">Vanguardia</p>
@@ -34,7 +34,7 @@ const Instalaciones = () => {
 
             {/* Imagen 2 - Superior Derecha */}
             <div className="rounded-[3rem] bg-[#111] relative overflow-hidden group border border-white/10 shadow-2xl">
-              <img src="/frezadora1.jpeg" alt="Precisión Digital" className="w-full h-full object-cover transition-all duration-1000 opacity-80 group-hover:opacity-100" />
+              <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775666/frezadora1.jpg" alt="Precisión Digital" className="w-full h-full object-cover transition-all duration-1000 opacity-80 group-hover:opacity-100" />
               <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent flex items-end p-8">
                 <h3 className="text-white font-black tracking-widest uppercase text-sm">Precisión Digital</h3>
               </div>
@@ -42,7 +42,7 @@ const Instalaciones = () => {
 
             {/* Imagen 3 - Inferior Derecha */}
             <div className="rounded-[3rem] bg-[#111] relative overflow-hidden group border border-white/10 shadow-2xl">
-              <img src="/maquinas adolfo 4.jpeg" alt="Tecnología de Punta" className="w-full h-full object-cover transition-all duration-1000 opacity-80 group-hover:opacity-100" />
+              <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775653/maquinas_adolfo_4.jpg" alt="Tecnología de Punta" className="w-full h-full object-cover transition-all duration-1000 opacity-80 group-hover:opacity-100" />
               <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent flex items-end p-8">
                 <h3 className="text-white font-black tracking-widest uppercase text-sm">Tecnología de Punta</h3>
               </div>
@@ -52,13 +52,13 @@ const Instalaciones = () => {
       </section>
 
       {/* Parte 2: Mapa y Contacto (Diseño Overlap según Image 1) */}
-      <section className="w-full relative flex items-center justify-center min-h-[600px] lg:min-h-[750px] bg-white">
+      <section className="w-full relative flex items-center justify-center min-h-150 lg:min-h-[750px] bg-white">
         {/* Mapa de fondo */}
         <div className="absolute inset-0 w-full h-full z-0">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.10688656627!2d-65.2104523!3d-26.8365691!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94225c0e12345678%3A0x123456789abcdef!2sJos%C3%A9%20Rondeau%20827%2C%20T4000%20San%20Miguel%20de%20Tucum%C3%A1n!5e0!3m2!1ses-419!2sar!4v1710000000000!5m2!1ses-419!2sar"
             width="100%" height="100%" style={{ border: 0 }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"
-            className="w-full h-full object-cover grayscale-[20%]"
+            className="w-full h-full object-cover grayscale-20"
           ></iframe>
         </div>
 
@@ -66,7 +66,7 @@ const Instalaciones = () => {
         <div className="relative z-10 w-[90%] sm:w-[90%] max-w-6xl mx-auto flex flex-col lg:flex-row items-center py-10 lg:py-20" data-aos="fade-up">
           
           {/* Caja Izquierda: Información de Contacto (Marrón) */}
-          <div className="bg-[#4a3b32] w-full lg:w-[55%] rounded-[1.5rem] md:rounded-[2rem] p-5 sm:p-8 md:p-14 z-20 shadow-[20px_0_40px_-10px_rgba(0,0,0,0.3)] border border-white/10 relative">
+          <div className="bg-[#4a3b32] w-full lg:w-[55%] rounded-3xl md:rounded-4xl p-5 sm:p-8 md:p-14 z-20 shadow-[20px_0_40px_-10px_rgba(0,0,0,0.3)] border border-white/10 relative">
             <h2 className="text-lg md:text-3xl font-black text-white tracking-wider uppercase mb-6 md:mb-12 text-center md:text-left">
               Información de Contacto
             </h2>
@@ -117,9 +117,9 @@ const Instalaciones = () => {
           </div>
 
           {/* Caja Derecha: Logo (Azul Oscuro) */}
-          <div className="bg-[#3b5d72] w-full lg:w-[45%] rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-14 z-10 lg:-ml-10 mt-3 lg:mt-0 shadow-2xl relative flex items-center justify-center min-h-[150px] md:min-h-[400px]">
-            <img 
-              src="/NEWLOGO.png" 
+          <div className="bg-[#3b5d72] w-full lg:w-[45%] rounded-3xl md:rounded-4xl p-6 md:p-14 z-10 lg:-ml-10 mt-3 lg:mt-0 shadow-2xl relative flex items-center justify-center min-h-[150px] md:min-h-[400px]">
+            <img loading="lazy" 
+              src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775657/NEWLOGO.png" 
               alt="Studio Dental C&M" 
               className="w-full max-w-[140px] md:max-w-[280px] object-contain drop-shadow-2xl transition-all duration-500 hover:scale-105" 
               style={{ filter: 'invert(1) hue-rotate(180deg)' }} 

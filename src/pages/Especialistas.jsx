@@ -7,22 +7,22 @@ import SeccionProfesionales from '../components/SeccionProfesionales';
    ───────────────────────────────────────────────────────────── */
 const techCards = [
   {
-    img: '/que-es-y-para-que-se-usa-el-sistema-cerec.jpg',
+    img: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775652/que-es-y-para-que-se-usa-el-sistema-cerec.jpg',
     icon: '🦷',
     title: 'Diagnóstico Digital',
   },
   {
-    img: '/sanners1.png',
+    img: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775651/sanners1.png',
     icon: '⚙️',
     title: 'Sistemas CAD/CAM,para la confeccion de guias quirurgicas y coronas.Ademas disponemos de radiografias digiital',
   },
   {
-    img: '/frezadora1.jpeg',
+    img: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775666/frezadora1.jpg',
     icon: '🧬',
     title: 'Fabricacion Aditiva 3D',
   },
   {
-    img: '/custom-tray-resin.webp',
+    img: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775654/custom-tray-resin.webp',
     icon: '📐',
     title: 'Scanner Intraoral',
   },
@@ -184,8 +184,8 @@ const AcercaDe = () => {
 
                   {/* Firma / Autores (Logo Oficial) */}
                   <div className="mt-10 flex items-center justify-center border-t border-white/10 pt-6 relative z-10">
-                    <img
-                      src="/NEWLOGO.png"
+                    <img loading="lazy"
+                      src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775657/NEWLOGO.png"
                       alt="Carcara & Martínez"
                       className="h-12 md:h-14 object-contain opacity-90"
                       style={{ filter: 'invert(1) hue-rotate(180deg)' }}
@@ -222,23 +222,23 @@ const AcercaDe = () => {
 
             {/* Maquinas Adolfo 1 - Impresora 3D (Ancha) */}
             <div className="relative rounded-2xl overflow-hidden h-[300px] md:h-[300px] shadow-lg group md:col-span-2" data-aos="fade-up">
-              <img src="/maquinas adolfo 2.jpg" alt="Impresora 3D Odontológica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img loading="lazy" src="/maquinas adolfo 2.jpg" alt="Impresora 3D Odontológica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
                 <h3 className="text-xl font-bold text-white uppercase tracking-tight">Precisión Digital</h3>
               </div>
             </div>
 
             {/* Maquinas Adolfo 2jpg.jpg - CEREC/Fresadora */}
-            <div className="relative rounded-2xl overflow-hidden h-[400px] md:h-[500px] shadow-lg group" data-aos="fade-up" data-aos-delay="100">
-              <img src="/sanners1.png" alt="Laboratorio Digital CEREC" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="relative rounded-2xl overflow-hidden h-[400px] md:h-125 shadow-lg group" data-aos="fade-up" data-aos-delay="100">
+              <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775651/sanners1.png" alt="Laboratorio Digital CEREC" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
                 <h3 className="text-xl font-bold text-white uppercase tracking-tight">Diseño CAD/CAM</h3>
               </div>
             </div>
 
             {/* Maquinas Adolfo 3.jpg - Equipamiento laboratorio */}
-            <div className="relative rounded-2xl overflow-hidden h-[400px] md:h-[500px] shadow-lg group" data-aos="fade-up" data-aos-delay="200">
-              <img src="/imagenIA.jpg" alt="Equipamiento de vanguardia" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="relative rounded-2xl overflow-hidden h-[400px] md:h-125 shadow-lg group" data-aos="fade-up" data-aos-delay="200">
+              <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775655/imagenIA.jpg" alt="Equipamiento de vanguardia" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
                 <h3 className="text-xl font-bold text-white uppercase tracking-tight">Tecnología Sirona</h3>
               </div>
@@ -265,7 +265,7 @@ const AcercaDe = () => {
 
             {/* Imagen 1 - Impresora 3D */}
             <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[450px] shadow-lg border-4 border-white group" data-aos="fade-right">
-              <img src="/nosotros-cirugia.png" alt="Impresión 3D Biocompatible" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img loading="lazy" src="/nosotros-cirugia.png" alt="Impresión 3D Biocompatible" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
                 <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Impresión 3D</h3>
                 <p className="text-white/90 font-medium mt-1">Impresión de alta precisión para prótesis y guías quirúrgicas.</p>
@@ -274,7 +274,7 @@ const AcercaDe = () => {
 
             {/* Imagen 2 - Ortodoncia */}
             <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[450px] shadow-lg border-4 border-white group" data-aos="fade-left">
-              <img src="/orthodontics.jpg.webp" alt="Ortodoncia y Planificación Digital" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775650/orthodontics.jpg.webp" alt="Ortodoncia y Planificación Digital" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
                 <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Ortodoncia Digital</h3>
                 <p className="text-white/90 font-medium mt-1">Tratamientos a medida diseñados a partir de escaneo intraoral.</p>
@@ -282,8 +282,8 @@ const AcercaDe = () => {
             </div>
 
             {/* Imagen 3 - Cirugía (Ancha) */}
-            <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-[500px] shadow-lg border-4 border-white group md:col-span-2" data-aos="fade-up">
-              <img src="/impresora-3b-blog.webp" alt="Cirugía Guiada" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="relative rounded-3xl overflow-hidden h-[400px] md:h-125 shadow-lg border-4 border-white group md:col-span-2" data-aos="fade-up">
+              <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775653/impresora-3b-blog.webp" alt="Cirugía Guiada" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent p-8 flex flex-col justify-end">
                 <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Cirugía Guiada</h3>
                 <p className="text-white/90 font-medium mt-1">Intervenciones precisas y mínimamente invasivas asistidas por software.</p>

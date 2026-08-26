@@ -38,7 +38,7 @@ const WhatsAppButton = () => {
       {/* Popover Form */}
       {isOpen && (
         <div
-          className="mb-6 bg-white/95 backdrop-blur-xl rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden border border-white/20 transition-all duration-300 origin-bottom-left w-[calc(100vw-3rem)] max-w-[380px]"
+          className="mb-6 bg-white/95 backdrop-blur-xl rounded-4xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] overflow-hidden border border-white/20 transition-all duration-300 origin-bottom-left w-[calc(100vw-3rem)] max-w-[380px]"
           style={{ animation: 'fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)' }}
         >
           {/* Header */}

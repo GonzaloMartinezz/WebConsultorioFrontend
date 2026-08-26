@@ -31,7 +31,7 @@ const SeccionProfesionales = () => {
         <div className="flex flex-col gap-6">
 
           {/* Tarjeta Ancha Superior: Equipo Integral */}
-          <div className="w-full bg-gradient-to-br from-primary to-[#3a2a1f] border border-secondary/20 shadow-xl rounded-[2.5rem] p-10 md:p-14 flex flex-col items-center justify-center text-center relative overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+          <div className="w-full bg-linear-to-r from-primary to-[#3a2a1f] border border-secondary/20 shadow-xl rounded-[2.5rem] p-10 md:p-14 flex flex-col items-center justify-center text-center relative overflow-hidden" data-aos="fade-up" data-aos-delay="100">
             {/* Glow decorativo */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
             
@@ -59,7 +59,7 @@ const SeccionProfesionales = () => {
             <Link to="/especialistas/adolfo" className="group bg-white/80 backdrop-blur-xl border border-white/40 shadow-lg hover:shadow-2xl transition-all duration-700 rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between h-[380px] relative overflow-hidden" data-aos="fade-up" data-aos-delay="200">
               
               {/* Onda de color (Background Fill) animada al hacer hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-accent-orange to-orange-600 translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-out z-0 rounded-[2.5rem]"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-accent-orange to-orange-600 translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-out z-0 rounded-[2.5rem]"></div>
               
               <div className="relative z-10 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-6">
@@ -94,7 +94,7 @@ const SeccionProfesionales = () => {
             <Link to="/especialistas/erina" className="group bg-white/80 backdrop-blur-xl border border-white/40 shadow-lg hover:shadow-2xl transition-all duration-700 rounded-[2.5rem] p-8 md:p-10 flex flex-col justify-between h-[380px] relative overflow-hidden" data-aos="fade-up" data-aos-delay="300">
               
               {/* Onda de color (Background Fill) animada al hacer hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-accent-orange to-orange-600 translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-out z-0 rounded-[2.5rem]"></div>
+              <div className="absolute inset-0 bg-linear-to-r from-accent-orange to-orange-600 translate-y-[101%] group-hover:translate-y-0 transition-transform duration-500 ease-out z-0 rounded-[2.5rem]"></div>
               
               <div className="relative z-10 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-6">

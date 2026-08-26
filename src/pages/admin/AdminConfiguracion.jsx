@@ -418,7 +418,7 @@ const AdminConfiguracion = () => {
               {waStatus === 'ESPERANDO_QR' && waQr ? (
                 <>
                   <div className="bg-white p-4 rounded-2xl shadow-md mb-6 inline-block border border-gray-100">
-                    <img src={waQr} alt="QR WhatsApp" className="w-56 h-56 md:w-64 md:h-64 object-contain" style={{ imageRendering: 'pixelated' }} />
+                    <img loading="lazy" src={waQr} alt="QR WhatsApp" className="w-56 h-56 md:w-64 md:h-64 object-contain" style={{ imageRendering: 'pixelated' }} />
                   </div>
                   <h3 className="text-lg font-black text-primary mb-2">Escanea este código</h3>
                   <p className="text-sm font-medium text-text-light max-w-sm mb-4">Abre WhatsApp en tu teléfono, ve a "Dispositivos Vinculados" y enfoca la cámara a este código QR.</p>
@@ -531,7 +531,7 @@ const AdminConfiguracion = () => {
             </form>
 
             {/* Lista de Servicios en Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto custom-scrollbar pr-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-125 overflow-y-auto custom-scrollbar pr-2">
               {servicios.map(s => (
                 <div key={s.id} className="flex items-center justify-between p-5 bg-background/40 rounded-2xl border border-secondary/10 hover:border-accent-orange/40 hover:bg-white transition-all group shadow-sm hover:shadow-md">
                   <div className="truncate pr-4 flex-1">

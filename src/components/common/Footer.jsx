@@ -80,7 +80,7 @@ const Footer = () => {
           {/* DESARROLLADOR */}
           <a href="https://mi-portafolioblogg.vercel.app/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 opacity-70 hover:opacity-100 transition-opacity group">
             <span className="text-[10px] font-black tracking-widest uppercase text-primary">Desarrollado por Gonzalo Martinez</span>
-            <img 
+            <img loading="lazy" 
               src="/logo-gm.png" 
               alt="GM Logo" 
               className="w-6 h-6 rounded-full object-cover shadow-sm group-hover:scale-110 transition-transform"

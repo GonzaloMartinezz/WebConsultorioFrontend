@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 
 const TomografoSection = () => {
   const images = [
-    '/tomografo1.7.jpg',
-    '/tomografo1.jpg',
-    '/tomografo1.2.jpg',
-    '/tomografo1.6.jpg',
-    '/tomografo1.3.jpg',
-    '/tomografo1.4.jpg',
-    '/tomografo1.5.jpg',
-    '/tomografo1.8.jpg',
+    'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775680/tomografo1.7.jpg',
+    'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775682/tomografo1.1.jpg',
+    'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775676/tomografo1.2.jpg',
+    'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775662/tomografo1.jpg',
+    'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775681/tomografo1.3.jpg',
+    'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775685/tomografo1.4.jpg',
+    'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775689/tomografo1.5.jpg',
+    'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775683/tomografo1.8.jpg',
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -25,7 +25,7 @@ const TomografoSection = () => {
   return (
     <section className="w-full bg-[#4a3b32] text-white pt-16 md:pt-28 pb-12 md:pb-20 px-4 md:px-12 relative z-10 -mt-[1px]">
       {/* Efecto de difuminado (fade) sangrando hacia arriba para fusionar suavemente con la foto */}
-      <div className="absolute -top-24 h-24 md:-top-48 md:h-48 left-0 w-full bg-gradient-to-t from-[#4a3b32] to-transparent pointer-events-none z-20"></div>
+      <div className="absolute -top-24 h-24 md:-top-48 md:h-48 left-0 w-full bg-linear-to- from-[#4a3b32] to-transparent pointer-events-none z-20"></div>
 
       <div className="max-w-[85rem] mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 xl:gap-20 items-center">
 
@@ -33,7 +33,7 @@ const TomografoSection = () => {
         <div className="w-full lg:w-7/12 xl:w-[55%] flex flex-col gap-4">
           {/* Imagen Principal */}
           <div className="w-full aspect-[1.15/1] rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative bg-[#111]">
-            <img
+            <img loading="lazy"
               src={mainImage}
               alt="Tomógrafo principal"
               className="w-full h-full object-cover transition-all duration-500 ease-in-out"
@@ -51,7 +51,7 @@ const TomografoSection = () => {
                 onClick={() => setCurrentIndex(idx)}
                 className={`w-full aspect-square rounded-xl overflow-hidden border-2 transition-all duration-300 ${currentIndex === idx ? 'border-accent-orange scale-105 shadow-[0_0_15px_rgba(255,107,0,0.4)]' : 'border-white/5 opacity-60 hover:opacity-100 hover:border-white/20'}`}
               >
-                <img
+                <img loading="lazy"
                   src={img}
                   alt={`Vista tomógrafo ${idx + 1}`}
                   className="w-full h-full object-cover"

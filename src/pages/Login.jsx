@@ -154,8 +154,8 @@ const Login = () => {
 
         {/* LADO IZQUIERDO: LOGO ORIGINAL */}
         <div className="hidden lg:flex flex-col items-center animate-fade-in-left lg:-translate-y-12">
-          <img
-            src="/NEWLOGO.png"
+          <img loading="lazy"
+            src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775657/NEWLOGO.png"
             alt="Logo Oficial"
             className="w-full max-w-md object-contain transition-all duration-300"
             style={{ filter: 'invert(1) hue-rotate(180deg)' }}
@@ -174,8 +174,8 @@ const Login = () => {
             <div className="relative z-10">
               {/* LOGO EN MÓVIL (Arriba de todo el formulario) */}
               <div className="flex justify-center mb-8 lg:hidden">
-                <img
-                  src="/NEWLOGO.png"
+                <img loading="lazy"
+                  src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775657/NEWLOGO.png"
                   alt="Logo Oficial"
                   className="w-40 md:w-48 object-contain"
                   style={{ filter: 'invert(1) hue-rotate(180deg)' }}

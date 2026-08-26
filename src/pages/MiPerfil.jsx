@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axios.js';
-import { FaUser, FaCalendarCheck, FaClock, FaSignOutAlt, FaTooth, FaCalendarAlt, FaShieldAlt, FaLightbulb, FaWallet } from 'react-icons/fa';
+import { FaUser, FaCalendarCheck, FaClock, FaSignOutAlt, FaTooth, FaCalendarAlt, FaShieldAlt, FaLightbulb, FaWallet, FaCamera, FaSpinner } from 'react-icons/fa';
 
 const MiPerfil = () => {
   const [misTurnos, setMisTurnos] = useState([]);
   const [turnosHoy, setTurnosHoy] = useState([]);
   const [cargando, setCargando] = useState(true);
+  const [subiendoImagen, setSubiendoImagen] = useState(false);
   const navigate = useNavigate();
   const usuarioStr = localStorage.getItem('perfilUsuario');
+  const usuarioInicial = JSON.parse(usuarioStr || '{}');
+  const [imagenPerfil, setImagenPerfil] = useState(usuarioInicial?.avatar || null);
   
   useEffect(() => {
     const fetchTurnos = async () => {
@@ -60,6 +63,41 @@ const MiPerfil = () => {
     window.location.reload();
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setSubiendoImagen(true);
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      // Usamos el endpoint configurado en backend para subir imágenes (POST /api/upload)
+      const response = await api.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      const imageUrl = response.data.imageUrl;
+      setImagenPerfil(imageUrl);
+
+      // Actualizar localStorage para mantener la sesión
+      const user = JSON.parse(localStorage.getItem('perfilUsuario') || '{}');
+      user.avatar = imageUrl;
+      localStorage.setItem('perfilUsuario', JSON.stringify(user));
+      
+      // Opcional: Puedes hacer un PUT al backend si existe una ruta para actualizar el usuario
+      // await api.put(`/usuarios/${user.id}`, { avatar: imageUrl });
+
+    } catch (error) {
+      console.error("Error al subir la imagen:", error);
+      alert("Hubo un error al subir la imagen. Inténtalo de nuevo.");
+    } finally {
+      setSubiendoImagen(false);
+    }
+  };
+
   const proximoTurno = !isAdmin && misTurnos.length > 0 ? misTurnos[0] : null;
 
   return (
@@ -80,10 +118,20 @@ const MiPerfil = () => {
 
               <div className="relative z-10 flex flex-col items-center text-center">
                 <div className="relative mb-6">
-                  <div className="w-24 h-24 rounded-full bg-linear-to-br from-accent-orange to-orange-500 flex items-center justify-center text-white text-3xl font-black shadow-[0_15px_35px_-5px_rgba(255,120,0,0.4)]">
-                    {usuario?.nombre?.charAt(0)}{usuario?.apellido?.charAt(0)}
+                  <div className="w-24 h-24 rounded-full bg-linear-to-br from-accent-orange to-orange-500 flex items-center justify-center text-white text-3xl font-black shadow-[0_15px_35px_-5px_rgba(255,120,0,0.4)] overflow-hidden relative group">
+                    {imagenPerfil ? (
+                      <img src={imagenPerfil} alt="Avatar" className="w-full h-full object-cover" loading="lazy" />
+                    ) : (
+                      <>{usuario?.nombre?.charAt(0)}{usuario?.apellido?.charAt(0)}</>
+                    )}
+                    
+                    {/* Overlay para subir imagen */}
+                    <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                      <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={subiendoImagen} />
+                      {subiendoImagen ? <FaSpinner className="animate-spin text-white text-xl" /> : <FaCamera className="text-white text-xl" />}
+                    </label>
                   </div>
-                  <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border border-[#EADDCA]/30">
+                  <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md border border-[#EADDCA]/30 z-10 pointer-events-none">
                     <FaShieldAlt className="text-accent-orange text-xs" />
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const BrandLogo = ({ className = "", scrolled = false }) => {
+const BrandLogo = ({ className = "", scrolled = false, forceDark = false }) => {
   const [isOverDark, setIsOverDark] = useState(false);
   const logoRef = useRef(null);
 
@@ -47,13 +47,13 @@ const BrandLogo = ({ className = "", scrolled = false }) => {
     return () => window.removeEventListener('scroll', checkDarkBackground);
   }, [scrolled]);
 
-  // Si NO está scrolleado (está en HeroCarousel) o si está sobre una sección oscura, lo hacemos blanco.
-  const shouldBeWhite = !scrolled || isOverDark;
+  // Si NO está scrolleado (está en HeroCarousel) o si está sobre una sección oscura, lo hacemos blanco. (A menos que forceDark sea true)
+  const shouldBeWhite = !forceDark && (!scrolled || isOverDark);
 
   return (
     <div ref={logoRef} className={`flex items-center justify-center ${className}`}>
-      <img
-        src="/NEWLOGO.png"
+      <img loading="lazy"
+        src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775657/NEWLOGO.png"
         alt="Logo Carcara Martínez"
         className="h-[72px] sm:h-[100px] w-auto object-contain ml-3 md:ml-6 transition-all duration-300"
         style={{ filter: shouldBeWhite ? 'invert(1) hue-rotate(180deg)' : 'none' }}

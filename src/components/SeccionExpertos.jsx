@@ -28,7 +28,7 @@ const SeccionExpertos = () => {
 
           <div className="w-full lg:w-1/2 relative mt-12 lg:mt-0" data-aos="fade-left">
             <div className="relative group">
-              <img src="/sala de espera 1.jpeg" alt="Instalaciones C&M" className="w-full h-[400px] md:h-[550px] object-cover rounded-[3rem] shadow-2xl border-8 border-white group-hover:scale-[1.02] transition-transform duration-500" />
+              <img loading="lazy" src="/sala de espera 1.jpeg" alt="Instalaciones C&M" className="w-full h-[400px] md:h-[550px] object-cover rounded-[3rem] shadow-2xl border-8 border-white group-hover:scale-[1.02] transition-transform duration-500" />
               <div className="absolute inset-0 rounded-[3rem] ring-1 ring-inset ring-black/10"></div>
             </div>
 

@@ -1,6 +1,61 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 
+const BeforeAfterSlider = ({ beforeImage, afterImage }) => {
+  const [sliderPosition, setSliderPosition] = useState(50);
+
+  // Si solo hay una imagen, mostramos solo esa imagen sin slider
+  if (!beforeImage || !afterImage) {
+    return <img loading="lazy" src={beforeImage || afterImage} alt="Caso clínico" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />;
+  }
+
+  return (
+    <div className="relative w-full h-full select-none group/slider">
+      {/* Imagen de fondo (Después) */}
+      <img loading="lazy" src={afterImage} alt="Después" className="absolute inset-0 w-full h-full object-cover" />
+
+      {/* Imagen superpuesta (Antes) recortada */}
+      <div
+        className="absolute inset-0 w-full h-full overflow-hidden"
+        style={{ width: `${sliderPosition}%` }}
+      >
+        <img loading="lazy" src={beforeImage} alt="Antes" className="absolute inset-0 h-full object-cover" style={{ width: '100vw', minWidth: '100%', maxWidth: 'none' }} />
+      </div>
+
+      {/* Línea divisoria y manija */}
+      <div
+        className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize flex items-center justify-center z-10 shadow-[0_0_10px_rgba(0,0,0,0.5)]"
+        style={{ left: `calc(${sliderPosition}% - 2px)` }}
+      >
+        <div className="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-accent-orange transition-transform group-hover/slider:scale-110">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent-orange">
+            <path d="M15 18l1-6-1-6"></path>
+            <path d="M9 18l-1-6 1-6"></path>
+          </svg>
+        </div>
+      </div>
+
+      {/* Input de rango invisible para controlar el slider */}
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value={sliderPosition}
+        onChange={(e) => setSliderPosition(e.target.value)}
+        className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-20"
+      />
+
+      {/* Etiquetas Antes/Después */}
+      <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest pointer-events-none z-10 transition-opacity opacity-0 group-hover/slider:opacity-100">
+        Antes
+      </div>
+      <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest pointer-events-none z-10 transition-opacity opacity-0 group-hover/slider:opacity-100">
+        Después
+      </div>
+    </div>
+  );
+};
+
 // Helper function removed
 const doctorsData = {
   erina: {
@@ -48,7 +103,7 @@ const doctorsData = {
         duration: '8 meses',
         difficulty: 'Media',
         technique: 'Alineadores Secuenciales de Precisión',
-        image: '/alineadores.png',
+        image: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775789/alineadores.png',
         layout: 'vertical-2',
         steps: [
           { key: 'before', name: 'Inicial (Antes)', desc: 'Pieza dentaria incisiva central inferior con rotación superior al 45% (señalada con la flecha).' },
@@ -64,7 +119,7 @@ const doctorsData = {
         duration: '2 sesiones',
         difficulty: 'Baja',
         technique: 'Peróxido de Hidrógeno al 35% + Luz LED Clínica',
-        image: '/casoclinico2.jpeg',
+        image: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775801/casoclinico2.png',
         layout: 'simple',
         steps: [
           { key: 'complete', name: 'Resultado', desc: 'Tratamiento de blanqueamiento profesional combinado en consultorio y hogar. Se muestran las 3 etapas del tratamiento.' }
@@ -79,7 +134,7 @@ const doctorsData = {
         duration: '1 sesión (45 min)',
         difficulty: 'Baja',
         technique: 'Gel de Peróxido Fotoactivado de Última Generación',
-        image: '/casoclinico1.jpeg',
+        image: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775643/casoclinico1.jpg',
         layout: 'vertical-2',
         steps: [
           { key: 'before', name: 'Antes (Inicial)', desc: 'Piezas dentarias con pigmentación de partida en tono 3R 2.5 en la escala cromática odontológica clásica.' },
@@ -175,7 +230,7 @@ const PerfilDoctor = () => {
         <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-secondary/20 flex flex-col md:flex-row gap-10 items-center md:items-start mb-16 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-orange-50 rounded-full blur-3xl opacity-50 -mr-20 -mt-20"></div>
 
-          <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-white shadow-2xl shrink-0 bg-gradient-to-br from-[#4a3b32] to-[#1a1410] relative z-10">
+          <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-white shadow-2xl shrink-0 bg-linear-to-r from-[#4a3b32] to-[#1a1410] relative z-10">
           </div>
 
           <div className="flex-1 text-center md:text-left relative z-10">
@@ -194,7 +249,7 @@ const PerfilDoctor = () => {
         {/* Especialidades en Recuadros */}
         <div className="mb-20">
           <h2 className="text-3xl md:text-4xl font-black text-primary uppercase tracking-tight mb-10 flex items-center gap-4">
-            <span className="w-8 h-[3px] bg-accent-orange rounded-full"></span>
+            <span className="w-8 h-0.75 bg-accent-orange rounded-full"></span>
             Áreas de Especialidad
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -210,7 +265,59 @@ const PerfilDoctor = () => {
           </div>
         </div>
 
-        {/* Se eliminaron los casos clínicos */}
+        {/* Casos de Éxito Clínico */}
+        {doctor.clinicalCases && doctor.clinicalCases.length > 0 && (
+          <div className="mb-20">
+            <h2 className="text-3xl md:text-4xl font-black text-primary uppercase tracking-tight mb-10 flex items-center gap-4">
+              <span className="w-8 h-0.75 bg-accent-orange rounded-full"></span>
+              Casos de Éxito
+            </h2>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {doctor.clinicalCases.map((caso, index) => (
+                <div key={index} className="bg-white rounded-3xl overflow-hidden shadow-lg border border-secondary/20 flex flex-col group hover:-translate-y-2 transition-transform duration-300">
+                  <div className="relative h-64 sm:h-72 lg:h-80 overflow-hidden bg-gray-100">
+                    <BeforeAfterSlider
+                      beforeImage={caso.beforeImage || caso.image}
+                      afterImage={caso.afterImage || caso.image}
+                    />
+                    <div className="absolute top-4 right-4 bg-accent-orange text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-md z-30 pointer-events-none">
+                      {caso.categoryName}
+                    </div>
+                  </div>
+                  <div className="p-6 md:p-8 flex-1 flex flex-col">
+                    <h3 className="text-xl md:text-2xl font-black text-primary mb-3 leading-tight">{caso.title}</h3>
+                    <p className="text-text-light text-sm font-medium mb-6 leading-relaxed flex-1">{caso.description}</p>
+
+                    <div className="grid grid-cols-2 gap-4 mb-6 border-y border-secondary/10 py-4">
+                      <div>
+                        <span className="block text-[10px] text-text-light font-bold uppercase tracking-widest mb-1">Duración</span>
+                        <span className="font-semibold text-primary">{caso.duration}</span>
+                      </div>
+                      <div>
+                        <span className="block text-[10px] text-text-light font-bold uppercase tracking-widest mb-1">Dificultad</span>
+                        <span className="font-semibold text-primary">{caso.difficulty}</span>
+                      </div>
+                      <div className="col-span-2">
+                        <span className="block text-[10px] text-text-light font-bold uppercase tracking-widest mb-1">Técnica</span>
+                        <span className="font-semibold text-primary">{caso.technique}</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <span className="block text-xs font-black text-accent-orange uppercase tracking-wider mb-2">Evolución</span>
+                      {caso.steps.map((step, idx) => (
+                        <div key={idx} className="bg-orange-50/50 p-3 rounded-xl border border-orange-100/50">
+                          <span className="block text-sm font-bold text-primary mb-1">{step.name}</span>
+                          <span className="block text-xs text-text-light leading-relaxed">{step.desc}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Certificaciones Formato Trophy Cabinet */}
         <div className="mb-20">

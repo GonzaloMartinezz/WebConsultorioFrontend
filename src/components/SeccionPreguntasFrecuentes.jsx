@@ -56,7 +56,7 @@ const SeccionPreguntasFrecuentes = () => {
                     </svg>
                   </div>
                 </button>
-                <div className={`px-8 overflow-hidden transition-all duration-500 ease-in-out ${openFaq === index ? 'max-h-[500px] pb-8 opacity-100' : 'max-h-0 opacity-0'}`}>
+                <div className={`px-8 overflow-hidden transition-all duration-500 ease-in-out ${openFaq === index ? 'max-h-125 pb-8 opacity-100' : 'max-h-0 opacity-0'}`}>
                   <p className="text-white/60 font-light text-base leading-relaxed border-t border-white/10 pt-6">"{faq.a}"</p>
 
                   {/* Botones de acción dinámicos */}

@@ -180,7 +180,7 @@ const SeccionesInformativas = () => {
                         </div>
 
                         {/* Mapa Punteado con tarjetas flotantes adaptado a oscuro */}
-                        <div className="w-full lg:w-7/12 relative h-[350px] md:h-[500px] bg-[radial-gradient(rgba(212,208,200,0.15)_2px,transparent_2px)] bg-size-[16px_16px] rounded-3xl flex items-center justify-center mt-8 lg:mt-0">
+                        <div className="w-full lg:w-7/12 relative h-[350px] md:h-125 bg-[radial-gradient(rgba(212,208,200,0.15)_2px,transparent_2px)] bg-size-[16px_16px] rounded-3xl flex items-center justify-center mt-8 lg:mt-0">
                             <div className="absolute top-1/4 left-10 bg-white p-4 rounded-full shadow-2xl flex items-center gap-4 text-primary">
                                 <div className="bg-secondary/30 p-2 rounded-full font-bold">+15</div>
                                 <p className="font-bold text-sm pr-4">Años de experiencia</p>
@@ -222,7 +222,7 @@ const SeccionesInformativas = () => {
                             </div>
                         </div>
                         <div className="w-full lg:w-1/2 relative mt-8 lg:mt-0" data-aos="fade-left">
-                            <img src="/sala de espera 1.jpeg" alt="Instalaciones" className="w-full h-[300px] md:h-[400px] lg:h-[500px] object-cover rounded-[2.5rem] shadow-2xl border-4 border-white" />
+                            <img loading="lazy" src="/sala de espera 1.jpeg" alt="Instalaciones" className="w-full h-[300px] md:h-[400px] lg:h-125 object-cover rounded-[2.5rem] shadow-2xl border-4 border-white" />
                             <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-[90%] bg-white rounded-2xl p-5 shadow-xl border border-secondary/50 flex items-center gap-4">
                                 <div className="bg-secondary/40 p-3 rounded-full text-accent-orange">
                                     <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 002 2h2v4l.586-.586z" /></svg>

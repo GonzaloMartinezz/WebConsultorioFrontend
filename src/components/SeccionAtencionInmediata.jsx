@@ -8,8 +8,8 @@ const SeccionAtencionInmediata = () => {
         {/* Contenedor Principal Glassmorphism - Con un toque del marrón primario */}
         <div className="bg-primary/10 backdrop-blur-3xl rounded-[3rem] p-10 md:p-20 shadow-[0_40px_100px_-20px_rgba(0,0,0,1)] border border-white/5 relative overflow-hidden group">
           {/* Glow Effects */}
-          <div className="absolute -top-24 -left-24 w-[500px] h-[500px] bg-white/5 rounded-full blur-[120px] pointer-events-none"></div>
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-accent-orange/10 rounded-full blur-[120px] -mr-40 -mt-40 pointer-events-none group-hover:bg-accent-orange/20 transition-colors duration-1000"></div>
+          <div className="absolute -top-24 -left-24 w-125 h-125 bg-white/5 rounded-full blur-[120px] pointer-events-none"></div>
+          <div className="absolute top-0 right-0 w-125 h-125 bg-accent-orange/10 rounded-full blur-[120px] -mr-40 -mt-40 pointer-events-none group-hover:bg-accent-orange/20 transition-colors duration-1000"></div>
           <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10 pointer-events-none"></div>
 
           <div className="flex flex-col lg:flex-row gap-16 items-center relative z-10">
