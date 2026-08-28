@@ -95,7 +95,7 @@ const LayoutAdmin = ({ children }) => {
           )}
 
           {/* Botón Cerrar (Solo Móvil) */}
-          <button onClick={() => setIsMobileMenuOpen(false)} className="lg:hidden text-white/70 hover:text-white p-2">
+          <button onClick={() => setIsMobileMenuOpen(false)} aria-label="Cerrar menú" className="lg:hidden text-white/70 hover:text-white p-2">
             <FaTimes className="text-2xl" />
           </button>
         </div>
@@ -103,6 +103,7 @@ const LayoutAdmin = ({ children }) => {
         {/* Botón flotante para PC (Oculto en móvil) */}
         <button
           onClick={() => setIsDesktopExpanded(!isDesktopExpanded)}
+          aria-label="Alternar menú lateral"
           className="hidden lg:flex absolute top-24 -right-4 bg-accent-orange text-white w-8 h-8 rounded-full items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-transform focus:outline-none ring-4 ring-background"
         >
           {isDesktopExpanded ? <FaChevronLeft className="text-sm" /> : <FaChevronRight className="text-sm" />}
@@ -164,7 +165,7 @@ const LayoutAdmin = ({ children }) => {
         {/* Header Superior Móvil (Hamburguesa) */}
         <div className="lg:hidden bg-primary text-white p-4 flex items-center justify-between sticky top-0 z-30 shadow-md">
           <div className="flex items-center gap-3">
-            <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 focus:outline-none active:scale-95 transition-transform">
+            <button onClick={() => setIsMobileMenuOpen(true)} aria-label="Abrir menú" className="p-2 focus:outline-none active:scale-95 transition-transform">
               <FaBars className="text-2xl text-accent-orange" />
             </button>
             <span className="font-black text-lg">C&M Admin</span>

@@ -207,12 +207,15 @@ const AcercaDe = () => {
         {/* SECCIÓN 3: INSTALACIONES PREMIUM (GRILLA DE 3 - bg-white) */}
         {/* Inspirado en references profesionales densas */}
         {/* ======================================================== */}
-        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-10 md:py-16 bg-white rounded-3xl md:rounded-[2.5rem] shadow-sm border border-secondary/50">
-          <div className="text-center mb-10 md:mb-16 space-y-3" data-aos="fade-up">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase text-text leading-tight tracking-tight">
+        <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full py-10 md:py-16 bg-primary rounded-3xl md:rounded-[2.5rem] shadow-xl border border-white/10 relative overflow-hidden">
+          {/* Subtle glow effect to match other dark sections */}
+          <div className="absolute top-0 right-0 w-full h-full opacity-5 pointer-events-none bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
+          
+          <div className="text-center mb-10 md:mb-16 space-y-3 relative z-10" data-aos="fade-up">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black uppercase text-white leading-tight tracking-tight">
               Nuestras <span className="text-accent-orange">Instalaciones</span>
             </h2>
-            <p className="text-base md:text-lg text-text-light font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-base md:text-lg text-white/80 font-medium max-w-2xl mx-auto leading-relaxed">
               Consultorios amplios, climatizados y equipados con tecnología de vanguardia para que tu experiencia sea lo más cómoda, segura y eficiente posible.
             </p>
           </div>
@@ -221,8 +224,8 @@ const AcercaDe = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             {/* Maquinas Adolfo 1 - Impresora 3D (Ancha) */}
-            <div className="relative rounded-2xl overflow-hidden h-75 md:h-75 shadow-lg group md:col-span-2" data-aos="fade-up">
-              <img loading="lazy" src="/maquinas adolfo 2.jpg" alt="Impresora 3D Odontológica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <div className="relative rounded-2xl overflow-hidden h-80 md:h-96 shadow-lg group md:col-span-2" data-aos="fade-up">
+              <img loading="lazy" src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775659/impresoras4.png" alt="Impresora 3D Odontológica" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent p-6 flex flex-col justify-end">
                 <h3 className="text-xl font-bold text-white uppercase tracking-tight">Precisión Digital</h3>
               </div>

@@ -28,33 +28,16 @@ const Preloader = ({ onLoaded }) => {
       }
     }, interval);
 
-    // Forzar la precarga de imágenes importantes en la memoria caché del navegador
-    const imagesToPreload = [
-      'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775657/NEWLOGO.png',
-      '/escritorio erina 3.jpeg',
-      '/saladeespera0.1.jpg',
-      '/sala de espera 1.jpg',
-      '/tomografo1.7.jpg'
-    ];
-    
-    imagesToPreload.forEach(src => {
-      const img = new Image();
-      img.src = src;
-    });
+    // Quitamos la precarga forzada de imágenes locales pesadas que destruyen el LCP
 
     return () => clearInterval(timer);
   }, [onLoaded]);
 
   return (
     <div 
-      className={`fixed inset-0 z- flex flex-col items-center justify-center bg-[#111] overflow-hidden transition-opacity duration-500 ease-in-out ${isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#111] overflow-hidden transition-opacity duration-500 ease-in-out ${isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
     >
-      {/* Fondo con la imagen solicitada (escritorio erina 3) */}
-      <div 
-        className="absolute inset-0 w-full h-full bg-cover bg-center opacity-30 scale-105"
-        style={{ backgroundImage: `url('/escritorio erina 3.jpeg')` }}
-      ></div>
-      
+
       {/* Overlay oscuro para máxima legibilidad del loader */}
       <div className="absolute inset-0 bg-linear-to- from-black/80 via-black/60 to-black/90"></div>
 
@@ -62,7 +45,7 @@ const Preloader = ({ onLoaded }) => {
       <div className="relative z-10 flex flex-col items-center mt-[-5%]">
         {/* Logo */}
         <img loading="lazy" 
-          src="https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775657/NEWLOGO.png" 
+          src="https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_400/v1787775657/NEWLOGO.png" 
           alt="Studio Dental C&M" 
           className="h-24 sm:h-28 mb-12 drop-shadow-[0_0_30px_rgba(255,255,255,0.2)] object-contain animate-[pulse_2s_ease-in-out_infinite]"
           style={{ filter: 'invert(1) hue-rotate(180deg)' }}

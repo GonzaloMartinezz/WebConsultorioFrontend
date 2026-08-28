@@ -106,7 +106,7 @@ const Navbar = () => {
           </div>
 
             {/* Botón Hamburguesa (MÓVIL) */}
-            <button onClick={() => setMenuOpen(!menuOpen)} className={`lg:hidden flex h-11 w-11 items-center justify-center rounded-2xl transition-all duration-300 ${scrolled ? 'bg-accent-orange text-white shadow-lg' : 'bg-white/20 text-white backdrop-blur-md border border-white/20 shadow-md drop-shadow-md'}`}>
+            <button onClick={() => setMenuOpen(!menuOpen)} aria-label="Abrir menú de navegación" className={`lg:hidden flex h-11 w-11 items-center justify-center rounded-2xl transition-all duration-300 ${scrolled ? 'bg-accent-orange text-white shadow-lg' : 'bg-white/20 text-white backdrop-blur-md border border-white/20 shadow-md drop-shadow-md'}`}>
               {menuOpen ? <FaTimes className="text-2xl" /> : (
                 <HiMenuAlt3 className="text-3xl" />
               )}

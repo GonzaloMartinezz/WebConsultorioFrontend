@@ -118,39 +118,6 @@ const doctorsData = {
           { key: 'after', name: 'Final (Después)', desc: 'Alineación perfecta del incisivo en el arco dental, logrando una anatomía armónica y mordida de encaje estable.' }
         ]
       },
-      {
-        id: 3,
-        title: 'Blanqueamiento Progresivo en 3 Fases',
-        category: 'estetica',
-        categoryName: 'Estética Dental',
-        description: 'Evolución paso a paso del tono dental durante un tratamiento de blanqueamiento profesional combinado en consultorio y hogar.',
-        duration: '2 sesiones',
-        difficulty: 'Baja',
-        technique: 'Peróxido de Hidrógeno al 35% + Luz LED Clínica',
-        beforeImage: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775801/casoclinico2.png',
-        afterImage: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775789/alineadores.png',
-        layout: 'simple',
-        steps: [
-          { key: 'complete', name: 'Resultado', desc: 'Tratamiento de blanqueamiento profesional combinado en consultorio y hogar. Se muestran las 3 etapas del tratamiento.' }
-        ]
-      },
-      {
-        id: 4,
-        title: 'Blanqueamiento Dental Clínico Express',
-        category: 'estetica',
-        categoryName: 'Estética Dental',
-        description: 'Blanqueamiento express de una sesión clínica para pacientes que buscan resultados inmediatos y de alta luminosidad de forma segura.',
-        duration: '1 sesión (45 min)',
-        difficulty: 'Baja',
-        technique: 'Gel de Peróxido Fotoactivado de Última Generación',
-        beforeImage: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775643/casoclinico1.jpg',
-        afterImage: '/alineadores.jpeg',
-        layout: 'vertical-2',
-        steps: [
-          { key: 'before', name: 'Antes (Inicial)', desc: 'Piezas dentarias con pigmentación de partida en tono 3R 2.5 en la escala cromática odontológica clásica.' },
-          { key: 'after', name: 'Ahora (Después)', desc: 'Aclarado instantáneo general de la sonrisa con excelente homogeneidad, brillo y esmalte protegido.' }
-        ]
-      }
     ]
   },
   adolfo: {
@@ -306,7 +273,7 @@ const PerfilDoctor = () => {
             <div className="absolute bottom-[-20%] left-[-20%] w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
 
             <h2 className="text-3xl font-black uppercase tracking-tight mb-10 flex items-center gap-3 relative z-10">
-              <span className="text-accent-orange text-4xl">🏆</span> Formación Académica & Certificaciones
+              Formación Académica & Certificaciones
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10">

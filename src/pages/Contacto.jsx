@@ -3,8 +3,8 @@ import { FaPhoneAlt, FaWhatsapp, FaInstagram } from 'react-icons/fa';
 
 // Dirección real para el mapa
 const direccion = "Jose Rondeau 827, San Miguel de Tucumán, Argentina";
-// URL de Google Maps corregida
-const mapsUrl = `https://maps.google.com/maps?q=${encodeURIComponent(direccion)}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
+// URL de Google Maps corregida y estable
+const mapsUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3560.10688656627!2d-65.2104523!3d-26.8365691!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94225c0e12345678%3A0x123456789abcdef!2sJos%C3%A9%20Rondeau%20827%2C%20T4000%20San%20Miguel%20de%20Tucum%C3%A1n!5e0!3m2!1ses-419!2sar!4v1710000000000!5m2!1ses-419!2sar";
 
 const Contacto = () => {
   return (

@@ -6,20 +6,20 @@ const HeroCarousel = () => {
   const [loadedIndices, setLoadedIndices] = useState([0, 1]); // Cargar solo la 1ra y 2da imagen al inicio
 
   const imagenesConsultorio = [
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775655/saladeespera0.1.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775655/sala_de_espera_1.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775655/escritorio_erina_1.jpeg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775714/escritorio_erina_2.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775687/consultorio_erina_1.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775785/escritorio_adolfo_2.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775703/pasillo_consultorio_adolfo_1.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775693/pasillo_consultorio_adolfo_2.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775692/pasillo_consultorio_adolfo_3.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775734/maquinas_adolfo_2.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775655/maquinas_adolfo_3.jpeg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775714/consultorio_adolfo_1.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775692/consultorio_adolfo_3.jpg",
-    "https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775713/consultorio_adolfo_4.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775655/saladeespera0.1.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775655/sala_de_espera_1.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775655/escritorio_erina_1.jpeg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775714/escritorio_erina_2.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775687/consultorio_erina_1.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775785/escritorio_adolfo_2.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775703/pasillo_consultorio_adolfo_1.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775693/pasillo_consultorio_adolfo_2.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775692/pasillo_consultorio_adolfo_3.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775734/maquinas_adolfo_2.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775655/maquinas_adolfo_3.jpeg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775714/consultorio_adolfo_1.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775692/consultorio_adolfo_3.jpg",
+    "https://res.cloudinary.com/t9ja9vq0/image/upload/f_auto,q_auto,w_1920/v1787775713/consultorio_adolfo_4.jpg",
   ];
 
   useEffect(() => {
@@ -63,12 +63,13 @@ const HeroCarousel = () => {
             {/* Sin scale animado para que no se vea "con zoom" extra */}
             <div className={`w-full h-full transition-transform duration-1000 ease-out`}>
 
-              {/* Capa Principal: Ocupa 100% de la pantalla siempre */}
               {isLoaded && (
                 <img 
                   loading={index === 0 ? "eager" : "lazy"}
                   fetchPriority={index === 0 ? "high" : "auto"}
                   src={img}
+                  srcSet={`${img.replace('w_1920', 'w_800')} 800w, ${img.replace('w_1920', 'w_1200')} 1200w, ${img} 1920w`}
+                  sizes="(max-width: 800px) 800px, (max-width: 1200px) 1200px, 100vw"
                   alt={`Consultorio ${index + 1}`}
                   className="absolute inset-0 w-full h-full object-cover object-center drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
                 />

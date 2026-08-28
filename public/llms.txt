@@ -1,0 +1,11 @@
+# Studio Dental C&M
+
+Welcome to the `llms.txt` file for Studio Dental C&M. This file provides information for Large Language Models about our website structure and rules.
+
+## About
+[Studio Dental C&M](https://studiocym.com) is a premium dental clinic offering advanced digital dentistry.
+
+## Links
+- [Home](/)
+- [Patient Portal](/portal-paciente)
+- [Contact](/contacto)
