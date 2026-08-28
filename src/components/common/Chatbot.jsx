@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import {
   FaClock, FaMapMarkerAlt, FaMoneyBillWave, FaCalendarCheck,
   FaNotesMedical, FaLaptopMedical, FaTooth, FaUserMd, FaSmileBeam,
-  FaRobot, FaSignOutAlt
+  FaHeadset, FaSignOutAlt
 } from 'react-icons/fa';
 
 // Base de datos de conocimiento expandida
@@ -165,7 +165,7 @@ const QA_DATABASE = [
     answer: (
       <div className="space-y-2">
         <h4 className="font-black text-[#FF7800] text-base drop-shadow-sm flex items-center gap-2">
-          ¡Hola! <FaRobot className="text-gray-500 opacity-50" />
+          ¡Hola! <FaHeadset className="text-gray-500 opacity-50" />
         </h4>
         <p className="text-sm leading-relaxed text-gray-700 font-medium">
           Soy el <strong>Asistente Clínico de IA</strong> de Carcara • Martínez.
@@ -287,7 +287,7 @@ const Chatbot = () => {
 
             <div className="flex items-center gap-3 relative z-10">
               <div className="w-10 h-10 rounded-full bg-black border border-white/10 flex items-center justify-center text-[#FF7800] relative shadow-[0_0_15px_rgba(255,120,0,0.3)]">
-                <FaRobot className="text-xl" />
+                <FaHeadset className="text-xl" />
                 <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-black rounded-full animate-pulse"></span>
               </div>
               <div>
@@ -350,7 +350,7 @@ const Chatbot = () => {
         aria-label="Abrir Asistente"
       >
         <span className="absolute inset-0 bg-linear-to-br from-[#FF8A1F] to-[#CC6000] group-hover:scale-110 transition-transform duration-500"></span>
-        <FaRobot className="w-8 h-8 relative z-10 drop-shadow-md" />
+        <FaHeadset className="w-8 h-8 relative z-10 drop-shadow-md" />
         <span className="absolute top-2 right-2 w-3 h-3 bg-white rounded-full z-10 animate-ping opacity-75"></span>
         <span className="absolute top-2 right-2 w-3 h-3 bg-white rounded-full z-10"></span>
       </button>

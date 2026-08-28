@@ -4,30 +4,36 @@ import { useEffect, useState, useRef } from 'react';
 const BeforeAfterSlider = ({ beforeImage, afterImage }) => {
   const [sliderPosition, setSliderPosition] = useState(50);
 
-  // Si solo hay una imagen, mostramos solo esa imagen sin slider
-  if (!beforeImage || !afterImage) {
-    return <img loading="lazy" src={beforeImage || afterImage} alt="Caso clínico" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />;
-  }
+  // Si no hay imágenes, no mostramos nada
+  if (!beforeImage && !afterImage) return null;
 
   return (
-    <div className="relative w-full h-full select-none group/slider">
-      {/* Imagen de fondo (Después) */}
-      <img loading="lazy" src={afterImage} alt="Después" className="absolute inset-0 w-full h-full object-cover" />
+    <div className="relative w-full h-full select-none group/slider overflow-hidden">
+      {/* Imagen de fondo (Después) - Queda al descubierto al mover a la izquierda */}
+      <img 
+        loading="lazy" 
+        src={afterImage || beforeImage} 
+        alt="Después" 
+        className="absolute inset-0 w-full h-full object-cover" 
+      />
 
-      {/* Imagen superpuesta (Antes) recortada */}
-      <div
-        className="absolute inset-0 w-full h-full overflow-hidden"
-        style={{ width: `${sliderPosition}%` }}
-      >
-        <img loading="lazy" src={beforeImage} alt="Antes" className="absolute inset-0 h-full object-cover" style={{ width: '100vw', minWidth: '100%', maxWidth: 'none' }} />
-      </div>
+      {/* Imagen superpuesta (Antes) con clip-path - Queda al descubierto al mover a la derecha */}
+      <img 
+        loading="lazy" 
+        src={beforeImage || afterImage} 
+        alt="Antes" 
+        className="absolute inset-0 w-full h-full object-cover" 
+        style={{ 
+          clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)`
+        }} 
+      />
 
       {/* Línea divisoria y manija */}
       <div
         className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize flex items-center justify-center z-10 shadow-[0_0_10px_rgba(0,0,0,0.5)]"
         style={{ left: `calc(${sliderPosition}% - 2px)` }}
       >
-        <div className="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-accent-orange transition-transform group-hover/slider:scale-110">
+        <div className="w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-accent-orange transition-transform group-hover/slider:scale-110 pointer-events-none">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-accent-orange">
             <path d="M15 18l1-6-1-6"></path>
             <path d="M9 18l-1-6 1-6"></path>
@@ -87,7 +93,8 @@ const doctorsData = {
         duration: '14 meses',
         difficulty: 'Alta',
         technique: 'Alineadores Secuenciales Transparentes',
-        image: '/alineadores.jpeg',
+        beforeImage: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775789/alineadores.png',
+        afterImage: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775643/casoclinico1.jpg',
         layout: 'vertical-2',
         steps: [
           { key: 'before', name: 'Inicial (Antes)', desc: 'Apiñamiento severo superior e inferior con apiñamiento anterior y superposición dental en espejo.' },
@@ -103,7 +110,8 @@ const doctorsData = {
         duration: '8 meses',
         difficulty: 'Media',
         technique: 'Alineadores Secuenciales de Precisión',
-        image: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775789/alineadores.png',
+        beforeImage: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775643/casoclinico1.jpg',
+        afterImage: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775801/casoclinico2.png',
         layout: 'vertical-2',
         steps: [
           { key: 'before', name: 'Inicial (Antes)', desc: 'Pieza dentaria incisiva central inferior con rotación superior al 45% (señalada con la flecha).' },
@@ -119,7 +127,8 @@ const doctorsData = {
         duration: '2 sesiones',
         difficulty: 'Baja',
         technique: 'Peróxido de Hidrógeno al 35% + Luz LED Clínica',
-        image: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775801/casoclinico2.png',
+        beforeImage: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775801/casoclinico2.png',
+        afterImage: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775789/alineadores.png',
         layout: 'simple',
         steps: [
           { key: 'complete', name: 'Resultado', desc: 'Tratamiento de blanqueamiento profesional combinado en consultorio y hogar. Se muestran las 3 etapas del tratamiento.' }
@@ -134,7 +143,8 @@ const doctorsData = {
         duration: '1 sesión (45 min)',
         difficulty: 'Baja',
         technique: 'Gel de Peróxido Fotoactivado de Última Generación',
-        image: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775643/casoclinico1.jpg',
+        beforeImage: 'https://res.cloudinary.com/t9ja9vq0/image/upload/v1787775643/casoclinico1.jpg',
+        afterImage: '/alineadores.jpeg',
         layout: 'vertical-2',
         steps: [
           { key: 'before', name: 'Antes (Inicial)', desc: 'Piezas dentarias con pigmentación de partida en tono 3R 2.5 en la escala cromática odontológica clásica.' },
@@ -161,38 +171,7 @@ const doctorsData = {
       'Certificación en Flujos Digitales y CAD/CAM',
       'Dictante de cursos de posgrado en Cirugía implantologica.'
     ],
-    clinicalCases: [
-      {
-        id: 1,
-        title: 'Rehabilitación Superior Completa',
-        category: 'implantes',
-        categoryName: 'Implantología & Prótesis',
-        description: 'Colocación de 6 implantes superiores y prótesis fija definitiva con carga inmediata digital en un flujo 100% CAD/CAM.',
-        duration: '24 horas',
-        difficulty: 'Alta',
-        technique: 'Cirugía Guiada 3D + Prótesis CAD/CAM',
-        image: '/caso-adolfo-1.jpg', // Placeholder
-        layout: 'simple',
-        steps: [
-          { key: 'complete', name: 'Resultado', desc: 'Rehabilitación masticatoria y estética completa del maxilar superior.' }
-        ]
-      },
-      {
-        id: 2,
-        title: 'Elevación de Seno y Regeneración Ósea',
-        category: 'cirugia',
-        categoryName: 'Cirugía Maxilofacial',
-        description: 'Regeneración ósea guiada mediante elevación de seno maxilar para posterior colocación segura de implantes en el sector posterior superior.',
-        duration: '6 meses',
-        difficulty: 'Alta',
-        technique: 'Elevación de Seno Maxilar con Membrana PRF',
-        image: '/caso-adolfo-2.jpg', // Placeholder
-        layout: 'simple',
-        steps: [
-          { key: 'complete', name: 'Resultado', desc: 'Estructura ósea recuperada con éxito y posterior colocación estable del implante dental.' }
-        ]
-      }
-    ]
+    clinicalCases: []
   }
 };
 
